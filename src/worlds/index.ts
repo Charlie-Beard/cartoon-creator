@@ -4,10 +4,14 @@
  * cartoon may borrow anyone (tests/unit/worlds.test.ts checks).
  */
 import common from './common';
+import faraway from './faraway';
+import hogwarts from './hogwarts';
 import type { BackdropDef, CharacterDef, PropDef, World } from './types';
 
 export const WORLDS: Record<string, World> = {
   common,
+  faraway,
+  hogwarts,
 };
 
 export type { BackdropDef, CharacterDef, PropDef, World } from './types';
