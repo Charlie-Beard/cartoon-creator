@@ -4,6 +4,7 @@
  *
  *   npm run shots -- lost-kettle
  *   npm run shots -- lost-kettle --scene 2          # one scene only
+ *   npm run shots -- lost-kettle --no-tap           # wait out every tap-to-help
  *   npm run shots -- lost-kettle --url http://localhost:5173   # use a dev server already running
  *
  * It starts `vite` on a free port itself (unless --url is given), opens
@@ -11,26 +12,38 @@
  * 1180 × 820, scale 1), waits for the curtains to open, and saves
  *
  *   screenshots/<id>/scene<n>-0.png    the scene's opening set
- *   screenshots/<id>/scene<n>-<k>.png  frames while it plays: one every 3 s, and
- *                                      one the moment a tap-to-help appears,
- *                                      after which the script taps it
+ *   screenshots/<id>/scene<n>-<k>.png  frames while it plays: one every 3 s until
+ *                                      the scene ends, and one the moment a
+ *                                      tap-to-help appears
  *   screenshots/<id>/sheet.png         a contact sheet of them all (look at this first)
  *
  * and prints a pacing report. The time is measured, not guessed: each
- * scene runs in real time (scenes run side by side, three at once, to
- * keep it short) and is timed from the player starting it to the player
- * starting the next, so it includes the little beat between scenes. Lines
- * with no recording are "spoken" by a stand-in for the iPad's voice that
- * takes as long as estimateSeconds says; recorded lines (public/audio) play
- * for real. Taps are tapped at once, so a child who waits takes up to ~21 s
- * longer for each (the report says how much).
+ * scene runs in real time, one at a time (see --parallel), and is timed
+ * from the player starting it to the player starting the next, so it
+ * includes the little beat between scenes. Lines with no recording are
+ * "spoken" by a stand-in for the iPad's voice that takes as long as
+ * estimateSeconds says; recorded lines (public/audio) play for real.
  *
- * Flags: a scene over 90 s, an episode outside 2–5 minutes. Exits 1 on an
- * error (the script threw, a scene never finished); --strict also exits 1
- * on a flag.
+ * Two ways to meet his turns (tap-to-help):
+ *   default   each is tapped at once, so a child who waits takes up to ~21 s
+ *             longer for each (the report says how much)
+ *   --no-tap  none is tapped: the nudge and helped lines play, and the story
+ *             carries on by itself after ~21 s. The times are then what a
+ *             child who never taps would see.
+ * The report says which mode was used.
  *
- * Options: --frames N (play frames per scene, default 6), --every S
- * (seconds between them, default 3), --parallel N (default 3), --out DIR.
+ * The report also lists every caption of every scene (when it came on and
+ * for how long), and flags silent stretches: more than 4 s with no caption
+ * showing and no tap waiting.
+ *
+ * Flags: a scene over 90 s, an episode outside 2–5 minutes, a silent
+ * stretch. Exits 1 on an error (the script threw, a scene never finished);
+ * --strict also exits 1 on a flag.
+ *
+ * Options: --every S (seconds between frames, default 3), --frames N (cap on
+ * frames per scene after the opening set; default no cap but a safety cap of
+ * 60), --parallel N (scenes at once, default 1: more are quicker but a busy
+ * machine makes GSAP lag-smooth and the times read high), --no-tap, --out DIR.
  *
  * Chromium comes from PW_CHROMIUM (or /opt/pw-browsers/chromium if that
  * exists, else Playwright's own).
@@ -59,7 +72,7 @@ const valueFlags = new Set(['url', 'scene', 'frames', 'every', 'parallel', 'out'
 const positional = args.filter((a, i) => !a.startsWith('--') && !(i > 0 && args[i - 1].startsWith('--') && valueFlags.has(args[i - 1].slice(2))));
 const id = positional[0];
 if (!id) {
-  console.error('Usage: npm run shots -- <cartoonId> [--scene N] [--frames 6] [--every 3] [--parallel 3] [--url http://localhost:5173] [--strict]');
+  console.error('Usage: npm run shots -- <cartoonId> [--scene N] [--no-tap] [--every 3] [--frames N] [--parallel 1] [--url http://localhost:5173] [--strict]');
   console.error(`On the shelf: ${SHELF.map((c) => c.id).join(', ') || '(nothing yet)'}`);
   process.exit(2);
 }
@@ -69,9 +82,12 @@ if (!entry) {
   process.exit(2);
 }
 const cartoon = (await entry.load()).default;
-const FRAMES = Number(option('frames', 6));
 const EVERY = Number(option('every', 3));
-const PARALLEL = Number(option('parallel', 3));
+/** Most frames kept per scene after the opening set: --frames N, but never more than the safety cap. */
+const MAX_FRAMES = 60;
+const FRAMES = Math.min(MAX_FRAMES, option('frames') === undefined ? MAX_FRAMES : Number(option('frames')));
+const PARALLEL = Math.max(1, Number(option('parallel', 1)));
+const NO_TAP = flag('no-tap');
 const OUT = resolve(ROOT, option('out', join('screenshots', id)));
 const only = option('scene') === undefined ? null : Number(option('scene')) - 1;
 /** Scenes are numbered from 1 for people (scene 1 is `?scene=0`). */
@@ -84,6 +100,7 @@ if (sceneIndexes.some((i) => !cartoon.scenes[i])) {
 // Longest a scene may take (the player gives up on one after 180 s, plus the curtains).
 const STUCK_SECONDS = 200;
 const TAP_WAIT_SECONDS = 21; // the kit's patience: 9 s, a nudge, 12 s, then it helps him
+const SILENT_SECONDS = 4; // a stretch with no caption and no tap waiting longer than this is flagged
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ------------------------------------------------------------------ server
@@ -169,14 +186,16 @@ function installProbe() {
   };
   Object.defineProperty(window, 'speechSynthesis', { value: synth, configurable: true, writable: true });
 
-  const log = (window.__probe = { events: [], scene: null, end: false, taps: 0, tapping: false });
+  const log = (window.__probe = { events: [], scene: null, sceneT: 0, end: false, taps: 0, tapping: false });
   const note = (type, extra = {}) => log.events.push({ t: performance.now(), type, ...extra });
-  let caption = '';
+  let capOn = false;
+  let capText = '';
   setInterval(() => {
     const scene = document.querySelector('[data-scene]')?.getAttribute('data-scene') ?? null;
     if (scene !== log.scene) {
       log.scene = scene;
       note('scene', { scene });
+      log.sceneT = performance.now();
     }
     const end = !!document.querySelector('[data-end]');
     if (end && !log.end) note('end');
@@ -186,18 +205,73 @@ function installProbe() {
       log.taps++;
       note('tap');
     }
+    if (!tapping && log.tapping) note('tap-end');
     log.tapping = tapping;
-    const el = document.querySelector('.story-caption.on .story-caption-text > span:last-child');
-    const text = el?.textContent ?? '';
-    if (text && text !== caption) note('caption', { text });
-    caption = text;
+    // The caption box fades in and out with the class "on"; a new line may replace the text while it stays on.
+    const box = document.querySelector('.story-caption');
+    const on = !!box?.classList.contains('on');
+    const text = on ? (box.querySelector('.story-caption-text > span:last-child')?.textContent ?? '') : '';
+    if (on && (!capOn || text !== capText)) note('cap', { text });
+    if (!on && capOn) note('cap-off');
+    capOn = on;
+    capText = text;
   }, 40);
+}
+
+// ------------------------------------------------------------ the timeline
+
+/**
+ * From the probe's events (from = the scene's start, to = the next scene's
+ * start or the end, -1 if it never came): every caption with when it came
+ * on (seconds from the scene's start) and how long it stayed, and the
+ * silent stretches: no caption showing and no tap waiting for longer than
+ * SILENT_SECONDS. A tap that waits is not silence, even though the
+ * captions are off: the ring is breathing and he has something to do.
+ */
+function timeline(events, from, to) {
+  const t0 = events[from].t;
+  const tEnd = to >= 0 ? events[to].t : events.at(-1).t;
+  const sec = (t) => (t - t0) / 1000;
+  const captions = [];
+  const busy = []; // [start, end] in seconds: a caption showing, or a tap waiting
+  let cur = null;
+  let tapAt = null;
+  const close = (t) => {
+    if (!cur) return;
+    captions.push({ text: cur.text, start: sec(cur.t), dur: (t - cur.t) / 1000 });
+    busy.push([sec(cur.t), sec(t)]);
+    cur = null;
+  };
+  for (const e of events.slice(from + 1, to < 0 ? undefined : to)) {
+    if (e.type === 'cap') {
+      close(e.t);
+      cur = { text: e.text, t: e.t };
+    } else if (e.type === 'cap-off') {
+      close(e.t);
+    } else if (e.type === 'tap') {
+      tapAt = e.t;
+    } else if (e.type === 'tap-end' && tapAt !== null) {
+      busy.push([sec(tapAt), sec(e.t)]);
+      tapAt = null;
+    }
+  }
+  close(tEnd);
+  if (tapAt !== null) busy.push([sec(tapAt), sec(tEnd)]);
+
+  const silences = [];
+  let at = 0;
+  for (const [a, b] of busy.sort((x, y) => x[0] - y[0])) {
+    if (a - at > SILENT_SECONDS) silences.push({ from: at, to: a });
+    at = Math.max(at, b);
+  }
+  if (sec(tEnd) - at > SILENT_SECONDS) silences.push({ from: at, to: sec(tEnd) });
+  return { captions, silences };
 }
 
 // ----------------------------------------------------------- one scene's run
 
 async function shootScene(context, base, index) {
-  const result = { index, name: cartoon.scenes[index].name, frames: [], errors: [], seconds: null, lines: [], taps: 0 };
+  const result = { index, name: cartoon.scenes[index].name, frames: [], errors: [], seconds: null, captions: [], silences: [], lines: [], taps: 0, capped: null };
   const page = await context.newPage();
   await page.addInitScript(installProbe);
   page.on('pageerror', (e) => result.errors.push(`${e.message}`));
@@ -206,11 +280,12 @@ async function shootScene(context, base, index) {
     if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) result.errors.push(`console: ${m.text()}`);
   });
 
-  const shoot = async () => {
+  const shoot = async (tap = false) => {
     const k = result.frames.length;
     const file = join(OUT, `scene${index + 1}-${k}.png`);
+    const t = await page.evaluate(() => (performance.now() - window.__probe.sceneT) / 1000).catch(() => 0);
     await page.screenshot({ path: file });
-    result.frames.push({ k, file, at: Date.now() });
+    result.frames.push({ k, file, t, tap });
   };
   const state = () => page.evaluate(() => ({ scene: window.__probe.scene, end: window.__probe.end, tapping: window.__probe.tapping, taps: window.__probe.taps }));
 
@@ -241,15 +316,19 @@ async function shootScene(context, base, index) {
         result.errors.push(`the scene had not finished after ${STUCK_SECONDS} s`);
         break;
       }
+      const room = result.frames.length - 1 < FRAMES; // frames after the opening set
+      if (!room && result.capped === null) result.capped = result.frames.at(-1).t;
       if (s.tapping && s.taps > tapped) {
-        // His turn: show it, then do it.
+        // His turn: show it, then (unless --no-tap) do it.
         await sleep(350); // let the ring fade in
-        await shoot();
-        const box = await page.locator('[data-tap-to-help]').first().boundingBox();
-        if (box) await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+        if (room) await shoot(true);
+        if (!NO_TAP) {
+          const box = await page.locator('[data-tap-to-help]').first().boundingBox();
+          if (box) await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+        }
         tapped = s.taps;
         nextFrame = Date.now() + EVERY * 1000;
-      } else if (Date.now() >= nextFrame && result.frames.length <= FRAMES) {
+      } else if (Date.now() >= nextFrame && room) {
         await shoot();
         nextFrame = Date.now() + EVERY * 1000;
       }
@@ -262,8 +341,9 @@ async function shootScene(context, base, index) {
     const to = events.findIndex((e, i) => i > from && (e.type === 'end' || (e.type === 'scene' && e.scene !== String(index) && e.scene !== null)));
     const mine = events.slice(from + 1, to < 0 ? undefined : to);
     if (to >= 0) result.seconds = (events[to].t - events[from].t) / 1000;
-    result.lines = mine.filter((e) => e.type === 'caption').map((e) => e.text);
     result.taps = mine.filter((e) => e.type === 'tap').length;
+    if (from >= 0) Object.assign(result, timeline(events, from, to));
+    result.lines = result.captions.map((c) => c.text);
   } catch (e) {
     result.errors.push(e.message);
     await page.screenshot({ path: join(OUT, `scene${index + 1}-error.png`) }).catch(() => {});
@@ -283,7 +363,7 @@ async function contactSheet(context, results, base) {
     .map((r) => {
       const label = `Scene ${r.index + 1}: ${esc(r.name)}${r.seconds === null ? '' : ` (${r.seconds.toFixed(0)} s)`}`;
       const thumbs = r.frames
-        .map((f, i) => `<figure><img src="${pathToFileURL(f.file).href}"><figcaption>${i === 0 ? 'opening set' : `frame ${i}`}</figcaption></figure>`)
+        .map((f, i) => `<figure><img src="${pathToFileURL(f.file).href}"><figcaption>${i === 0 ? 'opening set' : `${f.t.toFixed(0)} s${f.tap ? ' (tap waiting)' : ''}`}</figcaption></figure>`)
         .join('');
       return `<section><h2>${label}</h2><div class="row">${thumbs}</div></section>`;
     })
@@ -315,7 +395,8 @@ let exitCode = 0;
 try {
   mkdirSync(OUT, { recursive: true });
   // Old frames from an earlier, longer run would mislead.
-  if (only === null) for (const f of readdirSync(OUT)) if (/^scene\d+-.*\.png$|^sheet\.png$/.test(f)) rmSync(join(OUT, f));
+  const stale = only === null ? /^scene\d+-.*\.png$|^sheet\.png$/ : new RegExp(`^scene${only + 1}-.*\\.png$|^sheet\\.png$`);
+  for (const f of readdirSync(OUT)) if (stale.test(f)) rmSync(join(OUT, f));
 
   const base = (option('url') ?? (await startServer())).replace(/\/$/, '');
   const executablePath = process.env.PW_CHROMIUM || (existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined);
@@ -328,11 +409,12 @@ try {
   await warm.waitForFunction(() => document.querySelector('[data-scene]') !== null, null, { timeout: 60_000 }).catch(() => {});
   await warm.close();
 
-  console.log(`${cartoon.title} (${id}): ${sceneIndexes.length} scene${sceneIndexes.length === 1 ? '' : 's'}, in real time, ${PARALLEL} at a time...`);
+  const parallel = Math.min(PARALLEL, sceneIndexes.length);
+  console.log(`${cartoon.title} (${id}): ${sceneIndexes.length} scene${sceneIndexes.length === 1 ? '' : 's'}, in real time, ${parallel} at a time, ${NO_TAP ? 'waiting out every tap-to-help (--no-tap)' : 'tapping every tap-to-help at once'}...`);
   const results = new Array(sceneIndexes.length);
   let next = 0;
   await Promise.all(
-    Array.from({ length: Math.min(PARALLEL, sceneIndexes.length) }, async () => {
+    Array.from({ length: parallel }, async () => {
       while (next < sceneIndexes.length) {
         const slot = next++;
         results[slot] = await shootScene(context, base, sceneIndexes[slot]);
@@ -348,21 +430,42 @@ try {
   // ---------------------------------------------------------- the report
   const flags = [];
   const errors = [];
-  console.log(`\nPacing for ${id} (measured in real time; every tap-to-help tapped at once)`);
+  const mode = NO_TAP
+    ? 'MODE: --no-tap (no tap-to-help was tapped: the nudge and helped lines played, and each wait ran its full ~21 s)'
+    : 'MODE: tapping (every tap-to-help was tapped at once; a child who waits takes up to ~21 s longer for each)';
+  console.log(`\nPacing for ${id} (measured in real time, ${parallel} scene${parallel === 1 ? '' : 's'} at a time)`);
+  console.log(`  ${mode}`);
+  if (parallel > 1) console.log(`  WARNING: ${parallel} scenes ran at once, so a busy machine makes the times read high (GSAP lag smoothing). Run with --parallel 1 for true times.`);
   console.log('  scene  seconds  lines  taps  name');
   for (const r of results) {
     const secs = r.seconds === null ? '   ?' : r.seconds.toFixed(0).padStart(4);
     console.log(`  ${String(r.index + 1).padStart(5)}  ${secs} s  ${String(r.lines.length).padStart(5)}  ${String(r.taps).padStart(4)}  ${r.name}`);
     if (r.seconds !== null && r.seconds > 90) flags.push(`scene ${r.index + 1} runs ${r.seconds.toFixed(0)} s: over 90 s. Split it, or cut something.`);
     if (r.lines.length === 0 && r.seconds !== null) flags.push(`scene ${r.index + 1} says nothing (no captions shown): is that on purpose?`);
+    for (const s of r.silences) flags.push(`scene ${r.index + 1} is silent from ${s.from.toFixed(1)} s to ${s.to.toFixed(1)} s (${(s.to - s.from).toFixed(1)} s with no caption and no tap waiting).`);
     for (const e of r.errors) errors.push(`scene ${r.index + 1}: ${e}`);
   }
+
+  // Each scene's captions, in order: when each came on (from the scene's start) and how long it stayed.
+  console.log(`\nCaption timeline (seconds from each scene's start; silent = no caption and no tap waiting, over ${SILENT_SECONDS} s)`);
+  for (const r of results) {
+    console.log(`  scene ${r.index + 1}: ${r.name}${r.seconds === null ? '' : ` (${r.seconds.toFixed(1)} s)`}`);
+    if (!r.captions.length) console.log('    (no captions)');
+    // Silences sit in the list where they happen.
+    const rows = [...r.captions.map((c) => ({ at: c.start, c })), ...r.silences.map((s) => ({ at: s.from, s }))].sort((a, b) => a.at - b.at);
+    for (const row of rows) {
+      if (row.c) console.log(`    ${row.c.start.toFixed(1).padStart(5)} s  ${row.c.dur.toFixed(1).padStart(4)} s  "${row.c.text}"`);
+      else console.log(`    ${row.s.from.toFixed(1).padStart(5)} s  ${(row.s.to - row.s.from).toFixed(1).padStart(4)} s  ** SILENT ** (until ${row.s.to.toFixed(1)} s)`);
+    }
+    if (r.capped !== null) console.log(`    (frames stopped at the cap of ${FRAMES}, ${r.capped.toFixed(0)} s in; raise --frames)`);
+  }
+  console.log('');
   const timed = results.filter((r) => r.seconds !== null);
   const total = timed.reduce((t, r) => t + r.seconds, 0);
   const taps = results.reduce((t, r) => t + r.taps, 0);
   if (only === null) {
     console.log(`  total  ${fmt(total)} (${total.toFixed(0)} s), ${results.reduce((t, r) => t + r.lines.length, 0)} lines said, ${taps} tap-to-help`);
-    if (taps) console.log(`         if he waits out every tap: up to ${fmt(total + taps * TAP_WAIT_SECONDS)}`);
+    if (taps && !NO_TAP) console.log(`         if he waits out every tap: up to ${fmt(total + taps * TAP_WAIT_SECONDS)} (run with --no-tap to measure it)`);
     console.log(`  the script has ${Object.keys(cartoon.lines).length} lines: ${spokenSeconds(cartoon.lines).toFixed(0)} s of speech if each is said once`);
     if (timed.length === results.length) {
       if (total < 120) flags.push(`the episode runs ${fmt(total)}: under 2 minutes. Add a beat, or a scene.`);
@@ -370,11 +473,12 @@ try {
     }
     const said = new Set(results.flatMap((r) => r.lines));
     const unseen = Object.entries(cartoon.lines).filter(([, l]) => !said.has(personalise(l.text, DEFAULT_NAME)));
-    if (unseen.length) console.log(`  not said in this run: ${unseen.map(([k]) => k).join(', ')} (nudge and helped lines only come if he waits)`);
+    if (unseen.length) console.log(`  not said in this run: ${unseen.map(([k]) => k).join(', ')} ${NO_TAP ? '' : '(nudge and helped lines only come if he waits: try --no-tap)'}`);
   }
   for (const f of flags) console.log(`FLAG   ${f}`);
   for (const e of errors) console.log(`ERROR  ${e}`);
-  console.log(`\nScreenshots: ${OUT}${only === null ? '\nLook at sheet.png first, then any scene that looks odd.' : ''}`);
+  console.log(`\nContact sheet: ${join(OUT, 'sheet.png')}   (look at this first, then any scene that looks odd)`);
+  console.log(`Screenshots:   ${OUT}/scene<n>-<k>.png`);
   if (errors.length || (flag('strict') && flags.length)) exitCode = 1;
 } catch (e) {
   console.error(e instanceof Error ? e.message : e);
