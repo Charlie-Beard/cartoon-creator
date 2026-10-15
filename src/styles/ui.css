@@ -1,0 +1,229 @@
+/* Shared paper UI: the page wipe, seals, banners, the grown-ups' gear and its sum, the rotate screen. */
+
+.wipe {
+  position: absolute;
+  left: -160px;
+  top: -90px;
+  width: 1500px;
+  height: 1000px;
+  z-index: 800;
+  display: none;
+  pointer-events: none;
+}
+.wipe svg {
+  width: 100%;
+  height: 100%;
+}
+
+.parchment {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* ---------- Wax-seal buttons ---------- */
+
+.seal-btn {
+  position: absolute;
+  display: block;
+  transition: transform 80ms ease-out, filter 80ms;
+}
+.seal-btn svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  display: block;
+}
+.seal-btn.is-pressed {
+  transform: translateY(3px) scale(0.94);
+  filter: brightness(0.92);
+}
+.seal-btn .label {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  margin-top: 2px;
+  white-space: nowrap;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--parchment-100);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- Banners ---------- */
+
+.banner {
+  position: absolute;
+  z-index: 20;
+}
+.banner-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: var(--ink-900);
+  padding: 0 30px 6px;
+  text-align: center;
+  line-height: 1.05;
+}
+
+/* The little stars the kit scatters (Kit.sparkle). */
+.particle {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  pointer-events: none;
+  z-index: 60;
+}
+.particle svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Grown-ups' gear and its sum ---------- */
+
+/* Above every scene, below the page wipe. */
+.gear-btn {
+  position: absolute;
+  z-index: 750;
+  box-sizing: border-box;
+  padding: 6px;
+  opacity: 0.8;
+}
+.gear-btn svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.gear-btn.is-pressed {
+  transform: scale(0.94);
+}
+.no-gear .gear-btn {
+  display: none;
+}
+.gate {
+  position: absolute;
+  inset: 0;
+  z-index: 760;
+  background: rgba(14, 16, 34, 0.75);
+  -webkit-user-select: none;
+  user-select: none;
+}
+.gate-card {
+  position: absolute;
+  text-align: center;
+  color: var(--ink-900);
+}
+.gate-card h2 {
+  position: relative;
+  margin: 38px 0 6px;
+  font-size: 34px;
+}
+.gate-sum {
+  position: relative;
+  display: inline-block;
+  font-size: 56px;
+  margin-right: 14px;
+}
+.gate-answer {
+  position: relative;
+  display: inline-block;
+  min-width: 120px;
+  padding: 4px 14px;
+  font-size: 56px;
+  border-bottom: 4px solid var(--parchment-500);
+}
+.gate-answer.empty {
+  color: var(--parchment-400);
+}
+.gate-note {
+  position: relative;
+  height: 28px;
+  margin: 8px 0 6px;
+  font-size: 22px;
+  color: var(--scarlet-600);
+}
+.gate-keys {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 110px);
+  gap: 12px;
+  justify-content: center;
+}
+.gate-key {
+  height: 84px;
+  border-radius: 18px;
+  font-size: 38px;
+  font-weight: 700;
+  background: #fffaf0;
+  box-shadow: 0 4px 0 rgba(90, 62, 30, 0.35);
+}
+.gate-key:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 rgba(90, 62, 30, 0.35);
+}
+.gate-key.ok {
+  background: var(--emerald-500);
+  color: var(--parchment-100);
+}
+.gate-close {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  font-size: 30px;
+  background: var(--parchment-300);
+}
+
+/* ---------- Rotate-to-landscape ---------- */
+
+.rotate-inner {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
+.rotate-inner p {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--parchment-100);
+}
+.rotate-owl {
+  width: 200px;
+  height: 200px;
+}
+.rotate-owl svg {
+  width: 100%;
+  height: 100%;
+}
+.rotate-ipad {
+  width: 110px;
+  height: 150px;
+  border-radius: 16px;
+  background: var(--parchment-300);
+  padding: 10px;
+  animation: turn 2.4s ease-in-out infinite;
+}
+.rotate-ipad .screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  background: var(--night-600);
+}
+@keyframes turn {
+  0%,
+  30% {
+    transform: rotate(0deg);
+  }
+  60%,
+  100% {
+    transform: rotate(-90deg);
+  }
+}

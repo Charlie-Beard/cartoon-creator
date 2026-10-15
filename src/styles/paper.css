@@ -1,0 +1,33 @@
+/*
+ * Paper art and the global paper grain.
+ */
+
+svg.paper {
+  display: block;
+  overflow: visible;
+}
+
+/*
+ * Global paper grain over the whole stage. It is plain alpha: a dark,
+ * see-through speckle (made by installGrain in art/grain.ts). It once used
+ * mix-blend-mode: multiply, which on Safari makes the whole stage re-blend
+ * every time anything under it moves. Laying the speckle over looks the
+ * same, without the cost.
+ */
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 900;
+  pointer-events: none;
+  background-image: var(--grain-alpha-url, none);
+  background-size: 256px 256px;
+}
+
+/* Vignette to keep the eye in the middle of the stage. */
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 899;
+  pointer-events: none;
+  background: radial-gradient(ellipse 75% 70% at 50% 50%, transparent 60%, rgba(10, 8, 20, 0.35));
+}

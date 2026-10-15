@@ -1,0 +1,301 @@
+{
+ "lines": [
+  {
+   "id": "3kzsu",
+   "text": "Hello, Jasper! It’s tea time at the top of the tree.",
+   "speaker": "moonface",
+   "where": "whistling-kettle/hello"
+  },
+  {
+   "id": "fw1t4d",
+   "text": "Hello! It’s tea time at the top of the tree.",
+   "speaker": "moonface",
+   "where": "whistling-kettle/hello"
+  },
+  {
+   "id": "vhn7zr",
+   "text": "I’ve baked pop biscuits! They go pop in your mouth.",
+   "speaker": "silky",
+   "where": "whistling-kettle/biscuits"
+  },
+  {
+   "id": "t2603k",
+   "text": "Oh dear, oh dear! My whistling kettle! It’s GONE!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/gone",
+   "risky": "capitals “GONE”"
+  },
+  {
+   "id": "hsw53b",
+   "text": "Gone? Where did you leave it?",
+   "speaker": "silky",
+   "where": "whistling-kettle/where"
+  },
+  {
+   "id": "x5s0vh",
+   "text": "Eh? Up my SLEEVE? No, I’ve looked up there!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/sleeve",
+   "risky": "capitals “SLEEVE”"
+  },
+  {
+   "id": "1fg701s",
+   "text": "Not your sleeve! Where did you LEAVE it?",
+   "speaker": "moonface",
+   "where": "whistling-kettle/louder",
+   "risky": "capitals “LEAVE”"
+  },
+  {
+   "id": "1kham29",
+   "text": "Oh! On the top branch. Tap its lid, and it whistles a tune!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/branch"
+  },
+  {
+   "id": "12dc9su",
+   "text": "Listen! That’s your kettle. It’s up in the cloud!",
+   "speaker": "silky",
+   "where": "whistling-kettle/listen"
+  },
+  {
+   "id": "1j3g9h6",
+   "text": "A new land has come! But this cloud is too thick to see it.",
+   "speaker": "moonface",
+   "where": "whistling-kettle/newLand"
+  },
+  {
+   "id": "1u5kky1",
+   "text": "Can you blow the cloud away, Jasper? Tap it!",
+   "speaker": "moonface",
+   "where": "whistling-kettle/askCloud"
+  },
+  {
+   "id": "ud91yw",
+   "text": "Can you blow the cloud away? Tap it!",
+   "speaker": "moonface",
+   "where": "whistling-kettle/askCloud"
+  },
+  {
+   "id": "1s1fnyr",
+   "text": "Just tap the cloud. Whoosh!",
+   "speaker": "moonface",
+   "where": "whistling-kettle/nudgeCloud"
+  },
+  {
+   "id": "1n0hszk",
+   "text": "I’ll puff it away with a little spell.",
+   "speaker": "silky",
+   "where": "whistling-kettle/spellCloud"
+  },
+  {
+   "id": "1xcbfx6",
+   "text": "Whoosh! It’s gone! Thank you, Jasper!",
+   "speaker": "moonface",
+   "where": "whistling-kettle/thanksCloud"
+  },
+  {
+   "id": "m5q4qx",
+   "text": "Whoosh! It’s gone! Thank you!",
+   "speaker": "moonface",
+   "where": "whistling-kettle/thanksCloud"
+  },
+  {
+   "id": "1bjxyd2",
+   "text": "Oh no. It’s Dame Snap’s School!",
+   "speaker": "silky",
+   "where": "whistling-kettle/snapSchool"
+  },
+  {
+   "id": "1jotxgd",
+   "text": "Snap’s POOL? Lovely! I’ll go for a swim!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/pool",
+   "risky": "capitals “POOL”"
+  },
+  {
+   "id": "tnzaw",
+   "text": "That’s my kettle! I’d know that whistle anywhere!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/myKettle"
+  },
+  {
+   "id": "da5x0h",
+   "text": "In we go. Quiet as mice, everyone.",
+   "speaker": "moonface",
+   "where": "whistling-kettle/quiet"
+  },
+  {
+   "id": "5hmwnn",
+   "text": "THERE IT IS! MY KETTLE!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/there",
+   "risky": "capitals “THERE”, capitals “IT”, capitals “IS”, capitals “MY”, capitals “KETTLE”"
+  },
+  {
+   "id": "1tkse1",
+   "text": "Shh! Not so loud!",
+   "speaker": "silky",
+   "where": "whistling-kettle/shh",
+   "risky": "sound “Shh”"
+  },
+  {
+   "id": "1cfdetf",
+   "text": "Then, from inside the school… clack. Clack. CLACK.",
+   "speaker": "narrator",
+   "where": "whistling-kettle/clack",
+   "risky": "capitals “CLACK”"
+  },
+  {
+   "id": "owcmeh",
+   "text": "WHO is shouting in MY school?",
+   "speaker": "dameSnap",
+   "where": "whistling-kettle/who",
+   "risky": "capitals “WHO”, capitals “MY”"
+  },
+  {
+   "id": "1g65aa5",
+   "text": "That kettle WHISTLED! NOBODY whistles in my school!",
+   "speaker": "dameSnap",
+   "where": "whistling-kettle/whistled",
+   "risky": "capitals “WHISTLED”, capitals “NOBODY”"
+  },
+  {
+   "id": "1qwdpl3",
+   "text": "Eh? No WHISKERS? But I’ve got lovely whiskers!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/whiskers",
+   "risky": "capitals “WHISKERS”"
+  },
+  {
+   "id": "gi85f9",
+   "text": "NO whistling! NO kettles! And NO FUN!",
+   "speaker": "dameSnap",
+   "where": "whistling-kettle/noFun",
+   "risky": "capitals “NO”, capitals “FUN”"
+  },
+  {
+   "id": "wak7cx",
+   "text": "She hates whistling. So let’s give her a really big one!",
+   "speaker": "moonface",
+   "where": "whistling-kettle/plan"
+  },
+  {
+   "id": "1ev1mxk",
+   "text": "Can you tap the kettle’s lid, Jasper? Make it whistle!",
+   "speaker": "moonface",
+   "where": "whistling-kettle/askKettle"
+  },
+  {
+   "id": "1szpaav",
+   "text": "Can you tap the kettle’s lid? Make it whistle!",
+   "speaker": "moonface",
+   "where": "whistling-kettle/askKettle"
+  },
+  {
+   "id": "1x1gx6c",
+   "text": "Tap the little lid on top.",
+   "speaker": "moonface",
+   "where": "whistling-kettle/nudgeKettle"
+  },
+  {
+   "id": "1o1kwpq",
+   "text": "I’ll tap it myself. Ting!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/tingKettle"
+  },
+  {
+   "id": "1tt7djv",
+   "text": "STOP that WHISTLING!",
+   "speaker": "dameSnap",
+   "where": "whistling-kettle/stopIt",
+   "risky": "capitals “STOP”, capitals “WHISTLING”"
+  },
+  {
+   "id": "pcyhdm",
+   "text": "My RULER! Oh, BOTHER and BOTHER!",
+   "speaker": "dameSnap",
+   "where": "whistling-kettle/ruler",
+   "risky": "capitals “RULER”, capitals “BOTHER”"
+  },
+  {
+   "id": "78giun",
+   "text": "You did it! What a whistle!",
+   "speaker": "silky",
+   "where": "whistling-kettle/wellDone"
+  },
+  {
+   "id": "lr1beh",
+   "text": "What a whistle! She’s gone!",
+   "speaker": "silky",
+   "where": "whistling-kettle/whatAWhistle"
+  },
+  {
+   "id": "1ni3595",
+   "text": "My kettle! Hello, old friend!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/oldFriend"
+  },
+  {
+   "id": "4emtp1",
+   "text": "The land is moving on! Back to the ladder!",
+   "speaker": "moonface",
+   "where": "whistling-kettle/moving"
+  },
+  {
+   "id": "1ekto0u",
+   "text": "Home safe, and just in time for tea!",
+   "speaker": "moonface",
+   "where": "whistling-kettle/home"
+  },
+  {
+   "id": "dzsl1i",
+   "text": "Pop biscuits for everyone. And one for Jasper!",
+   "speaker": "silky",
+   "where": "whistling-kettle/oneFor"
+  },
+  {
+   "id": "nlcdge",
+   "text": "Pop biscuits for everyone. And one for you!",
+   "speaker": "silky",
+   "where": "whistling-kettle/oneFor"
+  },
+  {
+   "id": "t4fj5i",
+   "text": "Thank you, Jasper! You saved my kettle!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/thankYou"
+  },
+  {
+   "id": "1e8nvph",
+   "text": "Thank you! You saved my kettle!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/thankYou"
+  },
+  {
+   "id": "tjf1jy",
+   "text": "Who would like a cup of tea?",
+   "speaker": "moonface",
+   "where": "whistling-kettle/cupOfTea"
+  },
+  {
+   "id": "u4pphg",
+   "text": "A cup of BEES? No thank you! They buzz!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/bees",
+   "risky": "capitals “BEES”"
+  },
+  {
+   "id": "bl6ls",
+   "text": "Oh! TEA! Yes please!",
+   "speaker": "saucepan",
+   "where": "whistling-kettle/tea",
+   "risky": "capitals “TEA”"
+  },
+  {
+   "id": "937x2y",
+   "text": "And the kettle whistled all the way through tea.",
+   "speaker": "narrator",
+   "where": "whistling-kettle/end"
+  }
+ ]
+}

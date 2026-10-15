@@ -1,0 +1,88 @@
+/**
+ * Checks cartoons against the house rules before they reach the iPad.
+ *
+ *   npx tsx scripts/check-cartoon.ts            # every cartoon on the shelf
+ *   npx tsx scripts/check-cartoon.ts lost-kettle
+ *   npm run check -- lost-kettle
+ *
+ * For each cartoon:
+ *   - its lines pass checkLines (known speakers, short sentences, UK
+ *     English, nothing cruel, only {name} filled in)
+ *   - every line is used by the script (an unused line would be recorded
+ *     for nothing) and every line the script says exists
+ *   - every character, pose, backdrop and prop it asks for exists in a world
+ *   - there is at least one k.tapToHelp()
+ *   - the shelf entry and the file agree, and the id is kebab-case
+ *   - how long the speech alone runs (the floor for the running time)
+ *
+ * Exits 1 if any cartoon has an error. Warnings are printed but allowed.
+ * The checks themselves are in scripts/lib/cartoon-lint.ts (also run by
+ * tests/unit/cartoon-lint.test.ts).
+ */
+import { existsSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { isKebab } from '../src/core/cartoon';
+import { SHELF } from '../src/cartoons';
+import { WORLDS } from '../src/worlds';
+import { catalogue } from './lib/catalogue';
+import { lintCartoon } from './lib/cartoon-lint';
+
+const asks = process.argv.slice(2).filter((a) => !a.startsWith('-'));
+const unknown = asks.filter((id) => !SHELF.some((c) => c.id === id));
+if (unknown.length) {
+  console.error(`Not on the shelf (src/cartoons/index.ts): ${unknown.join(', ')}`);
+  console.error(`On the shelf: ${SHELF.map((c) => c.id).join(', ') || '(nothing yet)'}`);
+  process.exit(1);
+}
+const chosen = asks.length ? SHELF.filter((c) => asks.includes(c.id)) : SHELF;
+if (!chosen.length) {
+  console.log('The shelf is empty: nothing to check.');
+  process.exit(0);
+}
+
+const cat = catalogue();
+let failed = 0;
+
+for (const entry of chosen) {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const info: string[] = [];
+
+  if (!isKebab(entry.id)) errors.push(`id "${entry.id}" is not kebab-case`);
+  const file = fileURLToPath(new URL(`../src/cartoons/${entry.id}.ts`, import.meta.url));
+  if (!existsSync(file)) {
+    errors.push(`src/cartoons/${entry.id}.ts does not exist (a cartoon is one file named after its id)`);
+  } else {
+    let cartoon;
+    try {
+      cartoon = (await entry.load()).default;
+    } catch (e) {
+      errors.push(`could not load: ${e instanceof Error ? e.message : String(e)}`);
+    }
+    if (cartoon) {
+      for (const k of ['id', 'title', 'world', 'summary'] as const) {
+        if (cartoon[k] !== entry[k]) errors.push(`shelf ${k} "${entry[k]}" differs from the script's "${cartoon[k]}"`);
+      }
+      if (!(cartoon.world in WORLDS)) errors.push(`world "${cartoon.world}" does not exist`);
+      if (cartoon.scenes.length < 2) warnings.push(`only ${cartoon.scenes.length} scene: an episode has a few`);
+      if (cartoon.scenes.length > 7) warnings.push(`${cartoon.scenes.length} scenes: a 5 minute episode rarely needs more than 6`);
+      const result = lintCartoon({ id: entry.id, source: readFileSync(file, 'utf8'), lines: cartoon.lines, catalogue: cat });
+      errors.push(...result.errors);
+      warnings.push(...result.warnings);
+      const n = Object.keys(cartoon.lines).length;
+      info.push(
+        `${cartoon.scenes.length} scenes, ${n} lines, about ${Math.round(result.spokenSeconds)} s of speech, ${result.taps} tapToHelp`,
+        `scenes: ${cartoon.scenes.map((s, i) => `${i + 1} ${s.name}`).join(' · ')}`,
+      );
+    }
+  }
+
+  console.log(`${errors.length ? 'FAIL' : 'ok  '} ${entry.id}`);
+  for (const i of info) console.log(`       ${i}`);
+  for (const w of warnings) console.log(`  warn ${w}`);
+  for (const e of errors) console.log(`  ERROR ${e}`);
+  if (errors.length) failed++;
+}
+
+console.log(failed ? `\n${failed} of ${chosen.length} cartoons have errors.` : `\n${chosen.length} cartoon${chosen.length === 1 ? '' : 's'} pass.`);
+process.exit(failed ? 1 : 0);

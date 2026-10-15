@@ -1,0 +1,107 @@
+/* Grown-ups' corner: a normal, scrollable settings page on parchment. */
+
+.parent input,
+.parent select {
+  -webkit-user-select: text;
+  user-select: text;
+}
+.parent {
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: auto;
+  color: var(--ink-900);
+}
+.parent .p-head {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.parent h1 {
+  margin: 0;
+  font-size: 42px;
+}
+.parent h2 {
+  margin: 18px 0 8px;
+  font-size: 28px;
+}
+.parent h2:first-child {
+  margin-top: 0;
+}
+.p-note {
+  font-size: 20px;
+  color: var(--ink-700);
+}
+.p-body {
+  position: absolute;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  padding: 4px 12px 30px 4px;
+}
+
+.p-btn {
+  padding: 12px 24px;
+  border-radius: 14px;
+  font-size: 22px;
+  font-weight: 700;
+  background: var(--parchment-300);
+  box-shadow: 0 3px 0 rgba(90, 62, 30, 0.35);
+}
+.p-btn.primary {
+  background: var(--scarlet-500);
+  color: var(--parchment-100);
+}
+.p-btn.danger {
+  background: #f1d2c8;
+  color: var(--scarlet-600);
+}
+.p-btn:active,
+.p-btn.is-pressed {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(90, 62, 30, 0.35);
+}
+.p-btn:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+  transform: none;
+}
+
+.p-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 4px;
+  border-bottom: 2px solid rgba(90, 62, 30, 0.12);
+  font-size: 22px;
+}
+.p-row small {
+  display: block;
+  max-width: 560px;
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--ink-500);
+  margin-top: 3px;
+}
+
+.parent select,
+.parent input[type='text'] {
+  font: inherit;
+  font-size: 24px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 2px solid var(--parchment-400);
+  background: #fffaf0;
+  color: var(--ink-900);
+}
+
+/* Grown-ups tap with fingers too: every control is at least 72 px tall, as
+   everywhere else in the game. */
+.p-btn,
+.parent select,
+.parent input[type='text'] {
+  min-height: 72px;
+  min-width: 72px;
+  box-sizing: border-box;
+}

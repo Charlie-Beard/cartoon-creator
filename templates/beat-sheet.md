@@ -1,0 +1,43 @@
+# <Title, 2–5 words>
+
+- **Id:** <kebab-case, also the file name: src/cartoons/<id>.ts>
+- **World:** <faraway | hogwarts | …>
+- **Summary (for grown-ups, 1–2 sentences):** <…>
+- **Cast:** <ids from the world, 3–5; anyone new? → new-character>
+- **Places:** <backdrop ids; anything new? → new-backdrop>
+- **The problem (said out loud in scene 1):** <…>
+- **His turns (1–3):** <what he taps, and what it makes happen>
+- **The scary beat:** <who looms, how it's built, how it cuts back to the heroes>
+- **The warm ending:** <…>
+- **Length:** <3–5 scenes, about N minutes>
+
+## Scene 1: <name> (Hello)
+
+1. <one line per beat: who does what, or says what>
+2. …
+N. Hook: <the question or noise that leads to the next scene>
+
+## Scene 2: <name> (Off we go)
+
+1. …
+2. ★ His turn: <target> — ask / nudge / helped
+…
+
+## Scene 3: <name> (Uh-oh)
+
+1. …
+2. ⚠ Scary: <…> → cut back to the heroes
+3. ★ His turn: …
+…
+
+## Scene 4: <name> (Home)
+
+1. …
+N. The End: <the last picture>
+
+## Check
+
+- [ ] One clear problem, solved; no subplots
+- [ ] {name} 3–6 times; he is the hero of the turning points
+- [ ] Scary, never cruel (docs/STYLE.md); ends warm and safe
+- [ ] Every character sounds like their world notes say
