@@ -5,7 +5,8 @@
  *
  * Makes src/cartoons/<id>/ with meta.ts and cartoon.ts filled in with the
  * id, world and today's date. The folder is on the shelf at once (nothing
- * else lists cartoons); fill in the title, summary, thumb and the script.
+ * else lists cartoons); fill in the title, summary, thumb, the ledger (what
+ * the episode is about, so the series doesn't repeat itself) and the script.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -38,5 +39,6 @@ const today = new Date().toISOString().slice(0, 10);
 const fill = (s: string) => s.replaceAll('<id>', id).replaceAll('<world>', world).replaceAll('<YYYY-MM-DD>', today);
 mkdirSync(dir, { recursive: true });
 for (const f of ['meta.ts', 'cartoon.ts']) writeFileSync(join(dir, f), fill(readFileSync(join(templates, f), 'utf8')));
-console.log(`Made src/cartoons/${id}/ (meta.ts, cartoon.ts). Fill in the title, summary, thumb and the script.`);
+console.log(`Made src/cartoons/${id}/ (meta.ts, cartoon.ts). Fill in the title, summary, thumb, ledger and the script.`);
+console.log('Before planning, read what the other episodes were about: npm run check -- --ledger');
 console.log(`Backdrops in ${world}: ${Object.keys(WORLDS[world].backdrops).join(', ')}`);

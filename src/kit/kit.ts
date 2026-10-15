@@ -157,6 +157,7 @@ export class Kit<K extends string = string> {
     el.style.zIndex = String(o.z ?? 10);
     const inner = h('div', { class: 'story-flip', html });
     if (o.flip) inner.style.transform = 'scaleX(-1)';
+    el.dataset.flip = o.flip ? '1' : '0'; // mirrored or not (which way the art faces unmirrored isn't recorded)
     el.append(inner);
     this.root.append(el);
     return el;
@@ -173,6 +174,7 @@ export class Kit<K extends string = string> {
     if (!draw) throw new Error(`${c.name} has no pose "${o.pose}"`);
     const el = this.add(draw(), { w: 260, ...o });
     el.dataset.who = id;
+    el.dataset.actor = id; // for scripts/shots.mjs (frame checks): which character this is
     if (o.pose) el.dataset.pose = o.pose;
     return el;
   }
@@ -201,6 +203,7 @@ export class Kit<K extends string = string> {
   face(el: HTMLElement, flip: boolean): void {
     const inner = el.querySelector<HTMLElement>(':scope > .story-flip');
     if (inner) inner.style.transform = flip ? 'scaleX(-1)' : '';
+    el.dataset.flip = flip ? '1' : '0';
   }
 
   /** Removes an actor. */
@@ -281,10 +284,12 @@ export class Kit<K extends string = string> {
       }, 170);
     }
     const tw = gsap.to(el, { y: '-=6', rotation: '+=2', duration: 0.4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    el.dataset.speaking = ''; // for scripts/shots.mjs: who is talking in this frame
     let stopped = false;
     return () => {
       if (stopped) return;
       stopped = true;
+      delete el.dataset.speaking;
       if (flap) clearInterval(flap);
       open.forEach((m) => (m.style.opacity = '0'));
       shut.forEach((m) => (m.style.opacity = '1'));

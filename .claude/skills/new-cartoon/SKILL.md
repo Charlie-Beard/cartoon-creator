@@ -8,6 +8,21 @@ description: Make a new cartoon episode from a one-line idea ("/new-cartoon Sauc
 From a one-line idea to a finished, checked episode on the shelf. Work
 through the steps in order; don't skip the looking (step 7).
 
+**Who does what.** The story is where quality comes from, so the main
+session (the strongest model) keeps the parts that need taste, and
+hands the rest to cheaper subagents with the matching skill:
+
+| Step | Who |
+|---|---|
+| 1 Ask, 2 beat sheet, 4 script, 7 the final look | You (main session) |
+| 3 New reusable characters, backdrops, props | Sonnet subagent each (`new-character`, `new-backdrop`) |
+| 5 Check, 6 shots: running them and fixing what they report mechanically (ids, a line too long, a flagged frame that's plainly off stage) | Sonnet subagent, or you if it's one quick fix |
+| 8 Review | A fresh Sonnet subagent (`review-cartoon`): new eyes are the point |
+| Summarising long output (a pacing table, a test log) | Haiku, if you need it summarised at all |
+
+Give every subagent the episode id, the files it may touch, and what to
+report back; read what it changed before you carry on.
+
 ## 0. Read (every time; it's quick)
 
 (Several sessions or agents may share one machine: when you start a dev
@@ -15,12 +30,20 @@ server yourself, give it its own port, `npx vite --port 52xx`.)
 
 
 - `CLAUDE.md`, `docs/STYLE.md`, `docs/WRITING.md`. Skim `docs/KIT.md`.
-- The world's notes: `src/worlds/<world>/index.ts` (world `about`, every
-  character's `about`, the backdrops and props available).
+- The world, in text: `npm run catalogue -- <world> --brief` (an index of
+  everyone and everything, with sounds and moves), then
+  `npm run catalogue -- <world> about` (setting, tone, rules, what's never
+  shown), then `--id <id>` for each character and place you use. Don't
+  read `src/worlds/<world>/index.ts` or `moves.ts` to learn a world: the
+  catalogue is the same notes at a fraction of the size.
 - One or two finished cartoons in `src/cartoons/` for the standard
   expected (and, for more examples, the games' story scripts:
   `charlie-beard/maths-game` `src/stories/l7c8.ts`, `opening.ts`;
   `charlie-beard/spelling-game` `src/stories/`).
+
+Then `npm run check -- --ledger`: what every episode so far was about.
+Steer the idea away from recent villains, main places, turns and jokes,
+and tell the person if their idea repeats one.
 
 ## 1. Ask (2–4 quick questions, then go)
 
@@ -51,8 +74,8 @@ unless they stop you.
 ## 3. What's needed
 
 List every character, backdrop and prop the beat sheet uses, and look
-each up (`src/worlds/*/index.ts`, or `/lab.html?world=<id>` with the dev
-server). For each missing one decide:
+each up (`npm run catalogue -- <world> --id <id>`; to see them drawn,
+`npm run lab -- <world> chars --p <a>,<b>`). For each missing one decide:
 
 - **Reusable** (a new character, a place another episode could visit, a
   prop that will come back): add it to the world, following the
@@ -60,8 +83,8 @@ server). For each missing one decide:
 - **One-off** (this episode's special object): draw it in the cartoon's
   own file (docs/KIT.md, "Drawing one-off art").
 
-Sounds and moves too: **check `src/worlds/<world>/moves.ts` first** (and
-`src/worlds/common/moves.ts`) for the cast's signature sounds and moves
+Sounds and moves too: **check `npm run catalogue -- <world> moves`
+first** (it covers common and the kit's `k.fx`/`k.sfx` too) for the cast's signature sounds and moves
 (Dame Snap's heels, the Saucepan Man's "Eh?", Hedwig's wings …) before
 writing your own.
 
@@ -74,7 +97,8 @@ yourself when they're done, so no two agents edit the same file.
 ## 4. Script
 
 - `npm run new -- <id> <world>` makes `src/cartoons/<id>/` from the
-  templates: fill in `meta.ts` (title, summary, `thumb`) and write the
+  templates: fill in `meta.ts` (title, summary, `thumb`, and the `ledger`
+  of what it's about: docs/WRITING.md, "The ledger") and write the
   script in `cartoon.ts`. It's on the shelf as soon as the folder exists.
   A long episode can keep its one-off art or sounds in their own files
   in the folder (`art.ts`, `sounds.ts`).
@@ -83,6 +107,15 @@ yourself when they're done, so no two agents edit the same file.
 - Lines in the order they're said, keys that say what each line is.
 - Each scene: `set` builds the opening picture (no waiting, no motion;
   hide later entrances with `k.set(el, { opacity: 0 })`), `play` runs it.
+- **Before staging a scene, check the set pieces**
+  (`npm run catalogue -- <world> pieces`; docs/WORLDS.md, "pieces.ts"):
+  the ladder arrival, "the land is moving on", the Slippery-Slip, tea in
+  Moon-Face's room, Dame Snap's loom and defeat, the owl post, the Great
+  Hall, a spell lesson, brooms and apparating, Voldemort's loom, a
+  "meanwhile…" cut, a noise off, the warm ending. Pass your line keys in;
+  keep his `k.tapToHelp` in your script, between a piece's parts. Vary
+  them (a different line, a different place, a twist) so episodes don't
+  feel the same.
 - Put a sound on every action that matters; music per scene; one thing
   moving at a time; a quiet beat after big moments. Use the world's
   `moves.ts` (`import { sounds, moves } from '../../worlds/<world>/moves'`)
@@ -104,10 +137,11 @@ Fix everything it reports. Don't silence a rule; rewrite the line.
 ## 6. Watch it
 
 ```bash
+npm run shots -- <id> --openings          # each scene's opening picture only, ~5 s: after placing anyone
 npm run shots -- <id> --fast              # the whole episode on a fake clock, about a minute
 npm run shots -- <id> --fast --scene 2    # one scene (from 1), while fixing it
 npm run shots -- <id> --fast --no-tap     # lets every turn run out: see the nudge and helped lines
-npm run shots -- <id>                     # real time, 3–5 minutes: the final pacing check
+npm run shots -- <id> --strict            # real time, 3–5 minutes: the final check (fails on any flag)
 ```
 
 It plays the episode in Chromium at 1180 × 820, saves a frame of every
@@ -117,9 +151,17 @@ silent stretch over 4 s. Iterate with `--fast` after every round of
 changes (its times are story-clock times with the stand-in voice, close
 to the real thing); the last run before the PR is without it.
 
+It also checks the layout of every frame itself (an actor 25%+ off
+stage, a face in the caption band, characters overlapping 35%+, more
+than 4 characters, a tap target under 120 px or off stage, the speaker
+out of shot) and lists **Frames to look at** (also `flags.json`, and a
+red outline on the contact sheet).
+
 ## 7. Look (the step that matters most)
 
-Read the contact sheet and every scene's opening frame. For each, ask:
+Read the contact sheet, every scene's opening frame (`scene<n>-0.png`)
+and every flagged frame; you don't need the rest one by one. Fix or
+justify every flag. For each frame, ask:
 
 - Is everyone where they should be: on stage, not under the caption
   band (y 690+), not overlapping by accident, facing whoever they talk to?

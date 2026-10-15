@@ -169,6 +169,11 @@ function whistle(): void {
 }
 ```
 
+Whole recurring scenes (the climb into a land, tea in Moon-Face's room,
+Dame Snap looming, the owl post, the Great Hall feast) are **set pieces**
+in `src/worlds/<world>/pieces.ts`: check them before staging a scene
+yourself (docs/WORLDS.md, "pieces.ts").
+
 ## Drawing one-off art
 
 Art only this cartoon needs (a lost kettle, a special door) is drawn in
@@ -198,6 +203,12 @@ origin }, children)`; `raw(svgMarkup)`.
 
 ## Facts worth knowing
 
+- **The kit marks actors for the screenshot checks:** `data-actor="<id>"`
+  on characters, `data-prop="<id>"` on props, `data-flip`, and
+  `data-speaking` on whoever `k.say` is bobbing. Pass the speaker to
+  `k.say`, or the speaker check can't see who is talking. Under a camera
+  zoom the off-stage and caption-band checks are skipped, but the speaker
+  check isn't: keep whoever is speaking in the shot.
 - **While someone speaks, move them only in x.** `say` bobs the speaker
   with `y` and `rotation`; a tween on those at the same time fights it.
   Hop or tilt them before or after the line, or move an actor that

@@ -45,6 +45,23 @@ of one line each, marking his turns and the scary beat. Check it against
 the table above and docs/STYLE.md. It goes, shortened, into the comment
 at the top of the cartoon's `cartoon.ts`.
 
+## The ledger
+
+Before planning, run `npm run check -- --ledger` and read what the other
+episodes were about: pick a different problem, a different main place
+and, where you can, a different villain, and a new turn rather than the
+same tap again.
+
+Every `meta.ts` has a `ledger`: one short line each for `problem`,
+`villain` (a character id, or a gentler danger in words, or left out),
+`places` (backdrop ids, **main place first**), `cast`, `turns` (one
+phrase per `tapToHelp`: "blow the cloud away"), `jokes` (running jokes,
+always worded the same) and `ending`. `npm run check` fails without one,
+and warns when a villain, main place, turn, problem or running joke is
+much like a recent episode's. A warning is fine if the repeat is
+deliberate; a joke in each of a world's last two episodes is the one to
+rest.
+
 ## Lines
 
 - **One or two short sentences**, 140 characters at most, 16 words a
@@ -138,6 +155,8 @@ Each scene is `{ name, set(k), play(k) }`:
       by mistake, nothing under the caption band, faces visible, no
       clutter.
 - [ ] `meta.ts` filled in (title, summary, a `thumb` backdrop, `added` date).
+- [ ] `ledger` in meta.ts filled in and true to the script; any "much like"
+      warnings are deliberate.
 - [ ] typecheck, `npm test`, `npm run test:e2e` pass.
 - [ ] Voice: new speakers have a cast entry or are listed for a grown-up
       to choose (`voice-cartoon` skill).

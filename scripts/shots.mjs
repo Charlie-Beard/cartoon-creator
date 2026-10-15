@@ -7,6 +7,8 @@
  *   npm run shots -- lost-kettle --no-tap           # wait out every tap-to-help
  *   npm run shots -- lost-kettle --url http://localhost:5173   # use a dev server already running
  *   npm run shots -- lost-kettle --fast             # iterating on frames: seconds, not minutes (see below)
+ *   npm run shots -- lost-kettle --openings         # only each scene's opening set, in seconds (see below)
+ *   npm run shots -- lost-kettle --strict           # exit 1 if anything is flagged (pacing or layout)
  *   npm run shots -- --help
  *
  * It starts `vite` on a free port itself (unless --url is given), opens
@@ -39,8 +41,8 @@
  * showing and no tap waiting.
  *
  * Flags: a scene over 90 s, an episode outside 2–5 minutes, a silent
- * stretch. Exits 1 on an error (the script threw, a scene never finished);
- * --strict also exits 1 on a flag.
+ * stretch, and the layout problems below. Exits 1 on an error (the script
+ * threw, a scene never finished); --strict also exits 1 on a flag.
  *
  * --fast: for iterating on frames. The page runs on Playwright's fake clock
  * (page.clock, the way tests/e2e/cartoons.spec.ts plays an episode), pushed
@@ -57,20 +59,49 @@
  * recorded lengths. FOR THE FINAL PACING CHECK RUN WITHOUT --fast (real
  * time, recordings playing for real); --fast is for fixing frames.
  *
+ * LAYOUT CHECKS: at every frame (the page is asked, just before the screenshot,
+ * where every character and prop is, who is speaking, where the caption and
+ * the tap-to-help are), scripts/lib/frame-check.mjs looks for: an actor 25%+
+ * off the stage (and still so a frame later); a face reaching into the
+ * caption band (y 690+) under a caption; two characters overlapping by more
+ * than 35% of the smaller; more than 4 characters at once; a tap-to-help
+ * target under 120 px or partly off stage; the speaker off stage or
+ * invisible while their line is captioned. After the pacing report it prints
+ * "Frames to look at": each flagged frame's file and why. The same goes in
+ * screenshots/<id>/flags.json, and flagged frames get a red outline on the
+ * contact sheet. So: read the contact sheet, each scene's opening frame
+ * (scene<n>-0.png) and the flagged frames, not every frame. --strict exits 1
+ * if anything is flagged (pacing or layout). The page marks its actors with
+ * data-actor / data-prop (src/kit/kit.ts) for this.
+ *
+ * --openings: only each scene's opening set, as fast as the machine allows
+ * (a few seconds), for a quick layout check after moving people around. No
+ * play-through, so no pacing report. The page runs on the fake clock only
+ * until the scene's set() has built the stage, then the curtains and the
+ * title banner are hidden and the frame taken: it is the set as it stands
+ * before play() has moved anything. Frames go to <out>/openings/scene<n>.png
+ * with a small sheet.png and flags.json beside them (a full run's files are
+ * left alone). The frame checks run on them (no caption is showing yet, so
+ * not the caption-band or speaker checks: a set often parks people out of
+ * sight behind a foreground prop for play() to bring up). Scenes run
+ * --parallel at once (default 4).
+ *
  * Options: --every S (seconds between frames, default 3), --frames N (cap on
  * frames per scene after the opening set; default no cap but a safety cap of
- * 60), --parallel N (scenes at once, default 1, or 4 with --fast: in real
- * time more are quicker but a busy machine makes GSAP lag-smooth and the
- * times read high), --no-tap, --fast, --strict, --out DIR, --help.
+ * 60), --parallel N (scenes at once, default 1, or 4 with --fast or
+ * --openings: in real time more are quicker but a busy machine makes GSAP
+ * lag-smooth and the times read high), --no-tap, --fast, --openings,
+ * --strict, --out DIR, --help.
  *
  * Chromium comes from PW_CHROMIUM (or /opt/pw-browsers/chromium if that
  * exists, else Playwright's own).
  */
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
 import { chromiumPath, createDevServer } from './lib/dev-server.mjs';
+import { checkScene } from './lib/frame-check.mjs';
 import { SHELF } from './lib/shelf.ts';
 import { spokenSeconds } from '../src/core/cartoon.ts';
 import { DEFAULT_NAME, personalise } from '../src/core/phrases.ts';
@@ -93,15 +124,22 @@ const USAGE = `Usage: npm run shots -- <cartoonId> [options]
                  still one every --every seconds of story time and the times in the report
                  are story-clock times (recordings are not played; the stand-in voice speaks
                  every line at its estimateSeconds). Do the FINAL pacing check without it.
+  --openings     only each scene's opening set, in seconds: for a quick layout check after
+                 moving people around. Frames and a small sheet go in <out>/openings/. No pacing.
   --scene N      one scene only (numbered from 1)
   --no-tap       don't tap the tap-to-help: wait out each one (~21 s) as a child who never taps
   --every S      seconds between frames (default 3)
   --frames N     most frames per scene after the opening set (default and cap 60)
-  --parallel N   scenes at once (default 1; 4 with --fast)
+  --parallel N   scenes at once (default 1; 4 with --fast or --openings)
   --url URL      use a dev server that is already running
   --out DIR      where the PNGs go (default screenshots/<id>)
-  --strict       exit 1 on a pacing flag too, not only on an error
-  --help         this`;
+  --strict       exit 1 on a flag too (pacing or layout), not only on an error
+  --help         this
+
+Layout checks run on every frame (scripts/lib/frame-check.mjs): an actor 25%+ off stage, a face in
+the caption band (y 690+), characters overlapping 35%+, more than 4 characters, a tap-to-help under
+120 px or off stage, the speaker off stage. See "Frames to look at" in the report, flags.json, and the
+red outlines on sheet.png: read those and each scene's opening frame, not every frame.`;
 if (flag('help') || flag('h')) {
   console.log(USAGE);
   process.exit(0);
@@ -122,10 +160,11 @@ const EVERY = Number(option('every', 3));
 /** Most frames kept per scene after the opening set: --frames N, but never more than the safety cap. */
 const MAX_FRAMES = 60;
 const FRAMES = Math.min(MAX_FRAMES, option('frames') === undefined ? MAX_FRAMES : Number(option('frames')));
-const FAST = flag('fast');
+const OPENINGS = flag('openings');
+const FAST = flag('fast') || OPENINGS; // the openings are shot on the fake clock too
 const PARALLEL = Math.max(1, Number(option('parallel', FAST ? 4 : 1)));
 const NO_TAP = flag('no-tap');
-const OUT = resolve(ROOT, option('out', join('screenshots', id)));
+const OUT = resolve(ROOT, option('out', join('screenshots', id)), OPENINGS ? 'openings' : '.');
 const only = option('scene') === undefined ? null : Number(option('scene')) - 1;
 /** Scenes are numbered from 1 for people (scene 1 is `?scene=0`). */
 const sceneIndexes = only === null ? cartoon.scenes.map((_, i) => i) : [only];
@@ -231,6 +270,76 @@ function installProbe() {
   }, 40);
 }
 
+/**
+ * Runs in the page (page.evaluate: it must not use anything outside itself):
+ * where everything is NOW, in stage coordinates, as a Frame for
+ * scripts/lib/frame-check.mjs (the shape is described there). Stage
+ * coordinates come from the stage element's own scale, so the numbers hold
+ * at any window size; the camera's zoom is included, as it is what he sees.
+ */
+function collectFrame() {
+  const stage = document.querySelector('.story-stage');
+  if (!stage) return null;
+  const s = stage.getBoundingClientRect();
+  const k = s.width / 1180 || 1;
+  const box = (el) => {
+    const r = el.getBoundingClientRect();
+    return { x: (r.left - s.left) / k, y: (r.top - s.top) / k, w: r.width / k, h: r.height / k };
+  };
+  const world = stage.querySelector('.story-world');
+  const zoom = world ? world.getBoundingClientRect().width / s.width : 1;
+  // A name for each element that stays the same from frame to frame: "moonface#1".
+  const ids = (window.__frameIds ??= { map: new WeakMap(), counts: {} });
+  const keyOf = (el, name) => {
+    let key = ids.map.get(el);
+    if (!key) {
+      ids.counts[name] = (ids.counts[name] ?? 0) + 1;
+      key = `${name}#${ids.counts[name]}`;
+      ids.map.set(el, key);
+    }
+    return key;
+  };
+  /** Its own opacity times its parents' (up to the stage), and whether it is displayed at all. */
+  const look = (el) => {
+    let opacity = 1;
+    let shown = true;
+    for (let e = el; e && e !== stage; e = e.parentElement) {
+      const cs = getComputedStyle(e);
+      if (cs.display === 'none' || cs.visibility === 'hidden') shown = false;
+      opacity *= parseFloat(cs.opacity);
+    }
+    return { opacity, shown };
+  };
+  const actors = [...stage.querySelectorAll('.story-actor')]
+    .filter((el) => el.dataset.actor || el.dataset.prop)
+    .map((el) => {
+      const character = !!el.dataset.actor;
+      const name = el.dataset.actor || el.dataset.prop;
+      return { key: keyOf(el, name), kind: character ? 'character' : 'prop', name, box: box(el), ...look(el), speaking: el.dataset.speaking !== undefined };
+    });
+  const cap = stage.querySelector('.story-caption');
+  const bubble = cap?.querySelector('.story-caption-text');
+  const on = !!cap?.classList.contains('on');
+  const tap = stage.querySelector('[data-tap-to-help]');
+  return {
+    stage: { w: 1180, h: 820 },
+    zoom,
+    actors,
+    caption: { on, box: bubble ? box(bubble) : null },
+    tap: tap ? { box: box(tap) } : null,
+  };
+}
+const NO_FRAME = { stage: { w: 1180, h: 820 }, zoom: 1, actors: [], caption: null, tap: null };
+
+/** Runs the layout checks over a scene's frames and writes each one's reasons on it. */
+function checkFrames(frames, opts) {
+  const reasons = checkScene(
+    frames.map((f) => f.data ?? NO_FRAME),
+    opts,
+  );
+  frames.forEach((f, i) => (f.reasons = reasons[i]));
+}
+
 // ------------------------------------------------------------ the timeline
 
 /**
@@ -318,8 +427,9 @@ async function shootScene(browser, context, base, index) {
     const k = result.frames.length;
     const file = join(OUT, `scene${index + 1}-${k}.png`);
     const t = await page.evaluate(() => (performance.now() - window.__probe.sceneT) / 1000).catch(() => 0);
+    const data = await page.evaluate(collectFrame).catch(() => null);
     await page.screenshot({ path: file });
-    result.frames.push({ k, file, t, tap });
+    result.frames.push({ k, file, t, tap, data, reasons: [] });
   };
   const state = () => page.evaluate(() => ({ scene: window.__probe.scene, end: window.__probe.end, tapping: window.__probe.tapping, taps: window.__probe.taps }));
 
@@ -378,6 +488,7 @@ async function shootScene(browser, context, base, index) {
     result.taps = mine.filter((e) => e.type === 'tap').length;
     if (from >= 0) Object.assign(result, timeline(events, from, to));
     result.lines = result.captions.map((c) => c.text);
+    checkFrames(result.frames);
   } catch (e) {
     result.errors.push(e.message);
     await page.screenshot({ path: join(OUT, `scene${index + 1}-error.png`) }).catch(() => {});
@@ -388,30 +499,86 @@ async function shootScene(browser, context, base, index) {
   return result;
 }
 
+/**
+ * --openings: one scene's opening set and nothing else. The page runs on the
+ * fake clock, paused: the player builds the set behind the curtains and then
+ * waits ~2.4 s (story time) before play() begins, so the moment the backdrop
+ * exists is the moment the set is finished and nothing has yet moved. The
+ * curtains and the title banner are hidden for the picture, and the clock is
+ * never pushed on past that. Quick: the cost is loading the page.
+ */
+async function shootOpening(browser, base, index) {
+  const result = { index, name: cartoon.scenes[index].name, frames: [], errors: [] };
+  const own = await browser.newContext(CONTEXT);
+  const page = await own.newPage();
+  await page.clock.install({ time: FAKE_START });
+  await page.clock.pauseAt(FAKE_START + 1000);
+  await page.route('**/audio/manifest.json', (route) => route.fulfill({ json: { lines: [] } }));
+  page.on('pageerror', (e) => result.errors.push(`${e.message}`));
+  page.on('console', (m) => {
+    if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) result.errors.push(`console: ${m.text()}`);
+  });
+  try {
+    await page.goto(`${base}/?cartoon=${id}&scene=${index}`);
+    const began = Date.now();
+    // Push the clock on a little at a time until set() has run (the title banner's entrance comes first).
+    for (;;) {
+      if (await page.evaluate(() => document.querySelector('.story-stage .story-backdrop') !== null)) break;
+      if (result.errors.length) throw new Error('the script threw before the scene began');
+      if (Date.now() - began > 40_000) throw new Error('set() never built a backdrop (does the cartoon load? is set() throwing?)');
+      await page.clock.runFor(100);
+      await page.waitForTimeout(REAL_PAUSE_MS);
+    }
+    // A zero-length camera move in set() lands on the next frame.
+    await page.clock.runFor(50);
+    await page.addStyleTag({ content: '.story-curtain, .story-title { visibility: hidden !important; }' });
+    const file = join(OUT, `scene${index + 1}.png`);
+    const data = await page.evaluate(collectFrame).catch(() => null);
+    await page.screenshot({ path: file });
+    result.frames.push({ k: 0, file, t: 0, tap: false, data, reasons: [] });
+    checkFrames(result.frames);
+  } catch (e) {
+    result.errors.push(e.message);
+    await page.screenshot({ path: join(OUT, `scene${index + 1}-error.png`) }).catch(() => {});
+  } finally {
+    await page.close().catch(() => {});
+    await own.close().catch(() => {});
+  }
+  return result;
+}
+
 // ------------------------------------------------------------- contact sheet
 
 const esc = (s) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
 
-async function contactSheet(context, results, base) {
-  const rows = results
-    .map((r) => {
-      const label = `Scene ${r.index + 1}: ${esc(r.name)}${r.seconds === null ? '' : ` (${r.seconds.toFixed(0)} s)`}`;
-      const thumbs = r.frames
-        .map((f, i) => `<figure><img src="${pathToFileURL(f.file).href}"><figcaption>${i === 0 ? 'opening set' : `${f.t.toFixed(0)} s${f.tap ? ' (tap waiting)' : ''}`}</figcaption></figure>`)
+async function contactSheet(context, results) {
+  const thumb = (f, label) => {
+    const flagged = f.reasons.length > 0;
+    const why = flagged ? `<div class="why">${esc([...new Set(f.reasons.map((r) => r.kind))].join(', '))}</div>` : '';
+    return `<figure${flagged ? ' class="flagged"' : ''}><img src="${pathToFileURL(f.file).href}"><figcaption>${label}${why}</figcaption></figure>`;
+  };
+  const rows = OPENINGS
+    ? `<div class="row">${results.map((r) => thumb(r.frames[0] ?? { file: join(OUT, `scene${r.index + 1}-error.png`), reasons: [] }, `scene ${r.index + 1}: ${esc(r.name)}`)).join('')}</div>`
+    : results
+        .map((r) => {
+          const label = `Scene ${r.index + 1}: ${esc(r.name)}${r.seconds === null ? '' : ` (${r.seconds.toFixed(0)} s)`}`;
+          const thumbs = r.frames.map((f, i) => thumb(f, i === 0 ? 'opening set' : `${f.t.toFixed(0)} s${f.tap ? ' (tap waiting)' : ''}`)).join('');
+          return `<section><h2>${label}</h2><div class="row">${thumbs}</div></section>`;
+        })
         .join('');
-      return `<section><h2>${label}</h2><div class="row">${thumbs}</div></section>`;
-    })
-    .join('');
   const html = `<!doctype html><meta charset="utf-8"><title>${esc(cartoon.title)}</title>
 <style>
   body { margin: 0; padding: 16px; width: 1232px; background: #1f2a22; color: #f4ecd8; font: 15px/1.3 system-ui, sans-serif; }
   h1 { margin: 0 0 12px; font-size: 22px; } h2 { margin: 16px 0 6px; font-size: 16px; }
   .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
   figure { margin: 0; } img { width: 100%; display: block; border-radius: 4px; background: #000; }
+  figure.flagged img { outline: 5px solid #e8302a; outline-offset: -5px; }
   figcaption { font-size: 12px; opacity: 0.7; padding-top: 2px; }
+  .why { color: #ff8a80; font-weight: 700; opacity: 1; }
+  figure.flagged figcaption { opacity: 1; }
 </style>
-<h1>${esc(cartoon.title)} <small style="opacity:.6">(${esc(id)})</small></h1>${rows}`;
+<h1>${esc(cartoon.title)} <small style="opacity:.6">(${esc(id)}${OPENINGS ? ', opening sets' : ''})</small></h1>${rows}`;
   const file = join(OUT, 'sheet.html');
   writeFileSync(file, html);
   const page = await context.newPage();
@@ -421,7 +588,29 @@ async function contactSheet(context, results, base) {
   await page.screenshot({ path: join(OUT, 'sheet.png'), fullPage: true });
   await page.close();
   rmSync(file);
-  void base;
+}
+
+// ------------------------------------------------------------ frames to look at
+
+/** The flagged frames of every scene, in order: what to print and what goes in flags.json. */
+function flaggedFrames(results) {
+  const out = [];
+  for (const r of results) for (const f of r.frames) if (f.reasons.length) out.push({ scene: r.index + 1, frame: f.k, t: Math.round(f.t * 10) / 10, tap: f.tap, file: relative(ROOT, f.file), reasons: f.reasons.map((x) => `${x.kind}: ${x.message}`) });
+  return out;
+}
+
+/** Prints "Frames to look at" and writes flags.json. Returns the flagged frames. */
+function reportFrames(results) {
+  const flagged = flaggedFrames(results);
+  const checked = results.reduce((n, r) => n + r.frames.length, 0);
+  console.log(`\nFrames to look at (layout checks on ${checked} frame${checked === 1 ? '' : 's'}: ${flagged.length} flagged)`);
+  if (!flagged.length) console.log('  none: no actor off stage, no face under a caption, no pile-ups, no tap-to-help problems, no missing speaker.');
+  for (const f of flagged) {
+    console.log(`  ${f.file}   (scene ${f.scene}, ${f.frame === 0 ? 'opening set' : `${f.t} s${f.tap ? ', tap waiting' : ''}`})`);
+    for (const r of f.reasons) console.log(`      - ${r}`);
+  }
+  writeFileSync(join(OUT, 'flags.json'), JSON.stringify({ id, mode: OPENINGS ? 'openings' : FAST ? 'fast' : 'real-time', checked, flagged }, null, 2) + '\n');
+  return flagged;
 }
 
 // ---------------------------------------------------------------------- run
@@ -430,7 +619,7 @@ let exitCode = 0;
 try {
   mkdirSync(OUT, { recursive: true });
   // Old frames from an earlier, longer run would mislead.
-  const stale = only === null ? /^scene\d+-.*\.png$|^sheet\.png$/ : new RegExp(`^scene${only + 1}-.*\\.png$|^sheet\\.png$`);
+  const stale = only === null ? /^scene\d+(-.*)?\.png$|^sheet\.png$/ : new RegExp(`^scene${only + 1}(-.*)?\\.png$|^sheet\\.png$`);
   for (const f of readdirSync(OUT)) if (stale.test(f)) rmSync(join(OUT, f));
 
   const base = (option('url') ?? (await startServer())).replace(/\/$/, '');
@@ -440,10 +629,35 @@ try {
   // The dev server turns the code into modules the first time it is asked: do that before any timing.
   const warm = await context.newPage();
   await warm.goto(`${base}/?cartoon=${id}`);
-  await warm.waitForFunction(() => document.querySelector('[data-scene]') !== null, null, { timeout: 60_000 }).catch(() => {});
+  // (--openings only needs the set built, which comes well before the curtains open.)
+  await warm.waitForFunction((sel) => document.querySelector(sel) !== null, OPENINGS ? '.story-stage .story-backdrop' : '[data-scene]', { timeout: 60_000 }).catch(() => {});
   await warm.close();
 
   const parallel = Math.min(PARALLEL, sceneIndexes.length);
+  if (OPENINGS) {
+    const t0 = Date.now();
+    console.log(`${cartoon.title} (${id}): the opening set of ${sceneIndexes.length} scene${sceneIndexes.length === 1 ? '' : 's'}, ${parallel} at a time (--openings)...`);
+    const shots = new Array(sceneIndexes.length);
+    let n = 0;
+    await Promise.all(
+      Array.from({ length: parallel }, async () => {
+        while (n < sceneIndexes.length) {
+          const slot = n++;
+          shots[slot] = await shootOpening(browser, base, sceneIndexes[slot]);
+        }
+      }),
+    );
+    await contactSheet(context, shots);
+    await browser.close();
+    const errs = shots.flatMap((r) => r.errors.map((e) => `scene ${r.index + 1}: ${e}`));
+    const flagged = reportFrames(shots);
+    for (const e of errs) console.log(`ERROR  ${e}`);
+    console.log(`\nOpening sets: ${OUT}/scene<n>.png   Sheet: ${join(OUT, 'sheet.png')}   Flags: ${join(OUT, 'flags.json')}   (${((Date.now() - t0) / 1000).toFixed(1)} s)`);
+    if (errs.length || (flag('strict') && flagged.length)) exitCode = 1;
+    process.exitCode = exitCode;
+    stopServer();
+    process.exit(exitCode);
+  }
   console.log(`${cartoon.title} (${id}): ${sceneIndexes.length} scene${sceneIndexes.length === 1 ? '' : 's'}, ${FAST ? 'on a fake clock (--fast)' : 'in real time'}, ${parallel} at a time, ${NO_TAP ? 'waiting out every tap-to-help (--no-tap)' : 'tapping every tap-to-help at once'}...`);
   const results = new Array(sceneIndexes.length);
   let next = 0;
@@ -458,7 +672,7 @@ try {
     }),
   );
 
-  await contactSheet(context, results, base);
+  await contactSheet(context, results);
   await browser.close();
 
   // ---------------------------------------------------------- the report
@@ -516,9 +730,10 @@ try {
   }
   for (const f of flags) console.log(`FLAG   ${f}`);
   for (const e of errors) console.log(`ERROR  ${e}`);
-  console.log(`\nContact sheet: ${join(OUT, 'sheet.png')}   (look at this first, then any scene that looks odd)`);
+  const layout = reportFrames(results);
+  console.log(`\nContact sheet: ${join(OUT, 'sheet.png')}   (look at this first, then each scene's opening frame and the frames to look at above)`);
   console.log(`Screenshots:   ${OUT}/scene<n>-<k>.png`);
-  if (errors.length || (flag('strict') && flags.length)) exitCode = 1;
+  if (errors.length || (flag('strict') && (flags.length || layout.length))) exitCode = 1;
 } catch (e) {
   console.error(e instanceof Error ? e.message : e);
   exitCode = 1;
