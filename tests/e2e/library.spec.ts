@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { SHELF } from '../../src/cartoons';
+import { SHELF } from '../../scripts/lib/shelf';
 import { cardFor } from './helpers';
 
 /** The shelf shows one card per cartoon (and a kind word when there are none). */

@@ -22,7 +22,10 @@ export default defineConfig({
   },
   projects: [
     { name: 'home-screen', use: { viewport: { width: 1180, height: 820 } } },
-    { name: 'safari-tab', use: { viewport: { width: 1180, height: 760 } } },
+    // The shorter Safari-tab viewport checks the screens' layout; playing every
+    // cartoon through again at that size would double the slowest tests for
+    // nothing (the stage is letterboxed the same way).
+    { name: 'safari-tab', use: { viewport: { width: 1180, height: 760 } }, testIgnore: /cartoons\.spec/ },
   ],
   webServer: {
     command: `npm run build && npx vite preview --port ${port} --strictPort`,

@@ -90,15 +90,20 @@ describe('tapToHelp', () => {
  * recorded for nothing, and nothing in the script that no world can draw.
  * (scripts/check-cartoon.ts also checks the rest: npm run check.)
  */
-const sources = import.meta.glob('../../src/cartoons/*.ts', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const files = import.meta.glob('../../src/cartoons/*/*.ts', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+/** Every .ts file in a cartoon's folder, joined (as scripts/lib/shelf.ts sourceOf does). */
+const sourceOf = (id: string): string | undefined => {
+  const mine = Object.keys(files).filter((f) => f.startsWith(`../../src/cartoons/${id}/`)).sort();
+  return mine.length ? mine.map((f) => files[f]).join('\n') : undefined;
+};
 
 describe('every cartoon on the shelf', () => {
   for (const entry of SHELF) {
     describe(entry.id, () => {
-      const source = sources[`../../src/cartoons/${entry.id}.ts`];
+      const source = sourceOf(entry.id);
 
-      it('is a file named after its id', () => {
-        expect(source, `src/cartoons/${entry.id}.ts`).toBeTypeOf('string');
+      it('is a folder named after its id', () => {
+        expect(source, `src/cartoons/${entry.id}/`).toBeTypeOf('string');
       });
 
       it('uses every line it lists, and only lines it lists', async () => {

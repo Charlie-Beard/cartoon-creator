@@ -54,7 +54,7 @@ import { createServer } from 'node:net';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
-import { SHELF } from '../src/cartoons/index.ts';
+import { SHELF } from './lib/shelf.ts';
 import { spokenSeconds } from '../src/core/cartoon.ts';
 import { DEFAULT_NAME, personalise } from '../src/core/phrases.ts';
 
@@ -78,7 +78,7 @@ if (!id) {
 }
 const entry = SHELF.find((c) => c.id === id);
 if (!entry) {
-  console.error(`"${id}" is not on the shelf (src/cartoons/index.ts). On the shelf: ${SHELF.map((c) => c.id).join(', ') || '(nothing yet)'}`);
+  console.error(`"${id}" is not on the shelf (src/cartoons/<id>/). On the shelf: ${SHELF.map((c) => c.id).join(', ') || '(nothing yet)'}`);
   process.exit(2);
 }
 const cartoon = (await entry.load()).default;

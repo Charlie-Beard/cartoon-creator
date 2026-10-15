@@ -13,7 +13,7 @@
  * characters and cast.json entries nobody uses.
  */
 import { readFileSync } from 'node:fs';
-import { SHELF } from '../../src/cartoons';
+import { SHELF } from '../lib/shelf';
 import { WORLDS } from '../../src/worlds';
 
 const cast = Object.entries(JSON.parse(readFileSync(new URL('./cast.json', import.meta.url), 'utf8')) as Record<string, { voice_id?: string; name?: string }>).filter(
@@ -30,7 +30,7 @@ const nameOf = (id: string): string => (id === 'narrator' ? 'Narrator' : (Object
 const asked = process.argv.slice(2).filter((a) => !a.startsWith('-'));
 const unknown = asked.filter((id) => !SHELF.some((c) => c.id === id));
 if (unknown.length) {
-  console.error(`Not on the shelf (src/cartoons/index.ts): ${unknown.join(', ')}`);
+  console.error(`Not on the shelf (no src/cartoons/<id>/meta.ts): ${unknown.join(', ')}`);
   process.exit(1);
 }
 const shelf = asked.length ? SHELF.filter((c) => asked.includes(c.id)) : SHELF;

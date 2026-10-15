@@ -1,10 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { SHELF } from '../../src/cartoons';
+import { SHELF as ON_DISK } from '../../scripts/lib/shelf';
 import { checkLines, isKebab } from '../../src/core/cartoon';
 import { speakers, WORLDS } from '../../src/worlds';
 
-/** Every cartoon on the shelf loads, agrees with its shelf entry, and its lines pass the house rules. */
+/** Every cartoon on the shelf loads, agrees with its meta.ts, and its lines pass the house rules. */
 describe('cartoons', () => {
+  it('are found the same way by the library and by the scripts', () => {
+    expect(SHELF.map((c) => c.id)).toEqual(ON_DISK.map((c) => c.id));
+  });
+
   it('have unique kebab-case ids', () => {
     const ids = SHELF.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
@@ -13,8 +18,9 @@ describe('cartoons', () => {
 
   for (const entry of SHELF) {
     describe(entry.id, () => {
-      it('matches its shelf entry', async () => {
+      it('is in a folder named after its id, and its script spreads its meta', async () => {
         const c = (await entry.load()).default;
+        expect(entry.load).toBeTypeOf('function');
         expect({ id: c.id, title: c.title, world: c.world, summary: c.summary }).toEqual({
           id: entry.id,
           title: entry.title,

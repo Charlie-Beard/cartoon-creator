@@ -5,7 +5,7 @@
  *   npx tsx scripts/voice/export.ts
  *   npm run voice:export
  *
- * Walks the shelf (src/cartoons/index.ts), loads each cartoon and writes
+ * Walks the shelf (src/cartoons/<id>/), loads each cartoon and writes
  * one entry per distinct spoken line:
  *
  *   id       voiceId(text, speaker): the clip's file name, public/audio/lines/<id>.mp3
@@ -21,7 +21,7 @@
  * Whole lines only: a cartoon has no questions or numbers to piece together.
  */
 import { writeFileSync } from 'node:fs';
-import { SHELF } from '../../src/cartoons';
+import { SHELF } from '../lib/shelf';
 import { DEFAULT_NAME, generic, personalise, voiceId } from '../../src/core/phrases';
 
 interface LineOut {

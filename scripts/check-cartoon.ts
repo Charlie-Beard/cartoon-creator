@@ -12,25 +12,25 @@
  *     for nothing) and every line the script says exists
  *   - every character, pose, backdrop and prop it asks for exists in a world
  *   - there is at least one k.tapToHelp()
- *   - the shelf entry and the file agree, and the id is kebab-case
+ *   - the folder, its meta.ts and the script agree, and the id is kebab-case
  *   - how long the speech alone runs (the floor for the running time)
  *
  * Exits 1 if any cartoon has an error. Warnings are printed but allowed.
  * The checks themselves are in scripts/lib/cartoon-lint.ts (also run by
  * tests/unit/cartoon-lint.test.ts).
  */
-import { existsSync, readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { isKebab } from '../src/core/cartoon';
-import { SHELF } from '../src/cartoons';
 import { WORLDS } from '../src/worlds';
 import { catalogue } from './lib/catalogue';
 import { lintCartoon } from './lib/cartoon-lint';
+import { folderOf, SHELF, sourceOf } from './lib/shelf';
 
 const asks = process.argv.slice(2).filter((a) => !a.startsWith('-'));
 const unknown = asks.filter((id) => !SHELF.some((c) => c.id === id));
 if (unknown.length) {
-  console.error(`Not on the shelf (src/cartoons/index.ts): ${unknown.join(', ')}`);
+  console.error(`Not on the shelf (no src/cartoons/<id>/meta.ts): ${unknown.join(', ')}`);
   console.error(`On the shelf: ${SHELF.map((c) => c.id).join(', ') || '(nothing yet)'}`);
   process.exit(1);
 }
@@ -49,9 +49,9 @@ for (const entry of chosen) {
   const info: string[] = [];
 
   if (!isKebab(entry.id)) errors.push(`id "${entry.id}" is not kebab-case`);
-  const file = fileURLToPath(new URL(`../src/cartoons/${entry.id}.ts`, import.meta.url));
-  if (!existsSync(file)) {
-    errors.push(`src/cartoons/${entry.id}.ts does not exist (a cartoon is one file named after its id)`);
+  const folder = folderOf(entry.id);
+  if (!existsSync(join(folder, 'cartoon.ts'))) {
+    errors.push(`src/cartoons/${entry.id}/cartoon.ts does not exist (a cartoon is a folder named after its id, with meta.ts and cartoon.ts)`);
   } else {
     let cartoon;
     try {
@@ -61,12 +61,13 @@ for (const entry of chosen) {
     }
     if (cartoon) {
       for (const k of ['id', 'title', 'world', 'summary'] as const) {
-        if (cartoon[k] !== entry[k]) errors.push(`shelf ${k} "${entry[k]}" differs from the script's "${cartoon[k]}"`);
+        if (cartoon[k] !== entry[k]) errors.push(`meta.ts ${k} "${entry[k]}" differs from the script's "${cartoon[k]}" (spread ...meta into defineCartoon)`);
       }
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(entry.added)) errors.push(`meta.ts added "${entry.added}" is not a date (YYYY-MM-DD)`);
       if (!(cartoon.world in WORLDS)) errors.push(`world "${cartoon.world}" does not exist`);
       if (cartoon.scenes.length < 2) warnings.push(`only ${cartoon.scenes.length} scene: an episode has a few`);
       if (cartoon.scenes.length > 7) warnings.push(`${cartoon.scenes.length} scenes: a 5 minute episode rarely needs more than 6`);
-      const result = lintCartoon({ id: entry.id, source: readFileSync(file, 'utf8'), lines: cartoon.lines, catalogue: cat });
+      const result = lintCartoon({ id: entry.id, source: sourceOf(entry.id), lines: cartoon.lines, catalogue: cat });
       errors.push(...result.errors);
       warnings.push(...result.warnings);
       const n = Object.keys(cartoon.lines).length;

@@ -35,7 +35,8 @@
  * world (src/worlds/faraway/cloudtop.ts); the grey cloud, her desk and the
  * tea table are drawn here.
  */
-import { bell, C, cached, circle, defineCartoon, ellipse, ink, noiseBurst, NOTE, now, piece, raw, rect, rng, svg, tone, type Kit, type Node, type Pt } from '../kit';
+import { bell, C, cached, circle, defineCartoon, ellipse, ink, noiseBurst, NOTE, now, piece, raw, rect, rng, svg, tone, type Kit, type Node, type Pt } from '../../kit';
+import meta from './meta';
 
 // ------------------------------------------------------------------- art
 
@@ -233,10 +234,7 @@ const KETTLE_DESK = { x: 500, y: 340, w: 140 };
 const KETTLE_TABLE = { x: 410, y: 446, w: 150 };
 
 export default defineCartoon({
-  id: 'whistling-kettle',
-  title: 'The Whistling Kettle',
-  world: 'faraway',
-  summary: 'The Saucepan Man’s whistling kettle has gone, and Dame Snap has it. Jasper blows away a cloud, then taps the kettle until it whistles so loudly that her ruler snaps.',
+  ...meta,
   lines: {
     // 1. Tea time
     hello: { who: 'moonface', text: 'Hello, {name}! It’s tea time!' },

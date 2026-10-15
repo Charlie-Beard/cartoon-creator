@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { SHELF } from '../../src/cartoons';
+import { SHELF } from '../../scripts/lib/shelf';
 import { answerTo, openCorner } from './helpers';
 
 test('the sum is worked out right', () => {

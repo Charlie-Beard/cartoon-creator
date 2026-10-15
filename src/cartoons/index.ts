@@ -1,34 +1,19 @@
 /**
- * The shelf: every cartoon, in the order they appear in the library.
- * Append-only (one entry per cartoon) so parallel PRs stay mergeable.
- *
- * The title, world and summary are written here as well as in the
- * cartoon's own file, so the library can show the shelf without loading
- * every script; tests/unit/cartoons.test.ts checks they agree.
+ * The shelf: every cartoon in src/cartoons/<id>/, found by Vite, newest
+ * first. Only the small meta.ts files are in the main bundle; each
+ * cartoon's script loads when it is played. (The scripts and tests find
+ * the same folders on disk: scripts/lib/shelf.ts.)
  */
-import type { CartoonInfo } from '../core/cartoon';
-import type { Cartoon } from '../kit';
+import type { Cartoon } from '../kit/cartoon';
+import { sortShelf, type CartoonMeta, type ShelfEntry } from './shelf';
 
-export interface ShelfEntry extends CartoonInfo {
-  /**
-   * Which backdrop to show on the shelf card, by id (looked up in the
-   * cartoon's world first, then the common world). Optional: the library
-   * falls back to the world's first backdrop. Pick one that shows the
-   * cartoon's best-known place.
-   */
-  thumb?: string;
-  load: () => Promise<{ default: Cartoon }>;
-}
+export { defineMeta, type CartoonMeta, type ShelfEntry } from './shelf';
 
-export const SHELF: ShelfEntry[] = [
-  {
-    id: 'whistling-kettle',
-    title: 'The Whistling Kettle',
-    world: 'faraway',
-    summary: 'The Saucepan Man’s whistling kettle has gone, and Dame Snap has it. Jasper blows away a cloud, then taps the kettle until it whistles so loudly that her ruler snaps.',
-    thumb: 'moon-room',
-    load: () => import('./whistling-kettle'),
-  },
-];
+const metas = import.meta.glob<CartoonMeta>('./*/meta.ts', { eager: true, import: 'default' });
+const scripts = import.meta.glob<{ default: Cartoon }>('./*/cartoon.ts');
+
+export const SHELF: ShelfEntry[] = sortShelf(
+  Object.entries(metas).map(([path, meta]) => ({ ...meta, load: scripts[path.replace(/meta\.ts$/, 'cartoon.ts')] })),
+);
 
 export const shelfEntry = (id: string): ShelfEntry | undefined => SHELF.find((c) => c.id === id);
