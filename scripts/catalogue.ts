@@ -59,7 +59,7 @@ interface Budget {
 
 const BUDGETS: Record<Mode, Budget> = {
   // brief is an index: who and what exists, so a writer can ask for the few entries they will use (--id).
-  brief: { world: 260, about: 130, voice: 0, backdropLead: 70, backdropTail: 60, prop: 45, doc: 100, kitDocs: false },
+  brief: { world: 260, about: 130, voice: 0, backdropLead: 70, backdropTail: 60, prop: 0, doc: 100, kitDocs: false },
   normal: { world: 400, about: 450, voice: 130, backdropLead: 150, backdropTail: 330, prop: 170, doc: 260, kitDocs: true },
   full: { world: Infinity, about: Infinity, voice: Infinity, backdropLead: Infinity, backdropTail: Infinity, prop: Infinity, doc: Infinity, kitDocs: true },
 };
@@ -117,7 +117,8 @@ function condense(text: string, budget: number): string {
   if (t.length <= budget) return t;
   const ss = sentences(t);
   const first = ss[0] ?? t;
-  if (first.length >= budget) return cut(first, budget);
+  // A short budget is for an index: the opening sentence says who or what it is.
+  if (first.length >= budget || budget < 200) return first.length >= budget ? cut(first, budget) : `${first} …`;
   const keep = new Set<number>([0]);
   let used = first.length;
   const fits = (i: number): boolean => used + 1 + (ss[i]?.length ?? 0) <= budget;
@@ -133,7 +134,7 @@ function condense(text: string, budget: number): string {
 
 /** The world's first paragraph: what it is, in a line or two. The rest is `about`. */
 function headline(text: string, budget: number): string {
-  return condense(text.split(/\n\s*\n/)[0] ?? text, budget);
+  return condense(text.trim().split(/\n/)[0] ?? text, budget);
 }
 
 /** ElevenLabs settings ("(speed 0.9, stability 0.4)") are for the recording script, not a writer. */
@@ -174,7 +175,7 @@ function docOf(sf: ts.SourceFile, node: ts.Node): string {
 }
 
 function paramText(sf: ts.SourceFile, p: ts.ParameterDeclaration): string {
-  return squash(p.getText(sf)).replace(/:\s*HTMLElement\b/, '');
+  return squash(p.getText(sf)).replace(/:\s*HTMLElement\b(?!\[)/, '');
 }
 
 /** Finds `export const <name> = { … }` and lists its members with docs. */
@@ -300,10 +301,12 @@ function characterBlock(id: string, c: CharacterDef, b: Budget, detail: boolean,
 
 function backdropLine(id: string, d: BackdropDef, b: Budget): string {
   const ss = sentences(d.about);
-  const lead = cut(ss[0] ?? '', b.backdropLead);
-  // Where the floor is, how many actors fit, and what to pair it with matter more than the scenery.
-  const tail = ss.slice(1).filter((s) => /ground|floor|room for|actors|pair with|only for|keep |no standing|seabed|no ground/i.test(s));
-  return `  ${id} — ${[lead, tail.length ? condense(tail.join(' '), b.backdropTail) : ''].filter(Boolean).join(' ')}`;
+  // Where the floor is, how many actors fit, and what to pair it with matter more than the scenery,
+  // so the scenery is cut first.
+  const isStaging = (s: string): boolean => /\bground\b|room for|pair with|only for|\bkeep |no standing|seabed|clear space/i.test(s);
+  const scenery = ss.filter((s) => !isStaging(s)).join(' ');
+  const staging = ss.filter(isStaging).join(' ').replace(/\bGround line at about y (\d+)/g, 'Ground y≈$1');
+  return `  ${id} — ${[cut(scenery, b.backdropLead), staging ? condense(staging, b.backdropTail) : ''].filter(Boolean).join(' ')}`;
 }
 
 function sizeTag(p: PropDef): string {
@@ -318,6 +321,12 @@ function sizeTag(p: PropDef): string {
  */
 function propLines(props: Record<string, PropDef>, b: Budget): string[] {
   const entries = Object.entries(props);
+  if (b.prop === 0) {
+    // An index: ids by size. `--id` says what any of them looks like.
+    const bySize = new Map<string, string[]>();
+    for (const [id, p] of entries) bySize.set(sizeTag(p).trim() || '[w120]', [...(bySize.get(sizeTag(p).trim() || '[w120]') ?? []), id]);
+    return [...bySize].map(([size, ids]) => `  ${size} ${ids.join(', ')}`);
+  }
   const tailOf = (p: PropDef): string => squash(p.about).replace(/^[^,:]*[,:]\s*/, '');
   const groups = new Map<string, [string, PropDef][]>();
   for (const e of entries) {
@@ -341,13 +350,14 @@ const memberLine = (prefix: string, m: Member, b: Budget): string => `  ${prefix
 
 function movesLines(m: Moves | undefined, b: Budget): string[] {
   if (!m) return ['  (no moves.ts)'];
+  const spec = m.file.replace(/^src\//, '../../').replace(/\.ts$/, '');
   const out: string[] = [];
   if (m.sounds.length) {
-    out.push(' sounds: plain functions that play now.  import { sounds } from the file above;  sounds.name(args)');
+    out.push(` sounds: plain functions that play now.  import { sounds } from '${spec}';  sounds.name(args)`);
     for (const s of m.sounds) out.push(memberLine('', s, b));
   }
   if (m.moves.length) {
-    out.push(' moves: async, animate an actor.  await moves.name(k, args)  or  void it to run alongside');
+    out.push(` moves: async, animate an actor.  import { moves } from '${spec}';  await moves.name(k, args)  or  void it to run alongside`);
     for (const s of m.moves) out.push(memberLine('', s, b));
   }
   return out;
@@ -356,7 +366,7 @@ function movesLines(m: Moves | undefined, b: Budget): string[] {
 function kitLines(b: Budget): string[] {
   const { fx, sfx } = kitSounds();
   const out: string[] = [];
-  for (const [head, list] of [[' k.fx.name(args): sound effects', fx], [' k.sfx.name(args): the games’ UI and magic sounds', sfx]] as const) {
+  for (const [head, list] of [[' k.fx.name(args): sound effects', fx], [' k.sfx.name(args): from Wizard Words, so skip the letter, tile and gem ones', sfx]] as const) {
     if (!list.length) continue;
     out.push(head);
     if (b.kitDocs) for (const m of list) out.push(memberLine('', m, b));
@@ -427,7 +437,7 @@ function entryText(worldId: string, id: string, common: boolean): string {
 export function catalogueText(worldId: string, opts: CatalogueOptions = {}): string {
   const w = world(worldId);
   const common = opts.common !== false;
-  if (opts.id) return entryText(worldId, opts.id, common);
+  if (opts.id) return `${entryText(worldId, opts.id, common)}\n`;
   const b = BUDGETS[opts.mode ?? 'normal'];
   const want = (s: Section): boolean => !opts.section || opts.section === s;
   const parts: string[] = [];

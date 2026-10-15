@@ -36,6 +36,7 @@ npm run check -- <id>  # one cartoon against the house rules (lines, ids, length
 npm run check -- --ledger   # what every episode so far was about: read before planning
 npm run shots -- <id> --fast [--scene n]   # frames + contact sheet on a fake clock, ~1 min: for iterating
 npm run shots -- <id>  # the same in real time, for the final pacing check (3–5 min)
+npm run catalogue -- <world> --brief   # a world in text: who, where, props, sounds, moves (read this, not src/worlds/*)
 npm run lab -- <world> # sheets of every character, pose, backdrop and prop with its id
 npm run test:e2e       # Playwright at 1180×820 and 1180×760 (in the cloud: PW_CHROMIUM=/opt/pw-browsers/chromium)
 npm run build

@@ -13,8 +13,20 @@ See what's in each, drawn: `npm run lab -- faraway` saves a sheet of
 every character, pose, backdrop and prop, each with its id, to
 `screenshots/lab/` (`npm run lab -- faraway props` for one set,
 `--backdrop <id>` for one at stage size). The same pages are live at
-`/lab.html?world=faraway` with `npm run dev`. The written notes are in each world's `index.ts`: **read
-them before writing a cartoon**.
+`/lab.html?world=faraway` with `npm run dev`.
+
+Read a world in text with `npm run catalogue -- faraway`: every character
+(poses, parts, who they are, how they sound), backdrop (with its ground
+line), prop (with its size), and the world's sounds and moves with their
+signatures and docs, plus `common` and the kit's `k.fx`/`k.sfx`. It is
+built from `index.ts` and `moves.ts`, at about half their size, so
+**read it, not those files, before writing a cartoon**.
+
+- `--brief`: an index (a sentence per note, ~13 KB for faraway). Start here, then
+- `--id <id>`: one character, backdrop, prop, sound or move in full.
+- `<world> about`: the world's setting, tone and rules. Read it before writing.
+- `<world> characters|backdrops|props|moves|kit`: one section; `--no-common` drops common.
+- `--list`: the worlds.
 
 ## Shape
 

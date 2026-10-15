@@ -30,8 +30,12 @@ server yourself, give it its own port, `npx vite --port 52xx`.)
 
 
 - `CLAUDE.md`, `docs/STYLE.md`, `docs/WRITING.md`. Skim `docs/KIT.md`.
-- The world's notes: `src/worlds/<world>/index.ts` (world `about`, every
-  character's `about`, the backdrops and props available).
+- The world, in text: `npm run catalogue -- <world> --brief` (an index of
+  everyone and everything, with sounds and moves), then
+  `npm run catalogue -- <world> about` (setting, tone, rules, what's never
+  shown), then `--id <id>` for each character and place you use. Don't
+  read `src/worlds/<world>/index.ts` or `moves.ts` to learn a world: the
+  catalogue is the same notes at a fraction of the size.
 - One or two finished cartoons in `src/cartoons/` for the standard
   expected (and, for more examples, the games' story scripts:
   `charlie-beard/maths-game` `src/stories/l7c8.ts`, `opening.ts`;
@@ -70,8 +74,8 @@ unless they stop you.
 ## 3. What's needed
 
 List every character, backdrop and prop the beat sheet uses, and look
-each up (`src/worlds/*/index.ts`, or `/lab.html?world=<id>` with the dev
-server). For each missing one decide:
+each up (`npm run catalogue -- <world> --id <id>`; to see them drawn,
+`npm run lab -- <world> chars --p <a>,<b>`). For each missing one decide:
 
 - **Reusable** (a new character, a place another episode could visit, a
   prop that will come back): add it to the world, following the
@@ -79,8 +83,8 @@ server). For each missing one decide:
 - **One-off** (this episode's special object): draw it in the cartoon's
   own file (docs/KIT.md, "Drawing one-off art").
 
-Sounds and moves too: **check `src/worlds/<world>/moves.ts` first** (and
-`src/worlds/common/moves.ts`) for the cast's signature sounds and moves
+Sounds and moves too: **check `npm run catalogue -- <world> moves`
+first** (it covers common and the kit's `k.fx`/`k.sfx` too) for the cast's signature sounds and moves
 (Dame Snap's heels, the Saucepan Man's "Eh?", Hedwig's wings …) before
 writing your own.
 
