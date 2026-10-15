@@ -195,5 +195,8 @@ their ElevenLabs key. The episode plays with the iPad's voice until then.
   says what the episode is, push, and open a PR whose description has
   the summary, the scene list, his turns, the contact sheet's findings
   and the pacing numbers.
+- **Merge it** as soon as its CI check is green (the owner's standing
+  instruction: always merge; no need to ask). If CI fails, fix it and
+  push until it's green, then merge.
 - Tell the person: the title, a two-line summary, how long it runs, how
   to watch it (`?cartoon=<id>`), and anything waiting on them (voices).
