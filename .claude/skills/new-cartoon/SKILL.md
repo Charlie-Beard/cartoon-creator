@@ -128,10 +128,11 @@ Fix everything it reports. Don't silence a rule; rewrite the line.
 ## 6. Watch it
 
 ```bash
+npm run shots -- <id> --openings          # each scene's opening picture only, ~5 s: after placing anyone
 npm run shots -- <id> --fast              # the whole episode on a fake clock, about a minute
 npm run shots -- <id> --fast --scene 2    # one scene (from 1), while fixing it
 npm run shots -- <id> --fast --no-tap     # lets every turn run out: see the nudge and helped lines
-npm run shots -- <id>                     # real time, 3–5 minutes: the final pacing check
+npm run shots -- <id> --strict            # real time, 3–5 minutes: the final check (fails on any flag)
 ```
 
 It plays the episode in Chromium at 1180 × 820, saves a frame of every
@@ -141,9 +142,17 @@ silent stretch over 4 s. Iterate with `--fast` after every round of
 changes (its times are story-clock times with the stand-in voice, close
 to the real thing); the last run before the PR is without it.
 
+It also checks the layout of every frame itself (an actor 25%+ off
+stage, a face in the caption band, characters overlapping 35%+, more
+than 4 characters, a tap target under 120 px or off stage, the speaker
+out of shot) and lists **Frames to look at** (also `flags.json`, and a
+red outline on the contact sheet).
+
 ## 7. Look (the step that matters most)
 
-Read the contact sheet and every scene's opening frame. For each, ask:
+Read the contact sheet, every scene's opening frame (`scene<n>-0.png`)
+and every flagged frame; you don't need the rest one by one. Fix or
+justify every flag. For each frame, ask:
 
 - Is everyone where they should be: on stage, not under the caption
   band (y 690+), not overlapping by accident, facing whoever they talk to?

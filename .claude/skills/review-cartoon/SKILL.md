@@ -13,12 +13,12 @@ what to change. Fix what's clearly wrong; ask about matters of taste.
 
 ```bash
 npm run check -- <id>
-npm run shots -- <id>          # frames, contact sheet, measured pacing (real time)
+npm run shots -- <id> --strict # frames, contact sheet, layout flags, measured pacing (real time)
 npm run shots -- <id> --fast --no-tap   # his turns done for him: the nudge and helped lines
 ```
 
-Read the script top to bottom, then read the contact sheet and the
-frames of every scene.
+Read the script top to bottom, then the contact sheet, each scene's
+opening frame and every frame under "Frames to look at".
 
 ## 2. Go through the list
 

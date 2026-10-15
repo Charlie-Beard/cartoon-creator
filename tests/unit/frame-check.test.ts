@@ -152,6 +152,10 @@ describe('characters on top of each other', () => {
     expect(kinds(frame([char('moonface', 300, 300, 300), char('silky', 380, 340, 100)]))).toEqual(['overlap']);
   });
 
+  it('ignores two that are leaving together, bunched up mostly off the stage', () => {
+    expect(kinds(frame([char('moonface', -200, 300, 240), char('saucepan', -190, 310, 230)]))).not.toContain('overlap');
+  });
+
   it('ignores props and hidden characters', () => {
     expect(kinds(frame([char('moonface', 300, 300, 240), prop('kettle', 320, 340, 140)]))).toEqual([]);
     expect(kinds(frame([char('moonface', 300, 300, 240), char('silky', 300, 300, 240, { opacity: 0 })]))).toEqual([]);

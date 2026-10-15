@@ -33,7 +33,8 @@
  *              caption band (y 690+) under the caption bubble while one is
  *              showing. (With `assumeCaption`: as if one were.) Not checked
  *              with the camera zoomed in, which puts people low on purpose.
- *   overlap    two characters share more than 35% of the smaller one's box.
+ *   overlap    two characters share more than 35% of the smaller one's box (both
+ *              at least half on stage: two leaving together bunch up off the edge).
  *   crowd      more than 4 characters on stage at once.
  *   tap        a tap-to-help target under 120 px, or partly off stage.
  *   speaker    the actor the kit is bobbing for the line (data-speaking) is off
@@ -130,11 +131,13 @@ export function checkFrame(frame, { assumeCaption = false } = {}) {
     }
   }
 
-  // Characters on top of each other.
-  for (let i = 0; i < characters.length; i++) {
-    for (let j = i + 1; j < characters.length; j++) {
-      const a = characters[i];
-      const b = characters[j];
+  // Characters on top of each other, and too many on stage: those in the shot (half or more on
+  // the stage), not ones leaving or waiting in the wings, which bunch up off the edge.
+  const present = characters.filter((a) => onStage(a, stage) >= 0.5);
+  for (let i = 0; i < present.length; i++) {
+    for (let j = i + 1; j < present.length; j++) {
+      const a = present[i];
+      const b = present[j];
       const smaller = Math.min(area(a.box), area(b.box));
       const share = smaller > 0 ? overlapArea(a.box, b.box) / smaller : 0;
       if (share > T.overlap) {
@@ -142,9 +145,6 @@ export function checkFrame(frame, { assumeCaption = false } = {}) {
       }
     }
   }
-
-  // Too many on stage: those in the shot, not waiting in the wings.
-  const present = characters.filter((a) => onStage(a, stage) >= 0.5);
   if (present.length > T.maxCharacters) {
     issues.push({ kind: 'crowd', key: 'crowd', message: `${present.length} characters on stage at once (${present.map((a) => a.key).join(', ')}); more than ${T.maxCharacters}.` });
   }

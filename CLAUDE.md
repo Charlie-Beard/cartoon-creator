@@ -35,6 +35,7 @@ npm run new -- <id> <world>   # start a cartoon: src/cartoons/<id>/ from the tem
 npm run check -- <id>  # one cartoon against the house rules (lines, ids, length, his turns, ledger)
 npm run check -- --ledger   # what every episode so far was about: read before planning
 npm run shots -- <id> --fast [--scene n]   # frames + contact sheet on a fake clock, ~1 min: for iterating
+npm run shots -- <id> --openings   # only each scene's opening picture + sheet, ~5 s: after moving people
 npm run shots -- <id>  # the same in real time, for the final pacing check (3–5 min)
 npm run catalogue -- <world> --brief   # a world in text: who, where, props, sounds, moves (read this, not src/worlds/*)
 npm run lab -- <world> # sheets of every character, pose, backdrop and prop with its id
@@ -46,7 +47,9 @@ All of typecheck, `npm test`, `npm run check` and `npm run test:e2e` must
 pass before a PR. **Look at the screenshots** of every scene you make or
 change (`npm run shots`), at 1180 × 820. Iterate with `--fast`; the
 last run before a PR is in real time. Reading the PNGs is part of the
-job, not optional.
+job, not optional: `shots` flags layout slips itself ("Frames to look
+at"), so read the contact sheet, each scene's opening frame and the
+flagged frames, and fix or justify every flag.
 
 ## Rules that never bend
 
