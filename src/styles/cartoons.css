@@ -1,0 +1,43 @@
+/* ---------- The library and the player (scenes/library.ts, scenes/player.ts) ---------- */
+
+.shelf-card {
+  position: absolute;
+  border: none;
+  border-radius: 18px 12px 20px 14px;
+  box-shadow: 0 8px 0 rgba(20, 12, 4, 0.35);
+  color: var(--parchment-100, #f7f2e6);
+  font: 700 34px/1.15 Andika, sans-serif;
+  padding: 20px;
+  display: flex;
+  align-items: flex-end;
+}
+.shelf-card.is-pressed {
+  transform: translateY(4px);
+  box-shadow: 0 4px 0 rgba(20, 12, 4, 0.35);
+}
+.shelf-tick {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 40px;
+}
+
+/* His turn (Kit.tapToHelp): a soft gold ring that breathes slowly. Never flashes. */
+.story-tap-ring {
+  position: absolute;
+  z-index: 60;
+  border-radius: 50%;
+  border: 8px solid rgba(247, 210, 131, 0.95);
+  box-shadow:
+    0 0 24px rgba(247, 210, 131, 0.8),
+    inset 0 0 18px rgba(247, 210, 131, 0.5);
+  pointer-events: none;
+}
+.story-tap {
+  position: absolute;
+  z-index: 61;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
