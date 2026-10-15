@@ -32,7 +32,8 @@ npm run dev            # http://localhost:5173   ?cartoon=<id>&scene=<n>   ?scen
 npm run typecheck
 npm test               # Vitest: src/core, worlds, every cartoon's lines and ids
 npm run new -- <id> <world>   # start a cartoon: src/cartoons/<id>/ from the templates
-npm run check -- <id>  # one cartoon against the house rules (lines, ids, length, his turns)
+npm run check -- <id>  # one cartoon against the house rules (lines, ids, length, his turns, ledger)
+npm run check -- --ledger   # what every episode so far was about: read before planning
 npm run shots -- <id> --fast [--scene n]   # frames + contact sheet on a fake clock, ~1 min: for iterating
 npm run shots -- <id>  # the same in real time, for the final pacing check (3–5 min)
 npm run lab -- <world> # sheets of every character, pose, backdrop and prop with its id
@@ -78,7 +79,7 @@ job, not optional.
 - `src/core/` is **pure** (no DOM, no audio) and unit-tested.
 - A cartoon is a folder, `src/cartoons/<id>/` (start one with
   `npm run new -- <id> <world>`): `meta.ts` (title, world, summary,
-  thumb, the day it was added) and `cartoon.ts` (`defineCartoon`, which
+  thumb, the day it was added, and the `ledger` of what it's about) and `cartoon.ts` (`defineCartoon`, which
   spreads the meta), plus any files of its own art or sounds. Nothing
   else lists cartoons: a new folder is on the shelf. Every line is listed
   up front in `lines`, so the voice export can find it. `{name}` is the

@@ -1,7 +1,9 @@
 /**
  * The checks on a cartoon's script that need its source text, not just
  * its lines: are all the lines used, do the characters, backdrops and
- * props it asks for exist, is there a turn for him to tap.
+ * props it asks for exist, is there a turn for him to tap. Also the episode
+ * ledger (see the end of this file): checked against the script and the
+ * worlds, and compared with the other episodes on the shelf.
  *
  * Pure (no DOM, no file access): scripts/check-cartoon.ts feeds it the
  * file and the worlds, and tests/unit/cartoon-lint.test.ts runs it over
@@ -11,6 +13,7 @@
  * so it only sees ids written out as string literals ('moonface'), which
  * is how the kit's docs tell authors to write them.
  */
+import type { CartoonMeta, Ledger } from '../../src/cartoons/shelf';
 import { checkLines, spokenSeconds, type Line } from '../../src/core/cartoon';
 
 /** What exists in the worlds, boiled down to ids. */
@@ -223,4 +226,261 @@ export function lintCartoon({ id, source, lines, catalogue }: LintInput): LintRe
   if (!new RegExp(`\\bid\\s*:\\s*${QUOTE}${escapeRe(id)}${QUOTE}`).test(source)) warnings.push(`the script's id does not look like "${id}"`);
 
   return { errors, warnings, spokenSeconds: seconds, taps: taps.total };
+}
+
+// ------------------------------------------------------------------- ledger
+//
+// The episode ledger (src/cartoons/shelf.ts, Ledger) in meta.ts says what an
+// episode was about. Two kinds of check: the ledger against its own script
+// and the worlds (lintLedger), and against the episodes already on the shelf
+// (compareLedgers). Only the first can fail a cartoon. The second only
+// warns, because repeating a villain or a place is sometimes the point.
+
+/** The part of a shelf entry the ledger checks read. */
+export type LedgerEntry = Pick<CartoonMeta, 'id' | 'title' | 'world' | 'added' | 'ledger'>;
+
+const PLACEHOLDER = /<[^<>]*>/;
+
+/** The ledger fields that still hold the template's `<placeholder>` text. */
+export function placeholderFields(ledger: Ledger): string[] {
+  const out: string[] = [];
+  const texts: [string, string[]][] = [
+    ['problem', [ledger.problem]],
+    ['villain', ledger.villain === undefined ? [] : [ledger.villain]],
+    ['places', ledger.places ?? []],
+    ['cast', ledger.cast ?? []],
+    ['turns', ledger.turns ?? []],
+    ['jokes', ledger.jokes ?? []],
+    ['ending', [ledger.ending]],
+  ];
+  for (const [field, list] of texts) if (list.some((s) => typeof s === 'string' && PLACEHOLDER.test(s))) out.push(field);
+  return out;
+}
+
+/** Character ids the script uses: drawn with k.character('id', …) or speaking a line (not the narrator). */
+export function usedCharacters(source: string, lines: Record<string, Line>): string[] {
+  const body = stripComments(source);
+  const drawn = allMatches(body, new RegExp(`\\.character\\s*\\(\\s*${QUOTE}([^'"\`]+)${QUOTE}`, 'g'));
+  const speaking = Object.values(lines).map((l) => l.who);
+  return [...new Set([...drawn, ...speaking])].filter((id) => id !== 'narrator');
+}
+
+/** Backdrop ids the script uses (one-off SVG backdrops have no id and are left out). */
+export function usedBackdrops(source: string): string[] {
+  const ids = allMatches(stripComments(source), new RegExp(`\\.backdrop\\s*\\(\\s*${QUOTE}([^'"\`]+)${QUOTE}`, 'g'));
+  return [...new Set(ids.filter((id) => !id.trimStart().startsWith('<')))];
+}
+
+/** A villain written as one lower-case word or id ('dameSnap', 'snap-guard') is meant as a character id; 'a storm' is words. */
+const looksLikeId = (s: string): boolean => /^[a-z][A-Za-z0-9]*(?:-[a-z0-9]+)*$/.test(s);
+
+export interface LedgerLintInput {
+  ledger: Ledger | undefined;
+  /** The cartoon's source (all its .ts files, as scripts/lib/shelf.ts sourceOf joins them). */
+  source: string;
+  lines: Record<string, Line>;
+  /** How many tapToHelp calls the script makes. */
+  taps: number;
+  catalogue: Catalogue;
+}
+
+/**
+ * A ledger against its own script and the worlds. Errors: missing, blank,
+ * still holding template placeholders, or naming a character or backdrop no
+ * world has. Warnings: the ledger and the script disagree (a cast member or
+ * place never used, or used but not listed, the turn count).
+ */
+export function lintLedger({ ledger, source, lines, taps, catalogue }: LedgerLintInput): { errors: string[]; warnings: string[] } {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  if (!ledger) {
+    errors.push('meta.ts has no `ledger`: say what the episode is about (problem, villain, places, cast, turns, jokes, ending). See templates/cartoon/meta.ts, and `npm run check -- --ledger` for the others');
+    return { errors, warnings };
+  }
+
+  const stale = new Set(placeholderFields(ledger));
+  for (const f of stale) errors.push(`ledger.${f} still has the template's <placeholder>: fill it in${f === 'villain' || f === 'jokes' ? ' (or delete it if there is none)' : ''}`);
+
+  const blank = (s: unknown): boolean => typeof s !== 'string' || !s.trim();
+  if (!stale.has('problem') && blank(ledger.problem)) errors.push('ledger.problem is empty: one line on what goes wrong');
+  if (!stale.has('ending') && blank(ledger.ending)) errors.push('ledger.ending is empty: a word or two, like "tea party"');
+  if (ledger.villain !== undefined && !stale.has('villain') && blank(ledger.villain)) errors.push('ledger.villain is empty: leave it out if there is no villain');
+  for (const f of ['places', 'cast', 'turns'] as const) {
+    if (stale.has(f)) continue;
+    const list = ledger[f];
+    if (!Array.isArray(list) || !list.length) errors.push(`ledger.${f} is empty`);
+    else if (list.some(blank)) errors.push(`ledger.${f} has an empty entry`);
+  }
+  if (ledger.jokes && !stale.has('jokes') && ledger.jokes.some(blank)) errors.push('ledger.jokes has an empty entry');
+
+  const castOk = !stale.has('cast') && Array.isArray(ledger.cast);
+  const placesOk = !stale.has('places') && Array.isArray(ledger.places);
+
+  if (castOk) {
+    for (const id of ledger.cast) if (!blank(id) && !(id in catalogue.characters)) errors.push(`ledger.cast: "${id}" is not a character in any world`);
+  }
+  if (placesOk) {
+    for (const id of ledger.places) if (!blank(id) && !catalogue.backdrops.has(id)) errors.push(`ledger.places: "${id}" is not a backdrop in any world`);
+  }
+  const villain = ledger.villain?.trim();
+  if (villain && !stale.has('villain') && looksLikeId(villain) && !(villain in catalogue.characters)) {
+    errors.push(`ledger.villain: "${villain}" looks like a character id but no world has one (a gentler danger goes in words, like "a storm")`);
+  }
+
+  // The ledger and the script should tell the same story.
+  if (castOk) {
+    const used = usedCharacters(source, lines);
+    for (const id of ledger.cast) if (id in catalogue.characters && !used.includes(id)) warnings.push(`ledger.cast lists "${id}" but the script never draws or hears them`);
+    for (const id of used) if (id in catalogue.characters && !ledger.cast.includes(id)) warnings.push(`the script uses "${id}" but ledger.cast does not list them`);
+    if (villain && looksLikeId(villain) && villain in catalogue.characters && !ledger.cast.includes(villain)) warnings.push(`ledger.villain "${villain}" is not in ledger.cast`);
+  }
+  if (placesOk) {
+    const used = usedBackdrops(source);
+    for (const id of ledger.places) if (catalogue.backdrops.has(id) && !used.includes(id)) warnings.push(`ledger.places lists "${id}" but the script never shows it`);
+    for (const id of used) if (catalogue.backdrops.has(id) && !ledger.places.includes(id)) warnings.push(`the script shows "${id}" but ledger.places does not list it`);
+  }
+  if (!stale.has('turns') && Array.isArray(ledger.turns) && ledger.turns.length && ledger.turns.length !== taps) {
+    warnings.push(`ledger.turns has ${ledger.turns.length} but the script has ${taps} tapToHelp: one phrase per turn`);
+  }
+  return { errors, warnings };
+}
+
+// -------------------------------------------------- comparing with the shelf
+
+/** Words too common to tell two phrases apart ("tap" is in nearly every turn). */
+const FILLER = new Set(['a', 'an', 'the', 'to', 'of', 'and', 'his', 'her', 'their', 'its', 'it', 'up', 'out', 'on', 'in', 'at', 'for', 'with', 'is', 'are', 'then', 'tap']);
+
+/** Crude stem: clouds → cloud, whistling and whistles → whistl. Enough to match "blow" with "blows". */
+function stem(w: string): string {
+  if (w.length > 4) w = w.replace(/(ing|ed|s)$/, '');
+  return w.length > 3 ? w.replace(/e$/, '') : w;
+}
+
+/** The distinct, stemmed, lower-case words of a phrase, without the filler (unless that would leave nothing). */
+export function phraseWords(s: string): string[] {
+  const all = s
+    .toLowerCase()
+    .replace(/[’']s\b/g, '')
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean)
+    .map(stem);
+  const kept = all.filter((w) => !FILLER.has(w));
+  return [...new Set(kept.length ? kept : all)];
+}
+
+/** How alike two phrases are, 0 to 1: shared words over all words used. */
+export function similarity(a: string, b: string): number {
+  const wa = phraseWords(a);
+  const wb = new Set(phraseWords(b));
+  if (!wa.length || !wb.size) return 0;
+  const shared = wa.filter((w) => wb.has(w)).length;
+  return shared / (wa.length + wb.size - shared);
+}
+
+/** Turns and jokes count as the same from this much overlap (3 of 5 distinct words); a problem needs more, as sentences share words by accident. */
+const SAME_PHRASE = 0.6;
+const SAME_PROBLEM = 0.8;
+
+type Filed = LedgerEntry & { ledger: Ledger };
+
+/**
+ * The other episodes with a finished ledger that came before this one (or on
+ * the same day, which can't be told apart), newest first, then by title: the
+ * order of the shelf. Comparing only backwards means each pair warns once
+ * when a new episode is checked, not again from the old episode's side.
+ */
+function earlier(entry: LedgerEntry, shelf: readonly LedgerEntry[]): Filed[] {
+  return shelf
+    .filter((o): o is Filed => o.id !== entry.id && !!o.ledger && o.added <= entry.added && !placeholderFields(o.ledger).length)
+    .sort((a, b) => b.added.localeCompare(a.added) || a.title.localeCompare(b.title));
+}
+
+const where = (o: LedgerEntry): string => `'${o.title}' (${o.added})`;
+
+/**
+ * Warnings for an episode that is much like ones already on the shelf. Never
+ * an error: a repeat is sometimes on purpose, so each says "fine if deliberate".
+ *
+ *   villain / main place   same as the most recent earlier episode in the same world
+ *   running joke           used in each of the last 2 earlier episodes of the same world
+ *   turn, problem          close to one in any earlier episode (any world: a good turn is a good turn)
+ *
+ * `nameOf` turns a character id into its name for the messages ('dameSnap' → 'Dame Snap').
+ */
+export function compareLedgers(entry: LedgerEntry, shelf: readonly LedgerEntry[], nameOf: (id: string) => string = (s) => s): string[] {
+  const mine = entry.ledger;
+  if (!mine || placeholderFields(mine).length) return [];
+  const warnings: string[] = [];
+  const before = earlier(entry, shelf);
+  const sameWorld = before.filter((o) => o.world === entry.world);
+  const last = sameWorld[0];
+
+  if (last) {
+    const v = mine.villain?.trim();
+    const lv = last.ledger.villain?.trim();
+    if (v && lv && similarity(v, lv) === 1) {
+      warnings.push(`${looksLikeId(v) ? nameOf(v) : v} was also the villain in ${where(last)}; fine if deliberate.`);
+    }
+    if (mine.places[0] && mine.places[0] === last.ledger.places[0]) {
+      warnings.push(`${mine.places[0]} was also the main place in ${where(last)}; fine if deliberate.`);
+    }
+  }
+
+  const lastTwo = sameWorld.slice(0, 2);
+  if (lastTwo.length === 2) {
+    for (const joke of mine.jokes ?? []) {
+      if (lastTwo.every((o) => (o.ledger.jokes ?? []).some((j) => similarity(joke, j) >= SAME_PHRASE))) {
+        warnings.push(`joke "${joke}" was in the last 2 episodes too (${lastTwo.map(where).join(' and ')}); fine if deliberate.`);
+      }
+    }
+  }
+
+  for (const turn of mine.turns) {
+    for (const o of before) {
+      const twin = o.ledger.turns.find((t) => similarity(turn, t) >= SAME_PHRASE);
+      if (twin) {
+        warnings.push(`turn "${turn}" is much like "${twin}" in ${where(o)}; fine if deliberate.`);
+        break;
+      }
+    }
+  }
+
+  const same = before.find((o) => similarity(mine.problem, o.ledger.problem) >= SAME_PROBLEM);
+  if (same) warnings.push(`the problem is worded like ${where(same)}: "${same.ledger.problem}"; fine if deliberate.`);
+
+  return warnings;
+}
+
+/**
+ * Every episode's ledger as plain text, for a writer to read before planning:
+ * grouped by world, newest first within each. An episode with no ledger yet
+ * says so (it can't be compared with).
+ */
+export function formatLedgers(shelf: readonly LedgerEntry[], nameOf: (id: string) => string = (s) => s): string {
+  const out: string[] = [];
+  const worlds = [...new Set(shelf.map((e) => e.world))].sort();
+  for (const world of worlds) {
+    const eps = shelf.filter((e) => e.world === world).sort((a, b) => b.added.localeCompare(a.added) || a.title.localeCompare(b.title));
+    out.push(`${world} (${eps.length})`);
+    for (const e of eps) {
+      out.push(`  ${e.added}  ${e.title}  [${e.id}]`);
+      const l = e.ledger;
+      if (!l) {
+        out.push('      (no ledger yet)');
+        continue;
+      }
+      const rows: [string, string][] = [
+        ['problem', l.problem],
+        ['villain', l.villain ? (looksLikeId(l.villain) ? nameOf(l.villain) : l.villain) : '(none)'],
+        ['places', l.places.join(', ')],
+        ['cast', l.cast.join(', ')],
+        ['turns', l.turns.join(' | ')],
+        ['jokes', (l.jokes ?? []).join(' | ') || '(none)'],
+        ['ending', l.ending],
+      ];
+      for (const [k, v] of rows) out.push(`      ${k.padEnd(9)}${v}`);
+    }
+    out.push('');
+  }
+  return out.join('\n').trimEnd();
 }

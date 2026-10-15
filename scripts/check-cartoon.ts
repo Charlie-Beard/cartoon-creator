@@ -14,6 +14,13 @@
  *   - there is at least one k.tapToHelp()
  *   - the folder, its meta.ts and the script agree, and the id is kebab-case
  *   - how long the speech alone runs (the floor for the running time)
+ *   - its meta.ts has an episode ledger (what the episode is about), whose
+ *     characters and places exist and match the script (an error), and
+ *     which is compared with the episodes already on the shelf: a repeated
+ *     villain, main place, turn, problem or running joke is a warning
+ *
+ *   npm run check -- --ledger    prints every episode's ledger, newest first
+ *                                and grouped by world, to read before planning
  *
  * Exits 1 if any cartoon has an error. Warnings are printed but allowed.
  * The checks themselves are in scripts/lib/cartoon-lint.ts (also run by
@@ -24,8 +31,18 @@ import { join } from 'node:path';
 import { isKebab } from '../src/core/cartoon';
 import { WORLDS } from '../src/worlds';
 import { catalogue } from './lib/catalogue';
-import { lintCartoon } from './lib/cartoon-lint';
+import { compareLedgers, formatLedgers, lintCartoon, lintLedger } from './lib/cartoon-lint';
 import { folderOf, SHELF, sourceOf } from './lib/shelf';
+
+// Character ids to names for the messages ('dameSnap' → 'Dame Snap').
+const names: Record<string, string> = {};
+for (const w of Object.values(WORLDS)) for (const [id, c] of Object.entries(w.characters)) names[id] = c.name;
+const nameOf = (id: string): string => names[id] ?? id;
+
+if (process.argv.includes('--ledger')) {
+  console.log(SHELF.length ? formatLedgers(SHELF, nameOf) : 'The shelf is empty: no ledgers yet.');
+  process.exit(0);
+}
 
 const asks = process.argv.slice(2).filter((a) => !a.startsWith('-'));
 const unknown = asks.filter((id) => !SHELF.some((c) => c.id === id));
@@ -70,6 +87,10 @@ for (const entry of chosen) {
       const result = lintCartoon({ id: entry.id, source: sourceOf(entry.id), lines: cartoon.lines, catalogue: cat });
       errors.push(...result.errors);
       warnings.push(...result.warnings);
+      const ledger = lintLedger({ ledger: entry.ledger, source: sourceOf(entry.id), lines: cartoon.lines, taps: result.taps, catalogue: cat });
+      errors.push(...ledger.errors);
+      warnings.push(...ledger.warnings);
+      warnings.push(...compareLedgers(entry, SHELF, nameOf));
       const n = Object.keys(cartoon.lines).length;
       info.push(
         `${cartoon.scenes.length} scenes, ${n} lines, about ${Math.round(result.spokenSeconds)} s of speech, ${result.taps} tapToHelp`,

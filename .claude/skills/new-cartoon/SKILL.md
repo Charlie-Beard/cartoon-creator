@@ -37,6 +37,10 @@ server yourself, give it its own port, `npx vite --port 52xx`.)
   `charlie-beard/maths-game` `src/stories/l7c8.ts`, `opening.ts`;
   `charlie-beard/spelling-game` `src/stories/`).
 
+Then `npm run check -- --ledger`: what every episode so far was about.
+Steer the idea away from recent villains, main places, turns and jokes,
+and tell the person if their idea repeats one.
+
 ## 1. Ask (2–4 quick questions, then go)
 
 Use AskUserQuestion once, with up to four questions. Put your
@@ -89,7 +93,8 @@ yourself when they're done, so no two agents edit the same file.
 ## 4. Script
 
 - `npm run new -- <id> <world>` makes `src/cartoons/<id>/` from the
-  templates: fill in `meta.ts` (title, summary, `thumb`) and write the
+  templates: fill in `meta.ts` (title, summary, `thumb`, and the `ledger`
+  of what it's about: docs/WRITING.md, "The ledger") and write the
   script in `cartoon.ts`. It's on the shelf as soon as the folder exists.
   A long episode can keep its one-off art or sounds in their own files
   in the folder (`art.ts`, `sounds.ts`).
