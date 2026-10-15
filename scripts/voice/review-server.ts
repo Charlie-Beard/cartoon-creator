@@ -8,7 +8,8 @@
  * Cartoons only have whole lines, so a clip's key is always lines/<id>.
  */
 import { createHash } from 'node:crypto';
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { join } from 'node:path';
 import type { Plugin } from 'vite';
@@ -43,10 +44,43 @@ function parseKey(key: unknown): { kind: string; id: string } | null {
   return (KINDS as readonly string[]).includes(kind) && safe(id) && existsSync(clipPath(kind, id)) ? { kind, id } : null;
 }
 
+const LINES_JSON = join(VOICE, 'lines.json');
+
+/** The newest modification time of any .ts file under dir (0 if none). */
+function newest(dir: string): number {
+  let t = 0;
+  for (const d of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, d.name);
+    if (d.isDirectory()) t = Math.max(t, newest(p));
+    else if (d.name.endsWith('.ts')) t = Math.max(t, statSync(p).mtimeMs);
+  }
+  return t;
+}
+
+/**
+ * lines.json is derived from the cartoons and not committed, so it is
+ * rebuilt (npx tsx scripts/voice/export.ts, in a child process so every
+ * cartoon is read afresh) when it is missing or older than any cartoon
+ * source or the phrase hashing it depends on.
+ */
+function freshLines(): void {
+  const stale =
+    !existsSync(LINES_JSON) ||
+    statSync(LINES_JSON).mtimeMs < Math.max(newest('src/cartoons'), statSync('src/core/phrases.ts').mtimeMs);
+  if (!stale) return;
+  const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+  try {
+    execFileSync(npx, ['tsx', join(VOICE, 'export.ts')], { stdio: 'pipe', shell: process.platform === 'win32' });
+  } catch (e) {
+    console.warn('[voice-review] could not rebuild scripts/voice/lines.json:', String((e as { stderr?: Buffer }).stderr ?? e));
+  }
+}
+
 function state() {
-  const data = readJson<Exported>(join(VOICE, 'lines.json'), { lines: [] });
-  const manifest = readJson<{ lines?: string[] }>(join(AUDIO, 'manifest.json'), {});
-  const ids = (manifest.lines ?? []).filter((id) => safe(id) && existsSync(clipPath('lines', id)));
+  freshLines();
+  const data = readJson<Exported>(LINES_JSON, { lines: [] });
+  // The clips on disk, which is also what the built audio/manifest.json lists.
+  const ids = mp3s(join(AUDIO, 'lines')).filter(safe).sort();
   return {
     clips: {
       lines: ids.map((id) => ({
@@ -97,6 +131,18 @@ function useTake(kind: string, id: string, take: string) {
   copyFileSync(clipPath(kind, id, take), cur);
 }
 
+/**
+ * Keys sorted (plain code-unit order, the same on every machine) and one
+ * entry per line, so two people's reviews of different clips merge in git
+ * without touching each other's lines.
+ */
+function writeReview(file: string, review: Record<string, Verdict>) {
+  const rows = Object.keys(review)
+    .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
+    .map((k) => ` ${JSON.stringify(k)}: ${JSON.stringify(review[k])}`);
+  writeFileSync(file, rows.length ? `{\n${rows.join(',\n')}\n}\n` : '{}\n');
+}
+
 export function voiceReview(): Plugin {
   return {
     name: 'voice-review',
@@ -127,8 +173,7 @@ export function voiceReview(): Plugin {
               const note = typeof b.note === 'string' ? b.note.trim().slice(0, 500) : '';
               review[k] = { verdict: b.verdict, ...(note ? { note } : {}), hash: hash(clipPath(key.kind, key.id)), at: new Date().toISOString() };
             } else delete review[k];
-            const sorted = Object.fromEntries(Object.entries(review).sort(([a], [b2]) => a.localeCompare(b2)));
-            writeFileSync(file, JSON.stringify(sorted, null, 1) + '\n');
+            writeReview(file, review);
             return send(res, 200, review[k] ?? null);
           }
 

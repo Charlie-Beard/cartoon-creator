@@ -1,8 +1,53 @@
 import { createHash } from 'node:crypto';
-import { readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { existsSync, mkdirSync, readdirSync, readFileSync, realpathSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative } from 'node:path';
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite';
 import { voiceReview } from './scripts/voice/review-server.ts';
+
+/**
+ * audio/manifest.json: the ids of the recorded voice clips, which the app
+ * checks before fetching one (src/audio/voice.ts). It is derived from the
+ * public/audio/lines/*.mp3 on disk, never committed, so two cartoon PRs
+ * that add clips can't conflict over it (each clip is its own file).
+ * Built into dist at build time, and served on the fly by the dev server.
+ */
+const MANIFEST = 'audio/manifest.json';
+const clipIds = (): string[] => {
+  const dir = join('public', 'audio', 'lines');
+  return existsSync(dir)
+    ? readdirSync(dir).filter((f) => f.endsWith('.mp3')).map((f) => f.slice(0, -4)).sort()
+    : [];
+};
+const manifestJson = () => JSON.stringify({ lines: clipIds() });
+
+function audioManifest(): Plugin {
+  return {
+    name: 'cartoon-audio-manifest',
+    // Before the service worker plugin, so the manifest is in the bundle it lists.
+    enforce: 'pre',
+    generateBundle() {
+      this.emitFile({ type: 'asset', fileName: MANIFEST, source: manifestJson() });
+    },
+    // Vite copies public/ over the bundle: if an old hand-made or leftover
+    // public/audio/manifest.json is there, make sure the built one wins.
+    writeBundle: {
+      order: 'post',
+      handler(opts) {
+        if (!opts.dir) return;
+        const out = join(opts.dir, MANIFEST);
+        mkdirSync(dirname(out), { recursive: true });
+        writeFileSync(out, manifestJson());
+      },
+    },
+    configureServer(server) {
+      server.middlewares.use('/audio/manifest.json', (_req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Cache-Control', 'no-store');
+        res.end(manifestJson());
+      });
+    },
+  };
+}
 
 /**
  * Writes sw.js after the build, so the cartoons work fully offline once
@@ -34,6 +79,7 @@ function serviceWorker(): Plugin {
           if (statSync(p).isDirectory()) walk(p);
           else {
             const path = relative('public', p).split('\\').join('/');
+            if (path === MANIFEST) continue; // built, not read from disk: added below
             const bytes = readFileSync(p);
             contents.update(bytes);
             if (path.endsWith('.mp3')) clips[path] = createHash('sha1').update(bytes).digest('hex').slice(0, 8);
@@ -42,6 +88,10 @@ function serviceWorker(): Plugin {
         }
       };
       walk('public');
+      // The generated manifest is cached with the shell, so it is there offline.
+      // Its ids are in the hash, so a new clip makes a new service worker version.
+      files.add(MANIFEST);
+      contents.update(manifestJson());
       files.delete('sw.js');
       const list = ['./', ...[...files].filter((f) => !f.endsWith('.map')).sort()];
       const version = contents.update(list.join('|')).digest('hex').slice(0, 10);
@@ -174,5 +224,5 @@ export default defineConfig({
     fs: { allow: [searchForWorkspaceRoot(process.cwd()), realpathSync('node_modules')] },
   },
   // voiceReview serves /review.html's endpoints in the dev server only (it never ships).
-  plugins: [serviceWorker(), voiceReview()],
+  plugins: [audioManifest(), serviceWorker(), voiceReview()],
 });

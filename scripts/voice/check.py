@@ -18,12 +18,15 @@ that count against it and "hints" that are only worth a listen:
   long     A clip far longer than its text needs: ElevenLabs sometimes
            trails off into breathing or says the context out loud.
 """
-import argparse, datetime, difflib, hashlib, json, os, re, shutil, subprocess
+import argparse, datetime, difflib, hashlib, json, os, re, shutil, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 AUDIO = os.path.join(ROOT, "public", "audio")
 HERE = os.path.join(ROOT, "scripts", "voice")
 TAKES = os.path.join(HERE, "takes")
+
+sys.path.insert(0, HERE)
+from castfile import refresh_lines  # noqa: E402
 
 
 def file_hash(path):
@@ -118,14 +121,17 @@ def main():
     ap.add_argument("--no-takes", action="store_true", help="don't check the earlier takes")
     args = ap.parse_args()
 
-    data = json.load(open(os.path.join(HERE, "lines.json"), encoding="utf-8"))
+    # lines.json is derived from the cartoons, not committed: rebuild it first.
+    data = json.load(open(refresh_lines(), encoding="utf-8"))
     check = Checker(data, whisper=not args.no_whisper)
-    manifest = json.load(open(os.path.join(AUDIO, "manifest.json"), encoding="utf-8"))
+    clips_dir = os.path.join(AUDIO, "lines")
+    # The clips on disk (the same list Vite builds audio/manifest.json from).
+    on_disk = sorted(f[:-4] for f in os.listdir(clips_dir) if f.endswith(".mp3")) if os.path.isdir(clips_dir) else []
     out_path = os.path.join(HERE, "qa.json")
     out = json.load(open(out_path, encoding="utf-8")) if os.path.exists(out_path) else {"clips": {}}
     clips = out["clips"]
 
-    ids = manifest["lines"]
+    ids = on_disk
     if args.cartoon:
         mine = {l["id"] for l in data["lines"]
                 if any(w.split("/", 1)[0] == args.cartoon for w in [l["where"], *l.get("also", [])])}
@@ -133,7 +139,7 @@ def main():
             raise SystemExit(f'No lines from a cartoon called "{args.cartoon}" in lines.json.')
         ids = [i for i in ids if i in mine]
     if not ids:
-        raise SystemExit("No recorded clips to check yet (public/audio/manifest.json lists none).")
+        raise SystemExit("No recorded clips to check yet (public/audio/lines/ has no mp3s).")
 
     for cid in ids:
         for take in [None] + ([] if args.no_takes else takes_of("lines", cid)):

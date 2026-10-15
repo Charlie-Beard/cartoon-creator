@@ -1,14 +1,37 @@
 """
 Reads and edits cast.json (the voice of each character) without losing its
 layout: one character per line, grouped by world with blank lines between.
-Shared by generate.py, pick-voice.py and add-voices.py.
+Shared by generate.py, pick-voice.py and add-voices.py. Also holds
+refresh_lines(), which generate.py and check.py call before reading lines.json.
 """
-import json, os, re
+import json, os, re, shutil, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CAST = os.path.join(HERE, "cast.json")
 
 DEFAULT_SETTINGS = {"stability": 0.5, "speed": 1.0}
+
+ROOT = os.path.dirname(os.path.dirname(HERE))
+LINES_JSON = os.path.join(HERE, "lines.json")
+
+
+def refresh_lines():
+    """
+    Regenerates lines.json from the cartoons (npx tsx scripts/voice/export.ts)
+    and returns its path. lines.json is derived, not committed, so two
+    cartoon PRs never conflict over it; every reader calls this first.
+    """
+    npx = shutil.which("npx")
+    if not (shutil.which("node") and npx):
+        sys.exit("Node.js is needed to list the cartoons' lines (lines.json is built by "
+                 "`npx tsx scripts/voice/export.ts`), but `node`/`npx` is not on your PATH. "
+                 "Install Node 20+ and run `npm install` in the repo, then try again.")
+    r = subprocess.run([npx, "tsx", "scripts/voice/export.ts"], cwd=ROOT, capture_output=True, text=True, encoding="utf-8")
+    if r.returncode != 0 or not os.path.exists(LINES_JSON):
+        sys.exit("Could not build scripts/voice/lines.json (npx tsx scripts/voice/export.ts failed).\n"
+                 "Is `npm install` done? Its output:\n" + (r.stdout + r.stderr).strip())
+    print("lines.json:", (r.stdout.strip().splitlines() or ["rebuilt"])[0], flush=True)
+    return LINES_JSON
 
 
 def load_cast(path=CAST):

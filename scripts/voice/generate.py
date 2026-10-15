@@ -1,14 +1,14 @@
 """
 Records the cartoons' voices with ElevenLabs.
 
-    npx tsx scripts/voice/export.ts                                         # → lines.json
     python scripts/voice/generate.py --cartoon lost-kettle --dry-run        # what it would send, and the cost
     ELEVENLABS_API_KEY=... python scripts/voice/generate.py --cartoon lost-kettle   # record what is missing
 
-Reads scripts/voice/lines.json and writes trimmed, loudness-matched mono
-MP3s to public/audio/lines/<id>.mp3, then public/audio/manifest.json (the
-ids that exist and are still said somewhere). Existing clips are kept
-unless --force. Each character is recorded in their voice from cast.json
+First rebuilds scripts/voice/lines.json from the cartoons (it runs
+`npx tsx scripts/voice/export.ts`; lines.json is derived and not committed),
+then writes trimmed, loudness-matched mono MP3s to public/audio/lines/<id>.mp3.
+There is no manifest to write: Vite builds audio/manifest.json from the clips
+on disk (vite.config.ts). Existing clips are kept unless --force. Each character is recorded in their voice from cast.json
 (npx tsx scripts/voice/cast-check.ts lists who has none yet). Before
 sending anything it checks ffmpeg is installed and that the account has
 enough characters left.
@@ -47,7 +47,7 @@ OUT = os.path.join(ROOT, "public", "audio")
 LINES = os.path.join(OUT, "lines")
 
 sys.path.insert(0, HERE)
-from castfile import load_cast, load_config  # noqa: E402
+from castfile import load_cast, load_config, refresh_lines  # noqa: E402
 
 
 def spoken(text, say_as=None):
@@ -141,15 +141,13 @@ def clip_path(cid):
     return os.path.join(LINES, f"{cid}.mp3")
 
 
-def write_manifest(data):
-    """Lists the clips that exist and are still wanted (a line that was rewritten has a new id)."""
+def report_stale(data):
+    """Says which clips on disk are no longer said anywhere (a line that was rewritten has a new id)."""
     have = {f[:-4] for f in os.listdir(LINES) if f.endswith(".mp3")}
-    manifest = {"lines": sorted(l["id"] for l in data["lines"] if l["id"] in have)}
-    json.dump(manifest, open(os.path.join(OUT, "manifest.json"), "w", encoding="utf-8"))
-    print("manifest:", len(manifest["lines"]), "lines")
+    print("clips on disk:", len(have))
     stale = have - {l["id"] for l in data["lines"]}
     if stale:
-        print(f"{len(stale)} clips on disk are no longer said anywhere (left in place, not in the manifest).")
+        print(f"{len(stale)} clips on disk are no longer said anywhere (left in place; they are still listed in the built manifest).")
 
 
 def in_cartoon(line, cartoon):
@@ -170,23 +168,26 @@ def main():
     ap.add_argument("--clips", help="only these clips, e.g. lines/1001tlp,lines/7a2")
     ap.add_argument("--dry-run", action="store_true", help="print what would be sent and its cost; send nothing")
     ap.add_argument("--quiet", action="store_true", help="with --dry-run: only the totals")
-    ap.add_argument("--manifest", action="store_true", help="only rewrite manifest.json from the clips on disk")
+    ap.add_argument("--manifest", action="store_true", help="no-op: the manifest is built automatically now")
     args = ap.parse_args()
 
-    v = ElevenLabs(need_key=not (args.dry_run or args.manifest))
+    if args.manifest:
+        print("Nothing to do: audio/manifest.json is no longer written or committed. Vite builds it from "
+              "public/audio/lines/*.mp3 at build time and serves it in dev (vite.config.ts).")
+        return
+
+    v = ElevenLabs(need_key=not args.dry_run)
     if args.list_voices:
         return v.list_voices()
 
     # utf-8 explicitly: Windows would otherwise read ’ as "â€™" and the voice reads that out.
-    data = json.load(open(os.path.join(HERE, "lines.json"), encoding="utf-8"))
+    data = json.load(open(refresh_lines(), encoding="utf-8"))
     os.makedirs(LINES, exist_ok=True)
-    if args.manifest:
-        return write_manifest(data)
 
     cartoons = {l["where"].split("/", 1)[0] for l in data["lines"]}
     if args.cartoon and args.cartoon not in cartoons:
-        sys.exit(f'No lines from a cartoon called "{args.cartoon}" in lines.json. '
-                 f"Run npx tsx scripts/voice/export.ts first. Cartoons there: {', '.join(sorted(cartoons)) or 'none'}.")
+        sys.exit(f'No lines from a cartoon called "{args.cartoon}". '
+                 f"Cartoons there: {', '.join(sorted(cartoons)) or 'none'}.")
 
     from check import file_hash, stash
 
@@ -268,7 +269,7 @@ def main():
     finally:
         # Even when stopped part-way (Ctrl+C, an API error), list what was recorded; a rerun carries on.
         print(f"\nSent {sent:,} characters.")
-        write_manifest(data)
+        report_stale(data)
 
 
 if __name__ == "__main__":
