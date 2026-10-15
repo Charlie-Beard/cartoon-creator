@@ -480,7 +480,7 @@ export default defineCartoon({
         await k.say('who', snap);
 
         // The ruler comes down on the desk: SMACK.
-        const ruler = joint(k, k.part(snap, 'ruler'));
+        const ruler = k.pivot(k.part(snap, 'ruler'));
         await k.to(ruler, 0.18, { rotation: 50, ease: 'power3.in' });
         smack();
         void k.quake(5);
@@ -515,8 +515,6 @@ export default defineCartoon({
         // His big turn: tap the kettle's lid.
         const how = await k.tapToHelp(kettle, { ask: 'askKettle', nudge: 'nudgeKettle', helped: 'tingKettle', by: mf, helper: pan });
         ting();
-        // (if the Saucepan Man did it, the kit gave no sparkle: give the lid one)
-        if (how === 'helped') k.sparkle(KETTLE_DESK.x + 77, KETTLE_DESK.y + 45, 10, 90);
         const first = whistleKettle(k, kettle, KETTLE_DESK, 1);
         await k.wait(900);
         k.pose(snap, 'stomp');
@@ -633,28 +631,15 @@ export default defineCartoon({
 
 // ----------------------------------------------------------------- moves
 
-/**
- * k.pivot, but only the first time for each part: setting a part's pivot
- * again while it is turned shifts it (the Saucepan Man's hand ended up at
- * his mouth), so every helper below goes through this.
- */
-const pivoted = new WeakSet<Element>();
-function joint(k: Kit, parts: SVGGElement[]): SVGGElement[] {
-  const fresh = parts.filter((p) => !pivoted.has(p));
-  k.pivot(fresh);
-  fresh.forEach((p) => pivoted.add(p));
-  return parts;
-}
-
 /** Moon-Face's shine brightens (or settles back). */
 async function beam(k: Kit, mf: HTMLElement, on: boolean): Promise<void> {
-  const glow = joint(k, k.part(mf, 'glow'));
+  const glow = k.pivot(k.part(mf, 'glow'));
   await k.to(glow, 0.5, { scale: on ? 1.15 : 1, opacity: on ? 1 : 0.85, ease: 'sine.inOut' });
 }
 
 /** Moon-Face's wave (his right arm). */
 async function wave(k: Kit, el: HTMLElement): Promise<void> {
-  const arm = joint(k, k.part(el, 'armR'));
+  const arm = k.pivot(k.part(el, 'armR'));
   for (let i = 0; i < 2; i++) {
     await k.to(arm, 0.2, { rotation: -16 });
     await k.to(arm, 0.2, { rotation: 6 });
@@ -664,7 +649,7 @@ async function wave(k: Kit, el: HTMLElement): Promise<void> {
 
 /** Silky's wings flutter, `times` beats. */
 async function flutter(k: Kit, el: HTMLElement, times = 4): Promise<void> {
-  const wings = joint(k, [...k.part(el, 'wingL'), ...k.part(el, 'wingR')]);
+  const wings = k.pivot([...k.part(el, 'wingL'), ...k.part(el, 'wingR')]);
   if (!wings.length) return;
   for (let i = 0; i < times; i++) {
     await k.to(wings, 0.09, { scaleX: 0.72, ease: 'sine.inOut' });
@@ -680,7 +665,7 @@ async function rattle(k: Kit, el: HTMLElement): Promise<void> {
 
 /** The Saucepan Man cups his ear ("Eh?"), or lowers his hand again. */
 async function earCup(k: Kit, el: HTMLElement, on: boolean): Promise<void> {
-  const arm = joint(k, k.part(el, 'armR'));
+  const arm = k.pivot(k.part(el, 'armR'));
   await k.all(k.to(arm, 0.3, { rotation: on ? -10 : 0 }), k.to(el, 0.3, { rotation: on ? 4 : 0 }));
 }
 
@@ -706,7 +691,7 @@ async function whistleKettle(k: Kit, kettle: HTMLElement, at: { x: number; y: nu
   // The spout's tip (the art is 180 wide, the whistle at 18, 46).
   const s = at.w / 180;
   const [x, y] = [at.x + 18 * s, at.y + 46 * s];
-  const lid = joint(k, k.part(kettle, 'lid'));
+  const lid = k.pivot(k.part(kettle, 'lid'));
   if (tune) whistleTune(loud);
   else whistle(1, loud);
   hiss(tune ? 2.2 : 0.9);

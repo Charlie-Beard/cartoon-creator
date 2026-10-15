@@ -46,6 +46,19 @@ function grid(title: string, all: Record<string, () => string>, width = size): s
     .join('')}</div>`;
 }
 
+/** Props at their natural size (from `size`, default 120), so wide strips and big props read as they will on stage. */
+function props(w: World): string {
+  const ids = Object.keys(w.props).filter((n) => !only || only.includes(n));
+  if (!ids.length) return '';
+  return `<h2 class="lab-h">${w.name}: props</h2><div class="lab-grid">${ids
+    .map((n) => {
+      const p = w.props[n];
+      const width = Math.min(p.size?.[0] ?? 120, 1180);
+      return `<figure class="lab-card" data-id="${n}" style="width:${Math.max(width, 120)}px">${p.art()}<figcaption>${n}</figcaption></figure>`;
+    })
+    .join('')}</div>`;
+}
+
 function world(w: World): string {
   const map = <T,>(o: Record<string, T>, f: (v: T) => () => string) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, f(v)]));
   const poses: Record<string, () => string> = {};
@@ -54,7 +67,7 @@ function world(w: World): string {
     !set || set === 'chars' ? grid(`${w.name}: characters`, map(w.characters, (c) => c.art)) : '',
     !set || set === 'poses' ? grid(`${w.name}: poses`, poses) : '',
     !set || set === 'backdrops' ? grid(`${w.name}: backdrops`, map(w.backdrops, (b) => b.art), Math.max(size, 420)) : '',
-    !set || set === 'props' ? grid(`${w.name}: props`, map(w.props, (p) => p.art), Math.min(size, 160)) : '',
+    !set || set === 'props' ? props(w) : '',
   ];
   return parts.join('');
 }

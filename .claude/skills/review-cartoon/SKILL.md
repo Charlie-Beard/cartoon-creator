@@ -57,7 +57,8 @@ frames of every scene.
 - [ ] Faces above y ≈ 660 (the caption band); nobody accidentally off
       stage or cut by the frame; speakers face listeners.
 - [ ] One thing to look at at a time; at most four actors.
-- [ ] Scale consistent between characters; feet on the ground line.
+- [ ] Scale consistent between characters; portraits' bottom edges on or
+      below the ground line (or behind furniture), never floating.
 - [ ] Each scene's opening frame (`set`) reads as a picture on its own.
 
 **Code**

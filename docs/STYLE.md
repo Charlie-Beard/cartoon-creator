@@ -77,8 +77,10 @@ The villains' rules, from the games:
 - The stage is **1180 × 820**. Captions sit in the band **y 690–800**:
   keep faces and anything important above y ≈ 660.
 - The ground line in most backdrops is about **y 640** (each backdrop's
-  `about` says). Portraits are 300 × 340 at natural size; most scenes
-  use them at w 220–280, so stand them with their top near y 330–380.
+  `about` says). Portraits are **head and shoulders** (300 × 340 at
+  natural size, no legs); most scenes use them at w 220–280. Stand them
+  so their bottom edge sits on or a little below the ground line, or is
+  hidden behind a table, desk or bush, with their top near y 330–380.
 - Two to four actors on stage at once. More than four reads as clutter.
 - The speaker faces the listener (`flip: true` to face left). Whoever
   talks should be easy to find: they bob while speaking.

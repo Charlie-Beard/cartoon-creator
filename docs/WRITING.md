@@ -6,7 +6,15 @@ reference it points to.
 
 ## The shape of an episode
 
-**2–5 minutes, 3–5 scenes, 25–45 lines, 1–3 of his turns.**
+**2–5 minutes, 3–5 scenes, 1–3 of his turns.** Lines are the budget
+that sets the length: with the action between them, about **13 lines a
+minute** (the first episode: 40 lines, 3 minutes).
+
+| Length | Scenes | Lines |
+|---|---|---|
+| Short, about 2 minutes | 3 | 25–30 |
+| About 3 minutes | 4 | 35–40 |
+| Long, 4–5 minutes | 5 | 50–60 |
 
 | Part | Scenes | What happens |
 |---|---|---|

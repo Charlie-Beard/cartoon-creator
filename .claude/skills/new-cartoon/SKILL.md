@@ -10,6 +10,10 @@ through the steps in order; don't skip the looking (step 7).
 
 ## 0. Read (every time; it's quick)
 
+(Several sessions or agents may share one machine: when you start a dev
+server yourself, give it its own port, `npx vite --port 52xx`.)
+
+
 - `CLAUDE.md`, `docs/STYLE.md`, `docs/WRITING.md`. Skim `docs/KIT.md`.
 - The world's notes: `src/worlds/<world>/index.ts` (world `about`, every
   character's `about`, the backdrops and props available).
@@ -28,7 +32,8 @@ idea and the world notes. Pick from:
 - **The scary bit:** which villain, or a gentler danger (lost, stuck,
   a storm), or none this time.
 - **His turns:** two or three concrete ideas for what he taps.
-- **Length:** short (about 2 min, 3 scenes) or longer (4–5 min, 5 scenes).
+- **Length:** short (about 2 min, 3 scenes, 25–30 lines), about 3 min
+  (4 scenes, 35–40 lines) or long (4–5 min, 5 scenes, 50–60 lines).
 - **Ending flavour:** funny, cosy, a party.
 
 If the person said not to ask, or answered everything already, skip
@@ -89,12 +94,15 @@ Fix everything it reports. Don't silence a rule; rewrite the line.
 ## 6. Watch it
 
 ```bash
-npm run shots -- <id>
+npm run shots -- <id>              # taps his turns at once
+npm run shots -- <id> --no-tap     # lets every turn run out: hear the nudge and helped lines
+npm run shots -- <id> --scene 2    # one scene (from 0), while fixing it
 ```
 
-It plays the episode in Chromium at 1180 × 820, taps his turns, saves
-frames of every scene to `screenshots/<id>/`, a contact sheet, and a
-measured pacing report.
+It plays the episode in Chromium at 1180 × 820, saves a frame of every
+scene every few seconds to `screenshots/<id>/`, a contact sheet
+(`sheet.png`), and a measured pacing report with every caption's timing
+and any silent stretch over 4 s. Run it after every round of changes.
 
 ## 7. Look (the step that matters most)
 
@@ -108,7 +116,8 @@ Read the contact sheet and every scene's opening frame. For each, ask:
 - Pacing: every scene 25–90 s, the whole episode 2–5 minutes, no long
   silent stretches.
 
-Fix, re-run `shots`, look again, until every frame is right.
+Fix, re-run `shots`, look again, until every frame is right. Run it once
+with `--no-tap` too, and look at the turns done for him.
 
 ## 8. Review
 

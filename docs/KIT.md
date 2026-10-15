@@ -56,7 +56,9 @@ const how = await k.tapToHelp(target, { ask, nudge, helped, by, helper?, size? }
 `helper ?? by`), and `'helped'`. See docs/WRITING.md for good turns.
 
 The target must be on stage and still. Don't start other movement until
-it resolves.
+it resolves. The ring is the target's size, capped at 260 px; pass
+`size` to choose (a big cloud: `size: 300`). Either way it ends with a
+sparkle on the target, tapped or helped.
 
 ## Movement
 
@@ -89,7 +91,8 @@ await k.blink(mf);
 ```
 
 Rotate parts with `rotation` after `k.pivot`, never with an SVG
-`rotate()` string.
+`rotate()` string. `k.pivot` sets each part's joint once; calling it
+again on the same part is safe.
 
 ## Effects
 
@@ -181,6 +184,21 @@ rough, shadow, fibre })`, outlines `rect`, `circle`, `ellipse`, `poly`,
 origin }, children)`; `raw(svgMarkup)`.
 
 ## Facts worth knowing
+
+- **While someone speaks, move them only in x.** `say` bobs the speaker
+  with `y` and `rotation`; a tween on those at the same time fights it.
+  Hop or tilt them before or after the line, or move an actor that
+  isn't speaking.
+- **Lights sit above actors** (z 35), so a window's light glows over
+  anyone standing in front of it. Pass a lower `z` (e.g. 5) for a light
+  that belongs to the backdrop.
+- **A `flicker` light can't be faded** (its breathing loop owns its
+  opacity). Make lights you will fade without `flicker`, or `k.remove`
+  the flickering one.
+- **Poses mirror** with `flip` like portraits (Dame Snap's `loom` facing
+  left: `{ pose: 'loom', flip: true }`).
+- **Starting a scene zoomed in:** in `set`, `void k.camera({ zoom, x, y }, 0)`.
+- `?cartoon=<id>&scene=<n>` counts scenes **from 0**.
 
 - `set` must not await anything; it runs hidden behind the curtain or
   wipe.

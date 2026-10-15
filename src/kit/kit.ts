@@ -56,7 +56,11 @@ export interface TapToHelpOpts<K extends string> {
   by?: HTMLElement;
   /** Who says `helped`. Default `by`. */
   helper?: HTMLElement;
-  /** Size of the tap area round the target's centre, at least 120. Default: the target's size. */
+  /**
+   * Size of the tap area (and ring) round the target's centre, at least
+   * 120. Default: the target's size, capped at 260 so a big target (a
+   * cloud, a door) gets a ring round its middle, not the whole stage.
+   */
   size?: number;
 }
 
@@ -304,8 +308,12 @@ export class Kit<K extends string = string> {
    */
   pivot(gs: SVGGElement[]): SVGGElement[] {
     for (const g of gs) {
+      // Only once: setting the origin again on a part already turned makes it jump.
+      if (g.dataset.pivoted) continue;
       const [x, y] = g.style.transformOrigin.split(' ').map(parseFloat);
-      if (!Number.isNaN(x)) this.set(g, { svgOrigin: `${x} ${y}` });
+      if (Number.isNaN(x)) continue;
+      this.set(g, { svgOrigin: `${x} ${y}` });
+      g.dataset.pivoted = '1';
     }
     return gs;
   }
@@ -329,8 +337,9 @@ export class Kit<K extends string = string> {
    * on stage (motes, floats) holds still so nothing competes with it. If
    * he doesn't tap, `nudge` is said once; if he still doesn't, `helped` is
    * said and the story carries on without him. No timer shows, nothing is
-   * wrong, nobody waits on him for ever. Resolves 'tapped' or 'helped', so
-   * the script can thank him or not.
+   * wrong, nobody waits on him for ever. Either way it ends with a sparkle
+   * on the target. Resolves 'tapped' or 'helped', so the script can thank
+   * him or not.
    */
   async tapToHelp(target: HTMLElement, o: TapToHelpOpts<K> = {}): Promise<'tapped' | 'helped'> {
     if (!this.alive()) return never();
@@ -342,7 +351,7 @@ export class Kit<K extends string = string> {
     const k = s.width / 1180 || 1;
     const cx = (r.left + r.width / 2 - s.left) / k;
     const cy = (r.top + r.height / 2 - s.top) / k;
-    const size = Math.max(120, o.size ?? Math.max(r.width, r.height) / k);
+    const size = Math.max(120, o.size ?? Math.min(260, Math.max(r.width, r.height) / k));
 
     const ring = place(h('div', { class: 'story-tap-ring' }), cx - size / 2, cy - size / 2, size, size);
     const hit = place(h('button', { class: 'story-tap', 'data-tap-to-help': '', 'aria-label': 'Tap to help' }), cx - size / 2, cy - size / 2, size, size);
@@ -391,6 +400,9 @@ export class Kit<K extends string = string> {
       return 'tapped';
     }
     if (o.helped) await this.say(o.helped, o.helper ?? o.by);
+    // Done for him: the same sparkle, so the moment still lands.
+    sfx.sparkle();
+    this.sparkle(cx, cy, 12, 120);
     return 'helped';
   }
 
