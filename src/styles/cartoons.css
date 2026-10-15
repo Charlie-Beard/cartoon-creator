@@ -1,26 +1,189 @@
-/* ---------- The library and the player (scenes/library.ts, scenes/player.ts) ---------- */
+/* ---------- The library (scenes/library.ts) ---------- */
 
+.shelf-deck,
+.shelf-plank {
+  position: absolute;
+  inset: 0;
+}
+.shelf-plank {
+  pointer-events: none;
+}
+.shelf-plank svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* One cartoon. Its tilt and entrance are GSAP's (on the button), so the
+   press feedback is on the face inside, where nothing else moves it. */
 .shelf-card {
   position: absolute;
-  border: none;
-  border-radius: 18px 12px 20px 14px;
-  box-shadow: 0 8px 0 rgba(20, 12, 4, 0.35);
-  color: var(--parchment-100, #f7f2e6);
-  font: 700 34px/1.15 Andika, sans-serif;
-  padding: 20px;
-  display: flex;
-  align-items: flex-end;
+  display: block;
+  padding: 0;
+  overflow: visible;
 }
-.shelf-card.is-pressed {
-  transform: translateY(4px);
-  box-shadow: 0 4px 0 rgba(20, 12, 4, 0.35);
+.shelf-face {
+  position: absolute;
+  inset: 0;
+  transition: transform 80ms ease-out;
+}
+.shelf-card.is-pressed .shelf-face {
+  transform: translateY(4px) scale(0.98);
+}
+.shelf-art,
+.shelf-label {
+  position: absolute;
+  pointer-events: none;
+}
+.shelf-art {
+  inset: 0;
+}
+.shelf-art svg {
+  width: 100%;
+  height: 100%;
+}
+.shelf-thumb {
+  overflow: hidden;
+  pointer-events: none;
+}
+.shelf-thumb svg {
+  position: absolute;
+  left: 0;
+  top: -14px;
+  width: 308px;
+  height: 214px;
+}
+.shelf-thumb.plain {
+  display: grid;
+  place-items: center;
+}
+.shelf-thumb.plain svg {
+  position: static;
+  width: 96px;
+  height: 96px;
+}
+.shelf-label {
+  left: 20px;
+  top: 164px;
+  width: 296px;
+  height: 84px;
+}
+.shelf-title {
+  position: absolute;
+  left: 34px;
+  top: 164px;
+  width: 268px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font: 700 32px/1.1 Andika, sans-serif;
+  color: var(--ink-900);
+  pointer-events: none;
+}
+.shelf-title > span {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 .shelf-tick {
   position: absolute;
-  top: 12px;
-  right: 16px;
-  font-size: 40px;
+  right: -20px;
+  top: -24px;
+  width: 84px;
+  height: 84px;
+  pointer-events: none;
 }
+.shelf-tick svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.shelf-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.shelf-dot {
+  width: 40px;
+  height: 40px;
+  opacity: 0.45;
+}
+.shelf-dot.on {
+  opacity: 1;
+}
+.shelf-dot svg {
+  width: 100%;
+  height: 100%;
+}
+
+.shelf-empty-text {
+  display: grid;
+  place-items: center;
+  font: 700 56px/1.1 Andika, sans-serif;
+  color: var(--ink-900);
+  pointer-events: none;
+}
+
+/* ---------- The grown-ups' corner (scenes/corner.ts; the page itself is parent.css) ---------- */
+
+.p-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: none;
+}
+.p-row > div:first-child {
+  min-width: 0;
+}
+.p-row strong {
+  font-size: 26px;
+}
+.parent .p-name {
+  width: 340px;
+  font-size: 30px;
+}
+.p-step {
+  width: 72px;
+  padding: 0;
+  font-size: 46px;
+  line-height: 1;
+}
+.p-pips {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 50px;
+}
+.p-pips span {
+  width: 14px;
+  border-radius: 4px;
+  background: rgba(90, 62, 30, 0.2);
+}
+.p-pips span.on {
+  background: var(--emerald-500);
+}
+.p-level-text {
+  min-width: 70px;
+  text-align: right;
+  font-weight: 700;
+  font-size: 26px;
+}
+.p-cartoon small {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.parent .p-cartoon select {
+  width: 340px;
+  text-overflow: ellipsis;
+}
+
+/* ---------- The player (scenes/player.ts) ---------- */
 
 /* His turn (Kit.tapToHelp): a soft gold ring that breathes slowly. Never flashes. */
 .story-tap-ring {
