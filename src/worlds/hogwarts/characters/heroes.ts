@@ -1,6 +1,6 @@
 /** The three playable heroes, plus Hagrid. */
 import { C } from '../../../art/palette';
-import { circle, curve, ellipse, ink, piece, poly, rect, type Node, type Pt } from '../../../art/paper';
+import { circle, curve, ellipse, group, ink, piece, poly, rect, type Node, type Pt } from '../../../art/paper';
 import { HEAD, person, roundGlasses, wand } from './people';
 
 const [cx, cy] = HEAD;
@@ -138,7 +138,12 @@ export function hagrid(): string {
     body: coat,
     front: [
       fluff(beard, '#3a2a20', 12),
-      piece(curve([[cx - 22, cy + 46], [cx, cy + 40], [cx + 22, cy + 46], [cx, cy + 58]], 2), C.rose, { fibre: false }),
+      // (his mouth is in the beard; `mouth` / `mouthOpen` let k.talk() flap it)
+      group({ part: 'mouth' }, [piece(curve([[cx - 22, cy + 46], [cx, cy + 40], [cx + 22, cy + 46], [cx, cy + 58]], 2), C.rose, { fibre: false })]),
+      group({ part: 'mouthOpen', opacity: 0 }, [
+        piece(ellipse(cx, cy + 50, 20, 14), C.redDark, { edge: 'cut', fibre: false, shadow: false }),
+        piece(ellipse(cx, cy + 58, 11, 5), C.rose, { edge: 'clean', fibre: false, shadow: false }),
+      ]),
       fluff([[cx - 66, cy - 26], [cx - 40, cy - 66], [cx, cy - 74], [cx + 40, cy - 66], [cx + 66, cy - 26], [cx + 30, cy - 44], [cx - 30, cy - 44]], '#3a2a20', 8),
       piece(ellipse(cx, cy + 22, 14, 12), C.skinShade, { edge: 'cut', fibre: false }),
     ],

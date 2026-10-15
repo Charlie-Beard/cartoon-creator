@@ -19,8 +19,10 @@ export function hedwigFly(): string {
       piece(curve([[x(190), 130], [x(246), 80], [x(298), 56], [x(298), 100], [x(284), 150], [x(250), 196], [x(196), 220]]), C.white),
       // the long feathers at the wing tip
       ...[[x(262), 70, 20], [x(278), 110, 12], [x(270), 152, 4], [x(246), 188, -6]].map(([fx, fy, rot]) =>
-        piece(ellipse(fx, fy, 14, 38, side * rot), '#fffdf6', { edge: 'cut', fibre: false }),
+        piece(ellipse(fx, fy, 14, 38, side * rot), '#efe6d2', { edge: 'cut', fibre: false }),
       ),
+      // feather lines, so the white wing reads against the white body
+      ...[[286, 70], [292, 108], [280, 146], [256, 184]].map(([fx, fy]) => ink([[x(228), 148], [x(fx), fy]], { width: 2, color: C.stoneLight })),
       speck(x(236), 150), speck(x(256), 118), speck(x(222), 184), speck(x(272), 90),
     ];
   };

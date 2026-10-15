@@ -3,8 +3,8 @@
  * wand, the broomstick, the cauldron, the owl post letter and so on, drawn
  * as the game drew them. Registered as props in index.ts.
  */
-import { C } from '../../../art/palette';
-import { band, circle, curve, dot, ellipse, group, ink, piece, poly, rect, svg, type Node, type Pt } from '../../../art/paper';
+import { C } from '../../art/palette';
+import { band, circle, curve, dot, ellipse, group, ink, piece, poly, rect, svg, type Node, type Pt } from '../../art/paper';
 
 const pic = (name: string, label: string, nodes: Parameters<typeof svg>[1]) => svg({ w: 400, h: 400, name, label }, nodes);
 
@@ -36,7 +36,7 @@ const blush = (x: number, y: number, r = 9): Node =>
 const sparkle = (x: number, y: number, r: number, color: string = C.gold): Node =>
   piece(poly([[x, y - r], [x + r * 0.25, y - r * 0.25], [x + r, y], [x + r * 0.25, y + r * 0.25], [x, y + r], [x - r * 0.25, y + r * 0.25], [x - r, y], [x - r * 0.25, y - r * 0.25]]), color, { edge: 'cut', fibre: false });
 
-function sortingHat(): string {
+export function sortingHat(): string {
   return pic('hat', 'a hat', [
     ground(200, 334, 150),
     piece(ellipse(200, 300, 160, 40), C.brownDark),
@@ -52,7 +52,7 @@ function sortingHat(): string {
   ]);
 }
 
-function cauldron(): string {
+export function cauldron(): string {
   return pic('pot', 'a pot', [
     ground(200, 350, 130),
     piece(curve([[80, 170], [320, 170], [330, 270], [280, 340], [120, 340], [70, 270]]), C.charcoal),
@@ -67,7 +67,7 @@ function cauldron(): string {
   ]);
 }
 
-function parchmentMap(): string {
+export function parchmentMap(): string {
   return pic('map', 'a map', [
     ground(200, 330, 160),
     piece(poly([[50, 110], [150, 86], [250, 110], [350, 86], [350, 300], [250, 324], [150, 300], [50, 324]]), C.sand),
@@ -81,7 +81,7 @@ function parchmentMap(): string {
   ]);
 }
 
-function schoolBag(): string {
+export function schoolBag(): string {
   return pic('bag', 'a bag', [
     ground(200, 340, 140),
     piece(band([[120, 180], [130, 70], [270, 70], [280, 180]], 18), C.brownDark),
@@ -93,7 +93,7 @@ function schoolBag(): string {
   ]);
 }
 
-function rat(): string {
+export function rat(): string {
   return pic('rat', 'a rat', [
     ground(200, 318, 140),
     piece(band([[110, 300], [70, 290], [48, 250], [62, 214]], 10), C.pink),
@@ -113,7 +113,7 @@ function rat(): string {
   ]);
 }
 
-function bat(): string {
+export function bat(): string {
   const wing = (s: 1 | -1) =>
     group({ part: s === 1 ? 'wingR' : 'wingL', origin: [200, 190] }, [
       piece(
@@ -142,7 +142,7 @@ function bat(): string {
   ]);
 }
 
-function quill(): string {
+export function quill(): string {
   return pic('quill', 'a quill', [
     piece(rect(70, 290, 110, 80, 10), C.charcoal),
     piece(ellipse(125, 292, 55, 14), C.ink, { fibre: false }),
@@ -153,7 +153,7 @@ function quill(): string {
   ]);
 }
 
-function chessKnight(): string {
+export function chessKnight(): string {
   return pic('chess', 'a chess piece', [
     ground(200, 350, 110),
     piece(rect(110, 300, 180, 50, 12), C.charcoal),
@@ -166,7 +166,7 @@ function chessKnight(): string {
   ]);
 }
 
-function frog(): string {
+export function frog(): string {
   const g = C.green;
   return pic('frog', 'a frog', [
     ground(200, 340, 140),
@@ -186,7 +186,7 @@ function frog(): string {
   ]);
 }
 
-function wand(): string {
+export function wand(): string {
   return pic('wand', 'a wand', [
     piece(band([[90, 330], [300, 100]], 18), C.brownDark),
     piece(band([[90, 330], [140, 276]], 26), C.wood),
@@ -197,7 +197,7 @@ function wand(): string {
   ]);
 }
 
-function crescentMoon(): string {
+export function crescentMoon(): string {
   return pic('moon', 'the moon', [
     piece(curve([[260, 60], [170, 90], [130, 200], [180, 310], [280, 340], [210, 280], [200, 180], [230, 110]], 3), C.yellow),
     eye(196, 190, 9, false),
@@ -209,7 +209,7 @@ function crescentMoon(): string {
   ]);
 }
 
-function broomstick(): string {
+export function broomstick(): string {
   const bristles = Array.from({ length: 9 }, (_, i) => ink([[220 + i * 3, 240 - i * 3], [314 + i * 6, 296 - i * 13]], { width: 4, color: C.brown }));
   return pic('broom', 'a broom', [
     piece(band([[20, 110], [240, 230]], 16), C.wood),
@@ -220,7 +220,7 @@ function broomstick(): string {
   ]);
 }
 
-function spellbook(): string {
+export function spellbook(): string {
   return pic('book', 'a book', [
     ground(200, 340, 150),
     piece(poly([[70, 140], [200, 120], [330, 140], [330, 320], [200, 300], [70, 320]]), C.brownDark),
@@ -232,7 +232,7 @@ function spellbook(): string {
   ]);
 }
 
-function toad(): string {
+export function toad(): string {
   const wart = (x: number, y: number, r = 6) => piece(circle(x, y, r), '#6d5a3a', { edge: 'cut', fibre: false, shadow: false });
   return pic('toad', 'a toad', [
     ground(200, 340, 140),
@@ -250,7 +250,7 @@ function toad(): string {
   ]);
 }
 
-function owl(): string {
+export function owl(): string {
   return pic('owl', 'an owl', [
     piece(band([[60, 330], [340, 320]], 20), C.brownDark),
     piece(curve([[200, 80], [290, 120], [300, 240], [260, 320], [140, 320], [100, 240], [110, 120]]), C.wood),
@@ -268,7 +268,7 @@ function owl(): string {
   ]);
 }
 
-function owlPostLetter(): string {
+export function owlPostLetter(): string {
   return pic('letter', 'a letter', [
     ground(200, 320, 170, 22),
     piece(poly([[50, 110], [350, 100], [356, 300], [44, 306]]), C.cream),
@@ -279,7 +279,7 @@ function owlPostLetter(): string {
   ]);
 }
 
-function galleon(): string {
+export function galleon(): string {
   return pic('coin', 'a coin', [
     ground(200, 340, 120),
     piece(circle(200, 200, 140), '#b8862f'),
@@ -290,7 +290,7 @@ function galleon(): string {
   ]);
 }
 
-function birthdayCake(): string {
+export function birthdayCake(): string {
   return pic('cake', 'a cake', [
     ground(200, 350, 150),
     piece(ellipse(200, 334, 150, 26), C.stoneLight),
@@ -303,7 +303,7 @@ function birthdayCake(): string {
   ]);
 }
 
-function redStone(): string {
+export function redStone(): string {
   return pic('stone', 'a stone', [
     ground(200, 320, 120),
     piece(circle(200, 220, 120), 'rgba(255,190,170,0.35)', { edge: 'cut', fibre: false, shadow: false }),
@@ -314,7 +314,7 @@ function redStone(): string {
   ]);
 }
 
-function flame(): string {
+export function flame(): string {
   return pic('flame', 'a flame', [
     piece(curve([[200, 40], [290, 160], [300, 260], [250, 340], [150, 340], [100, 260], [120, 170], [160, 200]], 2), C.orange),
     piece(curve([[200, 120], [256, 210], [250, 290], [200, 330], [150, 290], [150, 220]], 2), C.yellow, { fibre: false }),
@@ -322,7 +322,7 @@ function flame(): string {
   ]);
 }
 
-function dragon(): string {
+export function dragon(): string {
   return pic('dragon', 'a dragon', [
     ground(200, 352, 150),
     piece(band([[270, 320], [330, 330], [370, 290], [360, 250]], 26), C.green),
@@ -341,7 +341,7 @@ function dragon(): string {
   ]);
 }
 
-function pumpkin(): string {
+export function pumpkin(): string {
   return pic('pumpkin', 'a pumpkin', [
     ground(200, 340, 150),
     piece(ellipse(130, 240, 70, 96), C.ginger),
@@ -354,7 +354,7 @@ function pumpkin(): string {
   ]);
 }
 
-function cobweb(): string {
+export function cobweb(): string {
   const ends: Pt[] = [[60, 20], [100, 160], [200, 260], [300, 340], [380, 360]];
   const threads = ends.map(([x, y]) => ink([[380, 20], [x, y]], { width: 3, color: C.greyDark }));
   const rings = [0.3, 0.55, 0.8].map((t) =>
@@ -371,7 +371,7 @@ function cobweb(): string {
   ]);
 }
 
-function lantern(): string {
+export function lantern(): string {
   return pic('lantern', 'a lantern', [
     ground(200, 350, 100),
     ink([[160, 90], [200, 50], [240, 90]], { width: 8, color: C.charcoal }),
@@ -384,7 +384,7 @@ function lantern(): string {
   ]);
 }
 
-function magicWand(): string {
+export function magicWand(): string {
   return pic('magic', 'magic', [
     piece(band([[80, 340], [240, 170]], 16), C.charcoal),
     piece(band([[230, 180], [250, 160]], 16), C.white),

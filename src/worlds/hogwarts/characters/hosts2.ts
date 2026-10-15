@@ -403,6 +403,12 @@ export function dumbledore(): string {
     front: [
       fluff(beard, white, 8),
       ink([[cx - 24, cy + 40], [cx - 10, cy + 34], [cx, cy + 40], [cx + 10, cy + 34], [cx + 24, cy + 40]], { width: 6, color: '#d8d2c6' }),
+      // (his mouth is hidden in the beard; `mouth` / `mouthOpen` let k.talk() flap it)
+      group({ part: 'mouth' }, [ink([[cx - 10, cy + 50], [cx, cy + 55], [cx + 10, cy + 50]], { width: 3, color: '#b98a7a' })]),
+      group({ part: 'mouthOpen', opacity: 0 }, [
+        piece(ellipse(cx, cy + 55, 13, 10), C.redDark, { edge: 'cut', fibre: false, shadow: false }),
+        piece(ellipse(cx, cy + 60, 7, 4), C.rose, { edge: 'clean', fibre: false, shadow: false }),
+      ]),
       ...halfMoonGlasses(),
       // pointed hat
       piece(curve([[cx - 80, cy - 40], [cx - 30, cy - 96], [cx + 14, cy - 138], [cx + 40, cy - 110], [cx + 80, cy - 40]], 1), C.purple),
