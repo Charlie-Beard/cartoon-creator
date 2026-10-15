@@ -31,6 +31,7 @@ npm run dev            # http://localhost:5173   ?cartoon=<id>&scene=<n>   ?scen
                        # /lab.html?world=faraway  every character, pose, backdrop and prop
 npm run typecheck
 npm test               # Vitest: src/core, worlds, every cartoon's lines and ids
+npm run new -- <id> <world>   # start a cartoon: src/cartoons/<id>/ from the templates
 npm run check -- <id>  # one cartoon against the house rules (lines, ids, length, his turns)
 npm run shots -- <id>  # screenshots of every scene + a contact sheet + measured pacing
 npm run test:e2e       # Playwright at 1180×820 and 1180×760 (in the cloud: PW_CHROMIUM=/opt/pw-browsers/chromium)
@@ -72,18 +73,22 @@ job, not optional.
   (`k.to`, `k.enter` …), moving smoothly. No `steps()` eases and no boil
   frames: held frames read as flicker on the iPad.
 - `src/core/` is **pure** (no DOM, no audio) and unit-tested.
-- A cartoon is one file, `src/cartoons/<id>.ts`, made with
-  `defineCartoon` (see `templates/cartoon.ts`). Every line is listed up
-  front in `lines`, so the voice export can find it. `{name}` is the
+- A cartoon is a folder, `src/cartoons/<id>/` (start one with
+  `npm run new -- <id> <world>`): `meta.ts` (title, world, summary,
+  thumb, the day it was added) and `cartoon.ts` (`defineCartoon`, which
+  spreads the meta), plus any files of its own art or sounds. Nothing
+  else lists cartoons: a new folder is on the shelf. Every line is listed
+  up front in `lines`, so the voice export can find it. `{name}` is the
   child's name.
 - Characters, backdrops and props live in **worlds** (`src/worlds/<id>/`)
   and are used by id. Art used by one cartoon only can be drawn in the
   cartoon's own file; anything a second cartoon could use goes into the
   world (see the new-character and new-backdrop skills).
-- Registries (`src/cartoons/index.ts`, `src/worlds/index.ts`) get
-  **append-only** edits, to keep parallel PRs mergeable.
+- The world catalogues (`src/worlds/*/index.ts`) get **append-only**
+  edits, to keep parallel PRs mergeable. Generated files (the voice
+  export, the audio manifest) are never committed.
 - Comments explain *why* and describe the design in plain words, as the
-  existing files do. Every cartoon file opens with a comment telling the
+  existing files do. Every cartoon's `cartoon.ts` opens with a comment telling the
   whole story, scene by scene.
 - Search for `SCAFFOLD` to find stand-ins waiting for a workstream.
 
@@ -91,7 +96,7 @@ job, not optional.
 
 | Where | What |
 |---|---|
-| `src/cartoons/` | One file per cartoon, and `index.ts`, the shelf |
+| `src/cartoons/` | One folder per cartoon (`meta.ts`, `cartoon.ts`); `index.ts` finds them for the shelf |
 | `src/kit/` | `kit.ts` (the stage and its tools), `cartoon.ts` (`defineCartoon`, scenes) |
 | `src/worlds/` | `types.ts`, `index.ts` (lookups), and one folder per world: `common`, `faraway`, `hogwarts` |
 | `src/core/` | Pure: lines and their checks (`cartoon.ts`), `{name}` and voice ids (`phrases.ts`) |

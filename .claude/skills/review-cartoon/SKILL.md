@@ -5,7 +5,7 @@ description: Review a cartoon episode against the house rules (safety, story, li
 
 # Review a cartoon
 
-A second, careful look at one episode, `src/cartoons/<id>.ts`. Be
+A second, careful look at one episode, `src/cartoons/<id>/`. Be
 concrete: every finding names the scene, the line key or the frame, and
 what to change. Fix what's clearly wrong; ask about matters of taste.
 
@@ -66,7 +66,7 @@ frames of every scene.
       named uniquely and commented; reusable art is in the world.
 - [ ] `set` never awaits or animates; `play` awaits its beats; no
       `Math.random` decides anything that matters for the story.
-- [ ] The shelf entry matches the file; typecheck, `npm test` and e2e
+- [ ] `meta.ts` is filled in and spread into the script; typecheck, `npm test` and e2e
       pass.
 
 ## 3. Report

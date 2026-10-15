@@ -68,7 +68,11 @@ yourself when they're done, so no two agents edit the same file.
 
 ## 4. Script
 
-- Create `src/cartoons/<id>.ts` from `templates/cartoon.ts`.
+- `npm run new -- <id> <world>` makes `src/cartoons/<id>/` from the
+  templates: fill in `meta.ts` (title, summary, `thumb`) and write the
+  script in `cartoon.ts`. It's on the shelf as soon as the folder exists.
+  A long episode can keep its one-off art or sounds in their own files
+  in the folder (`art.ts`, `sounds.ts`).
 - The top comment is the beat sheet, shortened: the whole story scene by
   scene. A reader should know the episode without running it.
 - Lines in the order they're said, keys that say what each line is.
@@ -78,8 +82,6 @@ yourself when they're done, so no two agents edit the same file.
   moving at a time; a quiet beat after big moments.
 - His turns via `k.tapToHelp` with `ask`, `nudge` and `helped` lines,
   and a thank-you that works either way.
-- Append the episode to `SHELF` in `src/cartoons/index.ts` (id, title,
-  world, summary exactly as in the file, `load: () => import('./<id>')`).
 
 ## 5. Check
 
@@ -135,7 +137,7 @@ their ElevenLabs key. The episode plays with the iPad's voice until then.
 
 - `npm run test:e2e` (with `PW_CHROMIUM=/opt/pw-browsers/chromium` in the
   cloud) must pass.
-- Commit (the cartoon, its art, the shelf entry) with a message that
+- Commit (the cartoon's folder and any world art) with a message that
   says what the episode is, push, and open a PR whose description has
   the summary, the scene list, his turns, the contact sheet's findings
   and the pacing numbers.

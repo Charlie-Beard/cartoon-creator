@@ -1,6 +1,6 @@
 # <Title, 2–5 words>
 
-- **Id:** <kebab-case, also the file name: src/cartoons/<id>.ts>
+- **Id:** <kebab-case, also the folder: src/cartoons/<id>/ (npm run new -- <id> <world>)>
 - **World:** <faraway | hogwarts | …>
 - **Summary (for grown-ups, 1–2 sentences):** <…>
 - **Cast:** <ids from the world, 3–5; anyone new? → new-character>
