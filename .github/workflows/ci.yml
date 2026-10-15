@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      # Unit tests, including every cartoon's lines and ids (tests/unit/cartoon-lint.test.ts).
+      - run: npm test
+      # Every cartoon against the house rules (scripts/check-cartoon.ts).
+      - run: npm run check
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      # Builds the site itself (playwright.config.ts) and plays every cartoon through at both iPad sizes.
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

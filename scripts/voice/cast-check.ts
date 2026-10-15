@@ -82,10 +82,10 @@ if (idle.length) {
 const strays = cast.map(([id]) => id).filter((id) => !everyone.includes(id));
 if (strays.length) console.log(`In cast.json but not a character in any world (a typo, or a character not written into its world yet): ${strays.join(', ')}\n`);
 
-// Two characters on one voice is allowed (Wizard Words does it), but worth knowing when they share a scene.
+// Two characters on one voice is allowed (Wizard Words does it), but worth knowing when they talk in the same cartoon.
 const byVoice = new Map<string, string[]>();
-for (const [id, v] of cast) if (v.voice_id) byVoice.set(v.voice_id, [...(byVoice.get(v.voice_id) ?? []), id]);
+for (const [id, v] of cast) if (v.voice_id && used.has(id)) byVoice.set(v.voice_id, [...(byVoice.get(v.voice_id) ?? []), id]);
 const shared = [...byVoice.values()].filter((ids) => ids.length > 1);
-if (shared.length) console.log(`Sharing a voice: ${shared.map((ids) => ids.join(' + ')).join('; ')} (they will sound alike, so avoid putting them in a scene together)\n`);
+if (shared.length) console.log(`Sharing a voice in these cartoons: ${shared.map((ids) => ids.join(' + ')).join('; ')} (they will sound alike)\n`);
 
 process.exit(missingUsed.length ? 1 : 0);
