@@ -11,13 +11,13 @@
  *   2. Above the cloud. They pop up through the cloud at the top of the
  *      ladder, but a thick grey cloud hides the new land. His turn: he
  *      taps the cloud and it puffs away (or Silky's spell does it). It's
- *      Dame Snap's School ("Snap's POOL? I'll have a swim!"). The kettle
- *      whistles from inside it, and a far-off CLACK.
+ *      Dame Snap's School. The kettle whistles from inside it ("I'd know
+ *      that whistle anywhere!"), and a far-off CLACK.
  *   3. Dame Snap's School. They tiptoe in; the kettle is on her desk by a
  *      NO WHISTLING slate. The Saucepan Man shouts with joy. Her window
  *      goes dark, then clack… clack… CLACK: she looms in, smacks her ruler
- *      on the desk and shrieks NO WHISTLING (he hears "no WHISKERS?").
- *      Silky: she hates whistling more than anything. His big turn: he
+ *      on the desk and shrieks NOBODY WHISTLES (he hears "no WHISKERS?").
+ *      Moon-Face: she hates whistling, so let's give her a big one. His big turn: he
  *      taps the kettle's lid. It whistles a jolly tune, again and louder,
  *      and she stomps so hard her own ruler snaps. "Oh, BOTHER!" She stomps
  *      off and slams a door. The Saucepan Man hugs his kettle, and the land
@@ -239,7 +239,7 @@ export default defineCartoon({
   summary: 'The Saucepan Man’s whistling kettle has gone, and Dame Snap has it. Jasper blows away a cloud, then taps the kettle until it whistles so loudly that her ruler snaps.',
   lines: {
     // 1. Tea time
-    hello: { who: 'moonface', text: 'Hello, {name}! It’s tea time at the top of the tree.' },
+    hello: { who: 'moonface', text: 'Hello, {name}! It’s tea time!' },
     biscuits: { who: 'silky', text: 'I’ve baked pop biscuits! They go pop in your mouth.' },
     gone: { who: 'saucepan', text: 'Oh dear, oh dear! My whistling kettle! It’s GONE!' },
     where: { who: 'silky', text: 'Gone? Where did you leave it?' },
@@ -248,13 +248,12 @@ export default defineCartoon({
     branch: { who: 'saucepan', text: 'Oh! On the top branch. Tap its lid, and it whistles a tune!' },
     listen: { who: 'silky', text: 'Listen! That’s your kettle. It’s up in the cloud!' },
     // 2. Above the cloud
-    newLand: { who: 'moonface', text: 'A new land has come! But this cloud is too thick to see it.' },
+    newLand: { who: 'moonface', text: 'A new land! But this cloud is too thick to see it.' },
     askCloud: { who: 'moonface', text: 'Can you blow the cloud away, {name}? Tap it!' },
     nudgeCloud: { who: 'moonface', text: 'Just tap the cloud. Whoosh!' },
     spellCloud: { who: 'silky', text: 'I’ll puff it away with a little spell.' },
     thanksCloud: { who: 'moonface', text: 'Whoosh! It’s gone! Thank you, {name}!' },
     snapSchool: { who: 'silky', text: 'Oh no. It’s Dame Snap’s School!' },
-    pool: { who: 'saucepan', text: 'Snap’s POOL? Lovely! I’ll go for a swim!' },
     myKettle: { who: 'saucepan', text: 'That’s my kettle! I’d know that whistle anywhere!' },
     quiet: { who: 'moonface', text: 'In we go. Quiet as mice, everyone.' },
     // 3. Dame Snap's School
@@ -265,7 +264,7 @@ export default defineCartoon({
     whistled: { who: 'dameSnap', text: 'That kettle WHISTLED! NOBODY whistles in my school!' },
     whiskers: { who: 'saucepan', text: 'Eh? No WHISKERS? But I’ve got lovely whiskers!' },
     noFun: { who: 'dameSnap', text: 'NO whistling! NO kettles! And NO FUN!' },
-    plan: { who: 'moonface', text: 'She hates whistling. So let’s give her a really big one!' },
+    plan: { who: 'moonface', text: 'She hates whistling. Let’s give her a big one!' },
     askKettle: { who: 'moonface', text: 'Can you tap the kettle’s lid, {name}? Make it whistle!' },
     nudgeKettle: { who: 'moonface', text: 'Tap the little lid on top.' },
     tingKettle: { who: 'saucepan', text: 'I’ll tap it myself. Ting!' },
@@ -282,7 +281,7 @@ export default defineCartoon({
     cupOfTea: { who: 'moonface', text: 'Who would like a cup of tea?' },
     bees: { who: 'saucepan', text: 'A cup of BEES? No thank you! They buzz!' },
     tea: { who: 'saucepan', text: 'Oh! TEA! Yes please!' },
-    end: { who: 'narrator', text: 'And the kettle whistled all the way through tea.' },
+    end: { who: 'narrator', text: 'And the kettle whistled all through tea.' },
   },
   scenes: [
     // ==================================================== 1. Tea time
@@ -305,7 +304,7 @@ export default defineCartoon({
       async play(k) {
         const { mf, silky, pan, tin } = cast;
         // Moon-Face beams.
-        await k.wait(400);
+        await k.wait(200);
         void beam(k, mf, true);
         void k.blink(mf);
         await k.all(k.say('hello', mf), k.wait(300).then(() => wave(k, mf)));
@@ -351,9 +350,9 @@ export default defineCartoon({
         await k.wait(300);
         whistle(1.6, 0.35);
         await k.all(...[mf, silky, pan].map((el, i) => k.wait(i * 120).then(() => k.to(el, 0.4, { y: '-=14', rotation: i === 1 ? 4 : -4 }))));
-        await k.wait(700);
+        await k.wait(500);
         heels(2, 0.5, 0.3);
-        await k.wait(900);
+        await k.wait(800);
         await k.all(k.say('listen', silky), flutter(k, silky, 6));
         await k.all(...[mf, silky, pan].map((el) => k.to(el, 0.4, { y: '+=14', rotation: 0 })));
         await k.wait(300);
@@ -413,10 +412,7 @@ export default defineCartoon({
         void k.fade(gloom, 0.18, 1.5);
         await k.camera({ zoom: 1.9, x: 590, y: 235 }, 1.4);
         await k.say('snapSchool', silky);
-        await k.camera({}, 1);
-        clank(2, 0.1);
-        await k.all(k.say('pool', pan), k.hop(pan, 24, 1));
-        await k.shake(silky, 4, 2);
+        await k.all(k.camera({}, 1), k.shake(silky, 4, 2), k.shake(pan, 4, 2));
 
         // From inside, the kettle's whistle, and a far-off CLACK.
         whistle(1.2, 0.5);
@@ -436,7 +432,8 @@ export default defineCartoon({
         k.backdrop('snap-school');
         k.music('sneaky');
         k.dim(0.12, '#1a1236');
-        cast.lamp = k.light(690, 375, 56, { strength: 0.5, flicker: true });
+        // No flicker: a flickering light's idle loop would fight the fade when she leaves the window.
+        cast.lamp = k.light(690, 375, 56, { strength: 0.5 });
         cast.pane = k.add(darkPane(), { x: 672, y: 340, w: 38, z: 2 });
         k.add(snapDesk(), { x: 460, y: 445, w: 220, z: 12 });
         cast.kettle = k.prop('kettle', { ...KETTLE_DESK, z: 15 });
@@ -518,6 +515,8 @@ export default defineCartoon({
         // His big turn: tap the kettle's lid.
         const how = await k.tapToHelp(kettle, { ask: 'askKettle', nudge: 'nudgeKettle', helped: 'tingKettle', by: mf, helper: pan });
         ting();
+        // (if the Saucepan Man did it, the kit gave no sparkle: give the lid one)
+        if (how === 'helped') k.sparkle(KETTLE_DESK.x + 77, KETTLE_DESK.y + 45, 10, 90);
         const first = whistleKettle(k, kettle, KETTLE_DESK, 1);
         await k.wait(900);
         k.pose(snap, 'stomp');
@@ -549,7 +548,7 @@ export default defineCartoon({
 
         // The kettle hops home to the Saucepan Man.
         k.fx.whizz();
-        await k.to(kettle, 0.8, { x: 300 - KETTLE_DESK.x, y: 528 - KETTLE_DESK.y, rotation: -360, ease: 'power1.inOut' });
+        await k.to(kettle, 0.8, { x: 300 - KETTLE_DESK.x, y: 556 - KETTLE_DESK.y, rotation: -360, ease: 'power1.inOut' });
         clank(3, 0.1);
         await k.all(k.say('oldFriend', pan), k.shake(pan, 4, 2), k.shake(kettle, 4, 2));
 
