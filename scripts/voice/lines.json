@@ -1,0 +1,70 @@
+{
+ "lines": [
+  {
+   "id": "d7mfe6",
+   "text": "Hello, Jasper! This is a test.",
+   "speaker": "narrator",
+   "where": "zz-scratch/hello"
+  },
+  {
+   "id": "1n7ppr1",
+   "text": "Hello! This is a test.",
+   "speaker": "narrator",
+   "where": "zz-scratch/hello"
+  },
+  {
+   "id": "15w0hvs",
+   "text": "Look at the shining star.",
+   "speaker": "narrator",
+   "where": "zz-scratch/look"
+  },
+  {
+   "id": "89972v",
+   "text": "Can you tap the star? Tap it now.",
+   "speaker": "narrator",
+   "where": "zz-scratch/ask"
+  },
+  {
+   "id": "1ow3re",
+   "text": "Just tap the star, Jasper.",
+   "speaker": "narrator",
+   "where": "zz-scratch/nudge"
+  },
+  {
+   "id": "9fcjd",
+   "text": "Just tap the star.",
+   "speaker": "narrator",
+   "where": "zz-scratch/nudge"
+  },
+  {
+   "id": "1ea5z6w",
+   "text": "I will do it for you.",
+   "speaker": "narrator",
+   "where": "zz-scratch/helped"
+  },
+  {
+   "id": "1qi0axe",
+   "text": "Well done, Jasper! Thank you.",
+   "speaker": "narrator",
+   "where": "zz-scratch/thanks"
+  },
+  {
+   "id": "tteech",
+   "text": "Well done! Thank you.",
+   "speaker": "narrator",
+   "where": "zz-scratch/thanks"
+  },
+  {
+   "id": "1m9m4bt",
+   "text": "Now it is night time.",
+   "speaker": "narrator",
+   "where": "zz-scratch/night"
+  },
+  {
+   "id": "1hkk1in",
+   "text": "Goodnight, everyone.",
+   "speaker": "narrator",
+   "where": "zz-scratch/bye"
+  }
+ ]
+}

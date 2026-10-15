@@ -10,6 +10,13 @@ import type { CartoonInfo } from '../core/cartoon';
 import type { Cartoon } from '../kit';
 
 export interface ShelfEntry extends CartoonInfo {
+  /**
+   * Which backdrop to show on the shelf card, by id (looked up in the
+   * cartoon's world first, then the common world). Optional: the library
+   * falls back to the world's first backdrop. Pick one that shows the
+   * cartoon's best-known place.
+   */
+  thumb?: string;
   load: () => Promise<{ default: Cartoon }>;
 }
 

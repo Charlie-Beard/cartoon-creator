@@ -1,0 +1,20 @@
+{
+  "narrator": { "voice_id": "jv41DhCf464zw0TI7I1w", "name": "Narrator", "owner": "c93052724e2cf4ab0ebd353cc7b03213d6f29474822369d076613bac8c0fe775", "settings": { "stability": 0.55, "speed": 0.92 } },
+
+  "moonface": { "voice_id": "58SnLsdWOv994RNKXLhV", "name": "Moon-Face", "owner": "906607a32fe2ca6a408e996efaa58319ba8625ec72b932c5fc74005adb5d0de8", "settings": { "stability": 0.4, "speed": 0.9 } },
+  "silky": { "voice_id": "XXphLKNRxvJ1Qa95KBhX", "name": "Silky", "owner": "cb8f12185b25573a68a3439afa2019305119eb88d1afc3c61493a44dc3c7d609", "settings": { "stability": 0.6, "speed": 0.92 } },
+  "saucepan": { "voice_id": "yZ3w1DL4ZAxIdOscv2t8", "name": "Saucepan Man", "owner": "300b35287e8acc21dd12bd610b831e19b47dc75e8b8c15c2bca80cdcb776ef2d", "settings": { "stability": 0.3, "speed": 1.0 } },
+  "washalot": { "voice_id": "aAsWcN5jdLdiYG7Hq0YL", "name": "Dame Washalot", "owner": "3f2ca29fd2019c4a0516b646c73c6f21140f676ac6d45236a2b5ef291bf8d8e1", "settings": { "stability": 0.4, "speed": 0.95 } },
+  "watzisname": { "voice_id": "BBfN7Spa3cqLPH1xAS22", "name": "Mr Watzisname", "owner": "696809093ba242d93e9beadc478b43ed0fe788b4839250870434d35decf13a53", "settings": { "stability": 0.5, "speed": 0.85 } },
+  "angryPixie": { "voice_id": "ouL9IsyrSnUkCmfnD02u", "name": "Angry Pixie", "owner": "9d48e632126e47fa24331617611c4fab3fbb61beadec42067817c28ade5f332f", "settings": { "stability": 0.3, "speed": 1.05 } },
+  "dameSnap": { "voice_id": "fgDJOgmENIR82PueQrVs", "name": "Dame Snap", "owner": "e21da34db31d58704b7b2776dcf7db1c31b464e5bffd71727d5f1c4abafafa87", "settings": { "stability": 0.35, "speed": 0.88 } },
+  "beth": { "voice_id": "rCmVtv8cYU60uhlsOo1M", "name": "Beth", "owner": "76c9cb1aa5bde66e61587de2b16dd92ca167852393360a9c1f7e567f229a31b4", "settings": { "stability": 0.45, "speed": 1.0 } },
+  "joe": { "voice_id": "kmSVBPu7loj4ayNinwWM", "name": "Joe", "owner": "89befade7c13aab22ca8c36dfb1892f659fd750058462eeed6b05ab238204d74", "settings": { "stability": 0.45, "speed": 1.0 } },
+  "fran": { "voice_id": "HIQo7B1lN83MPTdsvvSM", "name": "Fran", "owner": "4e149d42e3555b0c668cfa0b3a6ece638907ac775c5a4dcc44a3f7cfaa686f62", "settings": { "stability": 0.4, "speed": 1.05 } },
+
+  "hagrid": { "voice_id": "JBFqnCBsd6RMkjVDRZzb", "name": "Hagrid", "settings": { "stability": 0.4, "speed": 0.88 } },
+  "dumbledore": { "voice_id": "JBFqnCBsd6RMkjVDRZzb", "name": "Dumbledore", "settings": { "stability": 0.6, "speed": 0.86 } },
+  "mcgonagall": { "voice_id": "Xb7hH8MSUJpSbSDYk0k2", "name": "Professor McGonagall", "settings": { "stability": 0.6, "speed": 0.92 } },
+  "voldemort": { "voice_id": "onwK4e9ZLuTAKqWW03F9", "name": "Voldemort", "settings": { "stability": 0.5, "speed": 0.82 } },
+  "dobby": { "voice_id": "N2lVS1w4EtoT3dr4eOWO", "name": "Dobby", "settings": { "stability": 0.3, "speed": 1.05 } }
+}

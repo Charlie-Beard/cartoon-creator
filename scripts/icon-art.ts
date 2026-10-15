@@ -22,7 +22,7 @@ function starPts(cx: number, cy: number, outer: number, inner: number): Pt[] {
 /** One curtain, pulled to the left edge; `mirror` flips it for the right. */
 function curtain(mirror: boolean): Node[] {
   const x = (v: number): number => (mirror ? 512 - v : v);
-  const edge: Pt[] = curve([[x(-20), -20], [x(196), -20], [x(206), 110], [x(150), 250], [x(176), 390], [x(120), 532], [x(-20), 532]].map(([a, b]) => [a, b] as Pt), 2);
+  const edge: Pt[] = curve([[x(-20), -20], [x(190), -20], [x(196), 110], [x(136), 250], [x(160), 390], [x(112), 532], [x(-20), 532]], 2);
   const folds = [0, 1, 2].map((i) => piece(rect(x(i * 56 + (mirror ? 30 : 0)) - 12, -20, 26, 560), 'rgba(60,10,10,0.2)', { edge: 'torn', fibre: false, shadow: false, rough: 1.6 }));
   return [piece(edge, C.red, { rough: 1.8 }), ...folds];
 }
@@ -39,8 +39,8 @@ export function iconSvg(): string {
     piece(rect(-20, 440, 552, 100), C.wood, { rough: 1.4, shadow: false }),
     piece(rect(-20, 440, 552, 16), C.brown, { edge: 'cut', shadow: false, fibre: false }),
     // The star.
-    piece(poly(starPts(256, 262, 132, 62)), C.starYellow, { rough: 1.4 }),
-    piece(poly(starPts(256, 262, 96, 45)), C.starYellowDark, { edge: 'cut', shadow: false, fibre: false, opacity: 0.35 }),
+    piece(poly(starPts(256, 270, 114, 54)), C.starYellow, { rough: 1.4 }),
+    piece(poly(starPts(256, 270, 82, 39)), C.starYellowDark, { edge: 'cut', shadow: false, fibre: false, opacity: 0.35 }),
     ...curtain(false),
     ...curtain(true),
     // The valance.
