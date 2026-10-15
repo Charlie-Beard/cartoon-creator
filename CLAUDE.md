@@ -33,14 +33,17 @@ npm run typecheck
 npm test               # Vitest: src/core, worlds, every cartoon's lines and ids
 npm run new -- <id> <world>   # start a cartoon: src/cartoons/<id>/ from the templates
 npm run check -- <id>  # one cartoon against the house rules (lines, ids, length, his turns)
-npm run shots -- <id>  # screenshots of every scene + a contact sheet + measured pacing
+npm run shots -- <id> --fast [--scene n]   # frames + contact sheet on a fake clock, ~1 min: for iterating
+npm run shots -- <id>  # the same in real time, for the final pacing check (3–5 min)
+npm run lab -- <world> # sheets of every character, pose, backdrop and prop with its id
 npm run test:e2e       # Playwright at 1180×820 and 1180×760 (in the cloud: PW_CHROMIUM=/opt/pw-browsers/chromium)
 npm run build
 ```
 
 All of typecheck, `npm test`, `npm run check` and `npm run test:e2e` must
 pass before a PR. **Look at the screenshots** of every scene you make or
-change (`npm run shots`), at 1180 × 820. Reading the PNGs is part of the
+change (`npm run shots`), at 1180 × 820. Iterate with `--fast`; the
+last run before a PR is in real time. Reading the PNGs is part of the
 job, not optional.
 
 ## Rules that never bend

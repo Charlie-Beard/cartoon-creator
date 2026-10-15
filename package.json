@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "shots": "tsx scripts/shots.mjs",
+    "lab": "tsx scripts/lab-shots.mjs",
     "check": "tsx scripts/check-cartoon.ts",
     "voice:export": "tsx scripts/voice/export.ts",
     "voice:cast": "tsx scripts/voice/cast-check.ts",

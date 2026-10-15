@@ -60,14 +60,13 @@ props: {
 ## 4. Look at it
 
 ```bash
-npm run dev
-# /lab.html?world=<world>&backdrop=<id>      at stage size
-# /lab.html?world=<world>&set=props
+npm run lab -- <world> --backdrop <id>     # at stage size, 1180 × 820
+npm run lab -- <world> props --p <id>
 ```
 
-Screenshot at 1180 × 820 and read the PNG. Then place two or three
+Read the PNGs it prints (`screenshots/lab/`). Then place two or three
 characters on it (a scratch cartoon, or the one that needs it, with
-`npm run shots`) and check they stand on the floor, read clearly against
+`npm run shots -- <id> --fast --scene <n>`) and check they stand on the floor, read clearly against
 it, and that the caption band is calm.
 
 ## 5. Check

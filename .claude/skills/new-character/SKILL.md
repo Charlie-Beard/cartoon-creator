@@ -77,16 +77,16 @@ invent ElevenLabs ids.
 ## 4. Look at it
 
 ```bash
-npm run dev
-# /lab.html?world=<world>&set=chars&p=<id>&size=300
-# /lab.html?world=<world>&set=poses
+npm run lab -- <world> chars --p <id>,<two or three others> --size 300
+npm run lab -- <world> poses
 ```
 
-Screenshot with Playwright (Chromium at `/opt/pw-browsers/chromium`) and
-read the PNG. Check it next to two or three of the world's other
+Each prints the PNGs it saved (`screenshots/lab/`): read them. (The same
+pages are at `/lab.html?world=<world>&set=chars&p=<id>` with `npm run dev`.)
+Check it next to two or three of the world's other
 characters: same scale, same style, same line weight. Check the caption
-chip: render a scene with them speaking (`npm run shots` on a cartoon
-that uses them), or crop the portrait to the chip box yourself. Check
+chip: render a scene with them speaking (`npm run shots -- <id> --fast
+--scene <n>` on a cartoon that uses them), or crop the portrait to the chip box yourself. Check
 `mouthOpen` and `lids` by setting their opacity to 1 in a test render.
 
 ## 5. Check

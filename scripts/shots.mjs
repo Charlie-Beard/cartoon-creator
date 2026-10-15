@@ -20,7 +20,7 @@
  *   screenshots/<id>/sheet.png         a contact sheet of them all (look at this first)
  *
  * and prints a pacing report. The time is measured, not guessed: each
- * scene runs in real time, one at a time (see --parallel), and is timed
+ * scene runs in real time (or on the fake clock with --fast, below), one at a time (see --parallel), and is timed
  * from the player starting it to the player starting the next, so it
  * includes the little beat between scenes. Lines with no recording are
  * "spoken" by a stand-in for the iPad's voice that takes as long as
@@ -139,6 +139,12 @@ const STUCK_SECONDS = 200;
 const TAP_WAIT_SECONDS = 21; // the kit's patience: 9 s, a nudge, 12 s, then it helps him
 const SILENT_SECONDS = 4; // a stretch with no caption and no tap waiting longer than this is flagged
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// --fast: the fake clock is pushed on STEP_MS of story time at a time (frames and taps are noticed
+// to within that), with REAL_PAUSE_MS of real time after each push for the page's fetches and decodes.
+const STEP_MS = 250;
+const REAL_PAUSE_MS = 15;
+const FAKE_START = 1_700_000_000_000;
+const CONTEXT = { viewport: { width: 1180, height: 820 }, deviceScaleFactor: 1, hasTouch: true };
 
 // ------------------------------------------------------------------ server
 
@@ -157,6 +163,10 @@ process.on('SIGINT', () => {
  * takes as long as estimateSeconds says (Chromium has no voices, so lines
  * with no recording would otherwise take no time at all), and a log of
  * what the player is doing, sampled every 40 ms.
+ *
+ * Under --fast the page's clock is fake (page.clock), installed BEFORE this
+ * script so that the setInterval below, performance.now() and the stand-in's
+ * setTimeout are all the story clock's: everything this logs is story time.
  */
 function installProbe() {
   const estimate = (text) => {
@@ -273,15 +283,36 @@ function timeline(events, from, to) {
 
 // ----------------------------------------------------------- one scene's run
 
-async function shootScene(context, base, index) {
+async function shootScene(browser, context, base, index) {
   const result = { index, name: cartoon.scenes[index].name, frames: [], errors: [], seconds: null, captions: [], silences: [], lines: [], taps: 0, capped: null };
-  const page = await context.newPage();
+  // A fake clock belongs to a whole browser context, not a page: scenes running at once need a context each.
+  const own = FAST ? await browser.newContext(CONTEXT) : null;
+  const page = await (own ?? context).newPage();
+  // Fast mode: the page's clock is fake and paused, and only moves when we push it (see `advance`).
+  // It goes in first, so the probe and the app get the fake timers.
+  let storyMs = 0; // how far we have pushed the fake clock
+  if (FAST) {
+    await page.clock.install({ time: FAKE_START });
+    await page.clock.pauseAt(FAKE_START + 1000);
+    // Recordings play in real time, which the fake clock knows nothing of: every line goes to the stand-in voice.
+    await page.route('**/audio/manifest.json', (route) => route.fulfill({ json: { lines: [] } }));
+  }
   await page.addInitScript(installProbe);
   page.on('pageerror', (e) => result.errors.push(`${e.message}`));
   page.on('console', (m) => {
     // A missing recording (404) is normal before the voices are made.
     if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) result.errors.push(`console: ${m.text()}`);
   });
+
+  /** Lets `ms` of story time go by: real time normally, a push of the fake clock in --fast. */
+  const advance = async (ms) => {
+    if (!FAST) return sleep(ms);
+    await page.clock.runFor(ms);
+    storyMs += ms;
+    await page.waitForTimeout(REAL_PAUSE_MS); // real time, for the fetches and decodes the page is waiting on
+  };
+  /** A clock for the loop below, in ms: story time in --fast, wall-clock time otherwise. */
+  const now = () => (FAST ? storyMs : Date.now());
 
   const shoot = async (tap = false) => {
     const k = result.frames.length;
@@ -298,24 +329,24 @@ async function shootScene(context, base, index) {
     await page.mouse.click(590, 806).catch(() => {});
 
     // Curtains up: the player marks the root with the scene's number.
-    const opened = Date.now();
+    const opened = Date.now(); // real time, for the page's loading; the fake clock is no help here
     for (;;) {
       const s = await state();
       if (s.scene === String(index)) break;
       if (result.errors.length) throw new Error('the script threw before the scene began');
       if (Date.now() - opened > 40_000) throw new Error('the curtains never opened (does the cartoon load? is set() throwing?)');
-      await sleep(100);
+      await advance(FAST ? STEP_MS : 100);
     }
     await shoot();
 
-    let nextFrame = Date.now() + EVERY * 1000;
+    let nextFrame = now() + EVERY * 1000;
     let tapped = 0;
-    const began = Date.now();
+    const began = now();
     for (;;) {
       const s = await state();
       if (s.end || (s.scene !== String(index) && s.scene !== null)) break;
       if (result.errors.length) break;
-      if (Date.now() - began > STUCK_SECONDS * 1000) {
+      if (now() - began > STUCK_SECONDS * 1000) {
         result.errors.push(`the scene had not finished after ${STUCK_SECONDS} s`);
         break;
       }
@@ -323,19 +354,19 @@ async function shootScene(context, base, index) {
       if (!room && result.capped === null) result.capped = result.frames.at(-1).t;
       if (s.tapping && s.taps > tapped) {
         // His turn: show it, then (unless --no-tap) do it.
-        await sleep(350); // let the ring fade in
+        await advance(350); // let the ring fade in
         if (room) await shoot(true);
         if (!NO_TAP) {
           const box = await page.locator('[data-tap-to-help]').first().boundingBox();
           if (box) await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
         }
         tapped = s.taps;
-        nextFrame = Date.now() + EVERY * 1000;
-      } else if (Date.now() >= nextFrame && room) {
+        nextFrame = now() + EVERY * 1000;
+      } else if (now() >= nextFrame && room) {
         await shoot();
-        nextFrame = Date.now() + EVERY * 1000;
+        nextFrame = now() + EVERY * 1000;
       }
-      await sleep(100);
+      await advance(FAST ? STEP_MS : 100);
     }
 
     const { events } = await page.evaluate(() => window.__probe);
@@ -352,6 +383,7 @@ async function shootScene(context, base, index) {
     await page.screenshot({ path: join(OUT, `scene${index + 1}-error.png`) }).catch(() => {});
   } finally {
     await page.close().catch(() => {});
+    await own?.close().catch(() => {});
   }
   return result;
 }
@@ -402,9 +434,8 @@ try {
   for (const f of readdirSync(OUT)) if (stale.test(f)) rmSync(join(OUT, f));
 
   const base = (option('url') ?? (await startServer())).replace(/\/$/, '');
-  const executablePath = process.env.PW_CHROMIUM || (existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined);
-  const browser = await chromium.launch({ executablePath, args: ['--autoplay-policy=no-user-gesture-required', '--mute-audio'] });
-  const context = await browser.newContext({ viewport: { width: 1180, height: 820 }, deviceScaleFactor: 1, hasTouch: true });
+  const browser = await chromium.launch({ executablePath: chromiumPath(), args: ['--autoplay-policy=no-user-gesture-required', '--mute-audio'] });
+  const context = await browser.newContext(CONTEXT);
 
   // The dev server turns the code into modules the first time it is asked: do that before any timing.
   const warm = await context.newPage();
@@ -413,14 +444,14 @@ try {
   await warm.close();
 
   const parallel = Math.min(PARALLEL, sceneIndexes.length);
-  console.log(`${cartoon.title} (${id}): ${sceneIndexes.length} scene${sceneIndexes.length === 1 ? '' : 's'}, in real time, ${parallel} at a time, ${NO_TAP ? 'waiting out every tap-to-help (--no-tap)' : 'tapping every tap-to-help at once'}...`);
+  console.log(`${cartoon.title} (${id}): ${sceneIndexes.length} scene${sceneIndexes.length === 1 ? '' : 's'}, ${FAST ? 'on a fake clock (--fast)' : 'in real time'}, ${parallel} at a time, ${NO_TAP ? 'waiting out every tap-to-help (--no-tap)' : 'tapping every tap-to-help at once'}...`);
   const results = new Array(sceneIndexes.length);
   let next = 0;
   await Promise.all(
     Array.from({ length: parallel }, async () => {
       while (next < sceneIndexes.length) {
         const slot = next++;
-        results[slot] = await shootScene(context, base, sceneIndexes[slot]);
+        results[slot] = await shootScene(browser, context, base, sceneIndexes[slot]);
         const r = results[slot];
         console.log(`  scene ${r.index + 1} done: ${r.seconds === null ? 'no time' : r.seconds.toFixed(1) + ' s'}, ${r.frames.length} frames${r.errors.length ? ', ERRORS' : ''}`);
       }
@@ -436,9 +467,14 @@ try {
   const mode = NO_TAP
     ? 'MODE: --no-tap (no tap-to-help was tapped: the nudge and helped lines played, and each wait ran its full ~21 s)'
     : 'MODE: tapping (every tap-to-help was tapped at once; a child who waits takes up to ~21 s longer for each)';
-  console.log(`\nPacing for ${id} (measured in real time, ${parallel} scene${parallel === 1 ? '' : 's'} at a time)`);
+  console.log(`\nPacing for ${id} (${FAST ? 'STORY-CLOCK times from a --fast run' : 'measured in real time'}, ${parallel} scene${parallel === 1 ? '' : 's'} at a time)`);
+  if (FAST) {
+    console.log('  FAST: every time below is STORY-CLOCK time, read off the page\'s fake clock, not wall-clock time. Lines are said by the stand-in voice');
+    console.log('        (estimateSeconds each), never the recordings, so a recorded cartoon will differ a little. Good for fixing frames; run without --fast');
+    console.log('        for the final pacing check.');
+  }
   console.log(`  ${mode}`);
-  if (parallel > 1) console.log(`  WARNING: ${parallel} scenes ran at once, so a busy machine makes the times read high (GSAP lag smoothing). Run with --parallel 1 for true times.`);
+  if (parallel > 1 && !FAST) console.log(`  WARNING: ${parallel} scenes ran at once, so a busy machine makes the times read high (GSAP lag smoothing). Run with --parallel 1 for true times.`);
   console.log('  scene  seconds  lines  taps  name');
   for (const r of results) {
     const secs = r.seconds === null ? '   ?' : r.seconds.toFixed(0).padStart(4);
