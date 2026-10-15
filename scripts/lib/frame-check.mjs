@@ -20,7 +20,7 @@
  *                 opacity: 1,               // its own times its parents'
  *                 shown: true,              // false for display:none
  *                 speaking: false }],       // k.say is bobbing this one right now
- *     caption: { on: true, who: 'silky' | null, box: { x, y, w, h } | null },
+ *     caption: { on: true, box: { x, y, w, h } | null },   // the bubble
  *     tap:     { box: { x, y, w, h } } | null,   // the tap-to-help button, if on screen
  *   }
  *
@@ -31,12 +31,13 @@
  *              that is wholly off stage is waiting to enter or has left: not flagged.
  *   caption    a character's face (the top 40% of the box) reaches into the
  *              caption band (y 690+) under the caption bubble while one is
- *              showing. (With `assumeCaption`, as for opening frames: the first
- *              line will land there.)
+ *              showing. (With `assumeCaption`: as if one were.) Not checked
+ *              with the camera zoomed in, which puts people low on purpose.
  *   overlap    two characters share more than 35% of the smaller one's box.
  *   crowd      more than 4 characters on stage at once.
  *   tap        a tap-to-help target under 120 px, or partly off stage.
- *   speaker    the line's speaker is off stage or invisible, or not there at all.
+ *   speaker    the actor the kit is bobbing for the line (data-speaking) is off
+ *              stage or invisible while the line is captioned.
  *
  * Something that stays wrong over several frames is reported once, at the
  * first of them, with how long it lasts.
@@ -84,7 +85,7 @@ export const isVisible = (a) => a.shown !== false && a.opacity > T.invisible && 
 /** How much of an actor's box is on the stage, 0 to 1. */
 export function onStage(a, stage) {
   const total = area(a.box);
-  return total > 0 ? overlapArea(a.box, { x: 0, y: 0, w: stage.w, h: stage.h }) / total : 0;
+  return total > 0 ? Math.min(1, overlapArea(a.box, { x: 0, y: 0, w: stage.w, h: stage.h }) / total) : 0;
 }
 
 /**
@@ -111,9 +112,10 @@ export function checkFrame(frame, { assumeCaption = false } = {}) {
     }
   }
 
-  // Faces under the caption.
+  // Faces under the caption. (Not when the camera is in close: a push-in puts people low on purpose,
+  // and the boxes are scaled up with it.)
   const bubble = frame.caption?.box ?? { x: 150, y: T.bandTop, w: 880, h: 110 };
-  if (frame.caption?.on || assumeCaption) {
+  if ((frame.caption?.on || assumeCaption) && !zoomed) {
     for (const a of characters) {
       const face = { x: a.box.x, y: a.box.y, w: a.box.w, h: a.box.h * T.face };
       const reaches = face.y + face.h > T.bandTop;
@@ -158,19 +160,16 @@ export function checkFrame(frame, { assumeCaption = false } = {}) {
     }
   }
 
-  // The speaker, while their line is captioned.
+  // The speaker, while their line is being said. The kit marks the actor it is bobbing for the line
+  // (data-speaking); the caption alone can't say, as it stays up after the line ends (and while they
+  // walk off). A line said with no actor given has no one to check.
   if (frame.caption?.on) {
     const talkers = frame.actors.filter((a) => a.speaking);
-    const who = frame.caption.who;
-    const named = who ? frame.actors.filter((a) => a.kind === 'character' && a.name === who) : [];
-    const speakers = talkers.length ? talkers : named;
-    if (!speakers.length) {
-      if (who) issues.push({ kind: 'speaker', key: `speaker:${who}:absent`, message: `${who} is speaking but is not on stage.` });
-    } else {
-      // Several of the same character (rare): the best placed one is the speaker.
-      const best = speakers.map((a) => ({ a, f: isVisible(a) ? onStage(a, stage) : 0 })).sort((p, q) => q.f - p.f)[0];
+    if (talkers.length) {
+      // Several at once (a line said by a pair): the best placed one is enough.
+      const best = talkers.map((a) => ({ a, f: isVisible(a) ? onStage(a, stage) : 0 })).sort((p, q) => q.f - p.f)[0];
       if (best.f < T.speakerInView) {
-        const why = !isVisible(best.a) ? 'invisible' : `${pct(1 - best.f)} off the stage`;
+        const why = !isVisible(best.a) ? 'invisible' : `${pct(1 - best.f)} off the stage${zoomed ? ' (out of the camera\'s shot)' : ''}`;
         issues.push({ kind: 'speaker', key: `speaker:${best.a.key}`, message: `${best.a.key} is speaking but is ${why}.` });
       }
     }

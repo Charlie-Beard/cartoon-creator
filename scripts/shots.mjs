@@ -318,7 +318,6 @@ function collectFrame() {
       return { key: keyOf(el, name), kind: character ? 'character' : 'prop', name, box: box(el), ...look(el), speaking: el.dataset.speaking !== undefined };
     });
   const cap = stage.querySelector('.story-caption');
-  const tag = cap?.querySelector('.story-tag');
   const bubble = cap?.querySelector('.story-caption-text');
   const on = !!cap?.classList.contains('on');
   const tap = stage.querySelector('[data-tap-to-help]');
@@ -326,7 +325,7 @@ function collectFrame() {
     stage: { w: 1180, h: 820 },
     zoom,
     actors,
-    caption: { on, who: on && tag && !tag.hidden ? (tag.dataset.who ?? null) : null, box: bubble ? box(bubble) : null },
+    caption: { on, box: bubble ? box(bubble) : null },
     tap: tap ? { box: box(tap) } : null,
   };
 }
