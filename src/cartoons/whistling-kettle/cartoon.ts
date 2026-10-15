@@ -35,8 +35,18 @@
  * world (src/worlds/faraway/cloudtop.ts); the grey cloud, her desk and the
  * tea table are drawn here.
  */
-import { bell, C, cached, circle, defineCartoon, ellipse, ink, noiseBurst, NOTE, now, piece, raw, rect, rng, svg, tone, type Kit, type Node, type Pt } from '../../kit';
+import { C, cached, circle, defineCartoon, ellipse, ink, piece, raw, rect, rng, svg, type Node, type Pt } from '../../kit';
+import { moves as commonMoves, sounds as commonSounds } from '../../worlds/common/moves';
+import { moves as farawayMoves, sounds as farawaySounds } from '../../worlds/faraway/moves';
 import meta from './meta';
+
+// The sounds and moves are the worlds' own (src/worlds/faraway/moves.ts and
+// common/moves.ts), shared with every Faraway episode; nothing in this
+// episode needs one of its own.
+const { blowAway, clank, heels, popBiscuit, snapRuler, whirr, whistle } = farawaySounds;
+const { buzz, laugh, pour, slam, ting } = commonSounds;
+const { beam, earCup, flutter, popOut, rattle, smackRuler, whistleKettle } = farawayMoves;
+const { together, wave } = commonMoves;
 
 // ------------------------------------------------------------------- art
 
@@ -100,130 +110,6 @@ const teaTable = cached(() =>
 
 /** Her window going dark once she has left it (covers the lit window in snap-school). */
 const darkPane = cached(() => svg({ w: 40, h: 72, name: 'whistling-kettle-pane' }, [piece(rect(4, 4, 32, 64, 14), '#2c2a31', { edge: 'cut', fibre: false, shadow: false })]));
-
-// ---------------------------------------------------------------- sounds
-
-/** The kettle's whistle: a breathy note sliding up. Quiet (`loud` < 1) when it is far away. */
-function whistle(seconds = 1.2, loud = 1): void {
-  const t = now();
-  tone(NOTE.E5, t, { wave: 'sine', peak: 0.08 * loud, attack: 0.3, decay: seconds, glideTo: NOTE.B5, vibrato: [6, 10] });
-  tone(NOTE.E6, t, { wave: 'sine', peak: 0.02 * loud, attack: 0.3, decay: seconds, glideTo: NOTE.B5 * 2, vibrato: [6, 18] });
-  noiseBurst(t, { freq: 3400, q: 6, peak: 0.035 * loud, attack: 0.25, decay: seconds });
-}
-
-/** The kettle whistling its jolly tune (about 2.6 s): each note a breathy whistle that slides into place. */
-function whistleTune(loud = 1): void {
-  const t = now();
-  const notes: [number, number, number][] = [
-    [NOTE.G5, 0, 0.18], [NOTE.C6, 0.22, 0.18], [NOTE.E6, 0.44, 0.18], [NOTE.G6, 0.66, 0.4],
-    [NOTE.E6, 1.12, 0.16], [NOTE.G6, 1.32, 0.16], [NOTE.E6, 1.52, 0.16], [NOTE.D6, 1.72, 0.16], [NOTE.C6, 1.94, 0.6],
-  ];
-  for (const [f, dt, d] of notes) {
-    tone(f * 0.96, t + dt, { wave: 'sine', peak: 0.08 * loud, attack: 0.03, decay: d, glideTo: f, vibrato: [6, 9] });
-    noiseBurst(t + dt, { freq: f * 2, q: 7, peak: 0.018 * loud, attack: 0.02, decay: d });
-  }
-}
-
-/** Steam puffing out of the spout: a soft hiss. */
-function hiss(seconds = 0.8): void {
-  noiseBurst(now(), { freq: 5200, q: 0.8, peak: 0.035, attack: 0.08, decay: seconds, type: 'highpass' });
-}
-
-/** Pots and pans clanking, one clank per step. */
-function clank(steps = 1, gap = 0.2): void {
-  const t = now();
-  const r = rng(steps * 31);
-  for (let i = 0; i < steps; i++) {
-    const at = t + i * gap;
-    const f = 520 + r() * 400;
-    tone(f, at, { wave: 'triangle', peak: 0.07, attack: 0.002, decay: 0.25 });
-    tone(f * 2.76, at, { peak: 0.04, attack: 0.002, decay: 0.15 });
-    noiseBurst(at, { freq: 4200, q: 3, peak: 0.05, decay: 0.05 });
-  }
-}
-
-/** The kettle's lid tapped: one bright little ting. */
-function ting(): void {
-  bell(NOTE.E6, now(), 0.1, 0.8);
-}
-
-/** A pop biscuit going pop (`i` lifts the pitch). */
-function popBiscuit(i = 0): void {
-  const t = now();
-  tone(620 + i * 90, t, { wave: 'triangle', peak: 0.09, attack: 0.004, decay: 0.12, glideTo: 1500 + i * 120 });
-  noiseBurst(t, { freq: 3000, q: 2, peak: 0.04, decay: 0.04 });
-}
-
-/** Fairy wings: a soft, quick whirr. */
-function whirr(times = 6): void {
-  const t = now();
-  for (let i = 0; i < times; i++) noiseBurst(t + i * 0.07, { freq: 1800, q: 1.5, peak: 0.025, attack: 0.01, decay: 0.05, sweepTo: 2600 });
-}
-
-/** The grey cloud blown away: a big soft whoosh with a sprinkle of bells. */
-function blowAway(): void {
-  const t = now();
-  noiseBurst(t, { freq: 400, q: 0.7, peak: 0.1, attack: 0.15, decay: 1.2, sweepTo: 2600 });
-  noiseBurst(t + 0.2, { freq: 2400, q: 0.8, peak: 0.05, attack: 0.1, decay: 1, sweepTo: 600 });
-  [NOTE.C6, NOTE.E6, NOTE.G6].forEach((f, i) => bell(f, t + 0.5 + i * 0.12, 0.05, 0.9));
-}
-
-/** Dame Snap's terrible clacking heels: sharp, hollow clicks, `steps` of them. */
-function heels(steps = 4, gap = 0.34, loud = 1): void {
-  const t = now();
-  for (let i = 0; i < steps; i++) {
-    const at = t + i * gap;
-    noiseBurst(at, { freq: 3200 + (i % 2) * 400, q: 5, peak: 0.1 * loud, decay: 0.03 });
-    tone(1500 + (i % 2) * 120, at, { wave: 'triangle', peak: 0.05 * loud, attack: 0.002, decay: 0.05, glideTo: 900 });
-    tone(220, at, { peak: 0.06 * loud, attack: 0.002, decay: 0.06, glideTo: 140 });
-  }
-}
-
-/** Her ruler smacked down on the desk: a crack and a wooden thwack. */
-function smack(): void {
-  const t = now();
-  noiseBurst(t, { freq: 2600, q: 0.7, peak: 0.2, attack: 0.002, decay: 0.07, type: 'highpass' });
-  tone(420, t, { wave: 'square', peak: 0.06, attack: 0.002, decay: 0.09, glideTo: 160, lowpass: 1600 });
-  tone(140, t, { peak: 0.14, attack: 0.002, decay: 0.12, glideTo: 70 });
-}
-
-/** Her ruler snapping in two: a dry crackle, then the split, then a silly falling "boing". */
-function snapRuler(): void {
-  const t = now();
-  const r = rng(17);
-  for (let i = 0; i < 6; i++) noiseBurst(t + i * 0.03 + r() * 0.02, { freq: 2000 + r() * 2500, q: 3, peak: 0.07, decay: 0.025 });
-  noiseBurst(t + 0.22, { freq: 1600, q: 0.8, peak: 0.15, decay: 0.12, sweepTo: 600 });
-  tone(300, t + 0.22, { wave: 'triangle', peak: 0.06, decay: 0.15, glideTo: 120 });
-  tone(NOTE.G4, t + 0.5, { wave: 'triangle', peak: 0.06, attack: 0.01, decay: 0.5, glideTo: NOTE.C3, vibrato: [12, 20] });
-}
-
-/** A door slammed somewhere inside the school (not on anyone). */
-function slam(): void {
-  const t = now();
-  tone(90, t, { peak: 0.24, decay: 0.28, glideTo: 45 });
-  noiseBurst(t, { freq: 500, type: 'lowpass', peak: 0.18, decay: 0.22 });
-  noiseBurst(t + 0.02, { freq: 2200, q: 1, peak: 0.05, decay: 0.08 });
-}
-
-/** Tea pouring: a little rising trickle. */
-function pour(): void {
-  const t = now();
-  for (let i = 0; i < 8; i++) noiseBurst(t + i * 0.09, { freq: 900 + i * 140, q: 3, peak: 0.035, attack: 0.02, decay: 0.1 });
-}
-
-/** Bees! A short, silly buzz (the Saucepan Man's mishearing). */
-function buzz(): void {
-  const t = now();
-  tone(220, t, { wave: 'sawtooth', peak: 0.035, attack: 0.05, decay: 0.9, vibrato: [18, 30], lowpass: 900, glideTo: 260 });
-  tone(330, t + 0.1, { wave: 'sawtooth', peak: 0.02, attack: 0.05, decay: 0.7, vibrato: [22, 30], lowpass: 900 });
-}
-
-/** Everyone laughing: a warm, bouncing "ho-ho-ho" under the giggles. */
-function laugh(): void {
-  const t = now();
-  [196, 185, 175, 165].forEach((f, i) => tone(f, t + i * 0.2, { wave: 'triangle', peak: 0.09, attack: 0.02, decay: 0.14, glideTo: f * 0.85, lowpass: 900 }));
-  [NOTE.E5, NOTE.G5, NOTE.E5, NOTE.A5].forEach((f, i) => tone(f, t + 0.1 + i * 0.17, { wave: 'sine', peak: 0.04, attack: 0.01, decay: 0.1, glideTo: f * 1.1 }));
-}
 
 // ------------------------------------------------------------------ cast
 
@@ -352,7 +238,7 @@ export default defineCartoon({
         heels(2, 0.5, 0.3);
         await k.wait(800);
         await k.all(k.say('listen', silky), flutter(k, silky, 6));
-        await k.all(...[mf, silky, pan].map((el) => k.to(el, 0.4, { y: '+=14', rotation: 0 })));
+        await together(k, [mf, silky, pan], 0.4, { y: '+=14', rotation: 0 });
         await k.wait(300);
       },
     },
@@ -478,13 +364,10 @@ export default defineCartoon({
         await k.say('who', snap);
 
         // The ruler comes down on the desk: SMACK.
-        const ruler = k.pivot(k.part(snap, 'ruler'));
-        await k.to(ruler, 0.18, { rotation: 50, ease: 'power3.in' });
-        smack();
-        void k.quake(5);
-        void k.shake(kettle, 4, 1);
-        void k.all(k.shake(mf, 5, 1), k.shake(pan, 5, 1));
-        await k.to(ruler, 0.4, { rotation: 0, ease: 'power2.out' });
+        await smackRuler(k, snap, () => {
+          void k.shake(kettle, 4, 1);
+          void k.all(k.shake(mf, 5, 1), k.shake(pan, 5, 1));
+        });
         await k.say('whistled', snap);
 
         // Back to the heroes: he's got it wrong again.
@@ -626,80 +509,3 @@ export default defineCartoon({
     },
   ],
 });
-
-// ----------------------------------------------------------------- moves
-
-/** Moon-Face's shine brightens (or settles back). */
-async function beam(k: Kit, mf: HTMLElement, on: boolean): Promise<void> {
-  const glow = k.pivot(k.part(mf, 'glow'));
-  await k.to(glow, 0.5, { scale: on ? 1.15 : 1, opacity: on ? 1 : 0.85, ease: 'sine.inOut' });
-}
-
-/** Moon-Face's wave (his right arm). */
-async function wave(k: Kit, el: HTMLElement): Promise<void> {
-  const arm = k.pivot(k.part(el, 'armR'));
-  for (let i = 0; i < 2; i++) {
-    await k.to(arm, 0.2, { rotation: -16 });
-    await k.to(arm, 0.2, { rotation: 6 });
-  }
-  await k.to(arm, 0.2, { rotation: 0 });
-}
-
-/** Silky's wings flutter, `times` beats. */
-async function flutter(k: Kit, el: HTMLElement, times = 4): Promise<void> {
-  const wings = k.pivot([...k.part(el, 'wingL'), ...k.part(el, 'wingR')]);
-  if (!wings.length) return;
-  for (let i = 0; i < times; i++) {
-    await k.to(wings, 0.09, { scaleX: 0.72, ease: 'sine.inOut' });
-    await k.to(wings, 0.09, { scaleX: 1, ease: 'sine.inOut' });
-  }
-}
-
-/** Rattles the Saucepan Man's pots. */
-async function rattle(k: Kit, el: HTMLElement): Promise<void> {
-  const pots = k.part(el, 'pots');
-  for (const dx of [5, -5, 3, 0]) await k.to(pots, 0.06, { x: dx, rotation: dx * 0.6, ease: 'none' });
-}
-
-/** The Saucepan Man cups his ear ("Eh?"), or lowers his hand again. */
-async function earCup(k: Kit, el: HTMLElement, on: boolean): Promise<void> {
-  const arm = k.pivot(k.part(el, 'armR'));
-  await k.all(k.to(arm, 0.3, { rotation: on ? -10 : 0 }), k.to(el, 0.3, { rotation: on ? 4 : 0 }));
-}
-
-/** Pop biscuits hopping out of the tin and popping, `n` of them. */
-async function popOut(k: Kit, x: number, y: number, n: number): Promise<void> {
-  for (let i = 0; i < n; i++) {
-    const b = k.prop('pop-biscuit', { x: x - 30, y: y - 30, w: 60, z: 30 });
-    k.set(b, { opacity: 0 });
-    await k.appear(b, 0.2);
-    await k.to(b, 0.35, { y: -70 - i * 20, x: (i ? 30 : -30), rotation: 180, ease: 'power2.out' });
-    popBiscuit(i);
-    k.sparkle(x + (i ? 30 : -30), y - 70 - i * 20, 8, 70);
-    await k.vanish(b, 0.15);
-  }
-}
-
-/**
- * The kettle whistles: its lid bobs, steam puffs from the spout, and it
- * jiggles. `loud` 1 plays the whole jolly tune; `tune` false is one short
- * whistle (just boiled).
- */
-async function whistleKettle(k: Kit, kettle: HTMLElement, at: { x: number; y: number; w: number }, loud: number, tune = true): Promise<void> {
-  // The spout's tip (the art is 180 wide, the whistle at 18, 46).
-  const s = at.w / 180;
-  const [x, y] = [at.x + 18 * s, at.y + 46 * s];
-  const lid = k.pivot(k.part(kettle, 'lid'));
-  if (tune) whistleTune(loud);
-  else whistle(1, loud);
-  hiss(tune ? 2.2 : 0.9);
-  const puffs = tune ? 5 : 2;
-  const lidBobs = k.to(lid, 0.12, { y: -8, rotation: -6, yoyo: true, repeat: tune ? 17 : 5, ease: 'sine.inOut' });
-  const jiggle = k.to(kettle, 0.1, { rotation: '+=3', yoyo: true, repeat: tune ? 21 : 7, ease: 'sine.inOut' });
-  for (let i = 0; i < puffs; i++) {
-    k.puff(x - 20 - i * 6, y - 30 - i * 10, 110 + i * 16, C.white);
-    await k.wait(420);
-  }
-  await k.all(lidBobs, jiggle);
-  k.set(lid, { y: 0, rotation: 0 });
-}

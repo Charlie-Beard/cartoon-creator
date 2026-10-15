@@ -13,7 +13,8 @@ what to change. Fix what's clearly wrong; ask about matters of taste.
 
 ```bash
 npm run check -- <id>
-npm run shots -- <id>          # frames, contact sheet, measured pacing
+npm run shots -- <id>          # frames, contact sheet, measured pacing (real time)
+npm run shots -- <id> --fast --no-tap   # his turns done for him: the nudge and helped lines
 ```
 
 Read the script top to bottom, then read the contact sheet and the
@@ -74,4 +75,5 @@ frames of every scene.
 A short list, most serious first: **must fix** (safety, broken frames,
 failing checks), **should fix** (story, pacing, clarity), **could fix**
 (polish). Then fix the must and should items (or hand them back to the
-author), re-run `shots`, and look again.
+author), re-run `shots --fast` (`--scene n` for one scene), and look
+again.

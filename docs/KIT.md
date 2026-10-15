@@ -143,10 +143,23 @@ for a quick change of place. `k.clear()` empties the world without a wipe.
 `poof`, `wind(s)`, `twinkle`, `fizzle`, `jingle`, `uhoh`, `sneak`,
 `drumroll(s)`, `crash`, `rumble(s)`, `spell`.
 
-Your own, in the cartoon file:
+**The worlds' signature sounds** (Dame Snap's heels and ruler, the Saucepan
+Man's clank, Silky's whirr, Hedwig's wingbeats, a cloak swish, a door slam,
+a laugh …) and moves are in `src/worlds/<world>/moves.ts` and
+`src/worlds/common/moves.ts`: **check them before writing your own**
+(docs/WORLDS.md, "moves.ts").
 
 ```ts
-import { NOTE, noiseBurst, now, tone } from '../kit';
+import { sounds, moves } from '../../worlds/faraway/moves';
+sounds.heels(4, 0.34, 0.5);
+await moves.flutter(k, silky, 6);
+```
+
+Your own, in the cartoon file (and if a second episode would want it,
+promote it to the world's `moves.ts`):
+
+```ts
+import { NOTE, noiseBurst, now, tone } from '../../kit';
 
 /** The kettle whistling: a rising, breathy whistle. */
 function whistle(): void {

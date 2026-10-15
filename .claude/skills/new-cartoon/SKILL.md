@@ -60,6 +60,11 @@ server). For each missing one decide:
 - **One-off** (this episode's special object): draw it in the cartoon's
   own file (docs/KIT.md, "Drawing one-off art").
 
+Sounds and moves too: **check `src/worlds/<world>/moves.ts` first** (and
+`src/worlds/common/moves.ts`) for the cast's signature sounds and moves
+(Dame Snap's heels, the Saucepan Man's "Eh?", Hedwig's wings …) before
+writing your own.
+
 When there are two or more new reusable pieces, hand each to a subagent
 (Sonnet is enough) with the matching skill, and write the script while
 they draw. Give each agent its own files (its own file under
@@ -79,7 +84,10 @@ yourself when they're done, so no two agents edit the same file.
 - Each scene: `set` builds the opening picture (no waiting, no motion;
   hide later entrances with `k.set(el, { opacity: 0 })`), `play` runs it.
 - Put a sound on every action that matters; music per scene; one thing
-  moving at a time; a quiet beat after big moments.
+  moving at a time; a quiet beat after big moments. Use the world's
+  `moves.ts` (`import { sounds, moves } from '../../worlds/<world>/moves'`)
+  before writing your own; if you do write one a second episode would
+  want, promote it there (docs/WORLDS.md, "moves.ts").
 - His turns via `k.tapToHelp` with `ask`, `nudge` and `helped` lines,
   and a thank-you that works either way.
 
@@ -96,15 +104,18 @@ Fix everything it reports. Don't silence a rule; rewrite the line.
 ## 6. Watch it
 
 ```bash
-npm run shots -- <id>              # taps his turns at once
-npm run shots -- <id> --no-tap     # lets every turn run out: hear the nudge and helped lines
-npm run shots -- <id> --scene 2    # one scene (from 0), while fixing it
+npm run shots -- <id> --fast              # the whole episode on a fake clock, about a minute
+npm run shots -- <id> --fast --scene 2    # one scene (from 1), while fixing it
+npm run shots -- <id> --fast --no-tap     # lets every turn run out: see the nudge and helped lines
+npm run shots -- <id>                     # real time, 3–5 minutes: the final pacing check
 ```
 
 It plays the episode in Chromium at 1180 × 820, saves a frame of every
 scene every few seconds to `screenshots/<id>/`, a contact sheet
-(`sheet.png`), and a measured pacing report with every caption's timing
-and any silent stretch over 4 s. Run it after every round of changes.
+(`sheet.png`), and a pacing report with every caption's timing and any
+silent stretch over 4 s. Iterate with `--fast` after every round of
+changes (its times are story-clock times with the stand-in voice, close
+to the real thing); the last run before the PR is without it.
 
 ## 7. Look (the step that matters most)
 
@@ -118,8 +129,9 @@ Read the contact sheet and every scene's opening frame. For each, ask:
 - Pacing: every scene 25–90 s, the whole episode 2–5 minutes, no long
   silent stretches.
 
-Fix, re-run `shots`, look again, until every frame is right. Run it once
-with `--no-tap` too, and look at the turns done for him.
+Fix, re-run `shots --fast`, look again, until every frame is right. Run
+it once with `--no-tap` too, and look at the turns done for him. Then
+one real-time run for the pacing numbers in the PR.
 
 ## 8. Review
 
