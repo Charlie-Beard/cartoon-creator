@@ -20,6 +20,15 @@ export interface ShelfEntry extends CartoonInfo {
   load: () => Promise<{ default: Cartoon }>;
 }
 
-export const SHELF: ShelfEntry[] = [];
+export const SHELF: ShelfEntry[] = [
+  {
+    id: 'whistling-kettle',
+    title: 'The Whistling Kettle',
+    world: 'faraway',
+    summary: 'The Saucepan Man’s whistling kettle has gone, and Dame Snap has it. Jasper blows away a cloud, then taps the kettle until it whistles so loudly that her ruler snaps.',
+    thumb: 'moon-room',
+    load: () => import('./whistling-kettle'),
+  },
+];
 
 export const shelfEntry = (id: string): ShelfEntry | undefined => SHELF.find((c) => c.id === id);
