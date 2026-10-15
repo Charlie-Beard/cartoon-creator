@@ -6,6 +6,8 @@
  *   npm run shots -- lost-kettle --scene 2          # one scene only
  *   npm run shots -- lost-kettle --no-tap           # wait out every tap-to-help
  *   npm run shots -- lost-kettle --url http://localhost:5173   # use a dev server already running
+ *   npm run shots -- lost-kettle --fast             # iterating on frames: seconds, not minutes (see below)
+ *   npm run shots -- --help
  *
  * It starts `vite` on a free port itself (unless --url is given), opens
  * /?cartoon=<id>&scene=<n> for each scene in Playwright (chromium at
@@ -40,20 +42,35 @@
  * stretch. Exits 1 on an error (the script threw, a scene never finished);
  * --strict also exits 1 on a flag.
  *
+ * --fast: for iterating on frames. The page runs on Playwright's fake clock
+ * (page.clock, the way tests/e2e/cartoons.spec.ts plays an episode), pushed
+ * on a quarter of a second at a time, so a 3-minute episode takes under a
+ * minute of wall-clock time instead of 3-4 (and the scenes run 4 at a time,
+ * since the story clock doesn't care how busy the machine is). The frames
+ * are the same: one every --every seconds of STORY time, one when a
+ * tap-to-help appears, the same contact sheet. The times in the report are
+ * story-clock times: GSAP, the captions, the tap-to-help patience and the
+ * stand-in voice (estimateSeconds per line) all run on that clock, so they
+ * match a real run closely, and the report says so. One difference: with
+ * --fast, recordings in public/audio are not played, and every line is
+ * "spoken" by the stand-in, so the times are the estimates, not the
+ * recorded lengths. FOR THE FINAL PACING CHECK RUN WITHOUT --fast (real
+ * time, recordings playing for real); --fast is for fixing frames.
+ *
  * Options: --every S (seconds between frames, default 3), --frames N (cap on
  * frames per scene after the opening set; default no cap but a safety cap of
- * 60), --parallel N (scenes at once, default 1: more are quicker but a busy
- * machine makes GSAP lag-smooth and the times read high), --no-tap, --out DIR.
+ * 60), --parallel N (scenes at once, default 1, or 4 with --fast: in real
+ * time more are quicker but a busy machine makes GSAP lag-smooth and the
+ * times read high), --no-tap, --fast, --strict, --out DIR, --help.
  *
  * Chromium comes from PW_CHROMIUM (or /opt/pw-browsers/chromium if that
  * exists, else Playwright's own).
  */
-import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
-import { createServer } from 'node:net';
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
+import { chromiumPath, createDevServer } from './lib/dev-server.mjs';
 import { SHELF } from './lib/shelf.ts';
 import { spokenSeconds } from '../src/core/cartoon.ts';
 import { DEFAULT_NAME, personalise } from '../src/core/phrases.ts';
@@ -70,9 +87,28 @@ const option = (name, fallback) => {
 };
 const valueFlags = new Set(['url', 'scene', 'frames', 'every', 'parallel', 'out']);
 const positional = args.filter((a, i) => !a.startsWith('--') && !(i > 0 && args[i - 1].startsWith('--') && valueFlags.has(args[i - 1].slice(2))));
+const USAGE = `Usage: npm run shots -- <cartoonId> [options]
+
+  --fast         iterate on frames: play on a fake clock (seconds, not minutes). Frames are
+                 still one every --every seconds of story time and the times in the report
+                 are story-clock times (recordings are not played; the stand-in voice speaks
+                 every line at its estimateSeconds). Do the FINAL pacing check without it.
+  --scene N      one scene only (numbered from 1)
+  --no-tap       don't tap the tap-to-help: wait out each one (~21 s) as a child who never taps
+  --every S      seconds between frames (default 3)
+  --frames N     most frames per scene after the opening set (default and cap 60)
+  --parallel N   scenes at once (default 1; 4 with --fast)
+  --url URL      use a dev server that is already running
+  --out DIR      where the PNGs go (default screenshots/<id>)
+  --strict       exit 1 on a pacing flag too, not only on an error
+  --help         this`;
+if (flag('help') || flag('h')) {
+  console.log(USAGE);
+  process.exit(0);
+}
 const id = positional[0];
 if (!id) {
-  console.error('Usage: npm run shots -- <cartoonId> [--scene N] [--no-tap] [--every 3] [--frames N] [--parallel 1] [--url http://localhost:5173] [--strict]');
+  console.error(USAGE);
   console.error(`On the shelf: ${SHELF.map((c) => c.id).join(', ') || '(nothing yet)'}`);
   process.exit(2);
 }
@@ -86,7 +122,8 @@ const EVERY = Number(option('every', 3));
 /** Most frames kept per scene after the opening set: --frames N, but never more than the safety cap. */
 const MAX_FRAMES = 60;
 const FRAMES = Math.min(MAX_FRAMES, option('frames') === undefined ? MAX_FRAMES : Number(option('frames')));
-const PARALLEL = Math.max(1, Number(option('parallel', 1)));
+const FAST = flag('fast');
+const PARALLEL = Math.max(1, Number(option('parallel', FAST ? 4 : 1)));
 const NO_TAP = flag('no-tap');
 const OUT = resolve(ROOT, option('out', join('screenshots', id)));
 const only = option('scene') === undefined ? null : Number(option('scene')) - 1;
@@ -105,43 +142,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ------------------------------------------------------------------ server
 
-let server = null;
-async function freePort() {
-  return new Promise((res, rej) => {
-    const s = createServer();
-    s.once('error', rej);
-    s.listen(0, '127.0.0.1', () => {
-      const { port } = s.address();
-      s.close(() => res(port));
-    });
-  });
-}
-
-async function startServer() {
-  const port = await freePort();
-  const base = `http://127.0.0.1:${port}`;
-  server = spawn(process.execPath, [join(ROOT, 'node_modules/vite/bin/vite.js'), '--port', String(port), '--strictPort', '--host', '127.0.0.1'], {
-    cwd: ROOT,
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-  let log = '';
-  server.stdout.on('data', (d) => (log += d));
-  server.stderr.on('data', (d) => (log += d));
-  for (let i = 0; i < 240; i++) {
-    if (server.exitCode !== null) throw new Error(`vite exited early:\n${log}`);
-    try {
-      if ((await fetch(base + '/')).ok) return base;
-    } catch {
-      /* not up yet */
-    }
-    await sleep(250);
-  }
-  throw new Error(`vite did not start:\n${log}`);
-}
-const stopServer = () => {
-  server?.kill();
-  server = null;
-};
+const dev = createDevServer(ROOT);
+const startServer = () => dev.start();
+const stopServer = () => dev.stop();
 process.on('SIGINT', () => {
   stopServer();
   process.exit(130);
