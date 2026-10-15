@@ -21,6 +21,7 @@ Read before changing anything:
 | [docs/KIT.md](docs/KIT.md) | The kit's whole API, with examples |
 | [docs/WORLDS.md](docs/WORLDS.md) | How a world is set out, and how to add characters, places and props |
 | [scripts/voice/README.md](scripts/voice/README.md) | Recording the voices (ElevenLabs) |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | What's done, what's next, open questions |
 
 ## Commands
 
