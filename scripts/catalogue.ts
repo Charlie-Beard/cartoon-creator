@@ -3,8 +3,9 @@
  *
  *   npm run catalogue -- --list                  # the worlds
  *   npm run catalogue -- faraway                 # everything a writer needs, compact
- *   npm run catalogue -- faraway characters      # one section: about | characters | backdrops | props | moves | kit
- *   npm run catalogue -- faraway --id saucepan   # one entry in full (a character, backdrop, prop, sound or move)
+ *   npm run catalogue -- faraway characters      # one section: about | characters | backdrops | props | moves | pieces | kit
+ *   npm run catalogue -- faraway --id saucepan   # one entry in full (a character, backdrop, prop, sound, move or set piece)
+ *   npm run catalogue -- faraway pieces --id snapLoom   # a set piece's whole doc comment, usage example included
  *   npm run catalogue -- faraway --no-common     # leave out the "common" world's items
  *   npm run catalogue -- faraway --brief         # first sentence of every note: the smallest sheet
  *   npm run catalogue -- faraway --full          # nothing trimmed
@@ -13,7 +14,9 @@
  * (art imports, drawing glue and long notes), and reading them is what a
  * writer spent the most tokens on. This prints only what a script can use:
  * ids, poses, parts, sizes, the notes, and the sounds and moves with their
- * signatures and one-line docs.
+ * signatures and one-line docs. The set pieces (src/worlds/<id>/pieces.ts,
+ * 10-30 KB each) are shown the same way: name, parts with their options, and
+ * the opening of the doc comment; `--id <piece>` gives all of it.
  *
  * Ids, poses, parts, sizes and notes come from the loaded worlds
  * (src/worlds). Signatures and doc comments do not exist at run time, so
@@ -30,15 +33,15 @@ import type { BackdropDef, CharacterDef, PropDef, World } from '../src/worlds';
 // ------------------------------------------------------------------ options
 
 export type Mode = 'brief' | 'normal' | 'full';
-export const SECTIONS = ['about', 'characters', 'backdrops', 'props', 'moves', 'kit'] as const;
+export const SECTIONS = ['about', 'characters', 'backdrops', 'props', 'moves', 'pieces', 'kit'] as const;
 export type Section = (typeof SECTIONS)[number];
 
 export interface CatalogueOptions {
   /** Only this section. Default: all of them. */
   section?: Section;
-  /** One entry in full: a character, backdrop, prop, sound, move or kit sound. */
+  /** One entry in full: a character, backdrop, prop, sound, move, set piece or kit sound. */
   id?: string;
-  /** Include the common world's backdrops, props and moves. Default true. */
+  /** Include the common world's backdrops, props, moves and set pieces. Default true. */
   common?: boolean;
   /** How much of each note to keep. Default 'normal'. */
   mode?: Mode;
@@ -55,13 +58,17 @@ interface Budget {
   doc: number;
   /** Does the kit's sound list keep its one-line descriptions? */
   kitDocs: boolean;
+  /** How much of a set piece's doc comment to keep (0: names and parts only, an index). */
+  piece: number;
+  /** Do a piece's parts keep their one-line descriptions? */
+  partDocs: boolean;
 }
 
 const BUDGETS: Record<Mode, Budget> = {
   // brief is an index: who and what exists, so a writer can ask for the few entries they will use (--id).
-  brief: { world: 260, about: 130, voice: 0, backdropLead: 70, backdropTail: 60, prop: 0, doc: 100, kitDocs: false },
-  normal: { world: 400, about: 450, voice: 130, backdropLead: 150, backdropTail: 330, prop: 170, doc: 260, kitDocs: true },
-  full: { world: Infinity, about: Infinity, voice: Infinity, backdropLead: Infinity, backdropTail: Infinity, prop: Infinity, doc: Infinity, kitDocs: true },
+  brief: { world: 260, about: 130, voice: 0, backdropLead: 70, backdropTail: 60, prop: 0, doc: 100, kitDocs: false, piece: 0, partDocs: false },
+  normal: { world: 400, about: 450, voice: 130, backdropLead: 150, backdropTail: 330, prop: 170, doc: 260, kitDocs: true, piece: 150, partDocs: false },
+  full: { world: Infinity, about: Infinity, voice: Infinity, backdropLead: Infinity, backdropTail: Infinity, prop: Infinity, doc: Infinity, kitDocs: true, piece: Infinity, partDocs: true },
 };
 
 // -------------------------------------------------------------- text helpers
@@ -215,6 +222,174 @@ function movesOf(worldId: string): Moves | undefined {
   return { file, sounds: objectMembers(sf, 'sounds'), moves: objectMembers(sf, 'moves') };
 }
 
+// ------------------------------------------------------- set pieces (source)
+
+/** One callable part of a piece: `set`, `play`, `loom` …, or (for a piece that is itself a function) the whole call. */
+export interface PiecePart {
+  /** '' for a piece that is a function. */
+  name: string;
+  /** "k, { land, friends, cover?, music? }": the kit stays, options objects are shown by their keys. */
+  params: string;
+  /** "{ far, front, cover, friends }", or '' when there is nothing worth saying (void, a type parameter). */
+  returns: string;
+  doc: string;
+}
+
+/** A set piece: an exported async function, or an exported object whose members are functions. */
+export interface Piece {
+  name: string;
+  /** The whole doc comment, line breaks kept (it ends with the usage example). */
+  doc: string;
+  parts: PiecePart[];
+  object: boolean;
+}
+
+interface OtherExport {
+  name: string;
+  /** "Placed { id, x, y?, w?, z?, flip? }" or just the name. */
+  text: string;
+  doc: string;
+}
+
+interface Pieces {
+  file: string;
+  pieces: Piece[];
+  /** Drawn paper (greyCloud, teaTable …), not staging. */
+  art: OtherExport[];
+  /** Exported but not a piece: placeAll, centreOf, Placed … */
+  others: OtherExport[];
+}
+
+/** The `/** … *\/` comment before a node with its line breaks kept (` * ` margins removed). */
+function rawDocOf(sf: ts.SourceFile, node: ts.Node): string {
+  const ranges = ts.getLeadingCommentRanges(sf.text, node.getFullStart()) ?? [];
+  for (let i = ranges.length - 1; i >= 0; i--) {
+    const r = ranges[i];
+    if (!r) continue;
+    const raw = sf.text.slice(r.pos, r.end);
+    if (!raw.startsWith('/**')) continue;
+    return raw
+      .replace(/^\/\*\*[ \t]*/, '')
+      .replace(/[ \t]*\*\/$/, '')
+      .split('\n')
+      .map((l) => l.replace(/^\s*\* ?/, '').replace(/\s+$/, ''))
+      .join('\n')
+      .trim();
+  }
+  return '';
+}
+
+const hasModifier = (n: ts.Node, kind: ts.SyntaxKind): boolean => (ts.canHaveModifiers(n) ? ts.getModifiers(n) : undefined)?.some((m) => m.kind === kind) ?? false;
+
+/** "{ land, friends, cover?, music? }": an options type by its keys. */
+function keysText(sf: ts.SourceFile, members: readonly ts.TypeElement[]): string {
+  const keys = members.map((m) => `${m.name ? m.name.getText(sf) : '…'}${m.questionToken ? '?' : ''}`);
+  return keys.length ? `{ ${keys.join(', ')} }` : '{}';
+}
+
+/** Parameters for a call: the kit stays as `k`, an options object becomes its keys, anything else is its name. */
+function pieceParams(sf: ts.SourceFile, params: readonly ts.ParameterDeclaration[]): string {
+  return params
+    .map((p) => {
+      if (p.type && ts.isTypeLiteralNode(p.type)) return keysText(sf, p.type.members);
+      return `${p.name.getText(sf)}${p.questionToken || p.initializer ? '?' : ''}`;
+    })
+    .join(', ');
+}
+
+/**
+ * What a part gives back, when that is easy to read: an options-like literal,
+ * or an interface written in the same file (the "…Actors" a `set` returns),
+ * shown by its keys; a plain type name such as HTMLElement. Promise<…> is
+ * looked through, and void or a type parameter says nothing.
+ */
+function returnText(sf: ts.SourceFile, t: ts.TypeNode | undefined, tparams: Set<string>, ifaces: Map<string, ts.InterfaceDeclaration>, used: Set<string>): string {
+  if (!t || t.kind === ts.SyntaxKind.VoidKeyword) return '';
+  if (ts.isTypeLiteralNode(t)) return keysText(sf, t.members);
+  if (ts.isTypeReferenceNode(t)) {
+    const name = t.typeName.getText(sf);
+    if (name === 'Promise') return returnText(sf, t.typeArguments?.[0], tparams, ifaces, used);
+    if (tparams.has(name)) return '';
+    const local = ifaces.get(name);
+    if (local) {
+      used.add(name);
+      return keysText(sf, local.members);
+    }
+  }
+  const text = squash(t.getText(sf));
+  return text.length <= 28 ? text : '';
+}
+
+function partOf(
+  sf: ts.SourceFile,
+  name: string,
+  fn: { parameters: readonly ts.ParameterDeclaration[]; type?: ts.TypeNode; typeParameters?: ts.NodeArray<ts.TypeParameterDeclaration> },
+  doc: string,
+  ifaces: Map<string, ts.InterfaceDeclaration>,
+  used: Set<string>,
+): PiecePart {
+  const tparams = new Set((fn.typeParameters ?? []).map((tp) => tp.name.text));
+  return { name, params: pieceParams(sf, fn.parameters), returns: returnText(sf, fn.type, tparams, ifaces, used), doc: squash(doc) };
+}
+
+const unwrap = (e: ts.Expression): ts.Expression => {
+  while (ts.isAsExpression(e) || ts.isSatisfiesExpression(e) || ts.isParenthesizedExpression(e)) e = e.expression;
+  return e;
+};
+
+/**
+ * Reads src/worlds/<id>/pieces.ts. A piece is an exported `async function`,
+ * or an exported object literal with function members. An exported call such
+ * as `cached(…)` is art; any other export (a plain function, an interface)
+ * is a helper. Interfaces a piece returns are shown as that piece's keys, so
+ * they are not helpers.
+ */
+function piecesOf(worldId: string): Pieces | undefined {
+  const file = `src/worlds/${worldId}/pieces.ts`;
+  const sf = readSource(root(file));
+  if (!sf) return undefined;
+  const ifaces = new Map<string, ts.InterfaceDeclaration>();
+  for (const st of sf.statements) if (ts.isInterfaceDeclaration(st)) ifaces.set(st.name.text, st);
+  const used = new Set<string>();
+  const out: Pieces = { file, pieces: [], art: [], others: [] };
+  const isExported = (n: ts.Node): boolean => hasModifier(n, ts.SyntaxKind.ExportKeyword);
+
+  for (const st of sf.statements) {
+    if (!isExported(st)) continue;
+    if (ts.isFunctionDeclaration(st) && st.name) {
+      const name = st.name.text;
+      const doc = rawDocOf(sf, st);
+      if (hasModifier(st, ts.SyntaxKind.AsyncKeyword)) out.pieces.push({ name, doc, object: false, parts: [partOf(sf, '', st, doc.split(/\n\s*\n/)[0] ?? '', ifaces, used)] });
+      else out.others.push({ name, text: name, doc });
+    } else if (ts.isVariableStatement(st)) {
+      for (const d of st.declarationList.declarations) {
+        if (!ts.isIdentifier(d.name)) continue;
+        const name = d.name.text;
+        const doc = rawDocOf(sf, st);
+        const init = d.initializer ? unwrap(d.initializer) : undefined;
+        const parts: PiecePart[] = [];
+        if (init && ts.isObjectLiteralExpression(init)) {
+          for (const m of init.properties) {
+            if (!m.name || !(ts.isIdentifier(m.name) || ts.isStringLiteral(m.name))) continue;
+            if (ts.isMethodDeclaration(m)) parts.push(partOf(sf, m.name.text, m, rawDocOf(sf, m), ifaces, used));
+            else if (ts.isPropertyAssignment(m) && (ts.isArrowFunction(m.initializer) || ts.isFunctionExpression(m.initializer))) parts.push(partOf(sf, m.name.text, m.initializer, rawDocOf(sf, m), ifaces, used));
+          }
+        }
+        if (parts.length) out.pieces.push({ name, doc, object: true, parts });
+        else if (init && ts.isCallExpression(init)) out.art.push({ name, text: name, doc });
+        else out.others.push({ name, text: name, doc });
+      }
+    } else if (ts.isInterfaceDeclaration(st)) {
+      out.others.push({ name: st.name.text, text: `${st.name.text} ${keysText(sf, st.members)}`, doc: rawDocOf(sf, st) });
+    } else if (ts.isTypeAliasDeclaration(st)) {
+      out.others.push({ name: st.name.text, text: st.name.text, doc: rawDocOf(sf, st) });
+    }
+  }
+  // The "…Actors" a piece hands back are already shown as its return; they are not a thing to import by hand.
+  out.others = out.others.filter((o) => !used.has(o.name));
+  return out;
+}
+
 /** Follows `readonly fx = fx` in the kit to wherever fx is really written, so the sheet cannot drift from the kit. */
 function kitSounds(): { fx: Member[]; sfx: Member[] } {
   const none = { fx: [], sfx: [] };
@@ -363,6 +538,66 @@ function movesLines(m: Moves | undefined, b: Budget): string[] {
   return out;
 }
 
+/** The first sentence of a piece's doc comment, and the second if it still fits: what it is, in a line or two. */
+function lead(doc: string, budget: number): string {
+  const para = squash((doc.split(/\n\s*\n/)[0] ?? doc));
+  if (para.length <= budget) return para;
+  const ss = sentences(para);
+  const first = ss[0] ?? para;
+  if (first.length >= budget) return cut(first, budget);
+  const second = ss[1];
+  return second && first.length + 1 + second.length <= budget ? `${first} ${second}` : first;
+}
+
+const importLine = (names: string[], worldId: string): string => `  import { ${names.join(', ')} } from '../../worlds/${worldId}/pieces';`;
+
+const partCall = (piece: Piece, part: PiecePart): string => `${part.name || piece.name}(${part.params})${part.returns ? ` → ${part.returns}` : ''}`;
+
+function pieceLines(piece: Piece, b: Budget): string[] {
+  const doc = b.piece ? lead(piece.doc, b.piece) : '';
+  if (!piece.object) {
+    const part = piece.parts[0];
+    return [`  ${part ? partCall(piece, part) : piece.name}${doc ? ` — ${doc}` : ''}`];
+  }
+  return [`  ${piece.name}${doc ? ` — ${doc}` : ''}`, ...piece.parts.map((part) => `    ${partCall({ ...piece, name: '' }, part)}${b.partDocs && part.doc ? ` — ${part.doc}` : ''}`)];
+}
+
+/** The pieces of one world, each with the import line first. `intro` adds the three rules of how a piece works (once per sheet). */
+function piecesLines(worldId: string, b: Budget, intro: boolean): string[] {
+  const ps = piecesOf(worldId);
+  if (!ps) return ['  (no pieces.ts)'];
+  if (!ps.pieces.length) return ['  (no set pieces)'];
+  const out = [importLine(ps.pieces.map((p) => p.name), worldId)];
+  if (intro && b.piece) {
+    out.push(
+      '  An object piece: `set(k, …)` builds the picture (no waiting, no motion: legal in a scene’s `set`) and returns the actors; `play` and the other parts take them and animate: `await p.play(k, a, …)`.',
+      '  A function piece is just awaited. Options take line KEYS from your `lines`. His turns (k.tapToHelp) are yours. Whole doc and example: --id <piece>.',
+    );
+  }
+  if (!b.piece) {
+    // An index: who, and what parts they have.
+    for (const p of ps.pieces) out.push(p.object ? `  ${p.name}: ${p.parts.map((x) => x.name).join(', ')}` : `  ${p.name}`);
+  } else for (const p of ps.pieces) out.push(...pieceLines(p, b));
+  if (ps.art.length) out.push(`  art (call it for paper, then k.add): ${ps.art.map((a) => a.name).join(', ')}`);
+  if (ps.others.length) out.push(`  also exported, not pieces: ${ps.others.map((o) => o.text).join(', ')}`);
+  return out;
+}
+
+/** A piece, or the art and helpers beside it, in full: the whole doc comment, then its parts. */
+function pieceEntry(worldId: string, id: string, tag: string): string | undefined {
+  const ps = piecesOf(worldId);
+  if (!ps) return undefined;
+  const spec = `../../worlds/${worldId}/pieces`;
+  const piece = ps.pieces.find((p) => p.name === id);
+  if (piece) {
+    const parts = piece.parts.map((part) => `  ${partCall(piece.object ? { ...piece, name: '' } : piece, part)}${piece.object && part.doc ? `\n      ${part.doc}` : ''}`);
+    return [`piece ${id} — ${ps.file}${tag}\n  import { ${id} } from '${spec}';`, piece.doc ? piece.doc.replace(/^/gm, '  ').replace(/^ +$/gm, '') : '  (no doc comment)', '', 'Parts:', ...parts].join('\n');
+  }
+  const other = [...ps.art.map((a) => ['art', a] as const), ...ps.others.map((o) => ['helper', o] as const)].find(([, o]) => o.name === id);
+  if (other) return `${other[0]} ${id} — ${ps.file}${tag}\n  import { ${id} } from '${spec}';\n${other[1].doc ? other[1].doc.replace(/^/gm, '  ').replace(/^ +$/gm, '') : '  (no doc comment)'}`;
+  return undefined;
+}
+
 function kitLines(b: Budget): string[] {
   const { fx, sfx } = kitSounds();
   const out: string[] = [];
@@ -412,6 +647,8 @@ function entryText(worldId: string, id: string, common: boolean): string {
     for (const [kind, list] of [['sounds', m?.sounds], ['moves', m?.moves]] as const) {
       for (const member of list ?? []) if (member.name === id) found.push(`${kind}.${member.name}(${member.params})${tag}  — ${wid}/moves.ts${kind === 'moves' ? ' (async, first argument k)' : ''}\n  ${member.doc || '(no doc comment)'}`);
     }
+    const pe = pieceEntry(wid, id, tag);
+    if (pe) found.push(pe);
     // A name found in the world itself (or common) beats the same name in a world the cartoon is only visiting.
     if (found.length && (wid === worldId || wid === 'common')) break;
   }
@@ -423,7 +660,8 @@ function entryText(worldId: string, id: string, common: boolean): string {
     const near = new Set<string>();
     for (const wid of order) {
       const w = world(wid);
-      for (const n of [...Object.keys(w.characters), ...Object.keys(w.backdrops), ...Object.keys(w.props)]) if (n.toLowerCase().includes(id.toLowerCase())) near.add(n);
+      const ps = piecesOf(wid);
+      for (const n of [...Object.keys(w.characters), ...Object.keys(w.backdrops), ...Object.keys(w.props), ...(ps?.pieces ?? []).map((p) => p.name)]) if (n.toLowerCase().includes(id.toLowerCase())) near.add(n);
     }
     throw new Error(`No entry "${id}" in ${worldId}.${near.size ? ` Did you mean: ${[...near].slice(0, 8).join(', ')}?` : ''}`);
   }
@@ -473,6 +711,9 @@ export function catalogueText(worldId: string, opts: CatalogueOptions = {}): str
     const m = movesOf(w.id);
     parts.push(section(`## Sounds and moves — ${m?.file ?? `src/worlds/${w.id}/moves.ts`}`, movesLines(m, b)));
   }
+  if (want('pieces')) {
+    parts.push(section(`## Set pieces — whole recurring bits of staging, src/worlds/${w.id}/pieces.ts`, piecesLines(w.id, b, true)));
+  }
 
   if (common && w.id !== 'common') {
     const c = world('common');
@@ -480,6 +721,7 @@ export function catalogueText(worldId: string, opts: CatalogueOptions = {}): str
     if (want('backdrops')) cp.push(section(`### Backdrops`, Object.entries(c.backdrops).map(([id, d]) => backdropLine(id, d, b))));
     if (want('props')) cp.push(section(`### Props`, propLines(c.props, b)));
     if (want('moves')) cp.push(section(`### Sounds and moves — src/worlds/common/moves.ts`, movesLines(movesOf('common'), b)));
+    if (want('pieces')) cp.push(section(`### Set pieces — src/worlds/common/pieces.ts`, piecesLines('common', b, false)));
     if (cp.length) parts.push(`## common (available everywhere)\n${cp.join('\n\n')}`);
   }
   if (want('kit')) {
