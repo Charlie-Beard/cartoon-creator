@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { defineConfig, searchForWorkspaceRoot, type Plugin } from 'vite';
+import { voiceReview } from './scripts/voice/review-server.ts';
 
 /**
  * Writes sw.js after the build, so the cartoons work fully offline once
@@ -172,6 +173,6 @@ export default defineConfig({
     // dev server serve files (fonts) from wherever it really lives.
     fs: { allow: [searchForWorkspaceRoot(process.cwd()), realpathSync('node_modules')] },
   },
-  // SCAFFOLD: the voice workstream adds voiceReview() (scripts/voice/review-server.ts) here.
-  plugins: [serviceWorker()],
+  // voiceReview serves /review.html's endpoints in the dev server only (it never ships).
+  plugins: [serviceWorker(), voiceReview()],
 });

@@ -28,6 +28,7 @@ import { oldWoman } from './oldwoman';
 import { prop } from './props';
 import { giant, enchanter, jellyGoblin, snowman, toySoldier, topsy } from './visitors';
 import { whirligig } from './whirligig';
+import { cloudFront, cloudTop, kettle, LAND_FARS } from './cloudtop';
 
 // ---------------------------------------------------------------------------
 // Characters
@@ -359,6 +360,12 @@ const backdrops: Record<string, BackdropDef> = {
     'faraway-goblin-caves',
     'The Red Goblins\' caves: dark reds and earthy browns lit by warm lanterns and glowing mushrooms, heaps of goblin gold, big scales, jugs and a cauldron, tunnels leading off and a rope ladder up to a patch of daylight. Gloomy but never too dark for the puppets; the centre-lower stage is open and warm. Ground line at about y 640; room for 3 actors.',
   ),
+  'cloud-top': {
+    art: cloudTop,
+    about:
+      'Above the cloud at dusk, from the top of the ladder: where every land arrives. A sea of cloud, the low sun, the ladder poking up on the left (x 100 to 190) and the top of the tree\'s leaves on the right. ' +
+      'The middle of the sky (x 260 to 920, y 80 to 440) is open for a land\'s far view (a `far-<land>` prop, about x 290, y 160, w 600). Actors stand in the cloud along the bottom: put their busts\' bottoms below y 650 and lay the `cloud-front` prop (x 0, y 600, z above them) in front. Room for 3 actors.',
+  },
 };
 
 // ---------------------------------------------------------------------------
@@ -412,6 +419,9 @@ const props: Record<string, PropDef> = {
   'silky-ribbon': ks('silkyRibbon', 'Silky\'s ribbon', 'A gold bow of ribbon from Silky\'s hair.'),
   drum: ks('drum', 'A toy drum', 'A red toy drum with two drumsticks.'),
   rulebook: ks('rulebook', 'Dame Snap\'s rulebook', 'Dame Snap\'s black book of rules, with a red "!".'),
+  'cloud-front': { art: cloudFront, size: [1180, 220], about: 'A strip of cloud (1180 × 220) to lay in front of actors up in the sky, so they stand in the cloud: x 0, y 600, z above them (goes with `cloud-top`).' },
+  kettle: { art: kettle, size: [180, 160], about: 'The Saucepan Man\'s whistling kettle: round, copper, a curly spout. Part `lid` bobs when it whistles (pivot it).' },
+  ...LAND_FARS,
 };
 
 export default defineWorld({
