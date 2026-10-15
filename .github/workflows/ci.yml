@@ -1,9 +1,9 @@
 name: CI
 
+# Once per PR (and each push to it). Pushes to main deploy (deploy.yml).
 on:
   pull_request:
-  push:
-    branches-ignore: [main]
+  workflow_dispatch:
 
 jobs:
   check:
@@ -22,7 +22,8 @@ jobs:
       - run: npm run check
       - run: npm run build
       - run: npx playwright install --with-deps chromium
-      # Builds the site itself (playwright.config.ts) and plays every cartoon through at both iPad sizes.
+      # Builds the site itself (playwright.config.ts), checks the screens at both iPad sizes,
+      # and plays every cartoon through at 1180 × 820.
       - run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: failure()

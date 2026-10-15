@@ -9,9 +9,11 @@ there can use by id. Source: [`src/worlds/`](../src/worlds/).
 | The Faraway Tree | `faraway` | [Up the Faraway Tree](https://github.com/charlie-beard/maths-game) |
 | Hogwarts | `hogwarts` | [Wizard Words](https://github.com/charlie-beard/spelling-game) |
 
-See what's in each, drawn: `npm run dev`, then `/lab.html?world=faraway`
-(add `&set=chars|poses|backdrops|props`, or `?backdrop=<id>` for one at
-stage size). The written notes are in each world's `index.ts`: **read
+See what's in each, drawn: `npm run lab -- faraway` saves a sheet of
+every character, pose, backdrop and prop, each with its id, to
+`screenshots/lab/` (`npm run lab -- faraway props` for one set,
+`--backdrop <id>` for one at stage size). The same pages are live at
+`/lab.html?world=faraway` with `npm run dev`. The written notes are in each world's `index.ts`: **read
 them before writing a cartoon**.
 
 ## Shape
@@ -20,6 +22,7 @@ them before writing a cartoon**.
 src/worlds/<id>/
   index.ts      defineWorld({ id, name, accent, about, characters, backdrops, props })
   *.ts          the drawing code (characters, places, props), split as suits
+  moves.ts      the cast's signature sounds and moves (see "moves.ts" below)
   palette.ts    the world's own colours, if any (never edit src/art/palette.ts for one world)
 ```
 
@@ -70,6 +73,44 @@ props: {
 - **Append-only:** add entries; don't rename or remove ids a cartoon
   uses (`npm test` loads every cartoon).
 - Original art only (docs/STYLE.md).
+
+## moves.ts
+
+Each world has a `moves.ts` of its cast's signature sounds and moves, so
+authors stop re-inventing them per episode: Dame Snap's heels and ruler,
+the Saucepan Man's clank and "Eh?", Silky's wings, Hedwig's wingbeats, a
+villain's cloak swish. `common/moves.ts` holds the world-neutral ones (a
+door slam, tea pouring, a laugh, a wave). **Check them before writing your
+own sound or move**, and **promote anything a second episode would want**
+(move it out of the cartoon into the world's `moves.ts`, and import it).
+
+```ts
+import { sounds, moves } from '../../worlds/faraway/moves';
+import { sounds as anywhere } from '../../worlds/common/moves';
+
+sounds.heelsComing(5);                       // a plain function: makes a sound now
+await moves.earCup(k, saucepan, true);       // async: (k, actor, …) animates a part
+```
+
+- **`sounds`** is an object of plain functions that make a synthesised
+  sound with `tone`, `noiseBurst`, `bell`, `NOTE` and `now()` from
+  `src/audio/synth`, as the stories do. They never use `this`, so
+  `const { heels } = sounds` works. Soft and short; menace, never a
+  fright that hurts the ears.
+- **`moves`** is an object of async functions `(k: Kit, el, …)` that
+  animate a character with `k.to`, `k.part` and `k.pivot` and return a
+  promise (`await` it, or `void` it to run alongside). Use only parts the
+  character really has (`parts` in `index.ts`), and do nothing, never
+  throw or hang, when a part is missing. Move smoothly, never flash
+  (docs/STYLE.md). A villain's moves are theatre: nobody is hit.
+- Every function has a one-line doc comment saying what it is and when to
+  use it. Import the kit type with `import type { Kit } from '../../kit'`.
+- Keep each world's file self-contained; only `common` may be imported
+  from another world's `moves.ts`.
+- Already in the kit, so reach for these first: `k.fx` and `k.sfx`
+  (docs/KIT.md, "Sounds").
+- `tests/unit/moves.test.ts` checks that the files exist and export
+  functions. Add to the object with append-only edits.
 
 ## Adding to a world
 

@@ -43,7 +43,7 @@ Before any code, write the beat sheet (copy `templates/beat-sheet.md`):
 title, world, cast, the problem, and each scene as 4–10 numbered beats
 of one line each, marking his turns and the scary beat. Check it against
 the table above and docs/STYLE.md. It goes, shortened, into the comment
-at the top of the cartoon's file.
+at the top of the cartoon's `cartoon.ts`.
 
 ## Lines
 
@@ -121,7 +121,7 @@ Each scene is `{ name, set(k), play(k) }`:
 - `play` runs the scene, `await`ing each beat. When it returns, the
   player wipes to the next scene.
 - Share actors between `set` and `play` through a module-level `cast`
-  object (see `templates/cartoon.ts`).
+  object (see `templates/cartoon/cartoon.ts`).
 - The player's skip button stops a scene's script for good and moves on,
   so never leave something essential for the next scene to a scene's
   last line: each `set` must stand on its own.
@@ -137,7 +137,7 @@ Each scene is `{ name, set(k), play(k) }`:
 - [ ] `npm run shots -- <id>`: every frame looked at, nothing off stage
       by mistake, nothing under the caption band, faces visible, no
       clutter.
-- [ ] Registered on the shelf (`src/cartoons/index.ts`, appended).
+- [ ] `meta.ts` filled in (title, summary, a `thumb` backdrop, `added` date).
 - [ ] typecheck, `npm test`, `npm run test:e2e` pass.
 - [ ] Voice: new speakers have a cast entry or are listed for a grown-up
       to choose (`voice-cartoon` skill).

@@ -26,12 +26,16 @@ voice in `scripts/voice/cast.json`, with their `voice` note. For each:
 - Add the choice to `cast.json`. A character keeps the same voice in
   every cartoon, for good.
 
-## 2. Export and generate
+## 2. Generate
 
 ```bash
-npm run voice:export                     # every line of every cartoon → scripts/voice/lines.json
-python3 scripts/voice/generate.py --cartoon <id>   # needs ELEVENLABS_API_KEY
+python3 scripts/voice/generate.py --cartoon <id> --dry-run   # what it would send, and the cost
+python3 scripts/voice/generate.py --cartoon <id>             # needs ELEVENLABS_API_KEY
 ```
+
+No separate export step: `generate.py` and `check.py` rebuild
+`scripts/voice/lines.json` (every line of every cartoon) themselves, and
+it is not committed. (`npm run voice:export` still does it by hand.)
 
 Lines with `{name}` are recorded with the default name (Jasper) and
 also without a name, so another child's name falls back to the generic
@@ -52,6 +56,7 @@ marks wrong ones; `generate.py --redo` re-records only those.
 
 ## 5. Ship
 
-The clips go in `public/audio/lines/` with `public/audio/manifest.json`
-updated by the scripts. Commit them with the cartoon (they are what the
-iPad plays), run `npm test` and e2e, and push. Never commit the API key.
+The clips go in `public/audio/lines/`. Commit them with the cartoon (they
+are what the iPad plays), plus `cast.json` and `review.json` if they changed.
+Do not commit `lines.json` or `audio/manifest.json`: both are derived (the
+manifest is built from the clips by Vite, at build time and in dev). Run `npm test` and e2e, and push. Never commit the API key.

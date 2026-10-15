@@ -10,7 +10,8 @@
  *
  * <Anything a later reader needs: who borrows whom, why a choice was made.>
  */
-import { defineCartoon, type Kit } from '../kit';
+import { defineCartoon, type Kit } from '../../kit';
+import meta from './meta';
 
 // ------------------------------------------------------------------- art
 // One-off art for this cartoon only (see docs/KIT.md "Drawing one-off art").
@@ -24,10 +25,7 @@ import { defineCartoon, type Kit } from '../kit';
 const cast = {} as Record<'mf' | 'silky' | 'door', HTMLElement>;
 
 export default defineCartoon({
-  id: '<id>',
-  title: '<Title>',
-  world: '<world>',
-  summary: '<One or two sentences for grown-ups.>',
+  ...meta,
   lines: {
     // In the order they're said. Keys say what the line is.
     hello: { who: 'moonface', text: 'Hello, {name}! Something funny is going on.' },

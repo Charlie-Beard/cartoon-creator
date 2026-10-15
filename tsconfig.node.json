@@ -1,0 +1,10 @@
+{
+  // Scripts and tests run in Node (tsx, Vitest, Playwright): they get Node's types.
+  // The game itself (src) is checked by tsconfig.json, without them.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "vite/client"],
+    "allowImportingTsExtensions": true
+  },
+  "include": ["scripts/**/*.ts", "tests", "src", "playwright.config.ts", "vite.config.ts", "vitest.config.ts"]
+}

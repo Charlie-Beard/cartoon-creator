@@ -1,5 +1,5 @@
 import { expect, type Page } from '@playwright/test';
-import { SHELF } from '../../src/cartoons';
+import { SHELF } from '../../scripts/lib/shelf';
 
 /**
  * The cartoons to play through: the whole shelf, or just CARTOON=<id>

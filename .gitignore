@@ -17,3 +17,9 @@ undefined/
 
 # Voice takes kept while choosing (scripts/voice), local only.
 scripts/voice/takes/
+
+# Derived, rebuilt on demand (scripts/voice, vite.config.ts): never committed, so cartoon PRs
+# do not conflict over them. The clips in public/audio/lines/ are committed.
+scripts/voice/lines.json
+public/audio/manifest.json
+scripts/voice/qa.json

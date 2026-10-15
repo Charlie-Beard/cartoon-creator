@@ -1,8 +1,9 @@
 # Voicing a cartoon
 
 Until a line is recorded, the iPad's own British voice says it. Recording
-turns every line into an MP3 in `public/audio/lines/` (listed in
-`public/audio/manifest.json`), in the voice of whoever says it. Only whole
+turns every line into an MP3 in `public/audio/lines/` (the app learns which
+exist from `audio/manifest.json`, which Vite builds from those files), in the
+voice of whoever says it. Only whole
 lines are recorded: a cartoon has no questions or numbers to piece together.
 
 You need ElevenLabs (`ELEVENLABS_API_KEY` in your environment, **never in a
@@ -15,11 +16,12 @@ Say it is `lost-kettle`, and finished (`npm run check -- lost-kettle` passes,
 `npm run shots -- lost-kettle` looks right). Changing a line later changes
 its id, so record last.
 
-1. **Export** every line on the shelf to `scripts/voice/lines.json`:
-
-   ```bash
-   npm run voice:export          # = npx tsx scripts/voice/export.ts
-   ```
+1. **Lines.** Nothing to run: `generate.py` and `check.py` rebuild
+   `scripts/voice/lines.json` from every cartoon on the shelf before they read
+   it (`npx tsx scripts/voice/export.ts`, so Node must be installed), and the
+   review page does too when it is missing or older than a cartoon. The file
+   is derived and not committed. By hand, if you want to read it:
+   `npm run voice:export`.
 
    Lines with `{name}` are exported twice, like the games do: with
    "Jasper" (`DEFAULT_NAME`) and without ("Well done!").
@@ -53,8 +55,7 @@ its id, so record last.
    python scripts/voice/generate.py --cartoon lost-kettle
    ```
 
-   It records what is missing, trims and levels each clip, and rewrites the
-   manifest. A character with no voice stops it (it never uses someone
+   It records what is missing, then trims and levels each clip. A character with no voice stops it (it never uses someone
    else's). If `--risky` clips come out wrong ("Hmph", "EH"), respell them in
    `config.json` under `say_as` and redo with `--force --risky`.
 
@@ -79,12 +80,16 @@ its id, so record last.
 
    Repeat step 5 until every line is Right.
 
-6. **Manifest.** `generate.py` rewrites `public/audio/manifest.json` itself.
-   If clips were added or removed by hand: `python scripts/voice/generate.py --manifest`.
-   Then play the cartoon (`/?cartoon=lost-kettle`); in development the console
-   says `[voice] not recorded` for any line that still falls back to the iPad.
-   Commit `public/audio/`, `scripts/voice/lines.json`, `cast.json`, `config.json`,
-   `qa.json` and `review.json`. (`takes/` is only for you.)
+6. **Ship.** There is no manifest to update: Vite builds
+   `audio/manifest.json` from the clips on disk at build time and serves it in
+   the dev server (and the service worker caches it for offline). Play the
+   cartoon (`/?cartoon=lost-kettle`); in development the console says
+   `[voice] not recorded` for any line that still falls back to the iPad.
+   Commit `public/audio/lines/`, `cast.json`, `config.json`, `qa.json` and
+   `review.json`. Do **not** commit `lines.json` or `public/audio/manifest.json`
+   (both are in `.gitignore`), and `takes/` is only for you. Clips are one file
+   each, and `review.json` is written with sorted keys and one verdict per line,
+   so several cartoon PRs merge cleanly.
 
 ## The files
 
@@ -92,8 +97,9 @@ its id, so record last.
 |---|---|
 | `cast.json` | Each character's voice: `{ "<characterId>": { "voice_id", "name", "owner"?, "settings" } }`. `owner` is only for Voice Library voices (`add-voices.py` uses it). `settings` are ElevenLabs' `stability`, `speed`, `similarity_boost`, `style`. The Faraway voices and the Hogwarts ones that Wizard Words had are carried over from the games. |
 | `config.json` | The ElevenLabs `model_id` and `say_as` respellings. |
-| `lines.json` | Written by `export.ts`: `{ id, text, speaker, where: "<cartoon>/<lineKey>", also?, risky? }`. |
+| `lines.json` | Derived and not committed. Written by `export.ts` (which `generate.py`, `check.py` and the review page run for you): `{ id, text, speaker, where: "<cartoon>/<lineKey>", also?, risky? }`. |
 | `export.ts`, `cast-check.ts` | Run with `npx tsx`. They load every cartoon on the shelf. |
+| `../../public/audio/manifest.json` | Not a file you edit: built by `vite.config.ts` from `public/audio/lines/*.mp3`. |
 | `generate.py`, `check.py`, `pick-voice.py`, `add-voices.py` | Python; the first and the last two need the API key. `castfile.py` is their shared reader of `cast.json`. |
 | `review-server.ts`, `../../review.html`, `../../src/review.ts` | The review page (dev server only; it never ships). |
 | `takes/`, `qa.json`, `review.json` | Earlier recordings, the automatic checks, your verdicts. |
