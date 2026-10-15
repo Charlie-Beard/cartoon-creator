@@ -8,6 +8,21 @@ description: Make a new cartoon episode from a one-line idea ("/new-cartoon Sauc
 From a one-line idea to a finished, checked episode on the shelf. Work
 through the steps in order; don't skip the looking (step 7).
 
+**Who does what.** The story is where quality comes from, so the main
+session (the strongest model) keeps the parts that need taste, and
+hands the rest to cheaper subagents with the matching skill:
+
+| Step | Who |
+|---|---|
+| 1 Ask, 2 beat sheet, 4 script, 7 the final look | You (main session) |
+| 3 New reusable characters, backdrops, props | Sonnet subagent each (`new-character`, `new-backdrop`) |
+| 5 Check, 6 shots: running them and fixing what they report mechanically (ids, a line too long, a flagged frame that's plainly off stage) | Sonnet subagent, or you if it's one quick fix |
+| 8 Review | A fresh Sonnet subagent (`review-cartoon`): new eyes are the point |
+| Summarising long output (a pacing table, a test log) | Haiku, if you need it summarised at all |
+
+Give every subagent the episode id, the files it may touch, and what to
+report back; read what it changed before you carry on.
+
 ## 0. Read (every time; it's quick)
 
 (Several sessions or agents may share one machine: when you start a dev
