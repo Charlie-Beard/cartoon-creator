@@ -22,8 +22,9 @@
  *      in a huff. A warm light through the trees: Hagrid's hut.
  *   4. Hagrid's hut. "SURPRISE! Happy birthday, Hedwig!" Hagrid sent the
  *      letter: a year ago he gave Hedwig to Harry, so today she gets a cake,
- *      and she carried her own party invitation. A rock cake (crunch!), a
- *      slice of birthday cake for him, and Hedwig has the very first slice.
+ *      and she carried her own party invitation. A rock cake (crunch!);
+ *      Hedwig has the very first slice of birthday cake, then a slice for
+ *      him, and it's her best birthday ever.
  *
  * Scary, never cruel (docs/STYLE.md): Voldemort looms and hisses and wants
  * the letter; nobody is touched, and his wand is only ever lifted to the
@@ -39,7 +40,7 @@
  */
 import { C, cached, defineCartoon, ellipse, group, noiseBurst, now, piece, poly, raw, rect, svg, type Kit, type Node } from '../../kit';
 import { sounds as commonSounds } from '../../worlds/common/moves';
-import { sneakIn, warmEnding } from '../../worlds/common/pieces';
+import { centreOf, sneakIn, warmEnding } from '../../worlds/common/pieces';
 import { teaTable } from '../../worlds/faraway/pieces';
 import { moves as hogMoves, sounds as hogSounds } from '../../worlds/hogwarts/moves';
 import { owlPost, voldemortLoom } from '../../worlds/hogwarts/pieces';
@@ -94,10 +95,26 @@ const cakeSlice = cached(() =>
   ]),
 );
 
+/** Hagrid's window far off through the trees (60 × 54): a warm lit square with a cross of bars. */
+const hutWindow = cached(() =>
+  svg({ w: 60, h: 54, name: 'mysterious-letter-hut-window', label: 'A lit window' }, [
+    piece(rect(2, 2, 56, 50, 4), '#3a2a20', { shadow: false }),
+    piece(rect(8, 8, 44, 38, 2), C.candle, { edge: 'cut', fibre: false, shadow: false }),
+    piece(rect(28, 8, 4, 38), '#3a2a20', { edge: 'cut', fibre: false, shadow: false }),
+    piece(rect(8, 25, 44, 4), '#3a2a20', { edge: 'cut', fibre: false, shadow: false }),
+  ]),
+);
+
 /** An empty box over Harry's wand: something for the his-turn ring to sit on (nothing drawn). */
 const wandSpot = cached(() => svg({ w: 110, h: 140, name: 'mysterious-letter-wand-spot' }, []));
 
 // ---------------------------------------------------------------- sounds
+
+/** A gasp: the mouth falls open and stays open (the next line they say shuts it again). */
+function gasp<K extends string>(k: Kit<K>, el: HTMLElement): void {
+  k.part(el, 'mouthOpen').forEach((m) => (m.style.opacity = '1'));
+  k.part(el, 'mouth').forEach((m) => (m.style.opacity = '0'));
+}
 
 /** Biting a rock cake: three dry crunches. */
 function crunch(): void {
@@ -107,7 +124,7 @@ function crunch(): void {
 
 // ------------------------------------------------------------------ cast
 
-const cast = {} as Record<'harry' | 'hermione' | 'hedwig' | 'voldemort' | 'hagrid' | 'letter' | 'wandLight' | 'cake', HTMLElement>;
+const cast = {} as Record<'harry' | 'hermione' | 'hedwig' | 'voldemort' | 'hagrid' | 'letter' | 'envelope' | 'wandLight' | 'cake', HTMLElement>;
 /** Scene 1's owl post: Hedwig and the envelope. */
 let post: ReturnType<typeof owlPost.set>;
 
@@ -154,7 +171,7 @@ export default defineCartoon({
     scared: { who: 'harry', text: 'The forest? At night? What if it’s something scary?' },
     together: { who: 'hermione', text: 'Then we’ll be brave together. Look, Hedwig wants to show us the way!' },
     // 2. Moonrise
-    crept: { who: 'narrator', text: 'So out they crept across the grounds, under the big round moon.' },
+    crept: { who: 'narrator', text: 'So out they crept across the grounds, under the moon.' },
     whoSent: { who: 'harry', text: 'Who do you think sent it, Hermione?' },
     guess: { who: 'hermione', text: 'Someone who knows Hedwig very well. Look how she leads the way!' },
     edge: { who: 'harry', text: 'She’s flying into the Forbidden Forest. It’s so dark in there!' },
@@ -173,20 +190,20 @@ export default defineCartoon({
     expelliarmus: { who: 'harry', text: 'Expelliarmus!' },
     myWand: { who: 'voldemort', text: 'My WAND! Where has it gone?' },
     surprise: { who: 'hermione', text: 'It’s not a secret. It’s a surprise! Maybe even a party!' },
-    hateParties: { who: 'voldemort', text: 'A PARTY? Bah! I HATE parties!' },
+    hateParties: { who: 'voldemort', text: 'A PARTY? Ugh! I HATE parties!' },
     youDidIt: { who: 'harry', text: 'You did it, {name}! He’s gone!' },
     weDidIt: { who: 'harry', text: 'We did it! He’s gone!' },
     hagridsLight: { who: 'hermione', text: 'Look, a light in the trees! It’s Hagrid’s hut!' },
     // 4. Hagrid's hut
     surpriseHagrid: { who: 'hagrid', text: 'SURPRISE! Happy birthday, Hedwig!' },
     yourLetter: { who: 'harry', text: 'It’s Hedwig’s birthday? Hagrid, did YOU send the letter?' },
-    oneYear: { who: 'hagrid', text: 'I did! A year ago I gave her to yeh. So today she gets a cake!' },
+    oneYear: { who: 'hagrid', text: 'I did! It’s her birthday today. A year ago I gave her to yeh!' },
     ownInvite: { who: 'hermione', text: 'So Hedwig carried her OWN party invitation?' },
     bestOwl: { who: 'hagrid', text: 'Who better? She’s the best owl in the world!' },
     rockCake: { who: 'hagrid', text: 'Rock cake, anyone? Made ’em meself!' },
-    crunch: { who: 'hermione', text: 'Crunch! Er… I think I’ll have birthday cake, please.' },
+    crunch: { who: 'hermione', text: 'Er… I think I’ll have birthday cake, please.' },
     slice: { who: 'harry', text: 'And a slice for {name}, for being so brave!' },
-    end: { who: 'narrator', text: 'And Hedwig had the very first slice.' },
+    end: { who: 'narrator', text: 'And that was Hedwig’s best birthday ever.' },
   },
   scenes: [
     // ==================================================== 1. The common room
@@ -200,10 +217,12 @@ export default defineCartoon({
         k.light(620, 520, 150, { strength: 0.35, flicker: true, z: 5 });
         cast.harry = k.character('harry', { x: 190, y: 400, w: 250 });
         cast.hermione = k.character('hermione', { x: 830, y: 400, w: 250, flip: true });
+        k.prop('spellbook', { x: 880, y: 560, w: 120, z: 12 });
         // Hedwig comes in by the window, on the left.
         post = owlPost.set(k, { to: cast.harry, from: 'left' });
         cast.hedwig = post.owl;
-        cast.letter = k.add(openLetter(), { x: 410, y: 90, w: 360, z: 27 });
+        // The open letter is a close-up over the room (above the veil that dims it), so it sits above the lights.
+        cast.letter = k.add(openLetter(), { x: 410, y: 150, w: 360, z: 38 });
         k.set(cast.letter, { opacity: 0 });
         k.set(k.part(cast.letter, 'ink'), { opacity: 0 });
       },
@@ -219,27 +238,33 @@ export default defineCartoon({
         await k.wait(700);
         await owlPost.play(k, post, { stay: true });
         k.float(hedwig, 6, 2.2);
+        // He picks it up and holds it out where everyone can see it.
+        k.sfx.page();
+        await k.to(post.letter, 0.6, { x: '+=190', y: '-=20', scale: 1.6, rotation: 0 });
         await k.all(k.say('hedwigLetter', harry), k.hop(hermione, 20));
         await k.say('noName', hermione);
 
-        // He opens it: the seal pops, and the letter is blank.
-        const [ex, ey] = [post.letter.offsetLeft + 55, post.letter.offsetTop + 40];
+        // He opens it: the seal pops, the room dims, and the letter is blank.
+        const [ex, ey] = centreOf(post.letter);
         k.sfx.page();
         k.sparkle(ex, ey, 8, 80);
         await k.vanish(post.letter, 0.3);
+        const veil = k.dim(0, '#1a1020');
+        void k.fade(veil, 0.4, 0.5);
         await k.appear(letter, 0.5);
         await k.say('empty', harry);
         await k.all(k.say('invisible', hermione), k.hop(hermione, 24));
 
         // His first turn: tap the letter and the ink comes back.
         const how = await k.tapToHelp(letter, { ask: 'askInk', nudge: 'nudgeInk', helped: 'helpedInk', by: hermione });
-        if (how === 'helped') await castSpell(k, hermione, [590, 220]);
+        if (how === 'helped') await castSpell(k, hermione, [590, 280]);
         k.fx.twinkle();
-        k.sparkle(590, 220, 16, 260);
+        k.sparkle(590, 280, 16, 260);
         await k.to(k.part(letter, 'ink'), 1.4, { opacity: 1, ease: 'sine.inOut' });
         await k.say('wordsBack', hermione);
         await k.say('readLetter', harry);
         k.sfx.page();
+        void k.fade(veil, 0, 0.5);
         await k.vanish(letter, 0.4);
 
         // A forest at night! But Hedwig knows the way.
@@ -267,23 +292,20 @@ export default defineCartoon({
       async play(k) {
         const { harry, hermione, hedwig } = cast;
         // Out they creep, under the moon, with Hedwig flying over the trees ahead of them.
-        await k.say('crept');
-        await sneakIn.play(k, { walkers: [hermione, harry], distance: 1100, seconds: 2.4, hops: 8 });
+        await k.all(k.say('crept'), k.wait(600).then(() => sneakIn.play(k, { walkers: [hermione, harry], distance: 1100, seconds: 2.4, hops: 8 })));
         k.set(hedwig, { opacity: 1 });
-        await swoopIn(k, hedwig, 'left', 1.2);
+        await swoopIn(k, hedwig, 'right', 1.2);
         await hoot(k, hedwig, 1);
         k.face(harry, true);
         await k.say('whoSent', harry);
         await k.say('guess', hermione);
 
-        // Off she flies, into the forest.
-        await flyOff(k, hedwig, 'right', 1.2);
-        k.face(harry, false);
+        // Off she flies, over their heads to the pines: the Forbidden Forest.
+        await flyOff(k, hedwig, 'left', 1.4);
         await k.all(k.say('edge', harry), k.shake(harry, 3, 2));
         await k.say('needLight', hermione);
 
         // Lumos: the tip of his wand lights up.
-        k.face(harry, true);
         await k.all(k.say('lumos', harry), k.wait(300).then(() => castSpell(k, harry)));
         k.fx.twinkle();
         // Facing left, his wand is on his left side: its tip at x + (300 − 248) of his 300-wide box.
@@ -311,10 +333,12 @@ export default defineCartoon({
         cast.hedwig = k.character('hedwig', { x: 40, y: 110, w: 170, z: 12, pose: 'fly' });
         k.float(cast.hedwig, 7, 2.2);
         cast.wandLight = lumos(k, wandTip(HARRY_FOREST), true);
+        // The letter, in Harry's other hand: what Voldemort wants.
+        cast.envelope = k.prop('owlPostLetter', { x: 330, y: 560, w: 100, z: 13 });
         cast.voldemort = voldemortLoom.set(k, { ...VOLDEMORT, flip: true });
       },
       async play(k) {
-        const { harry, hermione, hedwig, voldemort } = cast;
+        const { harry, hermione, hedwig, voldemort, envelope } = cast;
         await k.wait(600);
         // Hedwig's urgent double hoot: look out!
         doubleHoot();
@@ -322,11 +346,20 @@ export default defineCartoon({
 
         // The creak, the cold, the hiss, and he looms out of the dark.
         await voldemortLoom.approach(k, { line: 'creak', trembling: [harry, hermione] });
+        // They gasp and step back as he rises.
+        gasp(k, harry);
+        gasp(k, hermione);
+        void k.to([harry, hermione, envelope], 0.5, { x: -18 });
         await voldemortLoom.loom(k, voldemort, { lines: ['whatsInLetter', 'secrets'], frighten: [harry, hermione] });
-        await voldemortLoom.cutBack(k, { line: 'notScared', by: harry, before: () => k.hop(harry, 18) });
+        // Back to the heroes: Harry steps up again and holds the letter tight.
+        await voldemortLoom.cutBack(k, {
+          line: 'notScared',
+          by: harry,
+          before: () => k.all(k.to([harry, hermione, envelope], 0.4, { x: 0 }), k.to(envelope, 0.4, { y: -30 })),
+        });
 
         // A swirl of his cloak (and a puff of dark smoke), and he lifts his wand to the sky.
-        k.puff(890, 430, 260, '#2a2633');
+        k.puff(890, 570, 220, '#2a2633');
         await k.wait(150);
         k.pose(voldemort, 'default');
         k.set(voldemort, { y: DROP });
@@ -363,10 +396,11 @@ export default defineCartoon({
         k.sparkle(590, 300, 16, 220);
         await k.all(k.say(how === 'tapped' ? 'youDidIt' : 'weDidIt', harry), k.hop(hermione, 30, 2), hoot(k, hedwig, 2));
 
-        // A warm light through the trees.
-        const hut = k.light(1080, 470, 110, { strength: 0.6 });
-        k.set(hut, { opacity: 0 });
-        await k.to(hut, 1.2, { opacity: 0.6 });
+        // A warm lit window through the trees: Hagrid's hut.
+        const win = k.add(hutWindow(), { x: 1040, y: 440, w: 60, z: 3 });
+        const hut = k.light(1070, 467, 110, { strength: 0.6 });
+        k.set([win, hut], { opacity: 0 });
+        await k.all(k.to(hut, 1.2, { opacity: 0.6 }), k.to(win, 1.2, { opacity: 1 }));
         await k.say('hagridsLight', hermione);
         await flyOff(k, hedwig, 'right', 1.2);
       },
@@ -379,12 +413,13 @@ export default defineCartoon({
         k.backdrop('hagrids-hut');
         k.music('cosy');
         // A fire in the hearth, the round table in front of it with the birthday cake, and Hedwig beside it.
-        k.prop('flame', { x: 450, y: 400, w: 130, z: 2 });
-        k.light(520, 470, 160, { strength: 0.4, flicker: true, z: 5 });
+        // (the fire to the right of the hearth, so the cake's candles stand clear of the flames)
+        k.prop('flame', { x: 545, y: 420, w: 110, z: 2 });
+        k.light(590, 480, 150, { strength: 0.4, flicker: true, z: 5 });
         k.add(teaTable('mysterious-letter-table'), { x: 380, y: 545, w: 320, z: 14 });
-        cast.cake = k.prop('birthdayCake', { x: 450, y: 395, w: 180, z: 15 });
+        cast.cake = k.prop('birthdayCake', { x: 395, y: 432, w: 150, z: 15 });
         cast.hagrid = k.character('hagrid', { x: 780, y: 232, w: 380, flip: true });
-        cast.hedwig = k.character('hedwig', { x: 610, y: 432, w: 120, z: 16 });
+        cast.hedwig = k.character('hedwig', { x: 580, y: 462, w: 115, z: 16 });
         cast.harry = k.character('harry', { x: 40, y: 370, w: 250, z: 11 });
         cast.hermione = k.character('hermione', { x: 220, y: 378, w: 240 });
         k.set([cast.harry, cast.hermione], { opacity: 0 });
@@ -414,24 +449,34 @@ export default defineCartoon({
         await k.say('bestOwl', hagrid);
         await k.all(hoot(k, hedwig, 1), flap(k, hedwig, 3));
 
-        // A rock cake. Crunch.
+        // A rock cake, set down on the table in front of Hermione. She tries it: crunch.
         k.music('cosy');
         await k.say('rockCake', hagrid);
-        const rock = k.add(rockCake(), { x: 740, y: 470, w: 70, z: 30 });
+        const rock = k.add(rockCake(), { x: 395, y: 545, w: 64, z: 17 });
         k.set(rock, { opacity: 0 });
+        k.fx.pop();
         await k.appear(rock, 0.3);
-        k.fx.whizz();
-        await k.to(rock, 0.8, { x: -400, y: -20, rotation: -200, ease: 'power1.inOut' });
+        await k.wait(400);
         crunch();
+        k.puff(427, 560, 60, '#8a7a64');
         await k.all(k.shake(hermione, 4, 2), k.vanish(rock, 0.3));
         await k.say('crunch', hermione);
         laugh();
         bellyLaugh();
         await k.all(k.shake(hagrid, 4, 3), k.shake(harry, 3, 3));
 
-        // A slice for him: it flies out of the cake towards the screen.
+        // The very first slice for the birthday owl.
+        const first = k.add(cakeSlice(), { x: 430, y: 500, w: 70, z: 17 });
+        k.set(first, { opacity: 0 });
+        await k.appear(first, 0.3);
+        k.fx.whizz();
+        await k.to(first, 0.6, { x: 120, y: 30, ease: 'power1.inOut' });
+        k.sparkle(620, 540, 8, 80);
+        await k.all(hoot(k, hedwig, 2), k.hop(hedwig, 20));
+
+        // And a slice for him: it flies out of the cake towards the screen.
         await k.say('slice', harry);
-        const bit = k.add(cakeSlice(), { x: 490, y: 420, w: 90, z: 40 });
+        const bit = k.add(cakeSlice(), { x: 430, y: 470, w: 90, z: 40 });
         k.set(bit, { opacity: 0 });
         await k.appear(bit, 0.3);
         k.fx.whizz();
@@ -440,9 +485,8 @@ export default defineCartoon({
         k.sparkle(560, 660, 14, 160);
         await k.vanish(bit, 0.25);
 
-        // And the very first slice for the birthday owl.
-        k.sparkle(590, 420, 8, 80);
-        await k.all(k.pop(cake, 1.08), hoot(k, hedwig, 2));
+        // Everyone together.
+        await k.pop(cake, 1.08);
         await warmEnding(k, { cast: [harry, hermione, hagrid, hedwig], end: 'end', confetti: true });
       },
     },
