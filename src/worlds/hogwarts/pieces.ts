@@ -28,6 +28,11 @@
  *     the middle (catch the letter), the piece comes in two parts and you put
  *     the turn between.
  *   - Everything waits through the kit, so a skipped scene stops where it was.
+ *   - A piece that is a whole place (the top of the ladder, Moon-Face's room, the
+ *     Great Hall) puts up its backdrop unless the scene already has one. Call
+ *     `k.backdrop('moon-room')` first if you like: `npm run check` reads those
+ *     calls, but it can't see inside a piece, and a place a piece shows is
+ *     "never shown" to it (a warning, not an error).
  *   - Spells are beams of light aimed at objects or the sky, never at a
  *     person's body. The villain's loom follows docs/STYLE.md: sound first, a
  *     slow loom, the camera in for a line or two, then back to the heroes.
@@ -35,7 +40,7 @@
 import { C } from '../../art/palette';
 import { cached, ellipse, piece, rect, svg, type Node } from '../../art/paper';
 import type { Kit, Mood, Side } from '../../kit';
-import { centreOf, placeAll, type Placed } from '../common/pieces';
+import { centreOf, ensureBackdrop, placeAll, type Placed } from '../common/pieces';
 import { sounds as commonSounds } from '../common/moves';
 import { moves, sounds } from './moves';
 
@@ -203,7 +208,7 @@ const FEAST: Record<string, [number, number]> = { pie: [120, 72], pumpkin: [92, 
 export const greatHall = {
   /** The hall laid for a feast. Nothing waits: legal in `set` (the candles bob gently from the start, and hold still on his turns). */
   set<K extends string>(k: Kit<K>, o: { guests: Placed[]; host?: Placed; music?: Mood }): HallActors {
-    k.backdrop('great-hall');
+    ensureBackdrop(k, 'great-hall');
     k.music(o.music ?? 'magic');
     // Candles drift in front of the wall (the backdrop's own are painted on).
     const candles = [[110, 250], [300, 170], [470, 280], [690, 190], [860, 270], [1030, 180]].map(([x, y], i) => {
@@ -282,7 +287,7 @@ export const spellLesson = {
     k: Kit<K>,
     o: { teacher: Placed; pupils: Placed[]; object?: string; desk?: [number, number]; backdrop?: string; music?: Mood },
   ): LessonActors {
-    k.backdrop(o.backdrop ?? 'classroom');
+    ensureBackdrop(k, o.backdrop ?? 'classroom');
     k.music(o.music ?? 'magic');
     const [dx, dy] = o.desk ?? [770, 500];
     const desk = k.add(lessonDesk(), { x: dx, y: dy, w: 200, z: 12 });
@@ -355,7 +360,7 @@ export interface BroomActors {
  *   broomArrival.play(k, a, { seconds?, stagger?, line?, by? })   they swoop in and land
  *
  * `set` options: `riders` are `{ id, x, y?, w?, z?, flip? }` (the place each ends up standing,
- * default y 330, w 200); `from` is the side they come in from (default 'left'). It returns
+ * default y 380, w 200, which sits the bust on the grass in `castle-grounds`); `from` is the side they come in from (default 'left'). It returns
  * `{ riders, brooms, from }`, with everyone parked off stage and every broom level.
  *
  * `play` options: `seconds` is each one's swoop (default 1.4), `stagger` the gap between
@@ -369,7 +374,7 @@ export const broomArrival = {
   /** The riders and their brooms, parked off stage. No motion: legal in `set`. */
   set<K extends string>(k: Kit<K>, o: { riders: Placed[]; from?: 'left' | 'right' }): BroomActors {
     const from = o.from ?? 'left';
-    const riders = placeAll(k, o.riders, { y: 330, w: 200 });
+    const riders = placeAll(k, o.riders, { y: 380, w: 200 });
     const brooms = riders.map((r) => {
       const w = parseFloat(r.style.width) || 200;
       const left = parseFloat(r.style.left) || 0;

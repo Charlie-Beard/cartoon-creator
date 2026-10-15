@@ -27,13 +27,18 @@
  *     the cartoon, and his turns are yours to write). Where a turn belongs in
  *     the middle, the piece comes in two parts and you put the turn between.
  *   - Everything waits through the kit, so a skipped scene stops where it was.
+ *   - A piece that is a whole place (the top of the ladder, Moon-Face's room, the
+ *     Great Hall) puts up its backdrop unless the scene already has one. Call
+ *     `k.backdrop('moon-room')` first if you like: `npm run check` reads those
+ *     calls, but it can't see inside a piece, and a place a piece shows is
+ *     "never shown" to it (a warning, not an error).
  *   - Scary pieces follow docs/STYLE.md: sound first, a slow loom, the camera
  *     in for a line or two, then back to the heroes. Nobody is touched.
  */
 import { C } from '../../art/palette';
 import { cached, circle, ellipse, ink, piece, rect, rng, svg, type Node, type Pt } from '../../art/paper';
 import type { Kit, Mood, Side } from '../../kit';
-import { centreOf, placeAll, type Placed } from '../common/pieces';
+import { centreOf, ensureBackdrop, placeAll, type Placed } from '../common/pieces';
 import { sounds as commonSounds } from '../common/moves';
 import { moves, sounds } from './moves';
 
@@ -127,7 +132,7 @@ export interface LadderActors {
 export const ladderArrival = {
   /** The cloud at the top of the ladder, the land in the sky, the friends hidden in the cloud below. No motion: legal in `set`. */
   set<K extends string>(k: Kit<K>, o: { land: string; friends: Placed[]; cover?: boolean | string; music?: Mood }): LadderActors {
-    k.backdrop('cloud-top');
+    ensureBackdrop(k, 'cloud-top');
     k.music(o.music ?? 'magic');
     const far = k.prop(`far-${o.land}`, { x: 290, y: 150, w: 600, z: 5 });
     const art = o.cover === true ? greyCloud() : o.cover || null;
@@ -274,7 +279,7 @@ const SLIDE_STANDS: [number, number][] = [[250, 700], [130, 690], [370, 690]];
 export const slipperySlip = {
   /** The tree at dusk, with each rider tiny and hidden. No motion: legal in `set`. */
   set<K extends string>(k: Kit<K>, o: { riders: { id: string; flip?: boolean }[]; music?: Mood }): SlideActors {
-    k.backdrop('tree');
+    ensureBackdrop(k, 'tree');
     k.music(o.music ?? 'adventure');
     const riders = o.riders.map((r) => {
       const el = k.character(r.id, { x: 0, y: 0, w: 110, z: 20, ...(r.flip ? { flip: true } : {}) });
@@ -382,7 +387,7 @@ export const teaTime = {
     k: Kit<K>,
     o: { guests: Placed[]; centre?: { id: string; x: number; y: number; w?: number }; cups?: [number, number][]; candle?: boolean; music?: Mood; tableName?: string },
   ): TeaActors {
-    k.backdrop('moon-room');
+    ensureBackdrop(k, 'moon-room');
     k.music(o.music ?? 'cosy');
     k.light(590, 236, 200, { color: '#c9d4ff', strength: 0.18 });
     if (o.candle) k.light(470, 520, 170, { strength: 0.3, flicker: true });

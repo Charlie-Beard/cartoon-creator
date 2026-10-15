@@ -32,48 +32,29 @@
  * whistle is set up in scene 1 so the big turn pays it off.
  *
  * The kettle, the cloud-top place and the land's far view are in the
- * world (src/worlds/faraway/cloudtop.ts); the grey cloud, her desk and the
- * tea table are drawn here.
+ * world (src/worlds/faraway/cloudtop.ts), and the grey cloud and the tea
+ * table are in its set pieces (src/worlds/faraway/pieces.ts); her desk and
+ * her window going dark are drawn here.
  */
-import { C, cached, circle, defineCartoon, ellipse, ink, piece, raw, rect, rng, svg, type Node, type Pt } from '../../kit';
+import { C, cached, defineCartoon, ink, piece, raw, rect, svg, type Node } from '../../kit';
 import { moves as commonMoves, sounds as commonSounds } from '../../worlds/common/moves';
+import { noiseOff, sneakIn, warmEnding } from '../../worlds/common/pieces';
 import { moves as farawayMoves, sounds as farawaySounds } from '../../worlds/faraway/moves';
+import { greyCloud, ladderArrival, landMovesOn, snapDefeat, snapLoom, teaTime, trapdoorArrival } from '../../worlds/faraway/pieces';
 import meta from './meta';
 
 // The sounds and moves are the worlds' own (src/worlds/faraway/moves.ts and
-// common/moves.ts), shared with every Faraway episode; nothing in this
-// episode needs one of its own.
-const { blowAway, clank, heels, popBiscuit, snapRuler, whirr, whistle } = farawaySounds;
-const { buzz, laugh, pour, slam, ting } = commonSounds;
-const { beam, earCup, flutter, popOut, rattle, smackRuler, whistleKettle } = farawayMoves;
-const { together, wave } = commonMoves;
+// common/moves.ts), and the recurring bits of staging are the worlds' set
+// pieces (src/worlds/*/pieces.ts): the tea-time room, the climb up through
+// the cloud, Dame Snap's looming and her defeat, "the land is moving on",
+// the warm ending. What is left here is this episode's own: its lines, its
+// jokes, the desk and the window, and his two turns.
+const { clank, heels, popBiscuit, whirr, whistle } = farawaySounds;
+const { buzz, laugh, pour, ting } = commonSounds;
+const { beam, earCup, flutter, popOut, rattle, whistleKettle } = farawayMoves;
+const { wave } = commonMoves;
 
 // ------------------------------------------------------------------- art
-
-/** The thick grey cloud hiding the new land (680 × 380), with lazy swirls in it. */
-const greyCloud = cached(() => {
-  const r = rng(41);
-  const greys = ['#a9a6a6', '#bbb7b1', '#9c9a9e', '#b3afab'];
-  const puffs: Node[] = [];
-  for (let i = 0; i < 9; i++) {
-    const x = 70 + i * 68;
-    const lift = Math.sin((i / 8) * Math.PI) * 90;
-    puffs.push(piece(circle(x, 190 - lift - r() * 24, 74 + r() * 26), greys[i % greys.length], { shadow: i % 3 === 0, rough: 1.2 }));
-  }
-  const swirl = (cx: number, cy: number, size: number): Node => {
-    const pts: Pt[] = [];
-    for (let a = 0; a < Math.PI * 3.2; a += 0.3) pts.push([cx + Math.cos(a) * (a / 10) * size, cy + Math.sin(a) * (a / 10) * size * 0.7]);
-    return ink(pts, { width: 4, color: '#86838a', opacity: 0.8, wobble: 1 });
-  };
-  return svg({ w: 680, h: 380, name: 'whistling-kettle-cloud', label: 'a thick grey cloud' }, [
-    piece(ellipse(340, 260, 330, 110), '#8f8d92', { rough: 1.3 }),
-    ...puffs,
-    piece(ellipse(340, 250, 310, 96), '#b7b3ae', { shadow: false, rough: 1.2 }),
-    swirl(220, 200, 46),
-    swirl(470, 170, 54),
-    swirl(350, 280, 38),
-  ]);
-});
 
 /** Andika lettering in chalk. */
 const chalk = (x: number, y: number, s: string, size: number): Node =>
@@ -96,24 +77,14 @@ const snapDesk = cached(() =>
   ]),
 );
 
-/** A low round tea table (300 × 130) for Moon-Face's room. */
-const teaTable = cached(() =>
-  svg({ w: 300, h: 130, name: 'whistling-kettle-table' }, [
-    piece(rect(40, 40, 18, 86, 3), C.barkDark, { edge: 'cut' }),
-    piece(rect(242, 40, 18, 86, 3), C.barkDark, { edge: 'cut' }),
-    piece(rect(140, 50, 20, 76, 3), C.bark, { edge: 'cut' }),
-    piece(ellipse(150, 44, 146, 18), C.brownDark, { shadow: false }),
-    piece(ellipse(150, 34, 146, 24), C.wood),
-    piece(ellipse(150, 32, 120, 16), C.cream, { edge: 'cut', fibre: false, opacity: 0.85 }),
-  ]),
-);
-
 /** Her window going dark once she has left it (covers the lit window in snap-school). */
 const darkPane = cached(() => svg({ w: 40, h: 72, name: 'whistling-kettle-pane' }, [piece(rect(4, 4, 32, 64, 14), '#2c2a31', { edge: 'cut', fibre: false, shadow: false })]));
 
 // ------------------------------------------------------------------ cast
 
-const cast = {} as Record<'mf' | 'silky' | 'pan' | 'snap' | 'kettle' | 'tin' | 'cloud' | 'far' | 'pane' | 'lamp' | 'front', HTMLElement>;
+const cast = {} as Record<'mf' | 'silky' | 'pan' | 'snap' | 'kettle' | 'tin' | 'pane' | 'lamp', HTMLElement>;
+/** The top of the ladder in scene 2: the grey cloud, the land behind it and everyone climbing up. */
+let climb: ReturnType<typeof ladderArrival.set>;
 
 /** Where the kettle stands in each scene that has it (so steam and taps line up). */
 const KETTLE_DESK = { x: 500, y: 340, w: 140 };
@@ -172,18 +143,16 @@ export default defineCartoon({
     {
       name: 'Tea time',
       set(k) {
+        // Moon-Face's round room laid for tea, with the tin of pop biscuits still to arrive.
         k.backdrop('moon-room');
-        k.music('cosy');
-        k.light(590, 236, 200, { color: '#c9d4ff', strength: 0.18 });
-        k.ambient('dust', { count: 14, area: [200, 120, 800, 420] });
-        k.add(teaTable(), { x: 330, y: 545, w: 300, z: 12 });
-        k.prop('teacup', { x: 352, y: 508, w: 74, z: 13 });
-        k.prop('teacup', { x: 540, y: 508, w: 74, z: 13 });
-        cast.tin = k.prop('biscuit-tin', { x: 430, y: 466, w: 110, z: 13 });
-        cast.mf = k.character('moonface', { x: 620, y: 318, w: 260 });
-        cast.silky = k.character('silky', { x: 880, y: 220, w: 210, z: 11 });
-        cast.pan = k.character('saucepan', { x: 110, y: 330, w: 250, z: 11 });
-        k.set([cast.silky, cast.pan, cast.tin], { opacity: 0 });
+        const room = teaTime.set(k, {
+          guests: [{ id: 'moonface', x: 620, y: 318, w: 260 }, { id: 'silky', x: 880, y: 220, w: 210, z: 11 }, { id: 'saucepan', x: 110, y: 330, w: 250, z: 11 }],
+          tableName: 'whistling-kettle-table',
+        });
+        [cast.mf, cast.silky, cast.pan] = room.guests;
+        cast.tin = room.centre;
+        k.set(cast.silky, { opacity: 0 });
+        trapdoorArrival.set(k, cast.pan);
       },
       async play(k) {
         const { mf, silky, pan, tin } = cast;
@@ -206,14 +175,7 @@ export default defineCartoon({
         await popOut(k, 470, 470, 1);
 
         // Clank, clank, CLANK: up through the trapdoor comes the Saucepan Man.
-        k.set(pan, { y: 330, opacity: 1 });
-        for (let i = 0; i < 3; i++) {
-          clank(2, 0.12);
-          await k.to(pan, 0.38, { y: 330 - ((i + 1) * 330) / 3, ease: 'power1.out' });
-          void rattle(k, pan);
-        }
-        clank(3, 0.09);
-        await k.pop(pan, 1.05);
+        await trapdoorArrival.play(k, pan);
 
         // No kettle!
         k.fx.uhoh();
@@ -231,15 +193,7 @@ export default defineCartoon({
         await k.say('branch', pan);
 
         // Far above: a thin whistle, then clack, clack.
-        await k.wait(300);
-        whistle(1.6, 0.35);
-        await k.all(...[mf, silky, pan].map((el, i) => k.wait(i * 120).then(() => k.to(el, 0.4, { y: '-=14', rotation: i === 1 ? 4 : -4 }))));
-        await k.wait(500);
-        heels(2, 0.5, 0.3);
-        await k.wait(800);
-        await k.all(k.say('listen', silky), flutter(k, silky, 6));
-        await together(k, [mf, silky, pan], 0.4, { y: '+=14', rotation: 0 });
-        await k.wait(300);
+        await noiseOff(k, { listeners: [mf, silky, pan], sound: () => whistle(1.6, 0.35), then: () => heels(2, 0.5, 0.3), line: 'listen', by: silky, during: () => flutter(k, silky, 6) });
       },
     },
 
@@ -247,48 +201,23 @@ export default defineCartoon({
     {
       name: 'Above the cloud',
       set(k) {
+        // The top of the ladder: the new land hidden in the sky behind a thick grey cloud, everyone still down in the cloud.
         k.backdrop('cloud-top');
-        k.music('magic');
-        cast.far = k.prop('far-snap-school', { x: 290, y: 150, w: 600, z: 5 });
-        cast.cloud = k.add(greyCloud(), { x: 240, y: 40, w: 700, z: 8 });
-        cast.mf = k.character('moonface', { x: 200, y: 400, w: 240 });
-        cast.silky = k.character('silky', { x: 480, y: 382, w: 210, z: 11 });
-        cast.pan = k.character('saucepan', { x: 880, y: 404, w: 240, flip: true });
-        cast.front = k.prop('cloud-front', { x: 0, y: 600, z: 22 });
-        k.set(cast.far, { opacity: 0 });
-        // Everyone starts down in the cloud, out of sight, and pops up.
-        k.set([cast.mf, cast.silky, cast.pan], { y: 320 });
+        climb = ladderArrival.set(k, {
+          land: 'snap-school',
+          cover: greyCloud('whistling-kettle-cloud'),
+          friends: [{ id: 'moonface', x: 200, y: 400, w: 240 }, { id: 'saucepan', x: 880, y: 404, w: 240, flip: true }, { id: 'silky', x: 480, y: 382, w: 210, z: 11 }],
+        });
+        [cast.mf, cast.pan, cast.silky] = climb.friends;
       },
       async play(k) {
-        const { mf, silky, pan, cloud, far } = cast;
-        k.fx.wind(2.5);
-        await k.wait(300);
-        k.fx.patter(4, 0.12);
-        await k.to(mf, 0.7, { y: 0, ease: 'back.out(1.3)' });
-        clank(3, 0.12);
-        await k.to(pan, 0.7, { y: 0, ease: 'back.out(1.3)' });
-        whirr(8);
-        void flutter(k, silky, 6);
-        await k.to(silky, 0.9, { y: 0, ease: 'back.out(1.2)' });
-        // The grey cloud churns slowly, then settles.
-        void k.to(cloud, 2.4, { scale: 1.03, rotation: 1, ease: 'sine.inOut' });
-        await k.say('newLand', mf);
-        await k.to(cloud, 0.6, { scale: 1, rotation: 0, ease: 'sine.inOut' });
+        const { mf, silky, pan } = cast;
+        // Up through the cloud they pop, and the grey cloud churns slowly while Moon-Face says what it hides.
+        await ladderArrival.play(k, climb, { line: 'newLand', by: mf });
 
         // His turn: blow the cloud away.
-        const how = await k.tapToHelp(cloud, { ask: 'askCloud', nudge: 'nudgeCloud', helped: 'spellCloud', by: mf, helper: silky, size: 300 });
-        if (how === 'helped') {
-          k.fx.spell();
-          await k.beam([590, 470], [590, 240], C.goldLight, 0.4);
-        }
-        blowAway();
-        for (const [x, y] of [[380, 180], [590, 120], [800, 190], [470, 300], [710, 310]] as const) {
-          k.puff(x, y, 200, '#c9c5bf');
-          await k.wait(90);
-        }
-        await k.all(k.to(cloud, 1.1, { opacity: 0, scale: 1.25, y: -60, ease: 'power2.out' }), k.fade(far, 1, 1.2));
-        k.sparkle(590, 240, 14, 260);
-        if (how === 'tapped') await k.all(k.say('thanksCloud', mf), k.hop(mf, 30, 2));
+        const how = await k.tapToHelp(climb.cover!, { ask: 'askCloud', nudge: 'nudgeCloud', helped: 'spellCloud', by: mf, helper: silky, size: 300 });
+        await ladderArrival.reveal(k, climb, { how, thanks: 'thanksCloud', by: mf });
 
         // It's Dame Snap's School.
         k.music('sneaky');
@@ -328,13 +257,12 @@ export default defineCartoon({
         k.set(cast.snap, { opacity: 0, y: 70 });
         k.set(cast.pane, { opacity: 0 });
         // The friends tiptoe in from the left.
-        k.set([cast.mf, cast.pan, cast.silky], { x: -520 });
+        sneakIn.set(k, [cast.mf, cast.pan, cast.silky]);
       },
       async play(k) {
         const { mf, pan, silky, kettle, snap, pane, lamp } = cast;
-        k.fx.sneak();
         void flutter(k, silky, 9);
-        await k.all(k.walk(mf, 520, 1.6, 6), k.walk(pan, 520, 1.6, 6), k.to(silky, 1.6, { x: 0, ease: 'sine.inOut' }));
+        await sneakIn.play(k, { walkers: [mf, pan], gliders: [silky] });
 
         // He sees it, and SHOUTS.
         void k.camera({ zoom: 1.3, x: 560, y: 420 }, 0.8);
@@ -348,32 +276,19 @@ export default defineCartoon({
         k.silence();
         await k.wait(400);
         await k.all(k.fade(pane, 1, 0.8), k.fade(lamp, 0, 0.8));
-        const clacks = k.say('clack');
-        await k.wait(1100);
-        for (const loud of [0.45, 0.75, 1]) {
-          heels(1, 0.3, loud);
-          void k.shake(pan, 3, 1);
-          await k.wait(620);
-        }
-        await clacks;
-        k.music('spooky');
-        k.fx.rumble(1.2);
-        await k.all(k.to(snap, 1.3, { opacity: 1, y: 0, ease: 'power2.out' }), k.shake(mf, 5, 2), k.shake(silky, 4, 2));
-        void k.camera({ zoom: 1.3, x: 910, y: 400 }, 1);
-        k.pose(snap, 'default');
-        await k.say('who', snap);
-
-        // The ruler comes down on the desk: SMACK.
-        await smackRuler(k, snap, () => {
-          void k.shake(kettle, 4, 1);
-          void k.all(k.shake(mf, 5, 1), k.shake(pan, 5, 1));
+        // Clack… clack… CLACK, then she looms in, smacks her ruler on the desk, and it cuts back to the heroes.
+        await snapLoom.approach(k, { line: 'clack', trembling: [pan] });
+        await snapLoom.loom(k, snap, {
+          lines: ['who', 'whistled'],
+          frighten: [mf, silky],
+          onSmack: () => {
+            void k.shake(kettle, 4, 1);
+            void k.all(k.shake(mf, 5, 1), k.shake(pan, 5, 1));
+          },
         });
-        await k.say('whistled', snap);
 
         // Back to the heroes: he's got it wrong again.
-        await k.camera({}, 0.8);
-        await earCup(k, pan, true);
-        await k.say('whiskers', pan);
+        await snapLoom.cutBack(k, { line: 'whiskers', by: pan, before: () => earCup(k, pan, true) });
         void earCup(k, pan, false);
 
         // She shrieks and stomps.
@@ -403,24 +318,9 @@ export default defineCartoon({
         await first;
         k.pose(snap, 'default');
         await k.say('stopIt', snap);
-        // Again, louder: she stomps and stomps, and SNAP goes her own ruler.
+        // Again, louder: she stomps and stomps, and SNAP goes her own ruler. Off she stomps, in a huff.
         void whistleKettle(k, kettle, KETTLE_DESK, 1.2);
-        k.pose(snap, 'stomp');
-        k.fx.stomp(3, 0.35);
-        void k.quake(6);
-        await k.to(snap, 0.18, { y: -16, yoyo: true, repeat: 5, ease: 'power1.inOut' });
-        snapRuler();
-        k.pose(snap, 'defeated');
-        k.puff(930, 420, 160, C.stoneLight);
-        await k.camera({ zoom: 1.25, x: 910, y: 420 }, 0.7);
-        await k.say('ruler', snap);
-        await k.camera({}, 0.7);
-        // Off she stomps, in a huff. A door slams somewhere inside.
-        heels(6, 0.26);
-        await k.exit(snap, 'right', 1.6);
-        await k.wait(200);
-        slam();
-        void k.quake(4);
+        await snapDefeat(k, snap, { line: 'ruler' });
         k.music('triumph');
         k.sparkle(590, 300, 16, 220);
         await k.all(k.say(how === 'tapped' ? 'wellDone' : 'whatAWhistle', silky), k.hop(mf, 30, 2), flutter(k, silky, 6));
@@ -431,13 +331,8 @@ export default defineCartoon({
         clank(3, 0.1);
         await k.all(k.say('oldFriend', pan), k.shake(pan, 4, 2), k.shake(kettle, 4, 2));
 
-        // The ground rumbles: the land is moving on.
-        k.music('adventure');
-        k.fx.rumble(2.5);
-        void k.quake(6);
-        await k.all(k.say('moving', mf), k.shake(mf, 5, 2));
-        k.fx.whizz();
-        await k.all(k.exit(mf, 'left', 0.6), k.exit(silky, 'left', 0.7), k.exit(pan, 'left', 0.8), k.to(kettle, 0.8, { x: '-=820', ease: 'power2.in' }));
+        // The ground rumbles: the land is moving on. Back to the ladder!
+        await landMovesOn(k, { friends: [mf, silky, pan], by: mf, line: 'moving', carrying: [kettle] });
       },
     },
 
@@ -445,18 +340,17 @@ export default defineCartoon({
     {
       name: 'Tea at last',
       set(k) {
+        // The same round room, the kettle steaming on the table, and a candle burning low over it.
         k.backdrop('moon-room');
-        k.music('cosy');
-        k.light(590, 236, 210, { color: '#c9d4ff', strength: 0.2 });
-        k.light(470, 520, 170, { strength: 0.3, flicker: true });
-        k.ambient('dust', { count: 14, area: [200, 120, 800, 420] });
-        k.add(teaTable(), { x: 330, y: 545, w: 300, z: 12 });
-        k.prop('teacup', { x: 342, y: 508, w: 74, z: 13 });
-        k.prop('teacup', { x: 560, y: 508, w: 74, z: 13 });
-        cast.kettle = k.prop('kettle', { ...KETTLE_TABLE, z: 13 });
-        cast.mf = k.character('moonface', { x: 640, y: 318, w: 260 });
-        cast.silky = k.character('silky', { x: 890, y: 230, w: 210, z: 11 });
-        cast.pan = k.character('saucepan', { x: 100, y: 334, w: 250, z: 11 });
+        const room = teaTime.set(k, {
+          guests: [{ id: 'moonface', x: 640, y: 318, w: 260 }, { id: 'silky', x: 890, y: 230, w: 210, z: 11 }, { id: 'saucepan', x: 100, y: 334, w: 250, z: 11 }],
+          centre: { id: 'kettle', ...KETTLE_TABLE },
+          cups: [[342, 508], [560, 508]],
+          candle: true,
+          tableName: 'whistling-kettle-table',
+        });
+        [cast.mf, cast.silky, cast.pan] = room.guests;
+        cast.kettle = room.centre;
       },
       async play(k) {
         const { mf, silky, pan, kettle } = cast;
@@ -496,15 +390,9 @@ export default defineCartoon({
         await k.all(k.say('tea', pan), k.hop(pan, 36, 1));
 
         // The kettle whistles its tune, and everyone bounces along.
-        k.music('triumph');
         void whistleKettle(k, kettle, KETTLE_TABLE, 1);
         void beam(k, mf, true);
-        await k.all(...[pan, mf, silky].map((el, i) => k.wait(i * 220).then(() => k.hop(el, 30, 3))));
-        k.sparkle(590, 300, 18, 300);
-        k.fx.twinkle();
-        await k.wait(400);
-        await k.say('end');
-        await k.wait(1200);
+        await warmEnding(k, { cast: [pan, mf, silky], end: 'end' });
       },
     },
   ],

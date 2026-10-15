@@ -35,6 +35,7 @@ src/worlds/<id>/
   index.ts      defineWorld({ id, name, accent, about, characters, backdrops, props })
   *.ts          the drawing code (characters, places, props), split as suits
   moves.ts      the cast's signature sounds and moves (see "moves.ts" below)
+  pieces.ts     recurring set pieces, whole bits of staging (see "pieces.ts" below)
   palette.ts    the world's own colours, if any (never edit src/art/palette.ts for one world)
 ```
 
@@ -123,6 +124,42 @@ await moves.earCup(k, saucepan, true);       // async: (k, actor, …) animates 
   (docs/KIT.md, "Sounds").
 - `tests/unit/moves.test.ts` checks that the files exist and export
   functions. Add to the object with append-only edits.
+
+## pieces.ts
+
+Each world also has a `pieces.ts` of **set pieces**: the whole bits of
+staging that come back episode after episode, so a scene can be 20 lines
+instead of 100. `moves.ts` has the one-shot sounds and moves; a piece is
+made from them. `common/pieces.ts` has the world-neutral ones.
+
+| World | Pieces |
+|---|---|
+| common | `meanwhile`, `noiseOff`, `sneakIn`, `warmEnding` |
+| faraway | `ladderArrival`, `landMovesOn`, `slipperySlip`, `teaTime`, `trapdoorArrival`, `snapLoom`, `snapDefeat` |
+| hogwarts | `owlPost`, `greatHall`, `spellLesson`, `broomArrival`, `apparateArrival`, `voldemortLoom` |
+
+```ts
+import { ladderArrival } from '../../worlds/faraway/pieces';
+const a = ladderArrival.set(k, { land: 'snap-school', cover: true, friends });   // in set
+await ladderArrival.play(k, a, { line: 'newLand', by: a.friends[0] });            // in play
+```
+
+- A piece is an async function `(k, options)`, or an object of them.
+  Anything with an opening picture is split: `set(k, …)` builds it (no
+  waiting, no motion, so it is legal in a scene's `set`) and returns the
+  actors it made; `play(k, a, …)` animates them. Some have more parts
+  (`reveal`, `open`, `approach`, `loom`, `cutBack`) so his turn can go
+  between them: **a piece never calls `k.tapToHelp`**.
+- **Lines are keys, never text:** `line: 'newLand'`, listed in your
+  `lines`. The checker can't see ids inside a piece's options, so call
+  `k.backdrop('…')` yourself before a whole-place piece's `set` (it only
+  puts one up if there is none), and draw the cast with `k.character`.
+- Pieces use only the kit's scoped waits, so a skipped scene stops where
+  it was, and move one thing at a time.
+- Read a piece's options in `npm run catalogue -- <world> pieces` (and
+  `--id <piece>` for its full doc and example), not the source. Promote a
+  scene you wrote that a second episode would want; appends only, as with
+  the catalogues. `tests/unit/pieces.test.ts` checks they load.
 
 ## Adding to a world
 

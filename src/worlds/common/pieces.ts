@@ -22,6 +22,10 @@
  *     so a skipped scene stops where it was.
  *   - One thing moves at a time, and a sound goes with every action that
  *     matters. A piece never starts motion that outlives it.
+ *
+ * Also here, for the world pieces to share: `Placed` and `placeAll` (put a few
+ * characters on stage from a list), `centreOf` (where an actor's middle is now)
+ * and `ensureBackdrop` (a whole-place piece's backdrop, unless the scene has one).
  */
 import { gsap } from 'gsap';
 import type { Kit, Mood } from '../../kit';
@@ -55,6 +59,16 @@ export function placeAll<K extends string>(k: Kit<K>, list: Placed[], defaults: 
     if (p.pose) o.pose = p.pose;
     return k.character(p.id, o);
   });
+}
+
+/**
+ * Gives the scene its backdrop, unless it has one already. The pieces that
+ * are a whole place (the top of the ladder, Moon-Face's room) call this so a
+ * scene works with just the piece; call `k.backdrop('moon-room')` yourself
+ * first if you like (the checker reads those calls) or to choose another place.
+ */
+export function ensureBackdrop<K extends string>(k: Kit<K>, id: string): void {
+  if (!k.root.querySelector(':scope > .story-backdrop')) k.backdrop(id);
 }
 
 /** Where the middle of an actor is on the stage right now, counting any movement so far. Handy for aiming sparkles and puffs at someone. */

@@ -169,6 +169,11 @@ function whistle(): void {
 }
 ```
 
+Whole recurring scenes (the climb into a land, tea in Moon-Face's room,
+Dame Snap looming, the owl post, the Great Hall feast) are **set pieces**
+in `src/worlds/<world>/pieces.ts`: check them before staging a scene
+yourself (docs/WORLDS.md, "pieces.ts").
+
 ## Drawing one-off art
 
 Art only this cartoon needs (a lost kettle, a special door) is drawn in

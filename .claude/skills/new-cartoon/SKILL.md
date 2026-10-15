@@ -107,6 +107,15 @@ yourself when they're done, so no two agents edit the same file.
 - Lines in the order they're said, keys that say what each line is.
 - Each scene: `set` builds the opening picture (no waiting, no motion;
   hide later entrances with `k.set(el, { opacity: 0 })`), `play` runs it.
+- **Before staging a scene, check the set pieces**
+  (`npm run catalogue -- <world> pieces`; docs/WORLDS.md, "pieces.ts"):
+  the ladder arrival, "the land is moving on", the Slippery-Slip, tea in
+  Moon-Face's room, Dame Snap's loom and defeat, the owl post, the Great
+  Hall, a spell lesson, brooms and apparating, Voldemort's loom, a
+  "meanwhile…" cut, a noise off, the warm ending. Pass your line keys in;
+  keep his `k.tapToHelp` in your script, between a piece's parts. Vary
+  them (a different line, a different place, a twist) so episodes don't
+  feel the same.
 - Put a sound on every action that matters; music per scene; one thing
   moving at a time; a quiet beat after big moments. Use the world's
   `moves.ts` (`import { sounds, moves } from '../../worlds/<world>/moves'`)
