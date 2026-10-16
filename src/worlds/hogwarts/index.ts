@@ -31,6 +31,9 @@ import { snape } from './characters/snape';
 import { tabbyCat } from './characters/tabbyCat';
 import { peeves } from './characters/peeves';
 import { baron, baronLoom } from './characters/baron';
+import { mrsWeasley } from './characters/mrsWeasley';
+import { gnomeChief } from './characters/gnomeChief';
+import { bush, hedge } from './objects/garden';
 import { babyHarryArt } from './objects/babyHarry';
 import { bludgerArt } from './objects/bludger';
 import { candle } from './objects/floatingCandle';
@@ -519,6 +522,24 @@ export default defineWorld({
         'The Baron, Slytherin\'s house ghost (the books\' Bloody Baron, but always just "the Baron" here: "bloody" is a swear word to a six-year-old in the UK): a tall, gaunt, see-through grey-green ghost with blank staring eyes, a hollow face, a long pointed beard, a ruff and a heavy cloak hung with silver chains that clink (part `chains`, origin 150, 244). Cold and stern, and he says very little: slow, deep, few words. Even Peeves is terrified of him. He looms and glares but is never cruel; underneath he is gruff but fair, and on the children\'s side. Never draw or mention blood or stains.',
       voice: 'Slow, deep, cold old British man; very few words, long pauses.',
     },
+
+    mrsWeasley: {
+      name: 'Mrs Weasley',
+      art: mrsWeasley,
+      parts: PERSON_WAND,
+      about:
+        'Molly Weasley, Ron\'s mum: plump and kind, a round rosy freckled face, flaming ginger hair pinned in a messy bun with strands escaping, a plum cardigan and a flowery apron, a wand always in her hand. Warm and bustling, never still: "Ronald!", "Now, dears", "Honestly!". Fusses, feeds everyone, and goes fierce when cross, but the cross melts into a hug and a second helping. Quick, busy sentences in cosy UK English; she would never be truly unkind.',
+      voice: 'Warm, brisk, motherly British woman in her forties or fifties; bustling and a little breathless, a bit louder and sharper when cross, then melting back into kindness.',
+    },
+
+    gnomeChief: {
+      name: 'The Gnome Chief',
+      art: gnomeChief,
+      parts: PERSON,
+      about:
+        'The Gnome Chief, big grumpy old leader of the garden gnomes at the Burrow: the same bald, bumpy, potato-brown fellow with big pointy ears as the little gnomes, but older and grander, with a long scruffy grey beard, huge bushy grey eyebrows in a frown, a twig crown with a daisy in it and a little leaf cape. Glares and stomps; grumpy in a funny way, never truly frightening, and softens in the end (he only wants a go on the spin). Talks in short, gruff, grumbly lines ("Hmph." "Not in MY garden.").',
+      voice: 'Gruff, grumbly old man, low and gravelly, a bit pompous; short lines, slow and crotchety.',
+    },
   },
 
   backdrops: {
@@ -618,5 +639,7 @@ export default defineWorld({
     putOuter: { art: cached(() => putOuterArt()), size: [120, 120], about: "Dumbledore's Put-Outer: a silver lighter-like gadget that clicks street lamps out (and back on). Part lid flips up." },
     flyingMotorbike: { art: cached(() => flyingMotorbikeArt()), size: [440, 260], about: "Hagrid's huge flying motorbike, side-on facing right. Put Hagrid behind it (lower z) so his head and shoulders rise over the seat. The seat top is at y 108 in the box (x 104 to 264), and the space above it is empty. Part lamp is the headlamp." },
     babyHarry: { art: cached(() => babyHarryArt()), size: [220, 160], about: 'Baby Harry, asleep in a bundle of blankets, with a letter tucked in (part: letter).' },
+    hedge: { art: cached(() => hedge()), size: [520, 230], about: 'A long, tall, scruffy garden hedge in torn-paper clumps (the Burrow\'s garden); flat bottom on the ground line. Gnomes get flung over it, and things can hide behind it.' },
+    bush: { art: cached(() => bush()), size: [220, 170], about: 'A round leafy garden bush with a few flowers; one solid shape, flat bottom, so a gnome can hide behind it. Part leaves is a top layer that wobbles from its bottom centre [110, 166]; shake the whole prop to rustle.' },
   },
 });
