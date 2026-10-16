@@ -12,22 +12,23 @@
  *      turn: he taps the drum (or the Saucepan Man bangs it). BOOM, confetti,
  *      and the party starts. Silky brings his own cake, with his name on it,
  *      but the candles aren't lit.
- *   3. The candles. Silky's spell is blown away by the wind at the top of the
- *      world. The Saucepan Man stands by the cake as a clanky wall. His turn:
- *      he taps the candles and they light (Silky counts them: six). Hip, hip,
- *      hooray! He makes a secret wish, and his next turn blows them out (or
- *      the Saucepan Man helps him blow). The wish flies up to the stars. Then
- *      the ground rumbles: the land is moving on, and the ladder is far away.
- *      "Take a balloon each!"
- *   4. Home by balloon. Everyone floats down out of the sky to the foot of the
- *      Tree, holding a balloon, and lands safe. One last present: a balloon
- *      for him, floating out of the picture to him.
+ *   3. The candles. Every candle in the land is out, even the giant cake's.
+ *      Silky's spell is blown away by the wind at the top of the world, so the
+ *      Saucepan Man stands by the cake as a clanky wall. His turn: he taps the
+ *      candles and they light, and so does every candle on the giant cake
+ *      (Silky counts his: six). Hip, hip, hooray! He makes a secret wish, and
+ *      his next turn blows them out (or the Saucepan Man helps him blow). The
+ *      wish flies up to the stars. Then the ground rumbles: the land is moving
+ *      on, and the ladder is far away.
+ *   4. Home by balloon. "Take a balloon each!" Up they go, and down they
+ *      float out of the sky to the foot of the Tree and land safe. One last
+ *      present: a balloon for him, floating out of the picture to him.
  *
  * The danger is only the wind and the land moving on; the balloons get them
  * home in time. The cake is the world's (`birthday-cake`, its flames a part);
  * his name is written on its plaque here, so it is drawn fresh each time.
  */
-import { defineCartoon, type Kit } from '../../kit';
+import { C, cached, defineCartoon, ink, piece, rect, svg, type Kit } from '../../kit';
 import { moves as commonMoves, sounds as commonSounds } from '../../worlds/common/moves';
 import { noiseOff, warmEnding } from '../../worlds/common/pieces';
 import { moves as farawayMoves, sounds as farawaySounds } from '../../worlds/faraway/moves';
@@ -47,6 +48,14 @@ function nameOnCake(name: string): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 240"><text x="140" y="${186 + size * 0.35}" font-family="Andika, sans-serif" font-weight="700" font-size="${size}" fill="#b5476b" text-anchor="middle">${safe}</text></svg>`;
 }
 
+/** Sky-coloured paper over the giant cake's ten flames, with a black wick on each candle (210 × 30). */
+const unlitFlames = cached(() =>
+  svg({ w: 210, h: 30, name: 'birthday-unlit' }, [
+    piece(rect(0, 0, 210, 30), '#f3d79a', { edge: 'clean', shadow: false, fibre: false }),
+    ...Array.from({ length: 10 }, (_, i) => ink([[14 + i * 20, 28], [14 + i * 20, 21]], { width: 2, color: C.charcoal })),
+  ]),
+);
+
 // ---------------------------------------------------------------- sounds
 
 /** Mr Oom Boom Boom's big drum: oom, boom, BOOM. */
@@ -56,14 +65,19 @@ function drum(k: Kit, times = 3): void {
 
 // ------------------------------------------------------------------ cast
 
-const cast = {} as Record<'mf' | 'silky' | 'pan' | 'oom' | 'cake' | 'name', HTMLElement>;
+const cast = {} as Record<'mf' | 'silky' | 'pan' | 'oom' | 'cake' | 'name' | 'unlit', HTMLElement>;
 let balloons: HTMLElement[] = [];
 
 /** Where the cake stands in scenes 2 and 3. */
 const CAKE = { x: 450, y: 432, w: 280 };
 
-/** The cake on the table, candles unlit, with his name on it. */
+/**
+ * The cake on the table, candles unlit, with his name on it. The giant cake
+ * in the backdrop has its candles drawn lit; a strip of the sky's own paper
+ * over its flames (`unlit`) puts them out until his candles light them all.
+ */
 function placeCake(k: Kit): void {
+  cast.unlit = k.add(unlitFlames(), { x: 486, y: 194, w: 210, z: 1 });
   cast.cake = k.prop('birthday-cake', { ...CAKE, z: 14 });
   cast.name = k.add(nameOnCake(k.name), { ...CAKE, h: 240, z: 15 });
   k.set(k.part(cast.cake, 'flames'), { opacity: 0 });
@@ -109,10 +123,10 @@ export default defineCartoon({
     panBlow: { who: 'saucepan', text: 'I’ll help you blow! One, two, three… PHOO!' },
     stars: { who: 'silky', text: 'Your wish is flying up to the stars!' },
     rumble: { who: 'moonface', text: 'Uh-oh! The land is moving on, and the ladder’s far away!' },
-    balloons: { who: 'oomBoomBoom', text: 'Never mind! Take a balloon each! Oom boom boom!' },
     // 4. Home by balloon
+    balloons: { who: 'oomBoomBoom', text: 'Never mind! Take a balloon each! Oom boom boom!' },
     holdOn: { who: 'oomBoomBoom', text: 'Hold on tight, everybody!' },
-    wheee: { who: 'saucepan', text: 'Wheee! I’m flying! My pots are flying too!' },
+    wheee: { who: 'saucepan', text: 'Wheee! What a ride! My pots flew too!' },
     home: { who: 'moonface', text: 'Home, safe and sound. What a party!' },
     lastPresent: { who: 'silky', text: 'And one last present. A balloon for {name}!' },
     thankYou: { who: 'moonface', text: 'Thank you for coming to your party!' },
@@ -261,9 +275,13 @@ export default defineCartoon({
           k.fx.spell();
           await k.beam([760, 300], top);
         }
+        // His candles light, and every candle on the giant cake behind lights with them.
         k.fx.twinkle();
         await k.to(flames, 0.8, { opacity: 1 });
         k.sparkle(top[0], top[1], 10, 120);
+        k.fx.twinkle();
+        void k.fade(cast.unlit, 0, 0.8);
+        k.sparkle(590, 210, 12, 200);
         const glow = k.light(top[0], top[1] + 10, 120, { strength: 0.35 });
         void k.fade(glow, 1, 0.8);
         await k.all(k.say('count', silky), flutter(k, silky, 6));
@@ -278,7 +296,8 @@ export default defineCartoon({
         // His big turn: blow them out.
         const blow = await k.tapToHelp(cake, { ask: 'askBlow', nudge: 'nudgeBlow', helped: 'panBlow', by: mf, helper: pan, size: 240 });
         k.fx.wind(1);
-        await k.all(k.to(flames, 0.5, { opacity: 0 }), k.fade(glow, 0, 0.5));
+        await k.all(k.to(flames, 0.5, { opacity: 0 }), k.fade(glow, 0, 0.5), k.fade(cast.unlit, 1, 0.5));
+        k.puff(590, 205, 120, '#eeeae4');
         for (const dx of [-60, 0, 60]) k.puff(top[0] + dx, top[1] - 20, 70, '#eeeae4');
         await k.wait(400);
         // The wish flies up.
@@ -290,17 +309,11 @@ export default defineCartoon({
         await k.all(k.say('stars', silky), flutter(k, silky, 6));
         if (blow === 'helped') await k.hop(pan, 24);
 
-        // The ground rumbles.
+        // The ground rumbles: the hook into the last scene.
+        await k.wait(500);
         k.fx.rumble(2.5);
         void k.quake(6);
-        await k.all(k.say('rumble', mf), k.shake(mf, 5, 2));
-        // A balloon each.
-        drum(k, 3);
-        balloons = [0, 1, 2].map((i) => k.prop('balloon', { x: [190, 440, 1050][i], y: [420, 350, 300][i], w: 110, z: 16 }));
-        k.set(balloons, { opacity: 0, y: 60 });
-        await k.all(k.say('balloons', oom), ...balloons.map((b, i) => k.wait(i * 250).then(() => k.to(b, 0.6, { opacity: 1, y: 0, ease: 'back.out(1.5)' }))));
-        k.fx.whizz();
-        await k.all(...[mf, pan, oom, ...balloons].map((el) => k.to(el, 1.4, { y: -820, ease: 'power1.in' })), k.to(silky, 1.4, { y: -700, ease: 'power1.in' }));
+        await k.all(k.say('rumble', mf), k.shake(mf, 5, 2), k.shake(pan, 4, 2));
       },
     },
 
@@ -308,37 +321,52 @@ export default defineCartoon({
     {
       name: 'Home by balloon',
       set(k) {
-        k.backdrop('tree');
-        k.music('dreamy');
-        // Everyone floats down to the grass either side of the trunk, a balloon each.
-        cast.mf = k.character('moonface', { x: 60, y: 480, w: 190 });
-        cast.silky = k.character('silky', { x: 250, y: 440, w: 170, z: 11 });
-        cast.pan = k.character('saucepan', { x: 790, y: 484, w: 190, flip: true });
-        cast.oom = k.character('oomBoomBoom', { x: 950, y: 474, w: 200, flip: true });
-        balloons = [
-          k.prop('balloon', { x: 170, y: 470, w: 100, z: 12 }),
-          k.prop('balloon', { x: 800, y: 380, w: 100, z: 12 }),
-          k.prop('balloon', { x: 1060, y: 380, w: 100, z: 12 }),
-        ];
-        k.set([cast.mf, cast.pan, cast.oom, ...balloons], { y: -820 });
-        k.set(cast.silky, { y: -800 });
+        // Still at the party, the ground rumbling: a balloon each, and up they go.
+        k.backdrop('birthdays');
+        k.music('adventure');
+        cast.mf = k.character('moonface', { x: 30, y: 400, w: 230 });
+        cast.pan = k.character('saucepan', { x: 340, y: 412, w: 220, z: 11 });
+        cast.silky = k.character('silky', { x: 700, y: 190, w: 180, z: 12, flip: true });
+        cast.oom = k.character('oomBoomBoom', { x: 880, y: 380, w: 250, flip: true });
+        placeCake(k);
+        balloons = [0, 1, 2].map((i) => k.prop('balloon', { x: [190, 560, 1050][i], y: [420, 350, 300][i], w: 110, z: 16 }));
+        k.set(balloons, { opacity: 0, y: 60 });
       },
       async play(k) {
-        const { mf, silky, pan, oom } = cast;
+        let { mf, silky, pan, oom } = cast;
+        k.fx.rumble(2);
+        void k.quake(4);
+        drum(k, 3);
+        await k.all(k.say('balloons', oom), ...balloons.map((b, i) => k.wait(i * 250).then(() => k.to(b, 0.6, { opacity: 1, y: 0, ease: 'back.out(1.5)' }))));
+        await k.say('holdOn', oom);
+        k.fx.whizz();
+        await k.all(...[mf, pan, oom, ...balloons].map((el) => k.to(el, 1.4, { y: -820, ease: 'power1.in' })), k.to(silky, 1.4, { y: -700, ease: 'power1.in' }));
+
+        // Down they float to the foot of the Tree, either side of the trunk.
+        await k.cut(() => {
+          k.backdrop('tree');
+          k.music('dreamy');
+          mf = k.character('moonface', { x: 60, y: 480, w: 190 });
+          silky = k.character('silky', { x: 250, y: 440, w: 170, z: 11 });
+          pan = k.character('saucepan', { x: 790, y: 484, w: 190, flip: true });
+          oom = k.character('oomBoomBoom', { x: 950, y: 474, w: 200, flip: true });
+          balloons = [
+            k.prop('balloon', { x: 170, y: 470, w: 100, z: 12 }),
+            k.prop('balloon', { x: 800, y: 380, w: 100, z: 12 }),
+            k.prop('balloon', { x: 1060, y: 380, w: 100, z: 12 }),
+          ];
+          k.set([mf, pan, oom, ...balloons], { y: -820 });
+          k.set(silky, { y: -800 });
+        });
         const [bMf, bPan, bOom] = balloons;
-        // Down they float, swaying, the Saucepan Man and Mr Oom Boom Boom first.
         whirr(6);
         void flutter(k, silky, 10);
         const sway = (els: HTMLElement[], s: number) => Promise.all(els.map((el) => k.to(el, s, { y: 0, ease: 'sine.out' })));
-        void sway([pan, bPan, oom, bOom], 4);
-        await k.wait(800);
-        await k.say('holdOn', oom);
-        await k.say('wheee', pan);
-        clank(3, 0.15);
-        await k.wait(600);
-        await k.all(sway([mf, bMf], 2.4), k.wait(300).then(() => k.to(silky, 2.6, { y: 0, ease: 'sine.out' })));
+        await k.all(sway([pan, bPan, oom, bOom], 3), k.wait(500).then(() => sway([mf, bMf], 2.6)), k.wait(700).then(() => k.to(silky, 2.6, { y: 0, ease: 'sine.out' })));
         farawaySounds.flump();
         await k.all(k.pop(mf, 1.08), k.pop(pan, 1.08));
+        clank(3, 0.15);
+        await k.say('wheee', pan);
 
         void beam(k, mf, true);
         await k.say('home', mf);
