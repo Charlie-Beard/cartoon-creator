@@ -199,6 +199,47 @@ export class Kit<K extends string = string> {
     return el;
   }
 
+  /**
+   * Where an actor is now, in stage points: the box it was placed in, moved
+   * by whatever `k.to` has done to its x and y (scale and rotation aside).
+   * `face` is a portrait's face box (characters are drawn on a 300 × 340
+   * grid with the face in 78 62 144 144; poses may differ), for putting a
+   * hat on a head, a sparkle on a nose or the camera on a face; `top` is the
+   * middle of the box's top edge and `feet` the middle of its bottom.
+   *
+   *   const { face } = k.box(harry);
+   *   k.prop('admiral-hat', { x: face.cx - 75, y: face.y - 70, w: 150 });   // on his head
+   */
+  box(el: HTMLElement): { x: number; y: number; w: number; h: number; top: Pt; feet: Pt; face: { x: number; y: number; w: number; h: number; cx: number; cy: number } } {
+    const x = (parseFloat(el.style.left) || 0) + (Number(gsap.getProperty(el, 'x')) || 0);
+    const y = (parseFloat(el.style.top) || 0) + (Number(gsap.getProperty(el, 'y')) || 0);
+    const w = parseFloat(el.style.width) || 0;
+    const h = parseFloat(el.style.height) || 0;
+    const face = { x: x + (w * 78) / 300, y: y + (h * 62) / 340, w: (w * 144) / 300, h: (h * 144) / 340, cx: 0, cy: 0 };
+    face.cx = face.x + face.w / 2;
+    face.cy = face.y + face.h / 2;
+    return { x, y, w, h, top: [x + w / 2, y], feet: [x + w / 2, y + h], face };
+  }
+
+  /**
+   * Lettering as an actor, in Andika: a name on a cake, a sign, a word on a
+   * letter. `x`, `y` is the middle of the text; it is drawn fresh each time,
+   * so it can carry his name (`k.name`, which may be empty: give a fallback).
+   * Long text shrinks to fit `w` if you give one.
+   *
+   *   k.lettering(k.name || 'You!', { x: 590, y: 618, size: 24, color: '#b5476b', z: 15 });
+   */
+  lettering(text: string, o: { x: number; y: number; size?: number; color?: string; w?: number; z?: number; weight?: number }): HTMLElement {
+    const size = o.size ?? 28;
+    const safe = text.replace(/[<>&"]/g, '');
+    const natural = Math.max(size, safe.length * size * 0.56);
+    const w = o.w ?? natural;
+    const fit = o.w && natural > o.w ? ` textLength="${o.w}" lengthAdjust="spacingAndGlyphs"` : '';
+    const hgt = size * 1.4;
+    const art = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${hgt}"><text x="${w / 2}" y="${size * 1.02}" font-family="Andika, sans-serif" font-weight="${o.weight ?? 700}" font-size="${size}" fill="${o.color ?? C.ink}" text-anchor="middle"${fit}>${safe}</text></svg>`;
+    return this.add(art, { x: o.x - w / 2, y: o.y - hgt / 2, w, h: hgt, z: o.z ?? 15 });
+  }
+
   /** Changes an actor's mirroring. */
   face(el: HTMLElement, flip: boolean): void {
     const inner = el.querySelector<HTMLElement>(':scope > .story-flip');
@@ -490,8 +531,8 @@ export class Kit<K extends string = string> {
     el.remove();
   }
 
-  /** Fades an actor in or out. */
-  fade(el: HTMLElement, to: number, seconds = 0.5): Promise<void> {
+  /** Fades an actor in or out (or anything GSAP can tween: a list of parts, `k.part(cake, 'flames')`). */
+  fade(el: gsap.TweenTarget, to: number, seconds = 0.5): Promise<void> {
     return this.to(el, seconds, { opacity: to, ease: 'none' });
   }
 

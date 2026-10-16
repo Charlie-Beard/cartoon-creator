@@ -75,7 +75,17 @@ unless they stop you.
 
 List every character, backdrop and prop the beat sheet uses, and look
 each up (`npm run catalogue -- <world> --id <id>`; to see them drawn,
-`npm run lab -- <world> chars --p <a>,<b>`). For each missing one decide:
+`npm run lab -- <world> chars --p <a>,<b>`).
+
+**Look at every backdrop you use at stage size before staging it**
+(`npm run lab -- <world> --backdrop <id>`, then read the PNG). Note where
+the open ground is, and list what is painted in: it can't move or change.
+If the beat sheet changes something the backdrop already shows (its cake's
+candles are drawn lit; a fir wood fills one side; a character is drawn into
+the scenery), change the beat, cover the spot with a one-off patch you can
+fade, or put the thing in as a prop. Find this now, not in the review.
+
+For each missing one decide:
 
 - **Reusable** (a new character, a place another episode could visit, a
   prop that will come back): add it to the world, following the
@@ -107,6 +117,10 @@ yourself when they're done, so no two agents edit the same file.
 - Lines in the order they're said, keys that say what each line is.
 - Each scene: `set` builds the opening picture (no waiting, no motion;
   hide later entrances with `k.set(el, { opacity: 0 })`), `play` runs it.
+- **Length first.** `npm run check -- <id>` prints the speech estimate
+  and the time on screen it gives. Hit the target from the lines
+  (docs/WRITING.md, "Pacing") before staging: an episode measured short
+  after the shots means writing and staging again.
 - **Before staging a scene, check the set pieces**
   (`npm run catalogue -- <world> pieces`; docs/WORLDS.md, "pieces.ts"):
   the ladder arrival, "the land is moving on", the Slippery-Slip, tea in
@@ -122,7 +136,11 @@ yourself when they're done, so no two agents edit the same file.
   before writing your own; if you do write one a second episode would
   want, promote it there (docs/WORLDS.md, "moves.ts").
 - His turns via `k.tapToHelp` with `ask`, `nudge` and `helped` lines,
-  and a thank-you that works either way.
+  and a thank-you that works either way (after `'helped'`, thank the
+  helper, not him).
+- Read docs/KIT.md "Pitfalls" before placing anyone: `flip` mirrors
+  lettering, hats go on `k.box(el).face`, entrances start fully off stage,
+  the speaker stays in the camera's shot, paths cross nobody.
 
 ## 5. Check
 
@@ -173,12 +191,20 @@ justify every flag. For each frame, ask:
 
 Fix, re-run `shots --fast`, look again, until every frame is right. Run
 it once with `--no-tap` too, and look at the turns done for him. Then
-one real-time run for the pacing numbers in the PR.
+one real-time run for the pacing numbers in the PR. The real-time run
+takes 3–5 minutes: start it in the background and don't edit any file
+until it finishes (the dev server reloads the page and spoils it); a
+review can read the frames meanwhile.
 
 ## 8. Review
 
 Follow the `review-cartoon` skill against your own episode (or hand it
-to a fresh subagent for a second pair of eyes). Fix what it finds.
+to a fresh subagent for a second pair of eyes). Fix what it finds. Give a
+subagent the episode id, the files, and whether a shots run is going (so
+it knows the PNGs may be older than the script); a finding drawn from a
+stale frame is checked against a fresh one before you act on it. After
+fixing, re-run `shots --fast` on the scenes you touched, and the real-time
+run if timings moved.
 
 ## 9. Voice
 

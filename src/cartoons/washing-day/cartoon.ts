@@ -268,8 +268,7 @@ export default defineCartoon({
           stuck: {
             rider: 1,
             async free(el) {
-              // Moon-Face steps off the cushions to make room, and he wobbles and clanks, stuck.
-              void k.walk(mf, 130, 0.6, 2);
+              // Stuck: he wobbles and clanks.
               clank(4, 0.08);
               await k.shake(el, 5, 2);
               await k.say('stuck', el);

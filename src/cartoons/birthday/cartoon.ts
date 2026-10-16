@@ -41,13 +41,6 @@ const { wave, together } = commonMoves;
 
 // ------------------------------------------------------------------- art
 
-/** His name in icing, laid exactly over the cake's blank plaque (the cake's own 280 × 240 box). */
-function nameOnCake(name: string): string {
-  const safe = (name || 'You!').replace(/[<>&"]/g, '');
-  const size = safe.length > 8 ? 18 : 24;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 240"><text x="140" y="${186 + size * 0.35}" font-family="Andika, sans-serif" font-weight="700" font-size="${size}" fill="#b5476b" text-anchor="middle">${safe}</text></svg>`;
-}
-
 /** Sky-coloured paper over the giant cake's ten flames, with a black wick on each candle (210 × 30). */
 const unlitFlames = cached(() =>
   svg({ w: 210, h: 30, name: 'birthday-unlit' }, [
@@ -79,7 +72,8 @@ const CAKE = { x: 450, y: 432, w: 280 };
 function placeCake(k: Kit): void {
   cast.unlit = k.add(unlitFlames(), { x: 486, y: 194, w: 210, z: 1 });
   cast.cake = k.prop('birthday-cake', { ...CAKE, z: 14 });
-  cast.name = k.add(nameOnCake(k.name), { ...CAKE, h: 240, z: 15 });
+  // His name in icing on the plaque (its middle is at 140, 186 in the cake's 280 × 240 box).
+  cast.name = k.lettering(k.name || 'You!', { x: CAKE.x + 140, y: CAKE.y + 186, size: 24, w: 110, color: '#b5476b', z: 15 });
   k.set(k.part(cast.cake, 'flames'), { opacity: 0 });
 }
 

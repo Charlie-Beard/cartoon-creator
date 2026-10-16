@@ -255,7 +255,8 @@ function slideAt(y: number): { x: number; y: number; front: number } {
 const STUCK_Y = 610;
 
 /** Where the riders stand once they have tumbled off the cushions (bottom middle of each, feet on the grass). */
-const SLIDE_STANDS: [number, number][] = [[250, 700], [130, 690], [370, 690]];
+// Far enough apart that riders standing side by side (165 wide) don't overlap: two left of the trunk, a third across on the right.
+const SLIDE_STANDS: [number, number][] = [[140, 700], [320, 690], [860, 700]];
 
 /**
  * Whizzing down the slippery-slip: a friend pops out at the top by Moon-Face's
