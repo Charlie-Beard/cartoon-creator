@@ -9,7 +9,8 @@ import { C, defineCartoon, piece, circle, svg, type Kit } from '../kit';
 ```
 
 All coordinates are stage points on the **1180 × 820** stage, top-left
-origin. Every `await` is safe to skip: if the player skips the scene, the
+origin. Option names in code are CSS spelling (`color`), unlike
+everything he hears or reads, which is UK English. Every `await` is safe to skip: if the player skips the scene, the
 script simply stops where it was.
 
 ## Building a set
@@ -23,6 +24,8 @@ script simply stops where it was.
 | `k.add(svgString, { x, y, w?, h?, z?, flip?, crop? })` | Any art as an actor (one-off art drawn in the cartoon file). `crop` is a viewBox to show part of it. |
 | `k.face(el, flip)` | Turns an actor to face the other way. |
 | `k.remove(el)` | Takes an actor off for good. |
+| `k.box(el)` | Where an actor is now: `{ x, y, w, h, top, feet, face }`, its placed box moved by any `k.to` x/y. `face` is a portrait's face box with its middle (`cx`, `cy`): put a hat on a head, a sparkle on a nose, the camera on a face, without guessing. |
+| `k.lettering(text, { x, y, size?, color?, w?, z? })` | Andika lettering as an actor, centred on `x`, `y` (a name on a cake, a sign). Drawn fresh, so it can say `k.name` (give a fallback: it can be empty). `w` squeezes long text to fit. |
 | `k.set(el, vars)` | Sets GSAP properties at once: `{ opacity: 0 }` to hide someone who enters later, `{ rotation: -10 }`, `{ scale: 0.8 }`. |
 
 **Stacking (`z`):** backdrop 0 · actors 10–29 (default 10; nearer is
@@ -75,7 +78,7 @@ All return promises; `await` to wait, `void` to let it run alongside.
 | `k.spin(el, turns=1, s=0.8)` | Whole turns. |
 | `k.pop(el, amount=1.15)` | Squash-and-stretch (something lands). |
 | `k.appear(el)` / `k.vanish(el)` | Grow in from nothing / shrink away and remove. |
-| `k.fade(el, to, s=0.5)` | Opacity. |
+| `k.fade(el, to, s=0.5)` | Opacity. Works on parts too: `k.fade(k.part(cake, 'flames'), 1)`. |
 | `k.float(el, amount=8, period=2)` | Idle bobbing until the scene ends (holds still during his turn). |
 | `k.quake(amount=8)` | Gentle shake of the whole stage (a stomp, a crash). |
 | `k.wait(ms)` | A pause. |
@@ -99,10 +102,10 @@ again on the same part is safe.
 | Call | Does |
 |---|---|
 | `k.sparkle(x, y, count=14, spread=160)` | A burst of paper stars. |
-| `k.puff(x, y, size=160, colour?)` | A puff of paper smoke (appear, vanish, crash). |
+| `k.puff(x, y, size=160, color?)` | A puff of paper smoke (appear, vanish, crash). |
 | `k.confetti(count=30)` | Confetti from the top (the happy ending). |
-| `await k.glow(colour?, strength=0.5, s=0.8)` | A soft wash of light in and out (capped at 0.6). Never a strobe. |
-| `await k.beam([x, y], [x, y], colour?)` | A magic beam between two points, sparkling where it lands. |
+| `await k.glow(color?, strength=0.5, s=0.8)` | A soft wash of light in and out (capped at 0.6). Never a strobe. |
+| `await k.beam([x, y], [x, y], color?)` | A magic beam between two points, sparkling where it lands. |
 
 ## Atmosphere
 
@@ -111,8 +114,8 @@ again on the same part is safe.
 | `k.music(mood)` | Starts a music bed: `'cosy' 'magic' 'spooky' 'adventure' 'sneaky' 'triumph' 'dreamy'`. Ducks under speech; carries on across scene cuts. |
 | `k.silence()` | Fades the music out (before a scary entrance, for a quiet beat). |
 | `k.ambient(kind, { count?, z?, area? })` | Slow looping `'dust' 'fireflies' 'snow' 'rain' 'bubbles' 'embers' 'stars'`. `area` is `[x, y, w, h]`. |
-| `k.light(x, y, radius, { colour?, strength?, flicker?, z? })` | A soft pool of light (lamp, moon, window). `flicker` breathes, never flashes. |
-| `k.dim(amount=0.35, colour?)` | A veil for night or gloom (under lights). Returns it: fade it to change the mood. |
+| `k.light(x, y, radius, { color?, strength?, flicker?, z? })` | A soft pool of light (lamp, moon, window). `flicker` breathes, never flashes. |
+| `k.dim(amount=0.35, color?)` | A veil for night or gloom (under lights). Returns it: fade it to change the mood. |
 
 ## Camera
 
@@ -232,3 +235,32 @@ origin }, children)`; `raw(svgMarkup)`.
 - Tweens started with `void` keep going after the line; kill or finish
   them before the scene ends if they matter.
 - Dev: `?cartoon=<id>&scene=<n>` starts at scene n.
+
+## Pitfalls (each one has cost an episode a round of fixes)
+
+- **`flip` mirrors lettering.** A character with a letter on their art
+  (Ron's "R" jumper) reads backwards when flipped. Turn the others to face
+  them instead, or leave them facing out.
+- **A backdrop's painted-in things can't change.** Look at it at stage
+  size (`npm run lab -- <world> --backdrop <id>`) and list what is drawn
+  in: lit candles, a sleeping Mr Watzisname, Washalot's tub, fir trees
+  along one side. If the story changes one (the candles start unlit), lay
+  a one-off patch over it and fade the patch; if he'll tap it, make it a
+  prop. Two of the same thing (a cake in the backdrop and a cake prop)
+  muddle a 6-year-old about which one to tap.
+- **Things on heads:** place them from `k.box(el).face`, not by eye.
+- **Start entrances fully off stage.** An actor in `set` waiting to drop
+  in from above at `y: -620` still peeps in and is flagged; use the stage
+  height (`y: -820`) or `opacity: 0`.
+- **Keep the speaker in the camera's shot.** Zooming on a prop while
+  someone off-shot speaks is flagged; say the line first, or put a sparkle
+  on the prop instead of zooming.
+- **Plan paths past people.** A jump or a run across the stage passes
+  through everyone in between (flagged as overlap): arc it over their
+  heads (`zIndex` above, scaled down), or move the one in the way first.
+- **A whole actor can turn** (`rotation: 180` for upside down, 90 for
+  sideways): `say` bobs relative to it, so they still talk the other
+  way up.
+- **Don't edit files while a real-time `shots` run is going**: the dev
+  server reloads the page and the run's timings are wrong. Edit after it
+  finishes (or stop it), then run again.

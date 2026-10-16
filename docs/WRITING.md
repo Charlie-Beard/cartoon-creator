@@ -79,6 +79,14 @@ rest.
 - `{name}` is replaced with his name. Without a name it becomes "you" or
   is dropped (`generic` in `src/core/phrases.ts`), so write lines that
   work both ways: "Well done, {name}!" and "{name} found it!" both work.
+- **Say the plot plainly.** He is six and takes words literally. A
+  back-to-front joke ("Goodbye!" for hello, "Oh dear, I mean, hooray!")
+  is fun, but never the only place a plot point is said: someone says the
+  plain meaning straight after ("He means hello!").
+- **Signature traits are not the joke every time.** The Saucepan Man
+  mishears and Mr Watzisname sleeps, but if a trait was the running joke
+  in each of the world's last two episodes (`npm run check` warns), give
+  them a different gag this time and keep the trait to a touch.
 - Every line in `lines` must be said in the script (`npm run check`
   fails on unused lines: they would be recorded for nothing).
 
@@ -113,6 +121,16 @@ await k.say(how === 'tapped' ? 'thanks' : 'phew', mf);
 
 All four lines are said in some run, so all four count as used.
 
+**Thank whoever did it.** When `helper` is someone else (Ron throws the
+snowball, Silky's wand lights the candles), the thank-you after a
+`'helped'` turn thanks *them*, not him: "Thank you, Silky!" Praising him
+for a tap he didn't make rings false. Branch the line on `how`.
+
+**A turn costs time.** About 5 s if he taps straight away, about 25 s if
+he waits it out (the nudge, the wait, the helped line). Two turns in one
+scene that runs 70 s with taps can run past 110 s in the `--no-tap` run:
+spread turns across scenes, or keep that scene's lines lean.
+
 ## Pacing
 
 | | Target |
@@ -124,7 +142,12 @@ All four lines are said in some run, so all four count as used.
 | After a big moment | A 0.5–1 s beat of quiet (`k.wait(700)`) |
 
 The iPad's voice speaks at about 2.4 words a second; recordings are
-similar. `npm run shots -- <id>` measures each scene for real and flags
+similar. `npm run check -- <id>` prints the speech estimate and, from it,
+the time on screen (about 1.15 × the speech when he taps, measured on
+the episodes so far, plus about 25 s for each turn he waits out). Aim
+the speech at about 105–130 s for a short episode, 155–200 s for 3–4
+minutes and 210–255 s for a long one, before you stage anything: adding
+lines after the shots is slower than writing them in. `npm run shots -- <id>` measures each scene for real and flags
 scenes over 90 s and episodes outside 2–5 minutes.
 
 ## Scenes in code

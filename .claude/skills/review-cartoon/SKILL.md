@@ -20,6 +20,14 @@ npm run shots -- <id> --fast --no-tap   # his turns done for him: the nudge and 
 Read the script top to bottom, then the contact sheet, each scene's
 opening frame and every frame under "Frames to look at".
 
+**Check the frames are current.** Compare the PNGs' times with the
+script's last change (`ls -l --time-style=+%T screenshots/<id>/ src/cartoons/<id>/`).
+Frames older than the script show a version that no longer exists: say
+which findings come from them, or re-run `shots --fast` first. (Reviews
+have flagged a mirrored jumper and a short scene that were already fixed.)
+If you were told not to run shots because a run is in progress, say
+which frames you could not check.
+
 ## 2. Go through the list
 
 **Safety (docs/STYLE.md). Any failure here blocks the episode.**
@@ -43,15 +51,25 @@ opening frame and every frame under "Frames to look at".
       easy for a 6-year-old to follow. No line depends on reading the
       caption.
 - [ ] `{name}` lines still make sense without a name (`generic`).
+- [ ] Taken literally, every line says what it means. A back-to-front or
+      ironic line ("I mean, hooray!") is followed by someone saying the
+      plain meaning; the plot never rests on a joke he has to decode.
+- [ ] No running joke repeats one from each of the world's last two
+      episodes (`npm run check` warns) unless it is deliberate.
 
 **His turns**
 - [ ] 1–3, never back to back; each target is big, still, obvious and on
       stage, and the tap makes something happen at once.
 - [ ] `ask`, `nudge` and `helped` all present and kind; the thank-you
-      works either way.
+      works either way, and after a `'helped'` turn it thanks the helper,
+      not him.
+- [ ] The target is the only thing of its kind on screen: nothing in the
+      backdrop looks like it (two cakes, two doors), so he knows what to
+      tap.
 
 **Pacing**
-- [ ] Measured: each scene 25–90 s, total 2–5 minutes.
+- [ ] Measured: each scene 25–90 s, total 2–5 minutes (with taps); the
+      `--no-tap` run not far over (a turn waited out adds about 25 s).
 - [ ] No silent stretch over ~4 s; a quiet beat after big moments.
 
 **Frames**
@@ -61,6 +79,11 @@ opening frame and every frame under "Frames to look at".
 - [ ] Scale consistent between characters; portraits' bottom edges on or
       below the ground line (or behind furniture), never floating.
 - [ ] Each scene's opening frame (`set`) reads as a picture on its own.
+- [ ] Nothing painted into the backdrop contradicts the story (lit
+      candles before they're lit, a character drawn into the scenery who
+      also walks on as an actor). Look at the backdrop alone:
+      `npm run lab -- <world> --backdrop <id>`.
+- [ ] Nobody with lettering on their art (Ron's "R") is flipped.
 
 **Code**
 - [ ] The top comment tells the whole story; one-off art and sounds are

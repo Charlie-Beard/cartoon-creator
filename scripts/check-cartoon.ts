@@ -13,7 +13,8 @@
  *   - every character, pose, backdrop and prop it asks for exists in a world
  *   - there is at least one k.tapToHelp()
  *   - the folder, its meta.ts and the script agree, and the id is kebab-case
- *   - how long the speech alone runs (the floor for the running time)
+ *   - how long the speech alone runs, and roughly how long the episode runs on
+ *     screen (speech × 1.15, plus about 25 s for each turn he waits out)
  *   - its meta.ts has an episode ledger (what the episode is about), whose
  *     characters and places exist and match the script (an error), and
  *     which is compared with the episodes already on the shelf: a repeated
@@ -92,8 +93,17 @@ for (const entry of chosen) {
       warnings.push(...ledger.warnings);
       warnings.push(...compareLedgers(entry, SHELF, nameOf));
       const n = Object.keys(cartoon.lines).length;
+      // On screen it runs about 1.1–1.2 × the speech (measured on the episodes so far: the
+      // action between lines, less the nudge and helped lines that a tapping child never hears),
+      // and each turn he waits out adds about 25 s.
+      const onScreen = result.spokenSeconds * 1.15;
+      const mmss = (s: number): string => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+      if (onScreen < 120) warnings.push(`about ${mmss(onScreen)} on screen: under the 2 minute floor (add a beat or a few lines)`);
+      if (onScreen > 300) warnings.push(`about ${mmss(onScreen)} on screen: over the 5 minute ceiling (trim lines)`);
+      else if (onScreen + result.taps * 25 > 330) warnings.push(`up to ${mmss(onScreen + result.taps * 25)} on screen if he waits out every turn: long (fine if a real run with --no-tap says otherwise)`);
       info.push(
         `${cartoon.scenes.length} scenes, ${n} lines, about ${Math.round(result.spokenSeconds)} s of speech, ${result.taps} tapToHelp`,
+        `on screen: about ${mmss(onScreen)} if he taps, up to ${mmss(onScreen + result.taps * 25)} if he waits out every turn (shots measures it)`,
         `scenes: ${cartoon.scenes.map((s, i) => `${i + 1} ${s.name}`).join(' · ')}`,
       );
     }
