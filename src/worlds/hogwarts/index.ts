@@ -29,6 +29,8 @@ import {
 import { buckbeakFly, fawkesFly, hedwigFly, voldemortLoom } from './characters/poses';
 import { snape } from './characters/snape';
 import { tabbyCat } from './characters/tabbyCat';
+import { peeves } from './characters/peeves';
+import { baron, baronLoom } from './characters/baron';
 import { babyHarryArt } from './objects/babyHarry';
 import { bludgerArt } from './objects/bludger';
 import { candle } from './objects/floatingCandle';
@@ -497,6 +499,25 @@ export default defineWorld({
       about:
         'A tabby cat with square markings round its eyes, like spectacles, sitting very stiffly on a wall: Professor McGonagall in her cat form (she is an Animagus). Watches and waits; never talks as a cat. Turn her into McGonagall with a puff of smoke.',
       voice: 'A cat: a short mew only.',
+    },
+
+    peeves: {
+      name: 'Peeves',
+      art: peeves,
+      parts: ['figure', 'head', 'lids', 'mouth', 'mouthOpen', 'armR', 'tongue'],
+      about:
+        'Peeves the poltergeist, the castle\'s naughty prankster (from the books): a little man who floats in the air, cross-legged, in a floppy jester hat with bells, a big orange bow tie and a spotty waistcoat. Bright and solid-looking, not see-through like the ghosts. Wicked dark eyes, rosy cheeks and a very wide grin. Cheeky and mischievous, never truly mean: he throws chalk, blows raspberries (show `mouthOpen` and `tongue`) and says "Ooooh! Ickle firsties!". Nothing he throws or drops ever lands on anyone. `armR` swings from the shoulder (232, 262) with a stick of chalk in the fist. Only the Baron can make him behave, and Peeves is terrified of him: he stammers sorry and zooms away.',
+      voice: 'A cackling, sing-song, cheeky man, high and fast with giggles and "ooooh!"s: a naughty imp, not a villain.',
+    },
+
+    baron: {
+      name: 'The Baron',
+      art: baron,
+      poses: { loom: baronLoom },
+      parts: ['figure', 'head', 'lids', 'mouth', 'mouthOpen', 'chains'],
+      about:
+        'The Baron, Slytherin\'s house ghost (the books\' Bloody Baron, but always just "the Baron" here: "bloody" is a swear word to a six-year-old in the UK): a tall, gaunt, see-through grey-green ghost with blank staring eyes, a hollow face, a long pointed beard, a ruff and a heavy cloak hung with silver chains that clink (part `chains`, origin 150, 244). Cold and stern, and he says very little: slow, deep, few words. Even Peeves is terrified of him. He looms and glares but is never cruel; underneath he is gruff but fair, and on the children\'s side. Never draw or mention blood or stains.',
+      voice: 'Slow, deep, cold old British man; very few words, long pauses.',
     },
   },
 
