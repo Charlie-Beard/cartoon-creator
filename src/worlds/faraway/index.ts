@@ -29,6 +29,7 @@ import { prop } from './props';
 import { giant, enchanter, jellyGoblin, snowman, toySoldier, topsy } from './visitors';
 import { whirligig } from './whirligig';
 import { cloudFront, cloudTop, kettle, LAND_FARS } from './cloudtop';
+import { birthdayCake } from './birthdayCake';
 
 // ---------------------------------------------------------------------------
 // Characters
@@ -422,6 +423,7 @@ const props: Record<string, PropDef> = {
   'cloud-front': { art: cloudFront, size: [1180, 220], about: 'A strip of cloud (1180 × 220) to lay in front of actors up in the sky, so they stand in the cloud: x 0, y 600, z above them (goes with `cloud-top`).' },
   kettle: { art: kettle, size: [180, 160], about: 'The Saucepan Man\'s whistling kettle: round, copper, a curly spout. Part `lid` bobs when it whistles (pivot it).' },
   ...LAND_FARS,
+  'birthday-cake': { art: birthdayCake, size: [280, 240], about: 'A two-tier birthday cake in pink icing with six candles. Part `flames` lights or blows out (fade it). The white plaque on the front is blank for a name: its middle is at (140, 186) in the cake\'s 280 × 240 box.' },
 };
 
 export default defineWorld({
