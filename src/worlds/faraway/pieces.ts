@@ -251,6 +251,9 @@ function slideAt(y: number): { x: number; y: number; front: number } {
   return { x: cx + (hw + 26) * Math.sin(th), y: y + 16 * Math.cos(th), front: Math.cos(th) };
 }
 
+/** Where a stuck rider stops: the lowest turn of the chute, right in front of the trunk (feet at about x 599, y 626). */
+const STUCK_Y = 610;
+
 /** Where the riders stand once they have tumbled off the cushions (bottom middle of each, feet on the grass). */
 const SLIDE_STANDS: [number, number][] = [[250, 700], [130, 690], [370, 690]];
 
@@ -261,7 +264,7 @@ const SLIDE_STANDS: [number, number][] = [[250, 700], [130, 690], [370, 690]];
  * cushions, then tumbles off and stands up on the grass. Each rider goes in turn.
  *
  *   slipperySlip.set(k, { riders, music? })    the `tree` backdrop and the riders, hidden, in `set`
- *   slipperySlip.play(k, a, { lines?, seconds? })     the ride, one rider after another
+ *   slipperySlip.play(k, a, { lines?, seconds?, stuck? })     the ride, one rider after another
  *
  * `set` options: `riders` are `{ id, flip? }` (they are drawn small, about 110 wide, while
  * they slide, and grow to 165 when they stand up on the grass); `music` (default
@@ -272,6 +275,10 @@ const SLIDE_STANDS: [number, number][] = [[250, 700], [130, 690], [370, 690]];
  * are standing ("Again! Again!"). `seconds` is how long the spiral takes (default 3.2).
  * The riders can't talk while they slide (a talking actor bobs), which is why the lines
  * are before and after. The landing is on the grass, above the caption band.
+ *
+ * `stuck` makes one rider (`rider`, from 0) get stuck part way, on the last turn round
+ * the front of the trunk: the slide stops with a thud and waits for `free(el)` (his
+ * tap, a shove, a wobble: yours), then the rider whizzes on down to the cushions.
  *
  *   const a = slipperySlip.set(k, { riders: [{ id: 'tim' }, { id: 'fran' }] });   // in set
  *   await slipperySlip.play(k, a, { lines: [{ start: 'wheee', landed: 'again' }, { landed: 'myGo' }] });
@@ -291,7 +298,7 @@ export const slipperySlip = {
   },
 
   /** Each rider in turn: a pop at the top, the spiral, the flump, and standing up. */
-  async play<K extends string>(k: Kit<K>, a: SlideActors, o: { lines?: { start?: K; landed?: K }[]; seconds?: number } = {}): Promise<void> {
+  async play<K extends string>(k: Kit<K>, a: SlideActors, o: { lines?: { start?: K; landed?: K }[]; seconds?: number; stuck?: { rider: number; free: (el: HTMLElement) => Promise<void> } } = {}): Promise<void> {
     const startY = 270;
     const endY = 690;
     const seconds = o.seconds ?? 3.2;
@@ -309,16 +316,22 @@ export const slipperySlip = {
 
       // Round and round the trunk: out of sight on the far side, back into view on this one.
       const path = { y: startY };
+      const onUpdate = (): void => {
+        const p = slideAt(path.y);
+        const near = Math.min(1, Math.max(0, p.front * 5));
+        k.set(el, { ...at(p), opacity: near, rotation: p.front > 0 ? 8 : 0 });
+      };
       k.fx.whizz();
-      await k.to(path, seconds, {
-        y: endY,
-        ease: 'sine.inOut',
-        onUpdate: () => {
-          const p = slideAt(path.y);
-          const near = Math.min(1, Math.max(0, p.front * 5));
-          k.set(el, { ...at(p), opacity: near, rotation: p.front > 0 ? 8 : 0 });
-        },
-      });
+      if (o.stuck?.rider === i) {
+        // Stuck part way, on the last turn round the front of the trunk, until `free` lets go.
+        await k.to(path, seconds * 0.8, { y: STUCK_Y, ease: 'sine.in', onUpdate });
+        k.fx.thud();
+        await o.stuck.free(el);
+        k.fx.whizz();
+        await k.to(path, seconds * 0.3, { y: endY, ease: 'power1.in', onUpdate });
+      } else {
+        await k.to(path, seconds, { y: endY, ease: 'sine.inOut', onUpdate });
+      }
 
       // Out along the roots to the cushions at the bottom.
       k.set(el, { rotation: 0 });
