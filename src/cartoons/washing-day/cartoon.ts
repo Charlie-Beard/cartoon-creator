@@ -81,7 +81,7 @@ export default defineCartoon({
     hello: { who: 'moonface', text: 'Hello, {name}! Listen. Somebody’s singing on the ladder.' },
     everything: { who: 'moonface', text: 'It’s Dame Washalot. She lives just below, and she washes everything!' },
     washingDay: { who: 'washalot', text: 'Washing day, my dears! Any washing for me?' },
-    socks: { who: 'saucepan', text: 'Oh! Then wash my socks, please. They’re VERY smelly.' },
+    socks: { who: 'saucepan', text: 'Yes, please! Wash my socks. They’re VERY smelly.' },
     bigWash: { who: 'washalot', text: 'Phew! These socks need a REALLY big wash.' },
     newSoap: { who: 'washalot', text: 'Pooh! I’ll use my new soap. It’s the bubbliest soap in the wood!' },
     tootle: { who: 'washalot', text: 'Back to my tub! Toodle-oo!' },
@@ -91,6 +91,7 @@ export default defineCartoon({
     fullPots: { who: 'saucepan', text: 'My pots are full of bubbles! Pop, pop, pop!' },
     atishoo: { who: 'moonface', text: 'Ah… ah… ATISHOO! A bubble popped on my nose!' },
     tooMuch: { who: 'washalot', text: 'Oh my! Too much soap! The bubbles are coming up the Tree!' },
+    nipBack: { who: 'washalot', text: 'I’ll nip back to my tub and turn the tap off!' },
     cantClimb: { who: 'moonface', text: 'We can’t climb down through all that. Down the slippery-slip!' },
     cushionsFirst: { who: 'moonface', text: 'But first, cushions for a soft landing at the bottom.' },
     askCushions: { who: 'moonface', text: 'Tap the cushions, {name}! Throw them down the slide!' },
@@ -212,6 +213,9 @@ export default defineCartoon({
         k.fx.pop();
         await k.to(wash, 0.7, { y: 0, opacity: 1, ease: 'back.out(1.4)' });
         await k.all(k.say('tooMuch', wash), k.shake(wash, 4, 2));
+        await k.say('nipBack', wash);
+        k.fx.patter(3, 0.12);
+        await k.to(wash, 0.7, { y: 260, opacity: 0, ease: 'power1.in' });
         k.fx.bubbles(6);
         await k.say('cantClimb', mf);
         await k.camera({ zoom: 1.25, x: 780, y: 560 }, 0.8);
@@ -224,15 +228,24 @@ export default defineCartoon({
           k.fx.whizz();
           await k.to(c, 0.6, { x: '+=200', y: '+=130', scale: 0.3, rotation: 200, ease: 'power1.in' });
           k.set(c, { opacity: 0 });
-          setTimeout(() => flump(), 500);
         }
-        await k.wait(700);
+        // Far below, three soft landings.
+        for (let i = 0; i < 3; i++) {
+          await k.wait(250);
+          flump();
+        }
+        await k.wait(400);
         await k.all(k.say(how === 'tapped' ? 'wellThrown' : 'allDown', mf), k.hop(mf, 24));
 
         // Moon-Face jumps in first.
         await k.say('meFirst', mf);
+        // Up and over the Saucepan Man's head, and down into the slide.
+        clank(2, 0.1);
+        void k.to(pan, 0.3, { y: 30 });
         k.fx.boing();
-        await k.to(mf, 0.9, { x: 560, y: 250, scale: 0.3, rotation: 30, opacity: 0, ease: 'power2.in' });
+        k.set(mf, { zIndex: 30 });
+        await k.to(mf, 0.6, { x: 330, y: -260, scale: 0.5, rotation: 20, ease: 'power2.out' });
+        await k.to(mf, 0.5, { x: 600, y: 230, scale: 0.2, rotation: 40, opacity: 0, ease: 'power2.in' });
       },
     },
 
@@ -320,7 +333,7 @@ export default defineCartoon({
         await k.say('thunderstorm', wash);
 
         // Clean socks float down for the Saucepan Man.
-        await k.say('cleanSocks', wash);
+        await k.all(k.say('cleanSocks', wash), k.wait(400).then(() => k.hop(wash, 14)));
         await k.appear(socks, 0.4);
         await k.to(socks, 1.8, { x: -420, y: 120, ease: 'sine.inOut' });
         sniff();
