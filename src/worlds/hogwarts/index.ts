@@ -18,6 +18,7 @@
 import { C } from '../../art/palette';
 import { cached } from '../../art/paper';
 import { defineWorld } from '../types';
+import { dudley, petunia, vernon } from './characters/dursleys';
 import { hedwig } from './characters/hedwig';
 import { hagrid, harry, hermione, ron } from './characters/heroes';
 import { basilisk, dobby, fawkes, gnome, nick, ollivander, trevor, voldemort, willow } from './characters/hosts1';
@@ -27,6 +28,8 @@ import {
 } from './characters/hosts2';
 import { buckbeakFly, fawkesFly, hedwigFly, voldemortLoom } from './characters/poses';
 import { snape } from './characters/snape';
+import { tabbyCat } from './characters/tabbyCat';
+import { babyHarryArt } from './objects/babyHarry';
 import { bludgerArt } from './objects/bludger';
 import { candle } from './objects/floatingCandle';
 import { goldenEgg } from './objects/goldenEgg';
@@ -41,6 +44,9 @@ import { spectrespecs } from './objects/spectrespecs';
 import { spider } from './objects/spider';
 import { wardrobe } from './objects/wardrobe';
 import { windChimes } from './objects/windChimes';
+import { streetLampArt } from './objects/streetLamp';
+import { putOuterArt } from './objects/putOuter';
+import { flyingMotorbikeArt } from './objects/flyingMotorbike';
 import { bankHall } from './places/gringotts-hall';
 import { bedroom } from './places/bedroom';
 import { burrow } from './places/burrow';
@@ -59,6 +65,7 @@ import { office } from './places/headmasters-office';
 import { kitchen } from './places/kitchen';
 import { surface } from './places/lake-surface';
 import { london } from './places/london';
+import { privetDrive } from './places/privet-drive';
 import { meadow } from './places/meadow';
 import { paddock } from './places/paddock';
 import { dungeon } from './places/potions-dungeon';
@@ -71,6 +78,8 @@ import { roomArt } from './places/training-room';
 import { underwater } from './places/underwater';
 import { vault } from './places/gringotts-vault';
 import { shop } from './places/wand-shop';
+import { dursleyKitchen } from './places/dursley-kitchen';
+import { grunningsOffice } from './places/grunnings-office';
 import { hillsBackdrop } from './places/countryside';
 import {
   birthdayCake, bat, broomstick, cauldron, cobweb, crescentMoon, dragon, flame, frog, galleon, lantern, magicWand,
@@ -453,6 +462,42 @@ export default defineWorld({
       voice:
         'ElevenLabs voice N2lVS1w4EtoT3dr4eOWO (a rough voice), speed 0.9, stability 0.45: crisp, dry and a little sniffy.',
     },
+
+    vernon: {
+      name: 'Mr Dursley',
+      art: vernon,
+      parts: [...PERSON, 'cross'],
+      about:
+        'Vernon Dursley, Harry\'s uncle and the director of Grunnings, a firm that makes drills: big and beefy with hardly any neck, a huge bushy brown moustache, a round pink face, small eyes, thin hair combed flat, a grey suit and a dull tie. Likes everything normal and cannot bear anything strange or magic ("Nonsense!", "Not in MY house!"). Blusters, harrumphs and goes purple in the face (fade in the `cross` part), but he is a figure of fun and never truly menacing. His mouth sits under the moustache: the open mouth drops below it.',
+      voice: 'Loud, blustery, pompous middle-aged British man; puffs and harrumphs.',
+    },
+
+    petunia: {
+      name: 'Mrs Dursley',
+      art: petunia,
+      parts: PERSON,
+      about:
+        'Petunia Dursley, Harry\'s aunt and Vernon\'s wife: thin, with neat blonde curls, a very long neck, a narrow horsey face, pursed lips, a pastel pink cardigan and a little pearl necklace. Spends her days craning over garden fences to spy on the neighbours. Prim and fussy, and sure her Dudley is perfect ("Diddy-kins!"). Sniffy, never cruel on screen.',
+      voice: 'Prim, thin, sharp middle-aged British woman, a little shrill.',
+    },
+
+    dudley: {
+      name: 'Dudley',
+      art: dudley,
+      parts: [...PERSON, 'armR'],
+      about:
+        'Baby Dudley, about one year old, the Dursleys\' spoilt son: a big chubby pink face, a tuft of blond hair, round blue eyes and a bib, in a high chair whose wooden tray runs along the bottom of the portrait (y 300 to 340). Shouts "More!" and flings his porridge (swing `armR` from the shoulder at 208, 262). His parents think he is wonderful. Cheeky, never nasty.',
+      voice: 'A big, loud, babyish toddler; shouts single words.',
+    },
+
+    tabbyCat: {
+      name: 'The tabby cat',
+      art: tabbyCat,
+      parts: ['head', 'lids', 'figure', 'mouth', 'mouthOpen', 'tail'],
+      about:
+        'A tabby cat with square markings round its eyes, like spectacles, sitting very stiffly on a wall: Professor McGonagall in her cat form (she is an Animagus). Watches and waits; never talks as a cat. Turn her into McGonagall with a puff of smoke.',
+      voice: 'A cat: a short mew only.',
+    },
   },
 
   backdrops: {
@@ -490,6 +535,10 @@ export default defineWorld({
     'gringotts-vault': { art: cached(() => vault()), about: 'A Gringotts vault: a grey wall of little doors and shelves, helmets on two shelves at left (y 100 to 300), a treasure chest and big heaps of gold coins at right (x 750 to 1180, y 470 to 680), a dark tiled floor. Ground line at about y 690; room for 3 actors left of the gold.' },
     'london-sunset': { art: cached(() => london()), about: 'London at sunset: a pink, orange and peach sky with a big sun at right, dark silhouettes of buildings and a clock tower from y 400 to 640, and a purple street. Ground line (the street) at about y 700; room for 3 actors.' },
     'castle-courtyard': { art: cached(() => courtyard()), about: 'The castle courtyard at dusk: a purple and orange sky with dark clouds, Hogwarts rising behind a stone wall (x 370 to 850, y 100 to 470), and a stone-paved yard in front. Ground line at about y 640 (the paving runs from y 500 to the bottom); room for 4 actors.' },
+    'dursley-kitchen': { art: cached(() => dursleyKitchen()), about: 'The Dursleys\' spotless lemon-yellow kitchen at No. 4 Privet Drive, morning: white tiles, tidy cupboards, a wall clock (x 302 to 378, y 58 to 134), a kettle (x 334 to 446) and a toaster (x 722 to 816) on the worktop. A big window at the back, upper middle (x 420 to 760, y 110 to 330) showing garden, picket fence and blue sky: owls can fly across it. Ground line at about y 650; room for 3 actors: left (x 80 to 340), middle (x 470 to 700, e.g. a baby in a high chair) and right (x 820 to 1080), heads at y 330 to 380 clear of the window.' },
+    'grunnings-office': { art: cached(() => grunningsOffice()), about: 'Mr Dursley\'s beige office at Grunnings (they make drills): a big window at the back right (x 640 to 1120, y 100 to 420) with blue sky and far rooftops low down (owls can fly over the sky part), a framed drill picture and a certificate on the left wall, a filing cabinet, and a big wooden desk across the front left (x 80 to 620, top edge y 540, front down to the bottom) with a telephone, papers and a drill on it. Keep x 220 to 480 of the desktop clear: stand a portrait behind the desk there, head at y 260 to 330. Ground line at about y 680 (right of the desk, x 640 to 1100).' },
+    'privet-drive': { art: cached(() => privetDrive(false)), about: 'Privet Drive by day: a neat street of identical brick houses and tidy hedges under a pale blue sky. Number Four is middle-right: front door x 640 to 740 (y 380 to 600, brass 4), stone doorstep in front with a flat top at y 600 (x 615 to 765), Mr Dursley\'s bedroom window above-left of the door (x 560 to 660, y 200 to 290, curtained). Low brick garden wall at left (x 0 to 420, flat top y 520), "Privet Drive" street sign above it (x 175 to 325, y 372 to 424). Pavement ground line at y 640, plain road below y 710. No lamps (put them at x 120, 470, 1050). Room for 3 actors across the middle.' },
+    'privet-drive-night': { art: cached(() => privetDrive(true)), about: 'Privet Drive by night: deep blue sky, stars and a crescent moon top right, the same street dim blue-grey with dark windows (a neighbour\'s window or two softly lit, never Number Four\'s). Door x 640 to 740 (y 380 to 600), doorstep top y 600 (x 615 to 765), bedroom window x 560 to 660, y 200 to 290 (dark, curtained: add a light with a script), garden wall at left x 0 to 420 with its top at y 520, street sign x 175 to 325, y 372 to 424. Ground line y 640; no lamps (put them at x 120, 470, 1050).' },
   },
 
   props: {
@@ -544,5 +593,9 @@ export default defineWorld({
     locket: { art: cached(() => locket()), size: [160, 160], about: 'A gold locket with a green snake S: a hidden treasure.' },
     goldenCup: { art: cached(() => goldenCup()), size: [160, 160], about: 'A two-handled golden cup with a badger: a hidden treasure.' },
     diadem: { art: cached(() => diadem()), size: [160, 160], about: 'A silver diadem with a blue jewel: a hidden treasure.' },
+    streetLamp: { art: cached(() => streetLampArt()), size: [120, 400], about: "A tall black street lamp (Privet Drive). Part glow is the light: fade it to 0 to turn the lamp off (Dumbledore's Put-Outer)." },
+    putOuter: { art: cached(() => putOuterArt()), size: [120, 120], about: "Dumbledore's Put-Outer: a silver lighter-like gadget that clicks street lamps out (and back on). Part lid flips up." },
+    flyingMotorbike: { art: cached(() => flyingMotorbikeArt()), size: [440, 260], about: "Hagrid's huge flying motorbike, side-on facing right. Put Hagrid behind it (lower z) so his head and shoulders rise over the seat. The seat top is at y 108 in the box (x 104 to 264), and the space above it is empty. Part lamp is the headlamp." },
+    babyHarry: { art: cached(() => babyHarryArt()), size: [220, 160], about: 'Baby Harry, asleep in a bundle of blankets, with a letter tucked in (part: letter).' },
   },
 });
