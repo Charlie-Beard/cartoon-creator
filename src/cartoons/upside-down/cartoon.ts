@@ -94,9 +94,9 @@ export default defineCartoon({
     fancy: { who: 'moonface', text: 'Ho ho! Fancy standing on your head all day!' },
     tryIt: { who: 'topsyTurvyMan', text: 'Try it yourself! Upsy-downsy, inside-outsy!' },
     whoa: { who: 'moonface', text: 'Whoa! I’m upside down! The sky is under my feet!' },
-    pudding: { who: 'saucepan', text: 'Moon-Face! You’ve gone all upside-down cake!' },
+    topsyToo: { who: 'saucepan', text: 'Moon-Face! You’ve gone all topsy-turvy!' },
     undo: { who: 'silky', text: 'Please turn him back. The land won’t stay here for long!' },
-    cant: { who: 'topsyTurvyMan', text: 'Oh dear, I mean, oh hooray! I can’t undo it!' },
+    cant: { who: 'topsyTurvyMan', text: 'Oh dear! I mean, hooray! I can’t undo it myself.' },
     rightWay: { who: 'topsyTurvyMan', text: 'Turn upside-down things the right way up. That undoes it!' },
     look: { who: 'silky', text: 'Look! The hat, the toadstool and the teacup!' },
     askHat: { who: 'moonface', text: 'Tap the hat, {name}! Turn things the right way up!' },
@@ -104,7 +104,7 @@ export default defineCartoon({
     wandHat: { who: 'silky', text: 'I’ll turn them with my wand. One, two, three!' },
     turning: { who: 'moonface', text: 'Ooh! I’m turning! I’m turning!' },
     sideways: { who: 'moonface', text: 'Oh. Now I’m SIDEWAYS.' },
-    nearly: { who: 'topsyTurvyMan', text: 'Very bad! I mean, very good! Nearly there!' },
+    nearly: { who: 'topsyTurvyMan', text: 'Nearly there! Nearly the right way up!' },
     moving: { who: 'silky', text: 'The land is moving on! Back to the ladder, quick!' },
     // 3. The top of the ladder
     downWeGo: { who: 'silky', text: 'Down the ladder, everyone, before the land goes!' },
@@ -219,7 +219,7 @@ export default defineCartoon({
         await k.say('whoa', mf);
         await k.all(k.shake(mf, 6, 2), k.wait(300));
         clank(2, 0.1);
-        await k.say('pudding', pan);
+        await k.say('topsyToo', pan);
 
         // Silky asks, kindly, and he explains.
         void flutter(k, silky, 4);
