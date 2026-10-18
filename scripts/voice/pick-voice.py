@@ -21,7 +21,6 @@ first; then hear the character's own lines with
 
     python scripts/voice/generate.py --speaker moonface --limit 5 --force
 
-Never pick a voice that imitates an actor from a film or TV version.
 Needs ELEVENLABS_API_KEY (read from the environment, never from a file).
 """
 import argparse, os, sys, time, urllib.error, urllib.parse, urllib.request
@@ -69,7 +68,7 @@ WANTED = {
                   ["girl", "young", "bright", "kind", "gentle", "clear"], ["old", "mature", "deep"]),
     "tim": want("male", "young", ["british boy character", "little british boy"],
                 ["boy", "young", "bright", "cheerful", "earnest", "small"], ["old", "mature", "deep"]),
-    # Hogwarts (never a voice that imitates a film actor)
+    # Hogwarts
     "hagrid": want("male", "middle_aged", ["warm british gentle giant", "west country british storyteller"],
                    ["warm", "gentle", "friendly", "rumbling", "big", "kind"], ["villain", "sinister"]),
     "dumbledore": want("male", "old", ["wise kind british old man", "gentle british wizard"],
