@@ -1,5 +1,5 @@
 /**
- * Sir Cadogan's pony (book 3; original paper art): a very fat, round,
+ * Sir Cadogan's pony (book 3; original paper art): a very round,
  * dapple-grey pony, side-on, facing right, with short stumpy legs, a shaggy
  * charcoal mane and forelock flopping over sleepy eyes, and a red saddle
  * cloth with a gold edge. Not a portrait bust: the whole pony fills the box,
@@ -98,7 +98,7 @@ function head(): Node {
 }
 
 export function cadoganPony(): string {
-  return svg({ w: 300, h: 340, name: 'cadogan-pony', label: "Sir Cadogan's fat pony", className: 'portrait' }, [
+  return svg({ w: 300, h: 340, name: 'cadogan-pony', label: "Sir Cadogan's pony", className: 'portrait' }, [
     group({ part: 'figure' }, [
       tail(),
       // far legs (darker) first, then the body over their tops, then the near legs

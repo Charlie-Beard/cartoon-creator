@@ -2,13 +2,13 @@
  * Sir Cadogan: a funny week from the third Harry Potter book that the film
  * leaves out. The Lady in Pink, who guards the door to Gryffindor Tower,
  * runs off to hide in another painting, and the only one brave enough to
- * guard the door instead is Sir Cadogan: a mad little knight on a fat grey
+ * guard the door instead is Sir Cadogan: a mad little knight on a round grey
  * pony, who shouts silly passwords and challenges everyone to duels.
  *
  *   1. The empty painting. After supper the friends climb the moving stairs
  *      to Gryffindor Tower, and the Lady in Pink's painting is empty! Peeves
  *      was rude to her, and she ran off to hide. Without her, nobody can get
- *      in. Clip-clop: into the painting gallops a little knight on a fat
+ *      in. Clip-clop: into the painting gallops a little knight on a round
  *      pony. "Fear not! Sir Cadogan is here!" The pony stops dead, and over
  *      he goes: "I meant to do that."
  *   2. Silly passwords. He changes the password every day, sometimes twice.
@@ -77,7 +77,7 @@ const butterfly = cached(() =>
 
 // ---------------------------------------------------------------- sounds
 
-/** Hooves on painted grass: a fat pony's clip-clop, `steps` of them. */
+/** Hooves on painted grass: a round pony's clip-clop, `steps` of them. */
 function clipClop(steps = 6, gap = 0.22): void {
   const t = now();
   for (let i = 0; i < steps; i++) {
@@ -122,6 +122,8 @@ type Actor =
   | 'harry' | 'ron' | 'hermione' | 'neville' | 'knight' | 'pony' | 'lady'
   | 'frame' | 'canvas' | 'parlour' | 'hole' | 'list' | 'butterfly' | 'hem';
 const cast = {} as Record<Actor, HTMLElement>;
+/** Who found the Lady in Pink in scene 4 (he did, or Hermione helped), for her thank-you at the end. */
+let foundBy: 'tapped' | 'helped' = 'tapped';
 
 /** The big painting by the door: its frame (440 × 540) at x 560, y 130; the opening inside is x 600 to 960, y 170 to 630. */
 const FRAME = { x: 560, y: 130, w: 440 };
@@ -160,8 +162,8 @@ async function topple<K extends string>(k: Kit<K>): Promise<void> {
   await k.to(cast.knight, 0.5, { rotation: 30, x: '+=60', y: '+=40', ease: 'power2.in' });
   clank();
   k.remove(cast.knight);
-  cast.knight = k.character('sirCadogan', { pose: 'fallen', x: PONY.x + 150, y: 640 - KNIGHT_W * (340 / 300), w: KNIGHT_W, z: 5 });
-  k.puff(PONY.x + 235, 600, 100);
+  cast.knight = k.character('sirCadogan', { pose: 'fallen', x: PONY.x + 190, y: 640 - KNIGHT_W * (340 / 300), w: KNIGHT_W, z: 5 });
+  k.puff(PONY.x + 260, 600, 100);
   await k.shake(cast.knight, 4, 2);
 }
 
@@ -182,9 +184,9 @@ export default defineCartoon({
     cantGetIn: { who: 'hermione', text: 'But without her, nobody can get into Gryffindor Tower!' },
     fearNot: { who: 'sirCadogan', text: 'Fear not! Sir Cadogan is here!' },
     illGuard: { who: 'sirCadogan', text: 'I shall guard your door! Have at you, scurvy knaves!' },
-    knave: { who: 'ron', text: 'Who’s he calling a knave?' },
-    meantIt: { who: 'sirCadogan', text: 'Ow! I mean… ha! I meant to do that.' },
-    silly: { who: 'hermione', text: 'He’s very brave. And very, very silly.' },
+    knave: { who: 'ron', text: 'What’s a knave? Is that us?' },
+    meantIt: { who: 'sirCadogan', text: 'Oops! Ha ha! I meant to do that.' },
+    silly: { who: 'hermione', text: 'He fell off! But he’s very brave. And very, very silly.' },
     // 2. Silly passwords
     everyDay: { who: 'narrator', text: 'Sir Cadogan changed the password every day. Sometimes twice!' },
     halt: { who: 'sirCadogan', text: 'Halt! Who goes there? Password!' },
@@ -192,7 +194,7 @@ export default defineCartoon({
     yesterday: { who: 'sirCadogan', text: 'Ha! That was yesterday’s password. Today it’s a new one!' },
     wroteDown: { who: 'neville', text: 'I can never remember them. So I wrote them all down!' },
     longList: { who: 'ron', text: 'That’s a very long list, Neville.' },
-    duel: { who: 'sirCadogan', text: 'You there, ginger knave! I challenge you to a duel!' },
+    duel: { who: 'sirCadogan', text: 'You there, young knave! I challenge you to a duel!' },
     sandwich: { who: 'ron', text: 'I haven’t got a sword. I’ve only got a sandwich.' },
     cantRead: { who: 'neville', text: 'Oh no. I can’t read my own writing!' },
     askList: { who: 'neville', text: '{name}, can you help me? Tap my list, and find today’s password.' },
@@ -204,12 +206,12 @@ export default defineCartoon({
     thanksHarry: { who: 'neville', text: 'Thanks, Harry! I’d be lost without you.' },
     // 3. The runaway pony
     morning: { who: 'narrator', text: 'Next morning, a painted butterfly fluttered past Sir Cadogan’s painting.' },
-    comeBack: { who: 'sirCadogan', text: 'Come back, you lazy lump of a pony!' },
+    comeBack: { who: 'sirCadogan', text: 'Come back, you sleepy pony!' },
     allRight: { who: 'harry', text: 'Are you all right, Sir Cadogan?' },
     neverBetter: { who: 'sirCadogan', text: 'Never better! A knight never needs his pony. Well… hardly ever.' },
     munching: { who: 'hermione', text: 'Look, his pony is munching the painted grass.' },
     askPony: { who: 'hermione', text: '{name}, can you call the pony back? Tap it!' },
-    nudgePony: { who: 'hermione', text: 'Tap the fat grey pony.' },
+    nudgePony: { who: 'hermione', text: 'Tap the little grey pony.' },
     helpedPony: { who: 'harry', text: 'Here, pony! Come on, back you come!' },
     onward: { who: 'sirCadogan', text: 'Ha ha! Onward, my noble steed!' },
     thanksPony: { who: 'sirCadogan', text: 'My thanks, brave {name}!' },
@@ -231,11 +233,12 @@ export default defineCartoon({
     // 5. Home again
     farewell: { who: 'sirCadogan', text: 'Farewell, friends! If you ever need a hero, just call!' },
     byeKnight: { who: 'hermione', text: 'Goodbye, Sir Cadogan! Thank you!' },
-    homeSweet: { who: 'pinkLady', text: 'Ah, home sweet home! Now, my dears. Password?' },
+    homeSweet: { who: 'pinkLady', text: 'Ah, home sweet home! Now, my dears. Let me think of a new password.' },
     whatNow: { who: 'ron', text: 'Oh no. What is it now?' },
-    braveKnight: { who: 'pinkLady', text: 'Today the password is: brave knight!' },
+    braveKnight: { who: 'pinkLady', text: 'I know! Today the password is: brave knight!' },
     together: { who: 'harry', text: 'Brave knight!' },
     thanksName: { who: 'pinkLady', text: 'And thank you, {name}, for finding me.' },
+    thanksHermione: { who: 'pinkLady', text: 'And thank you, Hermione, for finding me.' },
     end: { who: 'narrator', text: 'And the Lady in Pink sang a happy song, very loudly, all the way to bedtime.' },
   },
   scenes: [
@@ -263,7 +266,7 @@ export default defineCartoon({
         k.music('sneaky');
         await k.say('cantGetIn', hermione);
 
-        // Clip-clop: into the painting gallops a little knight on a fat pony.
+        // Clip-clop: into the painting gallops a little knight on a round pony.
         k.music('adventure');
         clipClop(10);
         await k.to([pony, knight], 1.6, { x: 0, opacity: 1, ease: 'power1.out' });
@@ -289,10 +292,10 @@ export default defineCartoon({
         k.backdrop('grand-staircase');
         k.music('cosy');
         painting(k);
-        cast.harry = k.character('harry', { x: 30, y: 445, w: 200 });
-        cast.ron = k.character('ron', { x: 180, y: 445, w: 200 });
-        cast.neville = k.character('neville', { x: 330, y: 445, w: 200 });
-        cast.list = k.prop('passwordList', { x: 440, y: 520, w: 70, z: 12 });
+        cast.harry = k.character('harry', { x: 0, y: 456, w: 190 });
+        cast.ron = k.character('ron', { x: 145, y: 456, w: 190 });
+        cast.neville = k.character('neville', { x: 290, y: 456, w: 190 });
+        cast.list = k.prop('passwordList', { x: 470, y: 520, w: 70, z: 12 });
         k.set(cast.list, { opacity: 0 });
       },
       async play(k) {
@@ -306,7 +309,7 @@ export default defineCartoon({
         k.sfx.rustle();
         await k.fade(list, 1, 0.3);
         await k.say('wroteDown', neville);
-        await k.to(list, 0.7, { y: -120, scale: 1.6, ease: 'back.out(1.4)' });
+        await k.to(list, 0.7, { y: -110, scale: 1.4, ease: 'back.out(1.4)' });
         await k.say('longList', ron);
 
         // A duel! With a sandwich.
@@ -353,10 +356,10 @@ export default defineCartoon({
         k.set(fly, { opacity: 1 });
         await k.to(fly, 1.6, { x: -300, y: 60, ease: 'sine.inOut' });
         neigh();
-        await k.all(trot(k, [pony], 2), k.to(pony, 0.8, { x: 70, ease: 'power1.in' }), topple(k));
+        await k.all(trot(k, [pony], 2), k.to(pony, 0.8, { x: -10, ease: 'power1.in' }), topple(k));
         await k.fade(fly, 0, 0.4);
         // Off the pony wanders, to the edge of the painting, and starts munching.
-        await k.to(pony, 0.6, { x: 120 });
+        await k.to(pony, 0.6, { x: -20 });
         await k.to(k.pivot(k.part(pony, 'head')), 0.6, { rotation: 18 });
         await k.say('comeBack', cast.knight);
         await k.say('allRight', harry);
@@ -397,10 +400,11 @@ export default defineCartoon({
           k.prop('portraitFrame', { x, y: 200, w: 180, z: 6 });
         };
         [520, 730, 940].forEach(small);
-        // She hides just out of sight: only the hem of her pink dress peeps in at the edge of the last painting.
+        // She hides just out of sight. Later, the hem of her pink dress peeps in at the edge of the last painting.
         cast.lady = k.character('pinkLady', { x: 970, y: 268, w: 110, z: 4 });
         k.set(cast.lady, { opacity: 0 });
-        cast.hem = k.add(pinkHem(), { x: 1040, y: 372, w: 60, z: 5 });
+        cast.hem = k.add(pinkHem(), { x: 1000, y: 360, w: 100, z: 5 });
+        k.set(cast.hem, { opacity: 0 });
         cast.knight = k.character('sirCadogan', { x: 555, y: 260, w: 110, z: 5 });
         k.set(cast.knight, { opacity: 0 });
       },
@@ -411,26 +415,26 @@ export default defineCartoon({
         await k.fade(knight, 1, 0.3);
         await k.all(k.say('leaveIt', knight), brandish(k, knight));
         // He pops from painting to painting.
-        clipClop(4);
         await k.say('notThisOne', knight);
         k.fx.whizz();
         await k.to(knight, 0.5, { x: 210, ease: 'power1.inOut' });
-        clipClop(4);
         await k.say('notThatOne', knight);
         k.music('magic');
+        k.fx.pop();
+        await k.fade(cast.hem, 1, 0.4);
         await k.say('pink', hermione);
 
         // His third turn: tap the painting with something pink in it.
         const spot = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', { x: 960, y: 220, w: 140, h: 180, z: 20 });
-        await k.tapToHelp(spot, { ask: 'askPainting', nudge: 'nudgePainting', helped: 'helpedPainting', by: harry, helper: hermione, size: 190 });
+        foundBy = await k.tapToHelp(spot, { ask: 'askPainting', nudge: 'nudgePainting', helped: 'helpedPainting', by: harry, helper: hermione, size: 190 });
         k.remove(spot);
         k.fx.knock(2);
         k.fx.twinkle();
         await k.all(k.fade(cast.hem, 0, 0.4), k.to(lady, 0.8, { opacity: 1, ease: 'power1.out' }));
         await k.say('foundMe', lady);
         await k.say('soRude', lady);
-        // Sir Cadogan hurries into the painting next door and bows.
-        clipClop(4);
+        // Sir Cadogan turns to her, in the painting next door, and bows.
+        k.fx.whizz();
         await k.to(knight, 0.5, { x: 210 - 30, ease: 'power1.inOut' });
         await k.to(knight, 0.3, { rotation: -14, yoyo: true, repeat: 1 });
         await k.say('fairLady', knight);
@@ -469,7 +473,7 @@ export default defineCartoon({
         await k.say('whatNow', ron);
         await k.say('braveKnight', lady);
         await k.all(k.say('together', harry), k.hop(harry, 20));
-        await k.say('thanksName', lady);
+        await k.say(foundBy === 'tapped' ? 'thanksName' : 'thanksHermione', lady);
         sing();
         await k.to(k.pivot(k.part(lady, 'armR')), 0.4, { rotation: -16, yoyo: true, repeat: 3 });
         await warmEnding(k, { cast: [harry, ron, hermione], end: 'end' });
