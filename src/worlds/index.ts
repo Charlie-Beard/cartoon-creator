@@ -6,12 +6,14 @@
 import common from './common';
 import faraway from './faraway';
 import hogwarts from './hogwarts';
+import bears from './bears';
 import type { BackdropDef, CharacterDef, PropDef, World } from './types';
 
 export const WORLDS: Record<string, World> = {
   common,
   faraway,
   hogwarts,
+  bears,
 };
 
 export type { BackdropDef, CharacterDef, PropDef, World } from './types';
