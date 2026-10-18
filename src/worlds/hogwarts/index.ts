@@ -140,6 +140,13 @@ import { diagonAlley } from './places/diagon-alley';
 import { flourishAndBlotts } from './places/flourish-and-blotts';
 import { bookCage, bookPile } from './objects/bookCage';
 import { sundae } from './objects/sundae';
+import { grindylow, grindylowGiggling } from './characters/grindylow';
+import { redCap } from './characters/redCap';
+import { hinkypunk } from './characters/hinkypunk';
+import { sunnyGrounds } from './places/sunny-grounds';
+import { marsh } from './places/marsh';
+import { poolBack, poolFront } from './objects/grindylowPool';
+import { potholeBack, potholeFront } from './objects/pothole';
 
 // The hair-and-robe portraits, shared by the notes below.
 const PERSON = ['figure', 'head', 'lids', 'mouth', 'mouthOpen'];
@@ -726,6 +733,33 @@ export default defineWorld({
         'Florean Fortescue, the jolly owner of the ice-cream parlour in Diagon Alley: round and twinkly, a curly brown moustache, a pink-and-white striped apron and a white paper hat, holding a scoop of pink ice cream. Gives Harry a free sundae every half hour all summer, and knows lots of history. Warm, generous and chatty. `armR` swings from the shoulder (232, 262) and holds the scoop: lift it to offer a treat.',
       voice: 'Warm, cheery, rather Italian-sounding middle-aged man (a light touch).',
     },
+    grindylow: {
+      name: 'The Grindylow',
+      art: grindylow,
+      poses: { giggling: grindylowGiggling },
+      parts: ['figure', 'head', 'lids', 'mouth', 'mouthOpen', 'armR', 'fingers'],
+      about:
+        'A grabby little water creature that lives in the pool on the exam course and grabs ankles: small and pale green, with two little sharp horns, big round yellow eyes, a wide cheeky grin of tiny teeth and very long, spindly, knobbly fingers. Drawn from the chest up so it pops out of the water (the body fades at the bottom edge). Part armR swings from the shoulder (204, 248); the child group `fingers` has its origin at the wrist (250, 262) so the fingers can curl and let go. It is very ticklish: a tap on its fingers makes it giggle and let go. The `giggling` pose has the eyes squeezed shut, the mouth wide open, the arm thrown up (wrist 252, 184) and the fingers spread open. Cheeky, never nasty; nobody is hurt.',
+      voice: 'No words: gurgles, bubbles and giggles (synth or recorded sounds, not an ElevenLabs voice).',
+    },
+
+    redCap: {
+      name: 'A Red Cap',
+      art: redCap,
+      parts: ['figure', 'head', 'lids', 'mouth', 'mouthOpen', 'tongue', 'armR'],
+      about:
+        'A tiny knobbly goblin-like creature in a big pointy, woolly red cap, with a turnip nose, pointy ears, a cheeky scowl, a patched brown tunic and little bare feet. Lives in the potholes on the exam course; pops up, blows raspberries (show `tongue` with `mouthOpen`) and tries to tug shoelaces. Carries no weapon. Scared of a loud laugh: it ducks back down into its hole. Small: the figure sits in the lower 70% of the box. Part armR swings from the shoulder (196, 240).',
+      voice: 'No words: grumbles, squeaks and raspberries (synth or recorded sounds, not an ElevenLabs voice).',
+    },
+
+    hinkypunk: {
+      name: 'The Hinkypunk',
+      art: hinkypunk,
+      parts: ['figure', 'head', 'lids', 'mouth', 'mouthOpen', 'lantern', 'glow'],
+      about:
+        'A little one-legged creature made of curling pale grey-blue smoke, see-through and frail-looking, with big sly yellow-green eyes and a sneaky grin. Hops on one leg and holds up a lantern on a pole. Lives in the marsh and swings its lantern to tempt people off the path into the bog; harmless if you do not follow the light. Part `lantern` (pole and lantern) swings from the hand (222, 252); `glow` inside it (centre 264, 134) is a soft yellow-green light a script can fade.',
+      voice: 'No words: a whispery giggle and "ooh" (synth or recorded sounds, not an ElevenLabs voice).',
+    },
   },
 
   backdrops: {
@@ -780,6 +814,8 @@ export default defineWorld({
     'grand-staircase': { art: cached(() => grandStaircase()), about: 'The landing at the top of the moving staircases outside Gryffindor Tower: a tall dim blue-grey stone stairwell, flights criss-crossing up into the dark at the top and zig-zagging up both side edges, lots of tiny old gold-framed paintings (fruit, hills, silhouettes) on the left wall (all above y 300) and along the top, warm torches at x 515 and x 995. Stone landing floor, ground line y 670. Floor space at left (x 80 to 500) for 3 children. A big plain wall at x 520 to 980, y 120 to 660 is left clear for the portraitFrame prop (440 x 540, e.g. left 540, top 130). Bottom band y 690 to 820 is plain flagstones.' },
     'diagon-alley': { art: cached(() => diagonAlley()), about: 'Diagon Alley on a sunny summer morning: a winding street of crooked, colourful shopfronts squashed together, striped awnings, chimneys, bunting, picture signs only (cauldron, book, owl, ice-cream cone, broom) and a blue sky strip along the top. LEFT (x 40 to 380) Florean Fortescue\'s ice-cream parlour: cream-and-mint front, bow window with ice-cream pictures (x 70 to 350, y 330 to 560), pink-and-white striped awning (y 268 to 340), two little round cafe tables on the cobbles (centres x 115 and x 300, tops y 600). RIGHT (x 820 to 1120) the sports shop with an empty pale window (x 850 to 1090, y 300 to 560) for a broom prop, a red awning above it (y 232 to 292) and a broom sign. Middle (x 380 to 820) open cobbles for 3 actors. Ground line at about y 670; bottom band (y 690 to 820) is plain cobbles.' },
     'flourish-and-blotts': { art: cached(() => flourishAndBlotts()), about: 'Inside the bookshop in Diagon Alley, warm, dusty and cosy: floor-to-ceiling wooden shelves of books in warm colours (no lettering), a brass rail with a rolling ladder (x 650 to 740), a hanging green lamp at x 590 with a soft glow, wooden floorboards. At the LEFT a counter (x 40 to 330, top y 455) with a brass till and a pile of books on it. Middle (x 360 to 820) clear floor for 3 actors; RIGHT (x 820 to 1160) bare floor with dimmer shelves behind, clear for the bookCage prop (bottom edge at y 670). Ground line at about y 670; bottom band (y 690 to 820) is plain floorboards.' },
+    'sunny-grounds': { art: cached(() => sunnyGrounds()), about: 'The school grounds on a bright summer day: blue sky with fluffy clouds and a pale sun (top left), the castle small on its hill at back right (x 725 to 975, y 250 to 470), the lake glinting at back left (x 0 to 490, y 410 to 506), green rolling grass with a few daisies, a round tree at x 200 to 385 (behind the actors), bigger trees at the right edge (x 920 to 1180), and at the left edge a wooden sign-post with three arrow boards (no words) and bunting (x 28 to 150, y 458 to 668) for "the course starts here". Ground line at about y 660; open grass for 3 or 4 actors across x 150 to 1050. Bottom band y 690 to 820 is plain grass.' },
+    marsh: { art: cached(() => marsh()), about: 'A misty bog at the end of the course, late afternoon: dull golden sky with a low pale sun (x 820, y 330), dark reeds, bulrushes and stumpy willows, dark green-brown bog pools (back left x 70 to 390, y 520 to 580; right x 850 to 1075, y 545 to 590; front right x 720 to 1140, y 640 to 690) and soft mist bands. A raised grassy path with flat stepping stones winds from the left front to the right back: centre line (-20,672) (170,668) (330,648) (480,632) (620,596) (760,572) (900,520) (1060,498) (1220,470), about 110 px deep at the left narrowing to 40 at the right. Ground line at the front about y 660; room for 3 actors on the path at the left and middle (feet on the centre line, x 100 to 650). Gentle and a little eerie, never frightening. Bottom band y 720 to 820 is plain turf. Good for a far-off lantern light at the right back.' },
   },
 
   props: {
@@ -896,5 +932,10 @@ export default defineWorld({
     bookCage: { art: cached(() => bookCage()), size: [320, 360], about: 'A big black iron cage like a giant birdcage: low base with feet, straight bars, a domed top with a ring. Almost transparent between the bars, so book characters placed behind it (lower z) show through. Bottom edge y 360 stands on the floor. Inside rectangle x 40 to 280, y 92 to 322. Part door is the latch door in the front (x 118 to 202, y 190 to 322), origin at its left hinge [118, 256]: rotate it to swing open.' },
     bookPile: { art: cached(() => bookPile()), size: [200, 160], about: 'Four ordinary books stacked a little crooked (red, blue, green, mustard) with cream page edges and a pink bookmark ribbon. No lettering. Flat bottom at y 160.' },
     sundae: { art: cached(() => sundae()), size: [140, 200], about: 'A huge ice-cream sundae in a tall glass with a stem and flat foot: strawberry, chocolate and vanilla scoops, a swirl of cream, nuts, sprinkles and a long spoon at the top right. Part cherry is the cherry on top, origin [70, 30] where its stalk meets the cream: wobble it. Flat bottom at y 200, so it can stand on a table.' },
+    // Lupin's Obstacle Course
+    poolBack: { art: cached(() => poolBack()), size: [700, 220], about: 'The far half of a wide shallow pool with a stone rim: green water, lily pads, ripples, reeds and bulrushes at the right end. Place it at the SAME x, y as poolFront and put actors (and the Grindylow) between the two in z, so poolFront hides their legs. Open water x 60 to 560, y 60 to 150 in the box.' },
+    poolFront: { art: cached(() => poolFront()), size: [700, 220], about: 'The near half of the same pool: wavy water with its top edge (the water line) at y 128 in the box, and a low stone rim below, y 168 to 220. Transparent above the waves. Put it in front of the actors at the same x, y as poolBack; an actor with its feet at box y 160 to 190 wades in it.' },
+    potholeBack: { art: cached(() => potholeBack()), size: [220, 110], about: 'The far half of a pothole in the grass: a dark oval hole with an earth rim and grass tufts. Opening centred at (110, 54) in the box, rx 84, ry 28. Place at the SAME x, y as potholeFront and put a small creature between them in z.' },
+    potholeFront: { art: cached(() => potholeFront()), size: [220, 110], about: 'The near lip of the same pothole: earth and grass below the opening\'s lower edge (y 54 at the sides, curving to y 84 at x 110), flat bottom at y 108. In front of a creature that pops up out of the hole (slide it up from box y 85 or lower).' },
   },
 });
