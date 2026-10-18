@@ -142,19 +142,23 @@ export default defineCartoon({
     sunny: { who: 'narrator', text: 'It was the last week of term, and the sun was shining on Hogwarts.' },
     welcome: { who: 'lupin', text: 'Welcome to your exam! It’s an obstacle course, full of magical creatures.' },
     course: { who: 'lupin', text: 'A pool, some potholes, and a marsh. And chocolate at the end.' },
+    tips: { who: 'lupin', text: 'Three tips. Grindylows are ticklish. Red Caps hate being laughed at.' },
+    tip3: { who: 'lupin', text: 'And never, ever follow a Hinkypunk’s light.' },
     hermioneTwice: { who: 'ron', text: 'Hermione’s done it already. Twice!' },
-    worried: { who: 'neville', text: 'I’m rubbish at exams. I’ll never get round.' },
+    worried: { who: 'neville', text: 'I’ll never remember all that. I’m rubbish at exams.' },
     withYou: { who: 'harry', text: 'We’ll go round with you, Neville. And {name} can help too!' },
     yourself: { who: 'lupin', text: 'Good. But Neville must do the tricky bits himself. Off you go!' },
     // 2. The Grindylow pool
     wading: { who: 'narrator', text: 'First, they waded into a big green pool.' },
     cold: { who: 'ron', text: 'Ooh! It’s cold!' },
     grabbed: { who: 'neville', text: 'Help! Something’s got my sleeve!' },
+    wontLetGo: { who: 'neville', text: 'It won’t let go!' },
     grindylow: { who: 'harry', text: 'A Grindylow! Professor Lupin said they’re very ticklish!' },
     askFingers: { who: 'neville', text: '{name}, will you tickle the Grindylow with me? Tap it!' },
     nudgeFingers: { who: 'neville', text: 'Tap the little green Grindylow.' },
     helpedFingers: { who: 'neville', text: 'Tickle, tickle!' },
     letGo: { who: 'harry', text: 'It’s giggling! It let go!' },
+    byeBye: { who: 'ron', text: 'Bye bye, giggly Grindylow!' },
     didIt: { who: 'neville', text: 'And I did it! Well, we did it.' },
     // 3. The Red Caps
     potholes: { who: 'narrator', text: 'Next came a field full of potholes.' },
@@ -186,6 +190,7 @@ export default defineCartoon({
     wellDone: { who: 'lupin', text: 'Well done, all of you! Have some chocolate.' },
     neville: { who: 'neville', text: 'Did I pass, Professor?' },
     fullMarks: { who: 'lupin', text: 'Full marks, Neville. You were very brave.' },
+    remembered: { who: 'lupin', text: 'And you remembered all three tips.' },
     whoopee: { who: 'neville', text: 'Full marks! Me! Wait till I tell my gran!' },
     goodFriends: { who: 'lupin', text: 'And Harry, Ron, you were very good friends.' },
     more: { who: 'ron', text: 'Thanks, Professor. Er… is there any more chocolate?' },
@@ -210,6 +215,8 @@ export default defineCartoon({
         await k.say('sunny');
         await k.say('welcome', lupin);
         await k.say('course', lupin);
+        await k.say('tips', lupin);
+        await k.say('tip3', lupin);
         await k.all(k.say('hermioneTwice', ron), k.shake(ron, 3, 2));
         k.music('dreamy');
         await k.all(k.say('worried', neville), k.to(neville, 0.5, { y: 12, ease: 'sine.out' }));
@@ -250,6 +257,7 @@ export default defineCartoon({
         k.fx.splash();
         await k.to(grindylow, 0.7, { y: 0, opacity: 1, ease: 'back.out(1.4)' });
         await k.all(k.say('grabbed', neville), k.shake(neville, 5, 3));
+        await k.all(k.say('wontLetGo', neville), k.shake(neville, 4, 2));
         await k.say('grindylow', harry);
 
         // His first turn: tickle the Grindylow.
@@ -261,6 +269,7 @@ export default defineCartoon({
         gurgle();
         k.fx.splash();
         await k.to(grindylow, 0.7, { y: 260, opacity: 0, ease: 'power2.in' });
+        await k.say('byeBye', ron);
         k.music('triumph');
         await k.all(k.say('didIt', neville), k.hop(neville, 24));
         await k.wait(300);
@@ -402,6 +411,7 @@ export default defineCartoon({
         }
         await k.say('neville', neville);
         await k.say('fullMarks', lupin);
+        await k.say('remembered', lupin);
         k.music('triumph');
         await k.all(k.say('whoopee', neville), k.hop(neville, 30, 2));
         await k.say('goodFriends', lupin);
