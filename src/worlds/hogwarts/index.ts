@@ -28,6 +28,7 @@ import {
 } from './characters/hosts2';
 import { buckbeakFly, fawkesFly, hedwigFly, voldemortLoom } from './characters/poses';
 import { snape } from './characters/snape';
+import { lockhart } from './characters/lockhart';
 import { tabbyCat } from './characters/tabbyCat';
 import { peeves } from './characters/peeves';
 import { baron, baronLoom } from './characters/baron';
@@ -104,6 +105,8 @@ import { christmasTree, snowball } from './objects/christmasTree';
 import { admiralHat, cracker, flowerBonnet, jumper, whiteMouse } from './objects/christmas';
 import { ghostParty } from './places/ghost-party';
 import { ghostFeast, gong, sawBand } from './objects/ghostFeast';
+import { dwarfCupid } from './characters/dwarfCupid';
+import { bigHeart, harp, heartGarland, valentineCard } from './objects/valentine';
 
 // The hair-and-robe portraits, shared by the notes below.
 const PERSON = ['figure', 'head', 'lids', 'mouth', 'mouthOpen'];
@@ -580,6 +583,24 @@ export default defineWorld({
         'Sir Patrick, leader of the Headless Hunt (book 2): a jolly, booming, show-off ghost huntsman, see-through and tinted silvery green like Nick. A ghost-pale red hunting jacket with brass buttons and a frilly white ruff at the top of the shoulders, with nothing above it but a soft curl of silvery mist (no neck, no stump: never gory). He holds his own head in both hands in front of his chest, grinning: a black riding cap, a huge curly moustache and rosy cheeks. Part `head` is the held head (origin at its centre, 150, 264) so a script can toss it up and catch it or spin it; `mouth`, `mouthOpen` and `lids` are inside it. The hands stay put when the head is tossed. He says "Tally-ho!" and "What ho, Nicholas!", loves a gallop and a show, and teases Nick that his head is not properly off ("Not quite off, is it, old chap?"), but never cruelly: in the end he cheers for Nick loudest.',
       voice: 'Booming, plummy, jolly old English huntsman; loud and pleased with himself.',
     },
+
+    lockhart: {
+      name: 'Professor Lockhart',
+      art: lockhart,
+      parts: [...PERSON_WAND, 'armR'],
+      about:
+        'Gilderoy Lockhart, the vain, cheerful Defence Against the Dark Arts teacher (book 2): glossy golden waves swept up in a perfect quiff, bright blue eyes, one eyebrow raised, rosy cheeks and a dazzling wide toothy smile. Dressed for Valentine\'s Day in a bright pink robe, a frilly lilac cravat and a big pink paper heart badge. A show-off who loves being admired ("Gilderoy Lockhart, Order of Merlin, Third Class!"), always smiling and winking, sure every idea of his is marvellous. His spells often go comically wrong, and he blames anything but himself. Harmless and silly, never cruel. The `wand` is held up on the left of the picture (pivot at his fist); `armR` swings from the right shoulder (226, 258) for a flourish or a wave.',
+      voice: 'Smooth, plummy, over-the-top charming British man; delighted with himself.',
+    },
+
+    dwarfCupid: {
+      name: 'The cupid',
+      art: dwarfCupid,
+      parts: [...PERSON, 'wingL', 'wingR'],
+      about:
+        'One of Lockhart\'s grumpy dwarfs on Valentine\'s Day (book 2), made to dress as a cupid: short and stocky, a bald ruddy head with a few brown tufts, a gold paper crown of hearts, heavy frowning eyebrows, a bulbous nose, a huge bushy brown beard, a cream tunic with a raspberry sash and small golden paper wings (`wingL` and `wingR`, origins at the shoulders, so they flap). Gruff and very determined to deliver every valentine, however embarrassing: marches, stomps and shouts "Oi!". He sings badly but proudly. Funny, never frightening, and he never hurts anyone.',
+      voice: 'Gruff, grumpy, gravelly little man; Northern English; sings off-key.',
+    },
   },
 
   backdrops: {
@@ -703,5 +724,11 @@ export default defineWorld({
     gong: { art: cached(() => gong()), size: [200, 240], about: 'A big round brass gong hanging from a dark wooden frame on two legs, with a little padded beater leaning on the frame. Part `disc` is the hanging gong (origin at its top hanging point): swing or shake it when it is struck.' },
     sawBand: { art: cached(() => sawBand()), size: [340, 240], about: 'A ghost band: three see-through pale-blue ghost musicians side by side (one in a tall hat, one in a ruff and bonnet, one with a curly moustache and cap), each playing a big musical saw with a bow. Stands on the platform in the ghost-party backdrop. Part `bows` (all three bows, origin about the centre) wiggles for playing.' },
     ghostFeast: { art: cached(() => ghostFeast()), size: [600, 200], about: 'A long table with a black cloth laid with rotten ghost food in greys and sickly greens: a green fish, a mouldy grey cheese, a lumpy grey cake with 500 in grey icing, burnt black sausages and a silver cloche. Flat bottom on the floor; people stand behind it and it hides their chests.' },
+
+    // The Singing Valentine
+    harp: { art: cached(() => harp()), size: [140, 170], about: "A small golden lyre-harp, like a cupid's, with curly scrolls and a little red heart on the cross-bar. Part strings (origin at its middle, [70, 90]) can be wobbled or twanged." },
+    heartGarland: { art: cached(() => heartGarland()), size: [600, 120], about: 'A long string of pink, red and white paper hearts hanging in three gentle swags, with gold pins at the ends and joins. Hang it across a hall or a doorway; the top edge (the string) is at y 12 to 62.' },
+    valentineCard: { art: cached(() => valentineCard()), size: [140, 110], about: 'A pink folded valentine card seen from the front: a lace edge, a fold down the left, and a big red heart.' },
+    bigHeart: { art: cached(() => bigHeart()), size: [160, 150], about: 'One big glossy pink paper heart with a shine on its upper left. Float it about, bob it, or burst it into confetti.' },
   },
 });
