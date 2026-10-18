@@ -11,8 +11,8 @@
  *      Ron will go round with him, and he has to do the tricky bits himself.
  *   2. The Grindylow pool. Wading through the green water, a little horned
  *      Grindylow pops up and grabs Neville's sleeve with its long knobbly
- *      fingers. Lupin calls out: Grindylows are very ticklish! His first
- *      turn: he taps its fingers. It giggles, lets go and sinks with a
+ *      fingers. Grindylows are very ticklish! His first turn: he tickles
+ *      it. It giggles, lets go and sinks with a
  *      bubble.
  *   3. The Red Caps. Potholes in the grass, and out of them pop little Red
  *      Caps, blowing raspberries and tugging at shoelaces. Red Caps can't
@@ -28,13 +28,13 @@
  *      chocolate. Full marks, all of them, and Neville most of all.
  *
  * There's no villain: the creatures are cheeky, not nasty. Professor Lupin
- * watches from the start and the finish (in the pool Harry remembers his tip). The Grindylow
+ * is at the start and the finish; in the pool Harry remembers what he said. The Grindylow
  * grabs a sleeve and lets go laughing, the Red Caps only blow raspberries
  * and tug laces (the book's Red Caps "bludgeon"; these carry nothing), and
  * the Hinkypunk only beckons. The book's last obstacle, the Boggart in a
- * trunk, is left out. Nobody gets wet above the knees.
+ * trunk, is left out. The pool is only for wading.
  */
-import { C, NOTE, cached, defineCartoon, noiseBurst, now, piece, rect, svg, tone, type Kit } from '../../kit';
+import { C, NOTE, cached, defineCartoon, ellipse, noiseBurst, now, piece, rect, svg, tone, type Kit } from '../../kit';
 import { sounds as commonSounds } from '../../worlds/common/moves';
 import { warmEnding } from '../../worlds/common/pieces';
 import meta from './meta';
@@ -49,6 +49,15 @@ const chocolate = cached(() =>
     piece(rect(4, 8, 82, 36, 4), '#6b3f25', { edge: 'cut' }),
     ...[22, 44].map((x) => piece(rect(x, 10, 2, 32), '#4f2c19', { edge: 'clean', shadow: false })),
     piece(rect(44, 6, 44, 40, 3), C.gold, { edge: 'cut' }),
+  ]),
+);
+
+/** One big flat stepping stone (130 × 56), paler than the rest with a soft gold edge: the next safe step. */
+const bigStone = cached(() =>
+  svg({ w: 130, h: 56, name: 'lupin-big-stone', label: 'A big flat stone' }, [
+    piece(ellipse(65, 30, 62, 24), '#f3e2a0', { edge: 'clean', shadow: false, opacity: 0.6 }),
+    piece(ellipse(65, 28, 54, 19), '#d9d6cc'),
+    piece(ellipse(56, 24, 30, 8), '#efece4', { edge: 'clean', shadow: false }),
   ]),
 );
 
@@ -110,16 +119,11 @@ const POOL = { x: 240, y: 470, w: 700 };
 const HOLES = [250, 560, 870];
 const HOLE_Y = 560;
 
-/** An invisible tap spot centred on (x, y), so the ring goes round one small thing. */
-function spot<K extends string>(k: Kit<K>, x: number, y: number, size = 130): HTMLElement {
-  return k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', { x: x - size / 2, y: y - size / 2, w: size, h: size, z: 25 });
-}
-
 /** The Red Cap pops up out of hole `i` (and blows a raspberry), or ducks back down. */
 async function capUp<K extends string>(k: Kit<K>, cap: HTMLElement, i: number): Promise<void> {
   k.set(cap, { x: HOLES[i] - HOLES[0], y: 0, opacity: 1 });
   popUp();
-  await k.to(cap, 0.4, { y: -150, ease: 'back.out(1.6)' });
+  await k.to(cap, 0.4, { y: -170, ease: 'back.out(1.6)' });
   raspberry();
   k.set([...k.part(cap, 'mouthOpen'), ...k.part(cap, 'tongue')], { opacity: 1 });
   await k.wait(700);
@@ -138,24 +142,19 @@ export default defineCartoon({
     sunny: { who: 'narrator', text: 'It was the last week of term, and the sun was shining on Hogwarts.' },
     welcome: { who: 'lupin', text: 'Welcome to your exam! It’s an obstacle course, full of magical creatures.' },
     course: { who: 'lupin', text: 'A pool, some potholes, and a marsh. And chocolate at the end.' },
-    hinkyQuestion: { who: 'lupin', text: 'Now, who knows what a Hinkypunk does?' },
-    hinkyGuess: { who: 'neville', text: 'Er… does it sing?' },
-    findOut: { who: 'lupin', text: 'Not quite. You’ll find out!' },
     hermioneTwice: { who: 'ron', text: 'Hermione’s done it already. Twice!' },
     worried: { who: 'neville', text: 'I’m rubbish at exams. I’ll never get round.' },
     withYou: { who: 'harry', text: 'We’ll go round with you, Neville. And {name} can help too!' },
     yourself: { who: 'lupin', text: 'Good. But Neville must do the tricky bits himself. Off you go!' },
     // 2. The Grindylow pool
     wading: { who: 'narrator', text: 'First, they waded into a big green pool.' },
-    cold: { who: 'ron', text: 'Ooh! It’s cold on my knees!' },
+    cold: { who: 'ron', text: 'Ooh! It’s cold!' },
     grabbed: { who: 'neville', text: 'Help! Something’s got my sleeve!' },
-    grindylow: { who: 'harry', text: 'It’s a Grindylow! Look at its long fingers!' },
-    ticklish: { who: 'harry', text: 'Professor Lupin told us! Grindylows are very ticklish!' },
-    askFingers: { who: 'neville', text: '{name}, will you tickle its fingers with me? Tap them!' },
-    nudgeFingers: { who: 'neville', text: 'Tap its long green fingers.' },
+    grindylow: { who: 'harry', text: 'A Grindylow! Professor Lupin said they’re very ticklish!' },
+    askFingers: { who: 'neville', text: '{name}, will you tickle the Grindylow with me? Tap it!' },
+    nudgeFingers: { who: 'neville', text: 'Tap the little green Grindylow.' },
     helpedFingers: { who: 'neville', text: 'Tickle, tickle!' },
     letGo: { who: 'harry', text: 'It’s giggling! It let go!' },
-    giggling: { who: 'ron', text: 'That Grindylow was giggling like mad!' },
     didIt: { who: 'neville', text: 'And I did it! Well, we did it.' },
     // 3. The Red Caps
     potholes: { who: 'narrator', text: 'Next came a field full of potholes.' },
@@ -173,12 +172,12 @@ export default defineCartoon({
     // 4. The Hinkypunk's marsh
     marsh: { who: 'narrator', text: 'Last of all, they came to a misty marsh.' },
     squelchy: { who: 'ron', text: 'Yuck. It’s all squelchy. And misty.' },
-    thisWay: { who: 'narrator', text: 'A little wispy creature hopped on one leg, and swung a lantern. This way, it seemed to say.' },
+    thisWay: { who: 'narrator', text: 'A wispy creature hopped on one leg and swung its lantern. It waved them towards the bog.' },
     followIt: { who: 'neville', text: 'Ooh, a light. Shall we go that way?' },
     noFollow: { who: 'harry', text: 'No, Neville! That’s a Hinkypunk. It wants you to fall in the bog!' },
     stones: { who: 'harry', text: 'Never follow the light. Stay on the stepping stones.' },
-    askStone: { who: 'harry', text: '{name}, which way is safe? Tap the next stepping stone!' },
-    nudgeStone: { who: 'harry', text: 'Tap the flat grey stone on the path.' },
+    askStone: { who: 'harry', text: '{name}, which way is safe? Tap the big stepping stone!' },
+    nudgeStone: { who: 'harry', text: 'Tap the big pale stone by Ron.' },
     helpedStone: { who: 'neville', text: 'The stones! I remember. This way.' },
     sulk: { who: 'ron', text: 'Ha! Look, the Hinkypunk is sulking.' },
     across: { who: 'neville', text: 'We’re across! And I didn’t fall in the bog!' },
@@ -188,7 +187,7 @@ export default defineCartoon({
     neville: { who: 'neville', text: 'Did I pass, Professor?' },
     fullMarks: { who: 'lupin', text: 'Full marks, Neville. You were very brave.' },
     whoopee: { who: 'neville', text: 'Full marks! Me! Wait till I tell my gran!' },
-    goodFriends: { who: 'lupin', text: 'And Harry and Ron, you were very good friends today.' },
+    goodFriends: { who: 'lupin', text: 'And Harry, Ron, you were very good friends.' },
     more: { who: 'ron', text: 'Thanks, Professor. Er… is there any more chocolate?' },
     thanksName: { who: 'neville', text: 'Thank you, Harry and Ron. And thank you, {name}!' },
     end: { who: 'narrator', text: 'And they sat in the sunshine and ate chocolate, until it was all gone.' },
@@ -211,10 +210,6 @@ export default defineCartoon({
         await k.say('sunny');
         await k.say('welcome', lupin);
         await k.say('course', lupin);
-        await k.say('hinkyQuestion', lupin);
-        await k.say('hinkyGuess', neville);
-        giggle();
-        await k.say('findOut', lupin);
         await k.all(k.say('hermioneTwice', ron), k.shake(ron, 3, 2));
         k.music('dreamy');
         await k.all(k.say('worried', neville), k.to(neville, 0.5, { y: 12, ease: 'sine.out' }));
@@ -256,13 +251,9 @@ export default defineCartoon({
         await k.to(grindylow, 0.7, { y: 0, opacity: 1, ease: 'back.out(1.4)' });
         await k.all(k.say('grabbed', neville), k.shake(neville, 5, 3));
         await k.say('grindylow', harry);
-        await k.say('ticklish', harry);
 
-        // His first turn: tickle its fingers (at the end of its long arm, by Neville's side).
-        const gb = k.box(grindylow);
-        const fingers = spot(k, gb.x + gb.w * 0.07, gb.y + gb.h * 0.94, 120);
-        await k.tapToHelp(fingers, { ask: 'askFingers', nudge: 'nudgeFingers', helped: 'helpedFingers', by: neville, size: 120 });
-        k.remove(fingers);
+        // His first turn: tickle the Grindylow.
+        await k.tapToHelp(grindylow, { ask: 'askFingers', nudge: 'nudgeFingers', helped: 'helpedFingers', by: neville, size: 170 });
         grindyGiggle();
         k.pose(grindylow, 'giggling');
         await k.shake(grindylow, 4, 3);
@@ -270,7 +261,6 @@ export default defineCartoon({
         gurgle();
         k.fx.splash();
         await k.to(grindylow, 0.7, { y: 260, opacity: 0, ease: 'power2.in' });
-        await k.say('giggling', ron);
         k.music('triumph');
         await k.all(k.say('didIt', neville), k.hop(neville, 24));
         await k.wait(300);
@@ -284,7 +274,7 @@ export default defineCartoon({
         k.backdrop('sunny-grounds');
         k.music('sneaky');
         HOLES.forEach((x) => k.prop('potholeBack', { x, y: HOLE_Y, w: 220, z: 3 }));
-        cast.redCap = k.character('redCap', { x: HOLES[0] + 55, y: HOLE_Y + 85, w: 110, z: 4 });
+        cast.redCap = k.character('redCap', { x: HOLES[0] + 35, y: HOLE_Y + 85, w: 150, z: 4 });
         k.set(cast.redCap, { opacity: 0 });
         HOLES.forEach((x) => k.prop('potholeFront', { x, y: HOLE_Y, w: 220, z: 5 }));
         cast.harry = k.character('harry', { x: 60, y: 330, w: 190, z: 8 });
@@ -312,7 +302,7 @@ export default defineCartoon({
         await k.all(k.say('another', neville), k.shake(neville, 4, 2));
 
         // His second turn: tap the Red Cap, and everybody laughs.
-        await k.tapToHelp(redCap, { ask: 'askCap', nudge: 'nudgeCap', helped: 'helpedCap', by: harry, size: 140 });
+        await k.tapToHelp(redCap, { ask: 'askCap', nudge: 'nudgeCap', helped: 'helpedCap', by: harry, size: 150 });
         laugh();
         await k.all(...[harry, ron, neville].map((el, i) => k.wait(i * 120).then(() => k.hop(el, 20, 2))));
         await capDown(k, redCap);
@@ -358,10 +348,12 @@ export default defineCartoon({
         await k.to(neville, 0.5, { x: 0, y: 0 });
         await k.say('stones', harry);
 
-        // His third turn: tap the next stepping stone on the path.
-        const stone = spot(k, 620, 596, 120);
+        // His third turn: tap the next stepping stone on the path (the big pale one, by Ron).
+        k.fx.twinkle();
+        const stone = k.add(bigStone(), { x: 555, y: 568, w: 130, z: 6 });
+        k.set(stone, { opacity: 0 });
+        await k.fade(stone, 1, 0.5);
         const how = await k.tapToHelp(stone, { ask: 'askStone', nudge: 'nudgeStone', helped: 'helpedStone', by: harry, helper: neville, size: 120 });
-        k.remove(stone);
         k.fx.twinkle();
         k.sparkle(620, 596, 8, 80);
         // Hop, hop, hop, along the stones.
@@ -414,7 +406,6 @@ export default defineCartoon({
         await k.all(k.say('whoopee', neville), k.hop(neville, 30, 2));
         await k.say('goodFriends', lupin);
         await k.say('more', ron);
-        laugh();
         await k.say('thanksName', neville);
         await warmEnding(k, { cast: [harry, ron, neville], end: 'end' });
       },
