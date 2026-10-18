@@ -88,6 +88,9 @@ import { roomArt } from './places/training-room';
 import { underwater } from './places/underwater';
 import { vault } from './places/gringotts-vault';
 import { shop } from './places/wand-shop';
+import { honeydukes } from './places/honeydukes';
+import { secretTunnel } from './places/secret-tunnel';
+import { fizzingWhizbee, iceMouse, pepperImp, sweetJar, trapdoor } from './objects/sweets';
 import { dursleyKitchen } from './places/dursley-kitchen';
 import { grunningsOffice } from './places/grunnings-office';
 import { hillsBackdrop } from './places/countryside';
@@ -107,6 +110,8 @@ import { ghostParty } from './places/ghost-party';
 import { ghostFeast, gong, sawBand } from './objects/ghostFeast';
 import { dwarfCupid } from './characters/dwarfCupid';
 import { bigHeart, harp, heartGarland, valentineCard } from './objects/valentine';
+import { fred, george } from './characters/twins';
+import { maraudersMapArt, oneEyedWitchArt } from './objects/marauders';
 
 // The hair-and-robe portraits, shared by the notes below.
 const PERSON = ['figure', 'head', 'lids', 'mouth', 'mouthOpen'];
@@ -601,6 +606,25 @@ export default defineWorld({
         'One of Lockhart\'s grumpy dwarfs on Valentine\'s Day (book 2), made to dress as a cupid: short and stocky, a bald ruddy head with a few brown tufts, a gold paper crown of hearts, heavy frowning eyebrows, a bulbous nose, a huge bushy brown beard, a cream tunic with a raspberry sash and small golden paper wings (`wingL` and `wingR`, origins at the shoulders, so they flap). Gruff and very determined to deliver every valentine, however embarrassing: marches, stomps and shouts "Oi!". He sings badly but proudly. Funny, never frightening, and he never hurts anyone.',
       voice: 'Gruff, grumpy, gravelly little man; Northern English; sings off-key.',
     },
+    fred: {
+      name: 'Fred',
+      art: fred,
+      parts: [...PERSON, 'armR'],
+      about:
+        "Fred Weasley, Ron's older twin, identical to George: flaming ginger hair (longer and messier than Ron's), lots of freckles, a big mischievous grin and one eyebrow up. Fred wears a hand-knitted DARK BLUE Weasley jumper with a yellow F (George's is green with a G, so that is how to tell them apart). Do not flip Fred: it would mirror the F. Jokers who finish each other's sentences and love mischief, but kind to Harry and never cruel. Says \"Mischief managed!\". Part armR swings from the shoulder (232, 262) for a wave or a wink-and-point.",
+      voice:
+        'Cheeky, quick, cheerful teenage British boy',
+    },
+
+    george: {
+      name: 'George',
+      art: george,
+      parts: [...PERSON, 'armR'],
+      about:
+        "George Weasley, Ron's older twin, identical to Fred: flaming ginger hair (longer and messier than Ron's), lots of freckles, a big mischievous grin and one eyebrow up. George wears a hand-knitted GREEN Weasley jumper with a yellow G (Fred's is dark blue with an F, so that is how to tell them apart). Do not flip George: it would mirror the G. Jokers who finish each other's sentences and love mischief, but kind to Harry and never cruel. Says \"Mischief managed!\". Part armR swings from the shoulder (232, 262) for a wave or a wink-and-point.",
+      voice:
+        'Cheeky, quick, cheerful teenage British boy, a touch lower than Fred',
+    },
   },
 
   backdrops: {
@@ -647,6 +671,8 @@ export default defineWorld({
     dormitory: { art: cached(() => dormitory()), about: 'The Gryffindor boys\' dormitory on a snowy Christmas morning: round stone tower walls, a tall arched window in the middle top (x 490 to 690, y 40 to 370) with snow falling and pale light, two four-poster beds with red velvet curtains tied back and red-and-gold covers (left x 20 to 380, right x 800 to 1160; the beds\' feet face the middle, at x 380 and x 800), a wooden trunk at the foot of the left bed, two holly wreaths, two stockings, a stone floor and a red rug in the middle. Ground line at about y 660; the middle (x 400 to 790, y 300 to 690) is clear for 2 actors, with room on the rug at x 500 to 700, y 560 to 680 for a pile of presents.' },
     'astronomy-tower': { art: cached(() => astronomyTower()), about: 'The flat top of the Astronomy Tower at midnight: a huge deep-blue starry sky, a big pale moon at upper right (x 870 to 1030, y 70 to 230), far below the dark hills, the Forbidden Forest treetops and the tiny lit window of Hagrid\'s hut (x 410, y 500), a few castle turrets with pointed roofs at the sides (x 0 to 150, and x 920 to 990, y 290 to 560). In front a grey stone parapet with crenellations (y 520 to 650) and the stone floor of the tower top. A brass telescope on a tripod at the far left (x 0 to 200, y 440 to 690) and a little stair hut with an arched door at the far right (x 1000 to 1180, y 250 to 660). Ground line at about y 650; room for 3 actors across x 220 to 960. The sky is clear (stars only) in the middle and upper left, x 200 to 800, y 0 to 500, for broomsticks to swoop through. Bottom band y 690 to 820 is plain stone floor.' },
     'ghost-party': { art: cached(() => ghostParty()), about: "Nick's Ghost Day party in a big dungeon hall: black velvet drapes in swags along the top and down both sides, hundreds of tall thin black candles with blue flames (wall brackets, iron stands, a ledge), cold silvery-blue light, grey-blue stone. A small empty wooden platform for the band at back left (x 80 to 420, deck top y 502, front to y 562). Ground line at about y 650; room for 3 or 4 actors across x 300 to 1100, and the middle and right floor is clear for a table and a ghost horse. Floor y 690 to 820 is plain. Spooky-funny, never frightening." },
+    honeydukes: { art: cached(() => honeydukes()), about: 'Inside Honeydukes, the Hogsmeade sweet shop, bright, warm and sugary: pink-and-cream striped wallpaper, tall wooden shelves crammed with jars and boxes of sweets (pinks, lemon, mint, chocolate) at the far left (x 0 to 200) and far right (x 980 to 1180) and in two runs at the back (x 214 to 410, x 704 to 954), a window at the middle back (x 430 to 680, y 90 to 320) with snowy Hogsmeade outside, a long wooden counter with glass jars on it (x 210 to 970, top y 430), a wordless pink hanging sign (x 710 to 890, y 50 to 120) and candy-cane strings across the top. Wooden floor. Ground line at about y 650; room for 3 or 4 actors across x 150 to 1050. The floor at x 120 to 320 is bare, for the trapdoor prop. Bottom band (y 690 to 820) is plain floorboards.' },
+    'secret-tunnel': { art: cached(() => secretTunnel()), about: 'A long, low, twisting earthy tunnel under the castle: brown-grey earth walls, a rounded low ceiling with roots poking through and two old wooden beams (x 170 and x 880), the tunnel bending away into darkness in the middle distance (x 360 to 790, y 250 to 560), stones and puddles on the packed-earth floor. At the far right (x 930 to 1180) a short stone staircase rises to a wooden trapdoor in the ceiling (about x 1030 to 1180, y 90 to 170). Dark but readable: add a wand light with k.light. Ground line at about y 650; room for 2 or 3 actors across x 150 to 850. Bottom band (y 690 to 820) is calm earth.' },
   },
 
   props: {
@@ -730,5 +756,13 @@ export default defineWorld({
     heartGarland: { art: cached(() => heartGarland()), size: [600, 120], about: 'A long string of pink, red and white paper hearts hanging in three gentle swags, with gold pins at the ends and joins. Hang it across a hall or a doorway; the top edge (the string) is at y 12 to 62.' },
     valentineCard: { art: cached(() => valentineCard()), size: [140, 110], about: 'A pink folded valentine card seen from the front: a lace edge, a fold down the left, and a big red heart.' },
     bigHeart: { art: cached(() => bigHeart()), size: [160, 150], about: 'One big glossy pink paper heart with a shine on its upper left. Float it about, bob it, or burst it into confetti.' },
+    // The Secret Way to Honeydukes
+    maraudersMap: { art: cached(() => maraudersMapArt()), size: [380, 260], about: "The Marauder's Map unfolded: old yellowed parchment with fold lines. Part `ink` (a group: the castle plan, corridors, towers, a dotted path to a tiny witch-statue mark, footprints and a wavy scribble title that is not readable) is drawn visible; fade it in from opacity 0. Part `feet` is one pair of tiny footprints parked at the path's start (about 92, 198 in the box): move it along the dotted path." },
+    oneEyedWitch: { art: cached(() => oneEyedWitchArt()), size: [220, 340], about: "The statue of the one-eyed witch: a kindly-silly hunched grey stone old witch with one big eye, a patch over the other, a crooked hat and a stick, on a plinth; base flat on the floor. Part `hump` is her round back-hump, origin at its lower edge (156, 168): rotate it to swing it open like a lid and show the dark round hole behind." },
+    fizzingWhizbee: { art: cached(() => fizzingWhizbee()), size: [100, 100], about: 'A Fizzing Whizzbee: a big round pink-and-white sherbet ball with cream swirls and fizzy white dots. Reads as a round pink ball; bob or spin it.' },
+    pepperImp: { art: cached(() => pepperImp()), size: [90, 110], about: 'A Pepper Imp: a little red-hot pepper-shaped sweet with a green stalk, a cheeky face (raised brows, grin) and puffs of heat. Flat-ish bottom at y 104.' },
+    iceMouse: { art: cached(() => iceMouse()), size: [120, 80], about: 'An Ice Mouse: a pale icy-blue sugar mouse with pink ears, nose and a string tail, side view, facing right (flip to face left).' },
+    sweetJar: { art: cached(() => sweetJar()), size: [140, 180], about: 'A big glass sweet jar with a gold lid, full of round colourful sweets. Flat bottom at y 176, so it can stand on a counter or the floor.' },
+    trapdoor: { art: cached(() => trapdoor()), size: [220, 90], about: 'A square wooden trapdoor in the floor seen at a slight angle, over a dark hole, with iron ring and rivets. Place it on the floor (the honeydukes floor at x 120 to 320 is left clear for it). Part door is the lid, origin at its back hinge edge [110, 30]: rotate it (e.g. rotationX or scaleY toward 0, or rotate up) to swing it open and show the hole.' },
   },
 });
