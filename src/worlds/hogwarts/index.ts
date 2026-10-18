@@ -117,6 +117,10 @@ import { malfoy, malfoyTangled } from './characters/malfoy';
 import { wood } from './characters/wood';
 import { fireboltArt, quidditchCupArt } from './objects/quidditchCup';
 import { maraudersMapArt, oneEyedWitchArt } from './objects/marauders';
+import { fluffy } from './characters/fluffy';
+import { woodenFlute } from './objects/woodenFlute';
+import { thirdFloorRoom } from './places/third-floor-room';
+import { devilsSnareArt } from './objects/devilsSnare';
 
 // The hair-and-robe portraits, shared by the notes below.
 const PERSON = ['figure', 'head', 'lids', 'mouth', 'mouthOpen'];
@@ -649,6 +653,15 @@ export default defineWorld({
         'Oliver Wood, 17, captain of the Gryffindor Quidditch team: tall and broad, short brown hair, a square jaw and intense eyes, in scarlet Quidditch robes with gold trim and padded shoulders. Quidditch-mad and very intense; he gives big speeches and takes the game terribly seriously. He cries with joy when they win. Kind to Harry. Part armR swings from the shoulder (240, 262): lift it for a fist pump.',
       voice: 'Earnest, fired-up Scottish young man.',
     },
+
+    fluffy: {
+      name: 'Fluffy',
+      art: fluffy,
+      parts: ['headL', 'headM', 'headR', 'lidsL', 'lidsM', 'lidsR', 'lids', 'mouth', 'mouthOpen', 'mouthOpenL', 'mouthOpenR', 'tail'],
+      about:
+        'Fluffy, Hagrid\'s enormous three-headed dog, who guards the trapdoor: a great shaggy toffee-brown heap lying down with big paws out in front, three big dog heads side by side (a larger middle head and a smaller one either side), each with big floppy dark ears, a wet black nose, round friendly eyes and teeth that show when he growls. Gruff to look at, but really a big soppy puppy. He growls at strangers, but music sends him straight to sleep, one head at a time, and then he snores like thunder. Each head is a part (`headL`, `headM`, `headR`, origin at its neck) so it can nod and droop; `lidsL`, `lidsM`, `lidsR` are each head\'s closed sleepy eyes (hidden, fade in as that head nods off); `lids` is the blink on all three heads; `mouth` / `mouthOpen` are the middle head\'s closed and open (growling, teeth showing) mouth, and `mouthOpenL` / `mouthOpenR` the side heads\' snarls (all the open ones hidden). `tail` (origin at its base) wags when he is happy. Ground at y 336 in the box.',
+      voice: 'No speech: low rumbling growls, big woofs, whimpers and thunderous snores (sound effects, not a voice actor).',
+    },
   },
 
   backdrops: {
@@ -698,6 +711,7 @@ export default defineWorld({
     honeydukes: { art: cached(() => honeydukes()), about: 'Inside Honeydukes, the Hogsmeade sweet shop, bright, warm and sugary: pink-and-cream striped wallpaper, tall wooden shelves crammed with jars and boxes of sweets (pinks, lemon, mint, chocolate) at the far left (x 0 to 200) and far right (x 980 to 1180) and in two runs at the back (x 214 to 410, x 704 to 954), a window at the middle back (x 430 to 680, y 90 to 320) with snowy Hogsmeade outside, a long wooden counter with glass jars on it (x 210 to 970, top y 430), a wordless pink hanging sign (x 710 to 890, y 50 to 120) and candy-cane strings across the top. Wooden floor. Ground line at about y 650; room for 3 or 4 actors across x 150 to 1050. The floor at x 120 to 320 is bare, for the trapdoor prop. Bottom band (y 690 to 820) is plain floorboards.' },
     'secret-tunnel': { art: cached(() => secretTunnel()), about: 'A long, low, twisting earthy tunnel under the castle: brown-grey earth walls, a rounded low ceiling with roots poking through and two old wooden beams (x 170 and x 880), the tunnel bending away into darkness in the middle distance (x 360 to 790, y 250 to 560), stones and puddles on the packed-earth floor. At the far right (x 930 to 1180) a short stone staircase rises to a wooden trapdoor in the ceiling (about x 1030 to 1180, y 90 to 170). Dark but readable: add a wand light with k.light. Ground line at about y 650; room for 2 or 3 actors across x 150 to 850. Bottom band (y 690 to 820) is calm earth.' },
     'quidditch-stands': { art: cached(() => stands()), about: 'The Gryffindor stand by day, close up: tiers of wooden benches rising behind, packed with a cheerful paper crowd in red and gold scarves with little flags and waving hands (all above y 520), bunting along the top, a wooden rail at y 552 to 610, bright blue sky with clouds at the top and two far-off gold goal hoops at the top right (x 900 to 1100, y 40 to 230). Floor of plain wooden boards. Ground line at about y 660; room for 3 actors across x 150 to 1030. Bottom band (y 690 to 820) is calm.' },
+    'third-floor-room': { art: cached(() => thirdFloorRoom()), about: 'The forbidden room off the third-floor corridor at night, where Fluffy lives: dim blue-grey stone walls, a heavy dark wooden door (closed, in a stone arch, iron bands, ring handle) at the far left (x 20 to 220, y 240 to 660) where the friends come in, a wall torch just right of it (x 262 to 310, y 300 to 420) with a warm glow on the nearby stones, one high arched window with three iron bars (x 800 to 920, y 70 to 300) letting in cool blue moonlight in a pale shaft across the right wall and floor, and a few dusty cobwebs in the corners. Bare dark flagstone floor. Ground line at about y 660. The right two thirds (x 450 to 1180) are open for a huge dog to lie in (his feet on y 660 to 690). A patch of floor at x 360 to 620, y 600 to 680 is left plain for the trapdoor prop. Bottom band (y 690 to 820) is calm dark flagstone.' },
   },
 
   props: {
@@ -795,5 +809,8 @@ export default defineWorld({
     gryffindorBanner: { art: cached(() => gryffindorBanner()), size: [420, 220], about: 'A big red Gryffindor banner with a friendly gold paper lion (mane, face, smile), gold border and fringe, held up on two wooden poles with gold knobs. No lettering. Part cloth (origin top centre, 210, 30) is the red cloth with the lion: rotate or skew it to wave; the poles stay still.' },
     quidditchCup: { art: cached(() => quidditchCupArt()), size: [200, 220], about: 'The big silver Quidditch Cup: a bowl with two big looped handles on a short wooden stand with a gold plate, red and gold ribbons tied on the stem and the handles. Base flat on the floor.' },
     firebolt: { art: cached(() => fireboltArt()), size: [300, 90], about: "Harry's Firebolt: a sleek racing broom side-on, drawn horizontal and facing right (handle tip on the right, the golden-brown twig tail trailing left), a dark polished handle and a little gold band, no lettering. Flip it for facing left; rotate it to climb or dive." },
+    // Harry's Flute
+    woodenFlute: { art: cached(() => woodenFlute()), size: [220, 50], about: "Harry's hand-whittled wooden flute lying flat, mouthpiece on the left: pale honey wood, a little crooked and homemade, with knife marks and grain, a notch for the whistle near the left end (x 52 to 72), a row of six uneven finger holes (x 92 to 196, y 27), a twist of brown twine round the middle and a little carved ring at the far end. It sounds a bit like an owl." },
+    devilsSnare: { art: cached(() => devilsSnareArt()), size: [600, 220], about: 'A big low tangle of dark green creeper with curling tendrils and leaves, spread over the floor like a soft springy mat (friends land on it), flat bottom at y 218. Part `tendrils` (four tall curling tendrils, x 190 to 410, origin bottom centre 300, 214) can be wiggled or shrunk back.' },
   },
 });
