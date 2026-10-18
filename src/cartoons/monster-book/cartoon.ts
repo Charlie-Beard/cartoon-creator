@@ -26,8 +26,7 @@
  *      trick.
  *
  * There's no villain: the trouble is a book with teeth. It snaps at air and
- * shoelaces and nips a glove, never a person, and the manager's "nipped
- * fingers" are only ever told, with a plaster. Crookshanks sits on Ron's
+ * shoelaces and chews gloves, never a person. Crookshanks sits on Ron's
  * head because he likes him.
  */
 import { NOTE, defineCartoon, noiseBurst, now, tone, type Kit } from '../../kit';
@@ -77,6 +76,8 @@ function mrrow(): void {
 
 type Actor = 'harry' | 'ron' | 'hermione' | 'fortescue' | 'manager' | 'book' | 'bookA' | 'bookB' | 'cat' | 'cage' | 'sundae' | 'broom' | 'list';
 const cast = {} as Record<Actor, HTMLElement>;
+/** Whether he stroked the spine himself in scene 3, for Harry's last word on it. */
+let strokedBy: 'tapped' | 'helped' = 'tapped';
 let post: ReturnType<typeof owlPost.set>;
 
 /** The big cage at the right of the shop (320 × 360) at x 840, y 310: inside x 880 to 1120, y 402 to 632. */
@@ -104,12 +105,12 @@ export default defineCartoon({
   lines: {
     // 1. Summer in Diagon Alley
     summer: { who: 'narrator', text: 'One summer, Harry stayed all by himself in Diagon Alley, the wizard shopping street.' },
-    noDursleys: { who: 'harry', text: 'No Dursleys for three whole weeks! Hello, {name}!' },
+    noDursleys: { who: 'harry', text: 'No Dursleys for three whole weeks! Hooray!' },
     morning: { who: 'fortescue', text: 'Good morning, Harry! Your free ice cream, as always?' },
     yesPlease: { who: 'harry', text: 'Yes please, Mr Fortescue!' },
-    scoops: { who: 'fortescue', text: 'Strawberry, chocolate, vanilla, cream, nuts and sprinkles…' },
-    askCherry: { who: 'fortescue', text: 'And a cherry on top. Will you put it on, {name}? Tap it!' },
-    nudgeCherry: { who: 'fortescue', text: 'Tap the little red cherry.' },
+    scoops: { who: 'fortescue', text: 'Strawberry, chocolate, vanilla… and sprinkles!' },
+    askCherry: { who: 'fortescue', text: 'And a cherry on top! Will you put it on, {name}? Tap the cherry!' },
+    nudgeCherry: { who: 'fortescue', text: 'Tap the red cherry above the ice cream.' },
     helpedCherry: { who: 'fortescue', text: 'Plop! There we go.' },
     biggest: { who: 'harry', text: 'It’s the biggest ice cream in the world!' },
     firebolt: { who: 'harry', text: 'And look! A Firebolt. The fastest broom ever made.' },
@@ -119,11 +120,11 @@ export default defineCartoon({
     // 2. The cage of books
     bookshop: { who: 'narrator', text: 'So Harry went into the bookshop, Flourish and Blotts.' },
     noise: { who: 'harry', text: 'What’s that noise?' },
-    notThose: { who: 'bookManager', text: 'Oh no. You want a Monster Book? Not the Monster Books!' },
+    notThose: { who: 'bookManager', text: 'A Monster Book? They’re very grumpy, Harry!' },
     puppies: { who: 'narrator', text: 'In a big iron cage, the books were snapping and fighting like grumpy puppies.' },
-    nipped: { who: 'bookManager', text: 'They’ve nipped my fingers fourteen times this week.' },
+    nipped: { who: 'bookManager', text: 'They’ve chewed my gloves fourteen times this week.' },
     gloves: { who: 'harry', text: 'Is that why you’re wearing those enormous gloves?' },
-    standBack: { who: 'bookManager', text: 'Exactly. Right. Stand back, Harry!' },
+    standBack: { who: 'bookManager', text: 'Yes, that’s why. Now stand back, Harry!' },
     loose: { who: 'bookManager', text: 'Oh no! It’s loose! Catch it!' },
     // 3. The book on the loose
     shoelaces: { who: 'harry', text: 'It’s chasing my shoelaces!' },
@@ -137,8 +138,8 @@ export default defineCartoon({
     purring: { who: 'narrator', text: 'The book gave a big happy purr, and fell open like a sleepy cat.' },
     itPurrs: { who: 'harry', text: 'It’s purring!' },
     whyDidnt: { who: 'bookManager', text: 'Stroke the spine! Why didn’t I think of that?' },
-    allPurring: { who: 'bookManager', text: 'Listen! They’re all purring now!' },
-    thanksBoth: { who: 'bookManager', text: 'Thank you, Harry. And thank your friend too. That book is free!' },
+    allPurring: { who: 'bookManager', text: 'Listen! They’re purring too!' },
+    thanksBoth: { who: 'bookManager', text: 'Thank you, Harry. And thank you, {name}! That book is free!' },
     thanksHarry: { who: 'bookManager', text: 'Thank you, Harry! That book is free!' },
     // 4. Old friends
     lastDay: { who: 'narrator', text: 'On the last day of summer, Harry’s best friends came to Diagon Alley.' },
@@ -159,6 +160,7 @@ export default defineCartoon({
     isItPurring: { who: 'hermione', text: 'Harry, is your book purring?' },
     trick: { who: 'harry', text: 'That’s my Monster Book. You just have to know the trick.' },
     stroked: { who: 'harry', text: '{name} and I found it out. Stroke the spine!' },
+    hagridTrick: { who: 'harry', text: 'Hagrid told us the trick. Stroke the spine!' },
     end: { who: 'narrator', text: 'And they ate their ice creams in the sunshine, while the Monster Book purred.' },
   },
   scenes: [
@@ -169,7 +171,7 @@ export default defineCartoon({
         k.backdrop('diagon-alley');
         k.music('cosy');
         cast.broom = k.prop('firebolt', { x: 880, y: 440, w: 190, z: 3 });
-        cast.fortescue = k.character('fortescue', { x: 120, y: 410, w: 240 });
+        cast.fortescue = k.character('fortescue', { x: 60, y: 430, w: 240 });
         cast.sundae = k.prop('sundae', { x: 390, y: 420, w: 150, z: 14 });
         k.set(k.part(cast.sundae, 'cherry'), { opacity: 0 });
         k.set(cast.sundae, { opacity: 0 });
@@ -191,24 +193,22 @@ export default defineCartoon({
         plop();
         await k.pop(sundae, 1.08);
 
-        // His first turn: the cherry on top.
-        const sb = k.box(sundae);
-        const spot = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', { x: sb.x + sb.w / 2 - 60, y: sb.y - 40, w: 120, h: 120, z: 20 });
-        await k.tapToHelp(spot, { ask: 'askCherry', nudge: 'nudgeCherry', helped: 'helpedCherry', by: fortescue, size: 120 });
-        k.remove(spot);
+        // His first turn: the cherry on top. It waits, still, just above the ice cream.
         const cherry = k.part(sundae, 'cherry');
         k.set(cherry, { opacity: 1, y: -60 });
+        const sb = k.box(sundae);
+        const spot = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', { x: sb.x + sb.w / 2 - 60, y: sb.y - 70, w: 120, h: 120, z: 20 });
+        await k.tapToHelp(spot, { ask: 'askCherry', nudge: 'nudgeCherry', helped: 'helpedCherry', by: fortescue, size: 120 });
+        k.remove(spot);
         await k.to(cherry, 0.4, { y: 0, ease: 'bounce.out' });
         plop();
         k.sparkle(sb.x + sb.w / 2, sb.y + 20, 10, 80);
         await k.all(k.say('biggest', harry), k.hop(harry, 20));
 
         // In the window across the street: a Firebolt.
-        k.music('magic');
         k.sparkle(975, 485, 12, 160);
         await k.to(broom, 0.6, { y: -10, yoyo: true, repeat: 1, ease: 'sine.inOut' });
         await k.say('firebolt', harry);
-        k.music('cosy');
         await k.say('list', fortescue);
         k.sfx.page();
         await k.say('oneBook', harry);
@@ -298,7 +298,7 @@ export default defineCartoon({
         // His second turn: stroke the book's spine (its furry back, on the left).
         const bb = k.box(book);
         const spine = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', { x: bb.x + bb.w * 0.2 - 60, y: bb.y + bb.h * 0.5 - 60, w: 120, h: 120, z: 20 });
-        const how = await k.tapToHelp(spine, { ask: 'askSpine', nudge: 'nudgeSpine', helped: 'helpedSpine', by: harry, size: 140 });
+        const how = (strokedBy = await k.tapToHelp(spine, { ask: 'askSpine', nudge: 'nudgeSpine', helped: 'helpedSpine', by: harry, size: 140 }));
         k.remove(spine);
         purr();
         k.pose(book, 'purring');
@@ -377,8 +377,8 @@ export default defineCartoon({
         cast.harry = k.character('harry', { x: 380, y: 432, w: 210 });
         cast.ron = k.character('ron', { x: 580, y: 432, w: 210 });
         cast.hermione = k.character('hermione', { x: 780, y: 436, w: 210 });
-        cast.fortescue = k.character('fortescue', { x: 120, y: 410, w: 240 });
-        cast.book = k.character('monsterBook', { x: 230, y: 470, w: 120, pose: 'purring', z: 12 });
+        cast.fortescue = k.character('fortescue', { x: 60, y: 430, w: 240 });
+        cast.book = k.character('monsterBook', { x: 250, y: 520, w: 120, pose: 'purring', z: 12 });
         k.set(cast.book, { opacity: 0 });
       },
       async play(k) {
@@ -387,7 +387,7 @@ export default defineCartoon({
         // Three ice creams, one for each.
         const ices = [harry, ron, hermione].map((el) => {
           const b = k.box(el);
-          const s = k.prop('sundae', { x: b.x + b.w / 2 - 50, y: 600, w: 100, z: 15 });
+          const s = k.prop('sundae', { x: b.x + b.w * 0.68, y: 572, w: 80, z: 15 });
           k.set(s, { opacity: 0, y: 30 });
           return s;
         });
@@ -405,7 +405,7 @@ export default defineCartoon({
         await k.say('isItPurring', hermione);
         giggle();
         await k.say('trick', harry);
-        await k.say('stroked', harry);
+        await k.say(strokedBy === 'tapped' ? 'stroked' : 'hagridTrick', harry);
         purr();
         await warmEnding(k, { cast: [harry, ron, hermione], end: 'end' });
       },
