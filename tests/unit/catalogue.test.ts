@@ -15,12 +15,14 @@ const movesOf = {
   common: () => import('../../src/worlds/common/moves'),
   faraway: () => import('../../src/worlds/faraway/moves'),
   hogwarts: () => import('../../src/worlds/hogwarts/moves'),
+  bears: () => import('../../src/worlds/bears/moves'),
 } as const;
 
 const piecesOf = {
   common: () => import('../../src/worlds/common/pieces'),
   faraway: () => import('../../src/worlds/faraway/pieces'),
   hogwarts: () => import('../../src/worlds/hogwarts/pieces'),
+  bears: () => import('../../src/worlds/bears/pieces'),
 } as const;
 
 const isAsync = (f: unknown): boolean => typeof f === 'function' && f.constructor.name === 'AsyncFunction';

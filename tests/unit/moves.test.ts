@@ -8,12 +8,13 @@ import { describe, expect, it } from 'vitest';
  * tested here, so this only checks they are there and are functions;
  * the episodes that use them (npm run check, npm run shots) do the rest.
  */
-const WORLDS_WITH_MOVES = ['common', 'faraway', 'hogwarts'] as const;
+const WORLDS_WITH_MOVES = ['common', 'faraway', 'hogwarts', 'bears'] as const;
 
 const loaders = {
   common: () => import('../../src/worlds/common/moves'),
   faraway: () => import('../../src/worlds/faraway/moves'),
   hogwarts: () => import('../../src/worlds/hogwarts/moves'),
+  bears: () => import('../../src/worlds/bears/moves'),
 };
 
 describe('world moves', () => {

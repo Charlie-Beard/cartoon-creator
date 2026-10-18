@@ -42,7 +42,7 @@ export const FUR = {
 /** The nose: nearly black, with a shine. */
 const NOSE = '#2a1d17';
 
-export type Arms = 'down' | 'out' | 'up' | 'wave' | 'hips' | 'hold' | 'face';
+export type Arms = 'down' | 'out' | 'up' | 'wave' | 'hips' | 'hold' | 'face' | 'point';
 export type Legs = 'stand' | 'sit' | 'walk' | 'hidden';
 export type Eyes = 'dot' | 'happy' | 'shut' | 'wide';
 export type Brows = 'kind' | 'cross' | 'worried' | 'raised' | 'none';
@@ -258,6 +258,8 @@ const ARM_TO: Record<Arms, [Pt, Pt]> = {
   hips: [[74, 270], [226, 270]],
   hold: [[118, 262], [182, 262]],
   face: [[116, 168], [184, 168]],
+  /** The right arm (viewer's right) straight out pointing, the left down. */
+  point: [[62, 292], [286, 188]],
 };
 
 function arm(part: 'armL' | 'armR', from: Pt, to: Pt, o: BearOpts, hold?: Node[]): Node {
