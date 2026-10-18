@@ -133,6 +133,13 @@ import { portraitFrameArt } from './objects/portraitFrame';
 import { paintedFieldArt, paintedParlourArt } from './objects/paintedField';
 import { passwordListArt } from './objects/passwordList';
 import { cadoganPony } from './objects/cadoganPony';
+import { monsterBook, monsterBookPurring } from './characters/monsterBook';
+import { bookManager } from './characters/bookManager';
+import { fortescue } from './characters/fortescue';
+import { diagonAlley } from './places/diagon-alley';
+import { flourishAndBlotts } from './places/flourish-and-blotts';
+import { bookCage, bookPile } from './objects/bookCage';
+import { sundae } from './objects/sundae';
 
 // The hair-and-robe portraits, shared by the notes below.
 const PERSON = ['figure', 'head', 'lids', 'mouth', 'mouthOpen'];
@@ -691,6 +698,34 @@ export default defineWorld({
         'The Lady in Pink, the lady in the portrait who guards the door to Gryffindor Tower: a plump, cheerful, grand old-fashioned lady in a big pink silk dress with puffed sleeves, pearls, rosy cheeks and curled grey-brown hair piled high with a pink rose. Asks for the password; grand and a bit fussy, and adores singing (sometimes too loudly). Part `armR` swings from the shoulder (240, 262): lift it to wave her pink fan. In the story she runs off in a huff to hide in another painting, and comes back at the end. Drawn as a normal character; a frame prop goes round her for a painting.',
       voice: 'Grand, plummy, motherly older lady with a wobbly singing voice.',
     },
+    monsterBook: {
+      name: 'The Monster Book',
+      art: monsterBook,
+      poses: { purring: monsterBookPurring },
+      parts: ['figure', 'cover', 'lids', 'mouth', 'mouthOpen', 'spine'],
+      chip: '50 52 200 200',
+      about:
+        'The Monster Book of Monsters (book 3): a big shaggy green-brown furry book standing up on two stubby legs, seen a little turned (fat spine down the left, page-edges down the right), with two big googly eyes, cross bushy brows and a wide mouth of little paper-white teeth across the cover. Snaps, scuttles and fights other books, like a grumpy puppy, never gory. Stroke its spine and it purrs and lies open: the `purring` pose (lying open, eyes shut in happy curves, fur smooth). Parts: `cover` (the furry front with the face, origin at the spine, 82, 180: tilt a few degrees to flap like a jaw), `spine` (origin at its centre, 62, 180: this is where to stroke), `mouth` (shut grin) and `mouthOpen` (wide, for snapping). The feet are on the ground at y 336.',
+      voice: 'No speech: snaps, growls and purrs (sound effects, not a voice actor).',
+    },
+
+    bookManager: {
+      name: 'The shop manager',
+      art: bookManager,
+      parts: [...PERSON, 'armR'],
+      about:
+        'The manager of Flourish and Blotts, the bookshop in Diagon Alley: a thin, frazzled wizard with wispy hair sticking up, small round spectacles, a neat but rumpled plum waistcoat and bow tie, enormous thick dragon-hide gloves and a sticking plaster on one finger poking out. Terrified of the Monster Books and wears the thick gloves to get them out of the cage. Very polite and a bit jumpy ("Oh! Oh dear. Do mind the teeth."). `armR` swings from the shoulder (222, 264).',
+      voice: 'Jittery, polite, middle-aged shopkeeper; voice goes up when startled.',
+    },
+
+    fortescue: {
+      name: 'Florean Fortescue',
+      art: fortescue,
+      parts: [...PERSON, 'armR'],
+      about:
+        'Florean Fortescue, the jolly owner of the ice-cream parlour in Diagon Alley: round and twinkly, a curly brown moustache, a pink-and-white striped apron and a white paper hat, holding a scoop of pink ice cream. Gives Harry a free sundae every half hour all summer, and knows lots of history. Warm, generous and chatty. `armR` swings from the shoulder (232, 262) and holds the scoop: lift it to offer a treat.',
+      voice: 'Warm, cheery, rather Italian-sounding middle-aged man (a light touch).',
+    },
   },
 
   backdrops: {
@@ -743,6 +778,8 @@ export default defineWorld({
     'third-floor-room': { art: cached(() => thirdFloorRoom()), about: 'The forbidden room off the third-floor corridor at night, where Fluffy lives: dim blue-grey stone walls, a heavy dark wooden door (closed, in a stone arch, iron bands, ring handle) at the far left (x 20 to 220, y 240 to 660) where the friends come in, a wall torch just right of it (x 262 to 310, y 300 to 420) with a warm glow on the nearby stones, one high arched window with three iron bars (x 800 to 920, y 70 to 300) letting in cool blue moonlight in a pale shaft across the right wall and floor, and a few dusty cobwebs in the corners. Bare dark flagstone floor. Ground line at about y 660. The right two thirds (x 450 to 1180) are open for a huge dog to lie in (his feet on y 660 to 690). A patch of floor at x 360 to 620, y 600 to 680 is left plain for the trapdoor prop. Bottom band (y 690 to 820) is calm dark flagstone.' },
     'potion-chamber': { art: cached(() => potionChamber()), about: 'A small, deep stone chamber far under the castle: rough grey-brown stone, a low vaulted ceiling, two warm wall torches (flames at about x 400 and x 780, y 262) lighting the wall, a flagstone floor. An arched doorway at the far left (x 20 to 220, y 230 to 660, the way back) and one at the far right (x 960 to 1160, y 230 to 660, the way on), both open and dark inside: put fire props in them (about 200 by 420, bottom at y 660). Mysterious and a bit spooky, not horrid. Ground line at about y 660; the middle (x 300 to 880) is clear for 2 or 3 actors and a table. Bottom band (y 690 to 820) is plain flagstones.' },
     'grand-staircase': { art: cached(() => grandStaircase()), about: 'The landing at the top of the moving staircases outside Gryffindor Tower: a tall dim blue-grey stone stairwell, flights criss-crossing up into the dark at the top and zig-zagging up both side edges, lots of tiny old gold-framed paintings (fruit, hills, silhouettes) on the left wall (all above y 300) and along the top, warm torches at x 515 and x 995. Stone landing floor, ground line y 670. Floor space at left (x 80 to 500) for 3 children. A big plain wall at x 520 to 980, y 120 to 660 is left clear for the portraitFrame prop (440 x 540, e.g. left 540, top 130). Bottom band y 690 to 820 is plain flagstones.' },
+    'diagon-alley': { art: cached(() => diagonAlley()), about: 'Diagon Alley on a sunny summer morning: a winding street of crooked, colourful shopfronts squashed together, striped awnings, chimneys, bunting, picture signs only (cauldron, book, owl, ice-cream cone, broom) and a blue sky strip along the top. LEFT (x 40 to 380) Florean Fortescue\'s ice-cream parlour: cream-and-mint front, bow window with ice-cream pictures (x 70 to 350, y 330 to 560), pink-and-white striped awning (y 268 to 340), two little round cafe tables on the cobbles (centres x 115 and x 300, tops y 600). RIGHT (x 820 to 1120) the sports shop with an empty pale window (x 850 to 1090, y 300 to 560) for a broom prop, a red awning above it (y 232 to 292) and a broom sign. Middle (x 380 to 820) open cobbles for 3 actors. Ground line at about y 670; bottom band (y 690 to 820) is plain cobbles.' },
+    'flourish-and-blotts': { art: cached(() => flourishAndBlotts()), about: 'Inside the bookshop in Diagon Alley, warm, dusty and cosy: floor-to-ceiling wooden shelves of books in warm colours (no lettering), a brass rail with a rolling ladder (x 650 to 740), a hanging green lamp at x 590 with a soft glow, wooden floorboards. At the LEFT a counter (x 40 to 330, top y 455) with a brass till and a pile of books on it. Middle (x 360 to 820) clear floor for 3 actors; RIGHT (x 820 to 1160) bare floor with dimmer shelves behind, clear for the bookCage prop (bottom edge at y 670). Ground line at about y 670; bottom band (y 690 to 820) is plain floorboards.' },
   },
 
   props: {
@@ -855,5 +892,9 @@ export default defineWorld({
     paintedParlour: { art: cached(() => paintedParlourArt()), size: [360, 460], about: "A soft painted pink drawing room canvas, the Lady in Pink's own painting: striped pink wallpaper with small flowers, a rose panel below y 326, a gold curtain rod, a wine-red curtain at the left (x 0 to 75) and a little round table with a blue vase of flowers at the right (x 253 to 345, flowers up to y 254). Exactly the frame opening size (360 x 460); place it behind the actors inside the portraitFrame." },
     passwordList: { art: cached(() => passwordListArt()), size: [120, 260], about: "Neville's long scrappy list of passwords: a crumpled strip of old parchment with a little drawn star at the top and foot and a column of wavy unreadable lines, five of them struck through in red-brown ink and one circled. No lettering. Hold it up, wave it, or unroll it by scaling from the top edge." },
     cadoganPony: { art: cached(() => cadoganPony()), size: [300, 340], about: 'Sir Cadogan\'s very round, dapple-grey pony, side-on and facing right, whole body (not a bust): short stumpy legs with hooves on the bottom of the box (y 336), a shaggy mane and forelock over sleepy eyes, a red saddle cloth. The saddle top is at y 148 of the box, x 66 to 150 (centre x 108): stand the knight so his bottom edge sits there. Part `head` (origin at the neck 196, 190) tosses or nods, `tail` (origin at its base 20, 196) swishes, `mouthOpen` is for a whinny. Fat, lazy and gentle: likes grass and naps, and when the knight falls off it just munches.' },
+    // The Book That Bites
+    bookCage: { art: cached(() => bookCage()), size: [320, 360], about: 'A big black iron cage like a giant birdcage: low base with feet, straight bars, a domed top with a ring. Almost transparent between the bars, so book characters placed behind it (lower z) show through. Bottom edge y 360 stands on the floor. Inside rectangle x 40 to 280, y 92 to 322. Part door is the latch door in the front (x 118 to 202, y 190 to 322), origin at its left hinge [118, 256]: rotate it to swing open.' },
+    bookPile: { art: cached(() => bookPile()), size: [200, 160], about: 'Four ordinary books stacked a little crooked (red, blue, green, mustard) with cream page edges and a pink bookmark ribbon. No lettering. Flat bottom at y 160.' },
+    sundae: { art: cached(() => sundae()), size: [140, 200], about: 'A huge ice-cream sundae in a tall glass with a stem and flat foot: strawberry, chocolate and vanilla scoops, a swirl of cream, nuts, sprinkles and a long spoon at the top right. Part cherry is the cherry on top, origin [70, 30] where its stalk meets the cream: wobble it. Flat bottom at y 200, so it can stand on a table.' },
   },
 });
