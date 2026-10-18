@@ -81,6 +81,8 @@ import { paddock } from './places/paddock';
 import { dungeon } from './places/potions-dungeon';
 import { pitch } from './places/quidditch-pitch';
 import { stadium } from './places/quidditch-stadium';
+import { stands } from './places/quidditch-stands';
+import { fakeDementor, gryffindorBanner, robeHeap } from './objects/fakeDementors';
 import { room } from './places/room-of-requirement';
 import { cliffs } from './places/sea-cliffs';
 import { throneRoom } from './places/throne-room';
@@ -111,6 +113,9 @@ import { ghostFeast, gong, sawBand } from './objects/ghostFeast';
 import { dwarfCupid } from './characters/dwarfCupid';
 import { bigHeart, harp, heartGarland, valentineCard } from './objects/valentine';
 import { fred, george } from './characters/twins';
+import { malfoy, malfoyTangled } from './characters/malfoy';
+import { wood } from './characters/wood';
+import { fireboltArt, quidditchCupArt } from './objects/quidditchCup';
 import { maraudersMapArt, oneEyedWitchArt } from './objects/marauders';
 
 // The hair-and-robe portraits, shared by the notes below.
@@ -625,6 +630,25 @@ export default defineWorld({
       voice:
         'Cheeky, quick, cheerful teenage British boy, a touch lower than Fred',
     },
+
+    malfoy: {
+      name: 'Malfoy',
+      art: malfoy,
+      poses: { tangled: malfoyTangled },
+      parts: PERSON,
+      about:
+        'Draco Malfoy, the Slytherin Seeker and Harry\'s rival: a pale boy with a pointed chin, sleek slicked-back white-blond hair, narrow grey eyes and a sneery smirk (one corner of the mouth up), in green Slytherin Quidditch robes with silver trim. A show-off and a sneerer ("Nice broom, Potter."), who always gets his comeuppance in a funny way. Never truly dangerous, and nothing cruel happens on screen. The `tangled` pose is Malfoy with his hair stuck up in tufts, a black Dementor hood slipped down round his neck and shoulders, and a startled, embarrassed open mouth: for when his costume collapses.',
+      voice: 'Drawling, sneery, posh British boy.',
+    },
+
+    wood: {
+      name: 'Oliver Wood',
+      art: wood,
+      parts: [...PERSON, 'armR'],
+      about:
+        'Oliver Wood, 17, captain of the Gryffindor Quidditch team: tall and broad, short brown hair, a square jaw and intense eyes, in scarlet Quidditch robes with gold trim and padded shoulders. Quidditch-mad and very intense; he gives big speeches and takes the game terribly seriously. He cries with joy when they win. Kind to Harry. Part armR swings from the shoulder (240, 262): lift it for a fist pump.',
+      voice: 'Earnest, fired-up Scottish young man.',
+    },
   },
 
   backdrops: {
@@ -673,6 +697,7 @@ export default defineWorld({
     'ghost-party': { art: cached(() => ghostParty()), about: "Nick's Ghost Day party in a big dungeon hall: black velvet drapes in swags along the top and down both sides, hundreds of tall thin black candles with blue flames (wall brackets, iron stands, a ledge), cold silvery-blue light, grey-blue stone. A small empty wooden platform for the band at back left (x 80 to 420, deck top y 502, front to y 562). Ground line at about y 650; room for 3 or 4 actors across x 300 to 1100, and the middle and right floor is clear for a table and a ghost horse. Floor y 690 to 820 is plain. Spooky-funny, never frightening." },
     honeydukes: { art: cached(() => honeydukes()), about: 'Inside Honeydukes, the Hogsmeade sweet shop, bright, warm and sugary: pink-and-cream striped wallpaper, tall wooden shelves crammed with jars and boxes of sweets (pinks, lemon, mint, chocolate) at the far left (x 0 to 200) and far right (x 980 to 1180) and in two runs at the back (x 214 to 410, x 704 to 954), a window at the middle back (x 430 to 680, y 90 to 320) with snowy Hogsmeade outside, a long wooden counter with glass jars on it (x 210 to 970, top y 430), a wordless pink hanging sign (x 710 to 890, y 50 to 120) and candy-cane strings across the top. Wooden floor. Ground line at about y 650; room for 3 or 4 actors across x 150 to 1050. The floor at x 120 to 320 is bare, for the trapdoor prop. Bottom band (y 690 to 820) is plain floorboards.' },
     'secret-tunnel': { art: cached(() => secretTunnel()), about: 'A long, low, twisting earthy tunnel under the castle: brown-grey earth walls, a rounded low ceiling with roots poking through and two old wooden beams (x 170 and x 880), the tunnel bending away into darkness in the middle distance (x 360 to 790, y 250 to 560), stones and puddles on the packed-earth floor. At the far right (x 930 to 1180) a short stone staircase rises to a wooden trapdoor in the ceiling (about x 1030 to 1180, y 90 to 170). Dark but readable: add a wand light with k.light. Ground line at about y 650; room for 2 or 3 actors across x 150 to 850. Bottom band (y 690 to 820) is calm earth.' },
+    'quidditch-stands': { art: cached(() => stands()), about: 'The Gryffindor stand by day, close up: tiers of wooden benches rising behind, packed with a cheerful paper crowd in red and gold scarves with little flags and waving hands (all above y 520), bunting along the top, a wooden rail at y 552 to 610, bright blue sky with clouds at the top and two far-off gold goal hoops at the top right (x 900 to 1100, y 40 to 230). Floor of plain wooden boards. Ground line at about y 660; room for 3 actors across x 150 to 1030. Bottom band (y 690 to 820) is calm.' },
   },
 
   props: {
@@ -764,5 +789,11 @@ export default defineWorld({
     iceMouse: { art: cached(() => iceMouse()), size: [120, 80], about: 'An Ice Mouse: a pale icy-blue sugar mouse with pink ears, nose and a string tail, side view, facing right (flip to face left).' },
     sweetJar: { art: cached(() => sweetJar()), size: [140, 180], about: 'A big glass sweet jar with a gold lid, full of round colourful sweets. Flat bottom at y 176, so it can stand on a counter or the floor.' },
     trapdoor: { art: cached(() => trapdoor()), size: [220, 90], about: 'A square wooden trapdoor in the floor seen at a slight angle, over a dark hole, with iron ring and rivets. Place it on the floor (the honeydukes floor at x 120 to 320 is left clear for it). Part door is the lid, origin at its back hinge edge [110, 30]: rotate it (e.g. rotationX or scaleY toward 0, or rotate up) to swing it open and show the hole.' },
+    // Gryffindor Wins the Cup
+    fakeDementor: { art: cached(() => fakeDementor()), size: [220, 420], about: 'A tall hooded figure in a ragged black cloak: a deep empty dark hood (no face), ragged hem, sleeves hanging with no hands. A bit lumpy and wobbly, with a knee poking out and a trainer-like shoe peeping from the hem, because it is really boys on each other\'s shoulders. Feet at y 415. Part hood (origin at the neck, 110, 96) can droop or tilt.' },
+    robeHeap: { art: cached(() => robeHeap()), size: [360, 160], about: 'The same black robes collapsed into a big tangled heap on the grass, with an empty hood flopped over, a green-and-silver sleeve sticking out on the right and a trainer-like shoe poking up. Flat bottom at y 156.' },
+    gryffindorBanner: { art: cached(() => gryffindorBanner()), size: [420, 220], about: 'A big red Gryffindor banner with a friendly gold paper lion (mane, face, smile), gold border and fringe, held up on two wooden poles with gold knobs. No lettering. Part cloth (origin top centre, 210, 30) is the red cloth with the lion: rotate or skew it to wave; the poles stay still.' },
+    quidditchCup: { art: cached(() => quidditchCupArt()), size: [200, 220], about: 'The big silver Quidditch Cup: a bowl with two big looped handles on a short wooden stand with a gold plate, red and gold ribbons tied on the stem and the handles. Base flat on the floor.' },
+    firebolt: { art: cached(() => fireboltArt()), size: [300, 90], about: "Harry's Firebolt: a sleek racing broom side-on, drawn horizontal and facing right (handle tip on the right, the golden-brown twig tail trailing left), a dark polished handle and a little gold band, no lettering. Flip it for facing left; rotate it to climb or dive." },
   },
 });
