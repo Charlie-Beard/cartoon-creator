@@ -126,6 +126,13 @@ import { potionTableArt } from './objects/potionTable';
 import { blackFireArt, purpleFireArt } from './objects/magicFire';
 import { riddleScrollArt } from './objects/riddleScroll';
 import { mirrorOfErisedArt } from './objects/mirrorOfErised';
+import { sirCadogan, sirCadoganFallen } from './characters/sirCadogan';
+import { pinkLady } from './characters/pinkLady';
+import { grandStaircase } from './places/grand-staircase';
+import { portraitFrameArt } from './objects/portraitFrame';
+import { paintedFieldArt, paintedParlourArt } from './objects/paintedField';
+import { passwordListArt } from './objects/passwordList';
+import { cadoganPony } from './objects/cadoganPony';
 
 // The hair-and-robe portraits, shared by the notes below.
 const PERSON = ['figure', 'head', 'lids', 'mouth', 'mouthOpen'];
@@ -667,6 +674,23 @@ export default defineWorld({
         'Fluffy, Hagrid\'s enormous three-headed dog, who guards the trapdoor: a great shaggy toffee-brown heap lying down with big paws out in front, three big dog heads side by side (a larger middle head and a smaller one either side), each with big floppy dark ears, a wet black nose, round friendly eyes and teeth that show when he growls. Gruff to look at, but really a big soppy puppy. He growls at strangers, but music sends him straight to sleep, one head at a time, and then he snores like thunder. Each head is a part (`headL`, `headM`, `headR`, origin at its neck) so it can nod and droop; `lidsL`, `lidsM`, `lidsR` are each head\'s closed sleepy eyes (hidden, fade in as that head nods off); `lids` is the blink on all three heads; `mouth` / `mouthOpen` are the middle head\'s closed and open (growling, teeth showing) mouth, and `mouthOpenL` / `mouthOpenR` the side heads\' snarls (all the open ones hidden). `tail` (origin at its base) wags when he is happy. Ground at y 336 in the box.',
       voice: 'No speech: low rumbling growls, big woofs, whimpers and thunderous snores (sound effects, not a voice actor).',
     },
+    sirCadogan: {
+      name: 'Sir Cadogan',
+      art: sirCadogan,
+      poses: { fallen: sirCadoganFallen },
+      parts: [...PERSON, 'armR', 'plume'],
+      about:
+        'Sir Cadogan, the mad little knight from a portrait (book 3): short, squat, in dented silver armour a size too big, visor pushed up on a round pink face with a huge bristly ginger moustache and fierce bushy eyebrows, a red plume on his helmet (part `plume`, origin at its base, to wobble) and a sword held high in his right hand (part `armR`, origin at the shoulder 232, 236: swing it to brandish). Brave, loud and very silly: he challenges everyone to duels, shouts old-fashioned battle cries ("Have at you, scurvy knave!"), changes the password twice a day and keeps falling off his pony. He never actually fights anyone. The `fallen` pose is him sitting in a heap on the ground, helmet askew, a bit dazed but fine (no injuries). Drawn as a normal character; a frame prop goes round him for a painting.',
+      voice: 'Excitable, booming, old-fashioned little knight; very theatrical, and a bit squeaky when cross.',
+    },
+    pinkLady: {
+      name: 'The Lady in Pink',
+      art: pinkLady,
+      parts: [...PERSON, 'armR'],
+      about:
+        'The Lady in Pink, the lady in the portrait who guards the door to Gryffindor Tower: a plump, cheerful, grand old-fashioned lady in a big pink silk dress with puffed sleeves, pearls, rosy cheeks and curled grey-brown hair piled high with a pink rose. Asks for the password; grand and a bit fussy, and adores singing (sometimes too loudly). Part `armR` swings from the shoulder (240, 262): lift it to wave her pink fan. In the story she runs off in a huff to hide in another painting, and comes back at the end. Drawn as a normal character; a frame prop goes round her for a painting.',
+      voice: 'Grand, plummy, motherly older lady with a wobbly singing voice.',
+    },
   },
 
   backdrops: {
@@ -718,6 +742,7 @@ export default defineWorld({
     'quidditch-stands': { art: cached(() => stands()), about: 'The Gryffindor stand by day, close up: tiers of wooden benches rising behind, packed with a cheerful paper crowd in red and gold scarves with little flags and waving hands (all above y 520), bunting along the top, a wooden rail at y 552 to 610, bright blue sky with clouds at the top and two far-off gold goal hoops at the top right (x 900 to 1100, y 40 to 230). Floor of plain wooden boards. Ground line at about y 660; room for 3 actors across x 150 to 1030. Bottom band (y 690 to 820) is calm.' },
     'third-floor-room': { art: cached(() => thirdFloorRoom()), about: 'The forbidden room off the third-floor corridor at night, where Fluffy lives: dim blue-grey stone walls, a heavy dark wooden door (closed, in a stone arch, iron bands, ring handle) at the far left (x 20 to 220, y 240 to 660) where the friends come in, a wall torch just right of it (x 262 to 310, y 300 to 420) with a warm glow on the nearby stones, one high arched window with three iron bars (x 800 to 920, y 70 to 300) letting in cool blue moonlight in a pale shaft across the right wall and floor, and a few dusty cobwebs in the corners. Bare dark flagstone floor. Ground line at about y 660. The right two thirds (x 450 to 1180) are open for a huge dog to lie in (his feet on y 660 to 690). A patch of floor at x 360 to 620, y 600 to 680 is left plain for the trapdoor prop. Bottom band (y 690 to 820) is calm dark flagstone.' },
     'potion-chamber': { art: cached(() => potionChamber()), about: 'A small, deep stone chamber far under the castle: rough grey-brown stone, a low vaulted ceiling, two warm wall torches (flames at about x 400 and x 780, y 262) lighting the wall, a flagstone floor. An arched doorway at the far left (x 20 to 220, y 230 to 660, the way back) and one at the far right (x 960 to 1160, y 230 to 660, the way on), both open and dark inside: put fire props in them (about 200 by 420, bottom at y 660). Mysterious and a bit spooky, not horrid. Ground line at about y 660; the middle (x 300 to 880) is clear for 2 or 3 actors and a table. Bottom band (y 690 to 820) is plain flagstones.' },
+    'grand-staircase': { art: cached(() => grandStaircase()), about: 'The landing at the top of the moving staircases outside Gryffindor Tower: a tall dim blue-grey stone stairwell, flights criss-crossing up into the dark at the top and zig-zagging up both side edges, lots of tiny old gold-framed paintings (fruit, hills, silhouettes) on the left wall (all above y 300) and along the top, warm torches at x 515 and x 995. Stone landing floor, ground line y 670. Floor space at left (x 80 to 500) for 3 children. A big plain wall at x 520 to 980, y 120 to 660 is left clear for the portraitFrame prop (440 x 540, e.g. left 540, top 130). Bottom band y 690 to 820 is plain flagstones.' },
   },
 
   props: {
@@ -824,5 +849,11 @@ export default defineWorld({
     blackFire: { art: cached(() => blackFireArt()), size: [200, 420], about: 'A curtain of soft magic fire, inky navy-black with glowing deep-blue and violet rims so it reads against a dark doorway; feet at y 410. Part `flames` (origin bottom centre, 100, 410) can be wobbled or scaled; part `glow` is a soft outer wash of blue light behind it.' },
     riddleScroll: { art: cached(() => riddleScrollArt()), size: [200, 260], about: 'An unrolled parchment scroll with curled rolls top and bottom, covered in neat wavy ink lines (squiggles, not readable) in two short-lined verses, and a tiny bottle doodle at the bottom.' },
     mirrorOfErised: { art: cached(() => mirrorOfErisedArt()), size: [280, 460], about: 'A magnificent tall old mirror, as high as a grown-up: ornate gold frame with a round arch, an engraved band of unreadable squiggles, standing on two clawed feet at the bottom edge. The glass is empty soft silvery-blue; part `glass` (origin centre, 140, 224; box x 72 to 208, y 56 to 392) can be glowed or tinted.' },
+    // Sir Cadogan
+    portraitFrame: { art: cached(() => portraitFrameArt()), size: [440, 540], about: 'A big, ornate, old gold picture frame standing upright, a HOLLOW border only (the inside is transparent): carved corner blocks with rosettes, a little scroll at the top, faint hinges on the left edge because it is the door into Gryffindor Tower. Inner opening is exactly x 40 to 400, y 40 to 500 (360 x 460); the bottom edge y 540 sits on the floor. Put a canvas (paintedField or paintedParlour) at frame left + 40, top + 40 behind the actors, the actors above that, and the frame above them (a portrait about 260 wide with its bottom at frame top + 500 fits).' },
+    paintedField: { art: cached(() => paintedFieldArt()), size: [360, 460], about: 'A soft, slightly blurry painted landscape canvas for inside the portraitFrame: pale sky and clouds, rolling green hills from y 230 down, a little round tree at x 292, and a few white painted daisies, mostly low and at the sides. Exactly the frame opening size, so place it at frame left + 40, top + 40, behind the actors.' },
+    paintedParlour: { art: cached(() => paintedParlourArt()), size: [360, 460], about: "A soft painted pink drawing room canvas, the Lady in Pink's own painting: striped pink wallpaper with small flowers, a rose panel below y 326, a gold curtain rod, a wine-red curtain at the left (x 0 to 75) and a little round table with a blue vase of flowers at the right (x 253 to 345, flowers up to y 254). Exactly the frame opening size (360 x 460); place it behind the actors inside the portraitFrame." },
+    passwordList: { art: cached(() => passwordListArt()), size: [120, 260], about: "Neville's long scrappy list of passwords: a crumpled strip of old parchment with a little drawn star at the top and foot and a column of wavy unreadable lines, five of them struck through in red-brown ink and one circled. No lettering. Hold it up, wave it, or unroll it by scaling from the top edge." },
+    cadoganPony: { art: cached(() => cadoganPony()), size: [300, 340], about: 'Sir Cadogan\'s very fat, round, dapple-grey pony, side-on and facing right, whole body (not a bust): short stumpy legs with hooves on the bottom of the box (y 336), a shaggy mane and forelock over sleepy eyes, a red saddle cloth. The saddle top is at y 148 of the box, x 66 to 150 (centre x 108): stand the knight so his bottom edge sits there. Part `head` (origin at the neck 196, 190) tosses or nods, `tail` (origin at its base 20, 196) swishes, `mouthOpen` is for a whinny. Fat, lazy and gentle: likes grass and naps, and when the knight falls off it just munches.' },
   },
 });
