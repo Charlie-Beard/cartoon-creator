@@ -33,6 +33,8 @@ import { peeves } from './characters/peeves';
 import { baron, baronLoom } from './characters/baron';
 import { mrsWeasley } from './characters/mrsWeasley';
 import { gnomeChief } from './characters/gnomeChief';
+import { norbert } from './characters/norbert';
+import { dragonKeeper } from './characters/dragonKeepers';
 import { bush, hedge } from './objects/garden';
 import { babyHarryArt } from './objects/babyHarry';
 import { bludgerArt } from './objects/bludger';
@@ -94,6 +96,8 @@ import { castleNight, forbiddenForest, nightSky } from './scenery';
 import { diadem, diary, cup as goldenCup, locket, ring } from './treasures';
 import { castleDoors, snowyGrounds } from './places/winter';
 import { dormitory } from './places/dormitory';
+import { astronomyTower } from './places/astronomy-tower';
+import { crate, hanky, invisibilityCloak, teddy } from './objects/norbert';
 import { christmasTree, snowball } from './objects/christmasTree';
 import { admiralHat, cracker, flowerBonnet, jumper, whiteMouse } from './objects/christmas';
 
@@ -544,6 +548,24 @@ export default defineWorld({
         'The Gnome Chief, big grumpy old leader of the garden gnomes at the Burrow: the same bald, bumpy, potato-brown fellow with big pointy ears as the little gnomes, but older and grander, with a long scruffy grey beard, huge bushy grey eyebrows in a frown, a twig crown with a daisy in it and a little leaf cape. Glares and stomps; grumpy in a funny way, never truly frightening, and softens in the end (he only wants a go on the spin). Talks in short, gruff, grumbly lines ("Hmph." "Not in MY garden.").',
       voice: 'Gruff, grumbly old man, low and gravelly, a bit pompous; short lines, slow and crotchety.',
     },
+
+    norbert: {
+      name: 'Norbert',
+      art: norbert,
+      parts: ['figure', 'head', 'lids', 'mouth', 'mouthOpen', 'wingL', 'wingR', 'tail'],
+      about:
+        'Norbert, Hagrid\'s baby Norwegian Ridgeback dragon: a whole small dragon sitting up, dark green-black with a pale belly, a row of little bumpy ridges down his back, big round amber eyes, a wide friendly snout with two tiny nostrils, small crumpled umbrella wings (`wingL`, `wingR`, origin at each shoulder, to flap) and a curly tail (`tail`, origin at its base, to wave). Hagrid won him as an egg; he hatched in the hut. Hiccups little puffs of smoke and sparks, squeaks, and adores Hagrid, who calls himself "Mummy". Grows fast, so he goes to live with Charlie\'s dragons in Romania. Cute and a bit daft; never fierce on screen and never bites anyone. He doesn\'t speak: `mouthOpen` is for squeaks and hiccups.',
+      voice: 'No words: squeaks, chirrups and little smoky hiccups (sound effects, not a voice actor).',
+    },
+
+    dragonKeeper: {
+      name: 'Charlie’s friend',
+      art: dragonKeeper,
+      parts: [...PERSON, 'armR'],
+      about:
+        'A young witch who works with Charlie Weasley\'s dragons in Romania: a windswept red-brown plait over one shoulder, freckles, flying goggles pushed up on her forehead, a brown leather dragon-keeper jacket with buckles and a cheerful wide grin. Brave, jolly and outdoorsy, brisk and kind, and she loves dragons. "Charlie sends his love!" Never scary. `armR` swings from the shoulder (232, 262) for a wave.',
+      voice: 'Bright, brisk, friendly young British woman, a bit breathless from flying.',
+    },
   },
 
   backdrops: {
@@ -588,6 +610,7 @@ export default defineWorld({
     'snowy-grounds': { art: cached(() => snowyGrounds()), about: 'The school grounds on a snowy winter afternoon: a pale grey-blue sky with a few falling flakes, the castle small on its hill at middle-right (x 690 to 925, y 195 to 450) with snow on its roofs and a few warm yellow windows, tall snow-laden dark firs on the left edge (x 0 to 300, y 175 to 690), small firs on the far hills, rolling white hills and deep plain snow in front. Ground line at about y 660; room for 3 actors across x 300 to 1180 (a big prop can come in from the right). Foreground x 300 to 1180, y 400 to 690 is plain snow; keep actors clear of the firs at the left.' },
     'castle-doors': { art: cached(() => castleDoors()), about: 'The castle\'s great front entrance from outside, in the snow: a big grey stone wall with a tall arched doorway in the middle (the glowing opening is x 430 to 750, y 150 to 660, with a stone surround and keystone up to y 108), two oak doors standing open against the wall each side (slabs x 366 to 430 and x 750 to 814), warm golden candlelight inside with two torches, a lantern at x 260 and x 920, snow on the ledges, the steps and the ground. Ground line at about y 660 (the doorway floor); two shallow snowy steps in front of the door, x 380 to 800, y 660 to 695. Actors stand left (x 0 to 360) and right (x 820 to 1180); a prop or tree can be pushed into the doorway.' },
     dormitory: { art: cached(() => dormitory()), about: 'The Gryffindor boys\' dormitory on a snowy Christmas morning: round stone tower walls, a tall arched window in the middle top (x 490 to 690, y 40 to 370) with snow falling and pale light, two four-poster beds with red velvet curtains tied back and red-and-gold covers (left x 20 to 380, right x 800 to 1160; the beds\' feet face the middle, at x 380 and x 800), a wooden trunk at the foot of the left bed, two holly wreaths, two stockings, a stone floor and a red rug in the middle. Ground line at about y 660; the middle (x 400 to 790, y 300 to 690) is clear for 2 actors, with room on the rug at x 500 to 700, y 560 to 680 for a pile of presents.' },
+    'astronomy-tower': { art: cached(() => astronomyTower()), about: 'The flat top of the Astronomy Tower at midnight: a huge deep-blue starry sky, a big pale moon at upper right (x 870 to 1030, y 70 to 230), far below the dark hills, the Forbidden Forest treetops and the tiny lit window of Hagrid\'s hut (x 410, y 500), a few castle turrets with pointed roofs at the sides (x 0 to 150, and x 920 to 990, y 290 to 560). In front a grey stone parapet with crenellations (y 520 to 650) and the stone floor of the tower top. A brass telescope on a tripod at the far left (x 0 to 200, y 440 to 690) and a little stair hut with an arched door at the far right (x 1000 to 1180, y 250 to 660). Ground line at about y 650; room for 3 actors across x 220 to 960. The sky is clear (stars only) in the middle and upper left, x 200 to 800, y 0 to 500, for broomsticks to swoop through. Bottom band y 690 to 820 is plain stone floor.' },
   },
 
   props: {
@@ -655,5 +678,10 @@ export default defineWorld({
     flowerBonnet: { art: cached(() => flowerBonnet()), size: [170, 120], about: 'A silly straw bonnet piled with pink and yellow flowers, with a lilac ribbon band, a bow on top and ribbon ties hanging at the sides. Seen from the front. Brim bottom is at y 100, so place it with the brim on the head (about 260-wide Dumbledore).' },
     admiralHat: { art: cached(() => admiralHat()), size: [180, 90], about: 'A paper admiral\'s bicorne seen from the front: navy, with gold braid, gold tips, little gold stars and a red and cream cockade with a gold star. The wide crescent sits across the head, tips up.' },
     whiteMouse: { art: cached(() => whiteMouse()), size: [110, 70], about: 'A little white mouse with pink ears, nose, feet and a curly pink tail, side view, facing right (flip to face left).' },
+    // Goodbye, Norbert
+    invisibilityCloak: { art: cached(() => invisibilityCloak()), size: [260, 200], about: "Harry's Invisibility Cloak, draped: a hooded, flowing silvery-grey cloth with watery pale-blue folds and a few faint sparkle stars, wavy hem along the bottom. Hang it up, hold it, or scale it over people. Fade it or shimmer it with a script." },
+    crate: { art: cached(() => crate()), size: [220, 180], about: 'A wooden crate for carrying a baby dragon: planks with nails, rope handles on both sides, a row of four round air holes. Flat bottom on the ground. Part lid is the lid, origin at its back hinge corner [8, 42]: rotate it up to lift, or wiggle it to rattle.' },
+    teddy: { art: cached(() => teddy()), size: [120, 130], about: 'A small worn brown teddy bear sitting up, with a red ribbon bow, a patch and a sewn-on smile.' },
+    hanky: { art: cached(() => hanky()), size: [160, 120], about: "Hagrid's enormous yellow handkerchief with white spots, a bit crumpled." },
   },
 });
