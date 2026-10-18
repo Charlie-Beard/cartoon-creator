@@ -42,8 +42,7 @@ its id, so record last.
    ```
 
    Characters `pick-voice.py` knows (see its `WANTED`) need only the name.
-   Never pick a voice that imitates an actor from the films. A voice chosen
-   but not yet in your account: `--no-add`, then `python scripts/voice/add-voices.py`.
+   A voice chosen but not yet in your account: `--no-add`, then `python scripts/voice/add-voices.py`.
    Hear a voice before recording everything:
    `python scripts/voice/generate.py --speaker kreacher --limit 3 --force`.
 
