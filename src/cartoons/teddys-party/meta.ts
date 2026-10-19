@@ -11,7 +11,7 @@ export default defineMeta({
     problem: 'Grandpa’s Mr Punch puppet is squashed, so there is no birthday show',
     villain: 'a broken puppet, and no show for the party',
     places: ['bear-garden'],
-    cast: ['teddy', 'mummyBear', 'grandpaBear', 'auntBertha', 'barney', 'marmaduke'],
+    cast: ['teddy', 'mummy-bear', 'grandpa-bear', 'aunt-bertha', 'barney', 'marmaduke'],
     turns: ['open the show’s starry curtains', 'blow out Aunt Bertha’s birthday candles'],
     jokes: ['Who’s Marmaduke?', 'Marmaduke’s squeaky voice is really Grandpa’s'],
     ending: 'birthday cake and a laugh',

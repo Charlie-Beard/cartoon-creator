@@ -58,32 +58,32 @@ export default defineCartoon({
     // 1. Getting ready
     birthday: { who: 'narrator', text: 'It was Aunt Bertha Bear’s birthday, and everyone was busy getting ready for a party.' },
     hardlyWait: { who: 'teddy', text: 'Cakes and jellies, pies and banana boats! Hello, {name}! I can hardly wait!' },
-    jollyGames: { who: 'auntBertha', text: 'We’ll play lots of jolly games. Then Grandpa Bear is bringing his puppet show!' },
+    jollyGames: { who: 'aunt-bertha', text: 'We’ll play lots of jolly games. Then Grandpa Bear is bringing his puppet show!' },
     puppetShow: { who: 'teddy', text: 'A puppet show! That’s the best thing at a party!' },
-    gamesBegin: { who: 'mummyBear', text: 'Here come the guests. Let the games begin!' },
+    gamesBegin: { who: 'mummy-bear', text: 'Here come the guests. Let the games begin!' },
     // 2. Poor Mr Punch
     roundWeGo: { who: 'barney', text: 'Musical Chairs! Round and round we go!' },
     musicalChairs: { who: 'narrator', text: 'Halfway through Musical Chairs, Grandpa Bear arrived. He was not in a party mood at all.' },
-    poorPunch: { who: 'grandpaBear', text: 'Oh dear, oh dear. Just look what’s happened to my poor old puppet!' },
+    poorPunch: { who: 'grandpa-bear', text: 'Oh dear, oh dear. Just look what’s happened to my poor old puppet!' },
     squashed: { who: 'teddy', text: 'His nose is all squashed!' },
-    cantMend: { who: 'grandpaBear', text: 'I caught it in my travelling case. I can’t possibly mend him in time.' },
-    stillAway: { who: 'mummyBear', text: 'Oh dear! And I suppose Marmaduke is still with Great Uncle Bertram?' },
-    ifOnly: { who: 'grandpaBear', text: 'Yes, indeed. Ah, my good friend Marmaduke! If only he were here now…' },
+    cantMend: { who: 'grandpa-bear', text: 'I caught it in my travelling case. I can’t possibly mend him in time.' },
+    stillAway: { who: 'mummy-bear', text: 'Oh dear! And I suppose Marmaduke is still with Great Uncle Bertram?' },
+    ifOnly: { who: 'grandpa-bear', text: 'Yes, indeed. Ah, my good friend Marmaduke! If only he were here now…' },
     whosMarmaduke: { who: 'teddy', text: 'Marmaduke? Who’s Marmaduke?' },
-    madeLaugh: { who: 'mummyBear', text: 'Marmaduke… How he used to make everyone laugh.' },
-    favourite: { who: 'grandpaBear', text: 'Always a great favourite…' },
+    madeLaugh: { who: 'mummy-bear', text: 'Marmaduke… How he used to make everyone laugh.' },
+    favourite: { who: 'grandpa-bear', text: 'Always a great favourite…' },
     whoIs: { who: 'teddy', text: 'But WHO… IS… MARMADUKE?' },
     looked: { who: 'narrator', text: 'Grandpa looked at Mummy. Mummy looked at Grandpa. Then they both looked at Teddy.' },
-    everyoneLikes: { who: 'mummyBear', text: 'Marmaduke! Everyone likes Marmaduke!' },
-    youToo: { who: 'grandpaBear', text: 'And I’m sure, Teddy Bear, that you will like him too. Come with me!' },
+    everyoneLikes: { who: 'mummy-bear', text: 'Marmaduke! Everyone likes Marmaduke!' },
+    youToo: { who: 'grandpa-bear', text: 'And I’m sure, Teddy Bear, that you will like him too. Come with me!' },
     puzzled: { who: 'teddy', text: 'But isn’t Marmaduke at Great Uncle Bertram’s? {name}, what’s going on?' },
     // 3. Who's Marmaduke?
     wheresTeddy: { who: 'barney', text: 'Where’s Teddy? He’s missing all the party games!' },
-    takeSeats: { who: 'mummyBear', text: 'Please take your seats for the birthday show, by Grandpa Bear… and Marmaduke!' },
+    takeSeats: { who: 'mummy-bear', text: 'Please take your seats for the birthday show, by Grandpa Bear… and Marmaduke!' },
     whisper: { who: 'barney', text: 'Marmaduke? Who’s Marmaduke?' },
-    askCurtains: { who: 'auntBertha', text: 'Let’s find out! {name}, will you open the curtains? Tap them!' },
-    nudgeCurtains: { who: 'auntBertha', text: 'Tap the starry curtains, {name}!' },
-    helpedCurtains: { who: 'auntBertha', text: 'Never mind, dear. I’ll open them myself!' },
+    askCurtains: { who: 'aunt-bertha', text: 'Let’s find out! {name}, will you open the curtains? Tap them!' },
+    nudgeCurtains: { who: 'aunt-bertha', text: 'Tap the starry curtains, {name}!' },
+    helpedCurtains: { who: 'aunt-bertha', text: 'Never mind, dear. I’ll open them myself!' },
     whoWasIt: { who: 'narrator', text: 'And who do you think it was?' },
     itsTeddy: { who: 'barney', text: 'It’s Teddy! Sitting on Grandpa’s knee!' },
     helloAll: { who: 'marmaduke', text: 'Hello, everybody! I’m Marmaduke! Happy birthday, Aunt Bertha!' },
@@ -92,18 +92,18 @@ export default defineCartoon({
     stuffed: { who: 'marmaduke', text: 'Because he was already STUFFED!' },
     howLaughed: { who: 'narrator', text: 'How the bears laughed! And that squeaky voice was really Grandpa’s!' },
     // 4. Happy birthday
-    bestShow: { who: 'auntBertha', text: 'What a wonderful show! Thank you, Grandpa. And thank you, Marmaduke!' },
+    bestShow: { who: 'aunt-bertha', text: 'What a wonderful show! Thank you, Grandpa. And thank you, Marmaduke!' },
     itWasMe: { who: 'teddy', text: 'It was me all along! Grandpa did the voice!' },
-    bestMarmaduke: { who: 'grandpaBear', text: 'Teddy is the best Marmaduke I ever had.' },
-    cakeTime: { who: 'mummyBear', text: 'And now, it’s time for the birthday cake!' },
-    askCandles: { who: 'auntBertha', text: 'Will you help me blow out my candles, {name}? Tap my cake!' },
-    nudgeCandles: { who: 'auntBertha', text: 'Just tap the cake, dear, and blow!' },
+    bestMarmaduke: { who: 'grandpa-bear', text: 'Teddy is the best Marmaduke I ever had.' },
+    cakeTime: { who: 'mummy-bear', text: 'And now, it’s time for the birthday cake!' },
+    askCandles: { who: 'aunt-bertha', text: 'Will you help me blow out my candles, {name}? Tap my cake!' },
+    nudgeCandles: { who: 'aunt-bertha', text: 'Just tap the cake, dear, and blow!' },
     helpedCandles: { who: 'teddy', text: 'I’ll help! One, two, three… whoosh!' },
-    happyBirthday: { who: 'mummyBear', text: 'Happy birthday, Aunt Bertha!' },
-    thanksName: { who: 'auntBertha', text: 'Thank you, {name}! What a lovely birthday.' },
-    thanksTeddy: { who: 'auntBertha', text: 'Thank you, Teddy! What a lovely birthday.' },
+    happyBirthday: { who: 'mummy-bear', text: 'Happy birthday, Aunt Bertha!' },
+    thanksName: { who: 'aunt-bertha', text: 'Thank you, {name}! What a lovely birthday.' },
+    thanksTeddy: { who: 'aunt-bertha', text: 'Thank you, Teddy! What a lovely birthday.' },
     nextParty: { who: 'teddy', text: 'Grandpa, can Marmaduke come to the next party too?' },
-    onlyIf: { who: 'grandpaBear', text: 'Only if you’ll be him again, Teddy Bear!' },
+    onlyIf: { who: 'grandpa-bear', text: 'Only if you’ll be him again, Teddy Bear!' },
   },
   scenes: [
     // ===================================================== 1. Getting ready
@@ -114,8 +114,8 @@ export default defineCartoon({
         k.music('cosy');
         partyTable(k);
         cast.balloons = k.prop('balloons', { x: 1000, y: 120, w: 170, z: 12 });
-        cast.bertha = k.character('auntBertha', { x: 40, y: 380, w: 260 });
-        cast.mummy = k.character('mummyBear', { x: 270, y: 390, w: 250 });
+        cast.bertha = k.character('aunt-bertha', { x: 40, y: 380, w: 260 });
+        cast.mummy = k.character('mummy-bear', { x: 270, y: 390, w: 250 });
         cast.teddy = k.character('teddy', { x: 470, y: 450, w: 200, z: 16 });
       },
       async play(k) {
@@ -143,8 +143,8 @@ export default defineCartoon({
         k.music('adventure');
         cast.barney = k.character('barney', { x: 640, y: 450, w: 200 });
         cast.teddy = k.character('teddy', { x: 400, y: 450, w: 200 });
-        cast.mummy = k.character('mummyBear', { x: 860, y: 390, w: 250, flip: true });
-        cast.grandpa = k.character('grandpaBear', { x: 70, y: 380, w: 260 });
+        cast.mummy = k.character('mummy-bear', { x: 860, y: 390, w: 250, flip: true });
+        cast.grandpa = k.character('grandpa-bear', { x: 70, y: 380, w: 260 });
         cast.case = k.prop('travelling-case', { x: 60, y: 560, w: 200, z: 12 });
         cast.punch = k.prop('mr-punch', { x: 250, y: 380, w: 130, z: 13 });
         k.set(cast.grandpa, { x: -420 });
@@ -198,11 +198,11 @@ export default defineCartoon({
       set(k) {
         k.backdrop('bear-garden');
         k.music('magic');
-        cast.show = k.character('grandpaBear', { x: 460, y: 300, w: 270, pose: 'marmaduke', z: 8 });
+        cast.show = k.character('grandpa-bear', { x: 460, y: 300, w: 270, pose: 'marmaduke', z: 8 });
         cast.curtains = k.prop('show-curtains', { x: 320, y: 140, w: 540, z: 9 });
         cast.barney = k.character('barney', { x: 30, y: 460, w: 200, z: 12 });
-        cast.bertha = k.character('auntBertha', { x: 900, y: 390, w: 250, flip: true, z: 12 });
-        cast.mummy = k.character('mummyBear', { x: 290, y: 390, w: 250, z: 13 });
+        cast.bertha = k.character('aunt-bertha', { x: 900, y: 390, w: 250, flip: true, z: 12 });
+        cast.mummy = k.character('mummy-bear', { x: 290, y: 390, w: 250, z: 13 });
         k.set(cast.mummy, { x: -700 });
       },
       async play(k) {
@@ -253,10 +253,10 @@ export default defineCartoon({
         k.backdrop('bear-garden');
         k.music('cosy');
         partyTable(k);
-        cast.bertha = k.character('auntBertha', { x: 40, y: 380, w: 260 });
-        cast.grandpa = k.character('grandpaBear', { x: 270, y: 380, w: 250 });
+        cast.bertha = k.character('aunt-bertha', { x: 40, y: 380, w: 260 });
+        cast.grandpa = k.character('grandpa-bear', { x: 270, y: 380, w: 250 });
         cast.teddy = k.character('teddy', { x: 470, y: 450, w: 200, z: 16, flip: true });
-        cast.mummy = k.character('mummyBear', { x: 975, y: 365, w: 220, flip: true, z: 13 });
+        cast.mummy = k.character('mummy-bear', { x: 975, y: 365, w: 220, flip: true, z: 13 });
       },
       async play(k) {
         const { bertha, grandpa, teddy, mummy, cake } = cast;

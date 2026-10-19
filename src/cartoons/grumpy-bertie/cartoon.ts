@@ -9,7 +9,7 @@
  *      sneeze from the bushes. His first turn: he taps the bush that
  *      sneezed, and up pops a soaked bear: "The name's Bertie." Daddy:
  *      you'd best come home with us.
- *   2. Daddy's chair. The cottage parlour: Bertie in Daddy's chair, in
+ *   2. Daddy's chair. The cottage kitchen: Bertie in Daddy's chair, in
  *      Teddy's dressing gown, with hot chocolate. He belongs to a girl
  *      called Lavinia, and her house is much bigger than this! (Mummy is
  *      polite.) She went picking flowers, got caught in the rain and ran
@@ -51,14 +51,13 @@ const { sneeze, sigh, sip } = bear;
 
 // ------------------------------------------------------------------ cast
 
-type Actor = 'teddy' | 'daddy' | 'mummy' | 'bertie' | 'bush' | 'umbrella' | 'chair' | 'mug' | 'jumper' | 'aunt' | 'lavinia' | 'hide';
+type Actor = 'teddy' | 'daddy' | 'mummy' | 'bertie' | 'bush' | 'umbrella' | 'mug' | 'jumper' | 'aunt' | 'lavinia' | 'hide';
 const cast = {} as Record<Actor, HTMLElement>;
 
-/** The parlour with Daddy's chair, Bertie in it in Teddy's dressing gown. */
+/** The cottage kitchen with Daddy's armchair (painted in the backdrop), Bertie in it in Teddy's dressing gown. */
 function parlour<K extends string>(k: Kit<K>): void {
-  k.backdrop('bear-parlour');
-  cast.chair = k.prop('armchair', { x: 420, y: 370, w: 320, z: 10 });
-  cast.bertie = k.character('bertie', { x: 480, y: 400, w: 200, z: 11, pose: 'gown' });
+  k.backdrop('bear-kitchen');
+  cast.bertie = k.character('bertie', { x: 700, y: 360, w: 200, z: 11, pose: 'gown' });
 }
 
 export default defineCartoon({
@@ -66,34 +65,34 @@ export default defineCartoon({
   lines: {
     // 1. Atishoo!
     woods: { who: 'narrator', text: 'Near Teddy Bear’s cottage there are some lovely woods.' },
-    tooWet: { who: 'daddyBear', text: 'We’ve had a lot of rain lately, Teddy. It’s too wet to go far, so I think…' },
+    tooWet: { who: 'daddy-bear', text: 'We’ve had a lot of rain lately, Teddy. It’s too wet to go far, so I think…' },
     listen: { who: 'teddy', text: 'Listen, Daddy! I’m sure I heard a voice!' },
     atishoo: { who: 'bertie', text: 'ATISHOO! Oh dear, oh dear! I feel so dreadful!' },
     askBush: { who: 'teddy', text: 'It came from the bushes. {name}, can you find him? Tap the bush that sneezed!' },
     nudgeBush: { who: 'teddy', text: 'Tap the big bush, {name}!' },
-    helpedBush: { who: 'daddyBear', text: 'Let’s look just under this clump of bushes.' },
+    helpedBush: { who: 'daddy-bear', text: 'Let’s look just under this clump of bushes.' },
     foundHim: { who: 'teddy', text: 'You found him, {name}!' },
     whoAreYou: { who: 'teddy', text: 'Hello! Who are you?' },
     bertie: { who: 'bertie', text: 'The name’s Bertie. Atishoo! Ooh, I’m soaked to the skin!' },
-    comeHome: { who: 'daddyBear', text: 'You’d best come home with us, Bertie. Take his arm, Teddy.' },
+    comeHome: { who: 'daddy-bear', text: 'You’d best come home with us, Bertie. Take his arm, Teddy.' },
     // 2. Daddy's chair
     beforeLong: { who: 'narrator', text: 'Soon Bertie was in Daddy’s chair, in Teddy’s dressing gown, with a hot chocolate.' },
     lavinia: { who: 'bertie', text: 'I belong to a girl called Lavinia. Our house is much bigger than this!' },
-    lovely: { who: 'mummyBear', text: 'Well! We think our little cottage is lovely, dear.' },
+    lovely: { who: 'mummy-bear', text: 'Well! We think our little cottage is lovely, dear.' },
     howLeft: { who: 'teddy', text: 'How did you come to be left in the woods, Bertie?' },
     pickingFlowers: { who: 'bertie', text: 'Lavinia went off picking flowers. She got caught in the rain and ran straight home.' },
     onPurpose: { who: 'bertie', text: 'She would never have left me behind on purpose.' },
-    ofCourseNot: { who: 'daddyBear', text: 'Of course not. Dry clothes first, then back to the woods. Maybe Lavinia will be looking for you.' },
+    ofCourseNot: { who: 'daddy-bear', text: 'Of course not. Dry clothes first, then back to the woods. Maybe Lavinia will be looking for you.' },
     // 3. Not my colour
     foundClothes: { who: 'teddy', text: 'I found you a woolly jumper and some trousers, Bertie!' },
     askJumper: { who: 'teddy', text: 'Help Bertie put the jumper on, {name}! Tap the jumper!' },
     nudgeJumper: { who: 'teddy', text: 'Just tap the green jumper!' },
-    helpedJumper: { who: 'mummyBear', text: 'Here, Bertie. Arms up, dear!' },
+    helpedJumper: { who: 'mummy-bear', text: 'Here, Bertie. Arms up, dear!' },
     notMyColour: { who: 'bertie', text: 'Hmm. Not really my colour.' },
     betterTrousers: { who: 'bertie', text: 'And Lavinia threw out a pair of trousers much better than these!' },
     betterThanNothing: { who: 'bertie', text: 'Still, they’re better than nothing. I’ll get new clothes when I’m home.' },
     noThankYou: { who: 'teddy', text: 'Psst, {name}! What a grumpy old bear. He hasn’t even said thank you!' },
-    sunOut: { who: 'mummyBear', text: 'Look, the sun’s out! Back to the woods, everyone.' },
+    sunOut: { who: 'mummy-bear', text: 'Look, the sun’s out! Back to the woods, everyone.' },
     // 4. Back to the woods
     waited: { who: 'narrator', text: 'Bertie’s own jacket was dry now. He sat by the path, and Teddy and Daddy hid to watch.' },
     someone: { who: 'teddy', text: 'Someone’s coming! But she hasn’t seen Bertie!' },
@@ -102,16 +101,16 @@ export default defineCartoon({
     helpedBertie: { who: 'bertie', text: 'Ah… ah… ATISHOO!' },
     atishooAgain: { who: 'bertie', text: 'Ah… ah… ATISHOO!' },
     heardHim: { who: 'teddy', text: 'She heard him, {name}! She’s looking!' },
-    blessYou: { who: 'greatAunt', text: 'Oh! What was that? Why, it’s a teddy bear! Lavinia, dear, come here a minute!' },
-    lostBear: { who: 'greatAunt', text: 'Isn’t this the bear you lost the other day?' },
+    blessYou: { who: 'great-aunt', text: 'Oh! What was that? Why, it’s a teddy bear! Lavinia, dear, come here a minute!' },
+    lostBear: { who: 'great-aunt', text: 'Isn’t this the bear you lost the other day?' },
     thatOldThing: { who: 'lavinia', text: 'What, that old thing, Auntie? I’ve got my new doll now!' },
     nearlyCry: { who: 'narrator', text: 'Bertie looked as if he were about to cry.' },
-    remindMe: { who: 'greatAunt', text: 'Do you know, you remind me of the teddy I had when I was a girl.' },
-    comeHomeWithMe: { who: 'greatAunt', text: 'Will you come home with me? My grandchildren would love to play with you.' },
+    remindMe: { who: 'great-aunt', text: 'Do you know, you remind me of the teddy I had when I was a girl.' },
+    comeHomeWithMe: { who: 'great-aunt', text: 'Will you come home with me? My grandchildren would love to play with you.' },
     shining: { who: 'narrator', text: 'Bertie’s black eyes shone like new. He was loved again.' },
     thankYouTeddy: { who: 'bertie', text: 'Psst! Thank you, Teddy. Thank you for everything!' },
     welcome: { who: 'teddy', text: 'Psst! You’re welcome, Bertie! Goodbye!' },
-    thinking: { who: 'daddyBear', text: 'What are you thinking about, Teddy?' },
+    thinking: { who: 'daddy-bear', text: 'What are you thinking about, Teddy?' },
     callAgain: { who: 'teddy', text: 'I was just wondering if Bertie will call at our cottage again.' },
   },
   scenes: [
@@ -119,11 +118,11 @@ export default defineCartoon({
     {
       name: 'Atishoo!',
       set(k) {
-        k.backdrop('bear-woods');
+        k.backdrop('bear-wood');
         k.music('cosy');
         k.dim(0.18, '#5d6b78');
         k.ambient('rain', { count: 60 });
-        cast.daddy = k.character('daddyBear', { x: 60, y: 390, w: 260 });
+        cast.daddy = k.character('daddy-bear', { x: 60, y: 390, w: 260 });
         cast.teddy = k.character('teddy', { x: 290, y: 460, w: 200 });
         cast.umbrella = k.prop('umbrella', { x: 90, y: 150, w: 330, z: 12 });
         cast.bertie = k.character('bertie', { x: 760, y: 470, w: 190, pose: 'soaked', z: 9 });
@@ -166,9 +165,9 @@ export default defineCartoon({
         parlour(k);
         k.music('cosy');
         cast.mug = k.prop('mug', { x: 700, y: 480, w: 80, z: 12 });
-        cast.daddy = k.character('daddyBear', { x: 40, y: 390, w: 250 });
+        cast.daddy = k.character('daddy-bear', { x: 40, y: 390, w: 250 });
         cast.teddy = k.character('teddy', { x: 250, y: 460, w: 190 });
-        cast.mummy = k.character('mummyBear', { x: 860, y: 390, w: 250, flip: true });
+        cast.mummy = k.character('mummy-bear', { x: 860, y: 390, w: 250, flip: true });
       },
       async play(k) {
         const { bertie, daddy, teddy, mummy } = cast;
@@ -195,7 +194,7 @@ export default defineCartoon({
         parlour(k);
         k.music('cosy');
         cast.teddy = k.character('teddy', { x: 220, y: 460, w: 190 });
-        cast.mummy = k.character('mummyBear', { x: 860, y: 390, w: 250, flip: true });
+        cast.mummy = k.character('mummy-bear', { x: 860, y: 390, w: 250, flip: true });
         cast.jumper = k.prop('jumper', { x: 260, y: 300, w: 170, z: 14 });
         k.set(cast.teddy, { x: -500 });
         k.set(cast.jumper, { x: -500 });
@@ -236,13 +235,13 @@ export default defineCartoon({
     {
       name: 'Back to the woods',
       set(k) {
-        k.backdrop('bear-woods');
+        k.backdrop('bear-wood');
         k.music('sneaky');
-        cast.daddy = k.character('daddyBear', { x: 60, y: 360, w: 230, z: 8 });
+        cast.daddy = k.character('daddy-bear', { x: 60, y: 360, w: 230, z: 8 });
         cast.teddy = k.character('teddy', { x: 230, y: 420, w: 180, z: 8 });
         cast.hide = k.prop('bush', { x: 20, y: 470, w: 400, z: 9 });
         cast.bertie = k.character('bertie', { x: 470, y: 470, w: 180 });
-        cast.aunt = k.character('greatAunt', { x: 740, y: 290, w: 340, flip: true });
+        cast.aunt = k.character('great-aunt', { x: 740, y: 290, w: 340, flip: true });
         cast.lavinia = k.character('lavinia', { x: 880, y: 360, w: 280, flip: true });
         k.set(cast.aunt, { x: 600 });
         k.set(cast.lavinia, { x: 500 });
@@ -285,13 +284,13 @@ export default defineCartoon({
     {
       name: 'Loved again',
       set(k) {
-        k.backdrop('bear-woods');
+        k.backdrop('bear-wood');
         k.music('dreamy');
-        cast.daddy = k.character('daddyBear', { x: 60, y: 360, w: 230, z: 8 });
+        cast.daddy = k.character('daddy-bear', { x: 60, y: 360, w: 230, z: 8 });
         cast.teddy = k.character('teddy', { x: 230, y: 420, w: 180, z: 8 });
         cast.hide = k.prop('bush', { x: 20, y: 470, w: 400, z: 9 });
         cast.bertie = k.character('bertie', { x: 470, y: 470, w: 180, pose: 'sad' });
-        cast.aunt = k.character('greatAunt', { x: 640, y: 290, w: 340, flip: true });
+        cast.aunt = k.character('great-aunt', { x: 640, y: 290, w: 340, flip: true });
         k.set(cast.daddy, { y: 120, opacity: 0 });
         k.set(cast.teddy, { y: 120, opacity: 0 });
         k.set(cast.bertie, { y: 10, rotation: -4 });
