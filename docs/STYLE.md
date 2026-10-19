@@ -72,6 +72,31 @@ The villains' rules, from the games:
 - **Original art only.** Fan versions in our own paper style: no film
   stills, logos, typefaces or actor likenesses.
 
+## The bears
+
+The `bears` world (Teddy Bear, Bear Cottage, the seaside) comes from a
+1994 picture book the family loves, and the owner chose to match that
+book's look rather than the paper theatre. It is the one world drawn this
+way:
+
+- **Watercolour and ink** on white paper (`src/art/watercolour.ts`): soft
+  washes with a darker glaze pooled on the shadow side and a paler bloom
+  where the light falls, a scratchy sepia pen line round everything,
+  hatching for shade, fur drawn as little pen flicks.
+- **Backdrops fade into the white page** at their edges, like the book's
+  pictures (`pageNodes`). Skies are a blue wash thinning to white; clouds
+  are the book's scalloped puffs with hatching under them.
+- **Bears are whole small teddies** (a big round head, a stubby body),
+  all built by one puppet (`bear()` in `src/worlds/bears/parts.ts`), told
+  apart by their clothes: Teddy's red jumper with the yellow stripes is
+  always the same.
+- Our own drawings in that style: never a traced or scanned page.
+- Everything else here still holds: drawn once and held still, smooth
+  motion, no flashing, Andika, the same stage and caption band.
+- The book's Bully Bear story has Captain Bear wanting to give Bully "a
+  good spanking" and nearly throwing him: never. He roars and sends Bully
+  off, and Bully comes back and says sorry.
+
 ## Composition
 
 - The stage is **1180 × 820**. Captions sit in the band **y 690–800**:

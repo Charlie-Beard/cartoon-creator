@@ -8,6 +8,7 @@ there can use by id. Source: [`src/worlds/`](../src/worlds/).
 | Anywhere (skies, a meadow, night, parchment, a few props; no characters) | `common` | made here |
 | The Faraway Tree | `faraway` | [Up the Faraway Tree](https://github.com/charlie-beard/maths-game) |
 | Hogwarts | `hogwarts` | [Wizard Words](https://github.com/charlie-beard/spelling-game) |
+| Bear Cottage (Teddy Bear; watercolour, not paper: docs/STYLE.md, "The bears") | `bears` | a 1994 book of teddy bear stories |
 
 See what's in each, drawn: `npm run lab -- faraway` saves a sheet of
 every character, pose, backdrop and prop, each with its id, to

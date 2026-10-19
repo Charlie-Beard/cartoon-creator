@@ -2,7 +2,8 @@
 
 Torn-paper puppet cartoons for one 6-year-old (autistic, possibly ADHD) on
 an iPad in landscape. Each cartoon is an episode of 2–5 minutes in a few
-scenes, set in the Faraway Tree or at Hogwarts, and now and then it's his
+scenes, set in the Faraway Tree, at Hogwarts or at Bear Cottage (the
+teddy bear stories), and now and then it's his
 turn to tap and help. Claude writes every cartoon from the skills in
 `.claude/skills/`. To make one, follow **`new-cartoon`**.
 
@@ -69,7 +70,10 @@ flagged frames, and fix or justify every flag.
   beat cuts back to the heroes before it's too much, and every episode
   ends safe and warm. See docs/STYLE.md.
 - **Original art only:** torn paper via `src/art/paper.ts`. No film
-  stills, no logos, no actor likenesses, no film fonts.
+  stills, no logos, no actor likenesses, no film fonts. The one
+  exception is the `bears` world, drawn in the watercolour-and-ink look
+  of the book it comes from (`src/art/watercolour.ts`; docs/STYLE.md,
+  "The bears"): still our own drawings, never traced or scanned.
 - **UK English** in everything he hears or reads ("Mum", "colour",
   "biscuit"). Short sentences: a 6-year-old is listening. `npm run check`
   catches the common slips.
@@ -106,10 +110,10 @@ flagged frames, and fix or justify every flag.
 |---|---|
 | `src/cartoons/` | One folder per cartoon (`meta.ts`, `cartoon.ts`); `index.ts` finds them for the shelf |
 | `src/kit/` | `kit.ts` (the stage and its tools), `cartoon.ts` (`defineCartoon`, scenes) |
-| `src/worlds/` | `types.ts`, `index.ts` (lookups), and one folder per world: `common`, `faraway`, `hogwarts` |
+| `src/worlds/` | `types.ts`, `index.ts` (lookups), and one folder per world: `common`, `faraway`, `hogwarts`, `bears` |
 | `src/core/` | Pure: lines and their checks (`cartoon.ts`), `{name}` and voice ids (`phrases.ts`) |
 | `src/scenes/` | The library (shelf), the player, the grown-ups' corner |
-| `src/art/` | The paper engine, palette, grain, UI pieces (seals, parchment, stars) |
+| `src/art/` | The paper engine, the watercolour engine (bears), palette, grain, UI pieces (seals, parchment, stars) |
 | `src/audio/` | Web Audio engine, UI sounds (`sfx`), story sounds and music beds (`synth`), voice |
 | `src/ui/` | Stage helpers, scenes and the director, pause, rotate, the gear |
 | `scripts/` | Screenshots and pacing, the cartoon checker, the voice pipeline |

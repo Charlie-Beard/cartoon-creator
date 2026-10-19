@@ -13,6 +13,7 @@ const loaders = {
   common: () => import('../../src/worlds/common/pieces'),
   faraway: () => import('../../src/worlds/faraway/pieces'),
   hogwarts: () => import('../../src/worlds/hogwarts/pieces'),
+  bears: () => import('../../src/worlds/bears/pieces'),
 };
 
 /** Every export of a pieces file that is meant to be a piece (not art, a helper or a type). */
@@ -20,6 +21,7 @@ const PIECES: Record<keyof typeof loaders, string[]> = {
   common: ['meanwhile', 'noiseOff', 'sneakIn', 'warmEnding'],
   faraway: ['ladderArrival', 'landMovesOn', 'slipperySlip', 'teaTime', 'trapdoorArrival', 'snapLoom', 'snapDefeat'],
   hogwarts: ['owlPost', 'greatHall', 'spellLesson', 'broomArrival', 'apparateArrival', 'voldemortLoom'],
+  bears: ['storyCloud', 'helicopterVisit'],
 };
 
 /** Pieces that come in parts must have a `set` and a `play` (or at least some parts, all functions). */
