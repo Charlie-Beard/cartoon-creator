@@ -79,6 +79,21 @@ export interface BearOpts {
   /** Held in the right arm's paw, moving with the arm. */
   holdR?: Node[];
   holdL?: Node[];
+  /** The muzzle's colour, if it isn't simply a paler fur (a grandpa's grey chin). */
+  muzzle?: string;
+  /** Colours for lengthwise stripes down the sleeves (a striped blazer), over `sleeve`. */
+  sleeveStripes?: string[];
+  /**
+   * False: this bear's mouth is drawn but is not a `mouth`/`mouthOpen` part,
+   * so it cannot talk (Grandpa, while a ventriloquist's dummy does the talking).
+   */
+  talks?: boolean;
+  /**
+   * For a bear drawn small inside another bear's picture (see `bearNodes`):
+   * only its `mouth` and `mouthOpen` keep their part names, so the big bear's
+   * own parts stay unique, and it casts no ground shadow.
+   */
+  nested?: boolean;
 }
 
 // ---------------------------------------------------------------- the body
@@ -172,7 +187,7 @@ function face(o: BearOpts): Node[] {
   // cheeks
   out.push(blot(ellipse(hx - 46, hy + 26, 13, 9), '#e59a8a', 0.55), blot(ellipse(hx + 46, hy + 26, 13, 9), '#e59a8a', 0.55));
   // muzzle
-  out.push(wash(ellipse(hx, hy + 32 * s, 40 * s, 30 * s), paler(o.fur, 0.5), { line: INK, lineWidth: 1.6, depth: 0.2, light: -110 }));
+  out.push(wash(ellipse(hx, hy + 32 * s, 40 * s, 30 * s), o.muzzle ?? paler(o.fur, 0.5), { line: INK, lineWidth: 1.6, depth: 0.2, light: -110 }));
   // eyes
   const ex = 30;
   const ey = hy - 10;
@@ -238,7 +253,9 @@ function face(o: BearOpts): Node[] {
         return [pen([[hx - 15, my - 3], [hx - 7, my + 4], [hx, my - 1], [hx + 7, my + 4], [hx + 15, my - 3]], { width: 2.6 })];
     }
   };
-  out.push(group({ part: 'mouth', origin: [hx, my] }, shape(o.mouth ?? 'smile')));
+  const talks = o.talks !== false;
+  out.push(group({ part: talks ? 'mouth' : undefined, origin: [hx, my] }, shape(o.mouth ?? 'smile')));
+  if (talks)
   out.push(
     group({ part: 'mouthOpen', origin: [hx, my], opacity: 0 }, [
       wash(curve([[hx - 13, my - 3], [hx + 13, my - 3], [hx + 8, my + 12], [hx - 8, my + 12]], 2), '#7a3328', { lineWidth: 2, shade: false, bloom: false }),
@@ -270,6 +287,17 @@ function arm(part: 'armL' | 'armR', from: Pt, to: Pt, o: BearOpts, hold?: Node[]
   const sleeve = bandOutline([from, via, wrist], 38);
   const kids: Node[] = [wash(sleeve, o.sleeve, { depth: 0.25, lineWidth: 2.2 })];
   if (o.cuff) kids.push(wash(bandOutline([[wrist[0] - (to[0] - from[0]) * 0.08, wrist[1] - (to[1] - from[1]) * 0.08], wrist], 38), o.cuff, { lineWidth: 2, bloom: false }));
+  if (o.sleeveStripes) {
+    const dx = (to[0] - from[0]) / len;
+    const dy = (to[1] - from[1]) / len;
+    const n = o.sleeveStripes.length;
+    const bands = o.sleeveStripes.map((c, i) => {
+      const d = (i - (n - 1) / 2) * 15;
+      const sh = (p: Pt): Pt => [p[0] - dy * d, p[1] + dx * d];
+      return wash(bandOutline([sh(from), sh(via), sh(wrist)], 8), c, { line: false, depth: 0.5, wobble: 1.2 });
+    });
+    kids.push(clipped(sleeve, bands));
+  }
   kids.push(...(hold ?? []));
   kids.push(wash(circle(to[0], to[1], 19), o.fur, { fur: 5, lineWidth: 2.2, depth: 0.25 }));
   return group({ part, origin: from }, kids);
@@ -319,8 +347,12 @@ function legs(o: BearOpts): Node[] {
 
 // ---------------------------------------------------------------- the bear
 
-/** A whole bear, as a 300 × 340 portrait SVG. */
-export function bear(o: BearOpts): string {
+/**
+ * A whole bear as drawing nodes rather than an SVG, so one bear can be
+ * placed inside another's picture (a cub on a grandpa's knee, in a group with
+ * a transform). Set `nested` on the small one.
+ */
+export function bearNodes(o: BearOpts): Node {
   const arms = o.arms ?? 'down';
   const [toL, toR] = ARM_TO[arms];
   const shL: Pt = [100, 214];
@@ -328,11 +360,10 @@ export function bear(o: BearOpts): string {
   const earL: Pt = [hx - 62, hy - 56];
   const earR: Pt = [hx + 62, hy - 56];
   const armNodes = [arm('armL', shL, toL, o, o.holdL), arm('armR', shR, toR, o, o.holdR)];
-  return svg({ w: W, h: H, name: o.name, label: o.label, className: 'portrait' }, [
-    group({ part: 'figure', origin: [150, 340] }, [
+  const figure = group({ part: 'figure', origin: [150, 340] }, [
       ...(o.back ?? []),
       // a soft shadow on the ground
-      blot(ellipse(150, 336, 104, 9), '#6b4a30', 0.22),
+      ...(o.nested ? [] : [blot(ellipse(150, 336, 104, 9), '#6b4a30', 0.22)]),
       ...legs(o),
       wash(TORSO, o.fur, { fur: 6 }),
       ...o.clothes,
@@ -349,6 +380,12 @@ export function bear(o: BearOpts): string {
       ]),
       ...(arms === 'wave' ? [armNodes[1]] : armNodes),
       ...(o.extra ?? []),
-    ]),
-  ]);
+    ]);
+  if (!o.nested) return figure;
+  return (ctx) => figure(ctx).replace(/ data-part="(?!mouth(Open)?")[^"]*"/g, '');
+}
+
+/** A whole bear, as a 300 × 340 portrait SVG. */
+export function bear(o: BearOpts): string {
+  return svg({ w: W, h: H, name: o.name, label: o.label, className: 'portrait' }, [bearNodes(o)]);
 }
