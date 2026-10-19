@@ -32,10 +32,10 @@
  *   4. Teatime (bear-beach). A brand new castle. Bully comes back, slowly,
  *      head down: sorry, can I help? I'm good at digging. "Of course you
  *      can!" He digs the best moat ever and the sea fills it. His turn: he
- *      taps the flag and it flies up onto the top (or Bully plants it).
+ *      taps the flag and it flies up onto the top (or Teeny plants it).
  *      Teeny runs to fetch Captain Bear; the whistle, and the prize goes to
  *      the castle they all built together. Shell medals for every builder,
- *      Bully too, and one for Teddy to take to Teeny. Teatime!
+ *      Bully too, and Teddy takes Teeny hers. Teatime!
  *
  * Changed from the book (house rules, docs/STYLE.md "The bears"): Captain
  * Bear never threatens a spanking and never lifts or throws Bully. He roars
@@ -110,15 +110,13 @@ export default defineCartoon({
     barneyTips: { who: 'barney', text: 'I’ll tip it over. One, two, three!' },
     thanksBucket: { who: 'teddy', text: 'A brand new tower! Thank you, {name}!' },
     thanksBarney: { who: 'teddy', text: 'A brand new tower! Well done, Barney!' },
-    whatsThat: { who: 'barney', text: 'Uh-oh. What’s that thumping?' },
     babies: { who: 'bully-bear', text: 'Sand-castles are for babies!' },
     haha: { who: 'bully-bear', text: 'Ha ha! Ha ha ha!' },
     tooBig: { who: 'barney', text: 'He spoils everything! He’s too big for any of us. What can we do, Teddy?' },
     idea: { who: 'teddy', text: 'Hmm… I’ve got an idea!' },
     // 2. The pretend letter
     whisper: { who: 'teddy', text: 'Listen. We’ll write a pretend letter. It says the prizes are buried under Captain Bear’s castle.' },
-    butNot: { who: 'barney', text: 'But the prizes aren’t there!' },
-    notTrue: { who: 'teddy', text: 'That’s right, {name}. It’s not true! But Bully will THINK it is.' },
+    notTrue: { who: 'teddy', text: 'It’s pretend, {name}. It’s not true! But Bully will THINK it is.' },
     scribble: { who: 'teddy', text: 'Scribble, scribble… There! And a red seal.' },
     teenyHello: { who: 'teeny-bear', text: 'Hello! Can I help?' },
     loud: { who: 'teddy', text: 'Teeny! Take this SECRET letter to Teacher Bear!' },
@@ -143,22 +141,20 @@ export default defineCartoon({
     squashed: { who: 'teeny-bear', text: 'But our castles are squashed. And it’s nearly teatime!' },
     bestEver: { who: 'teddy', text: 'Then let’s build the best castle ever!' },
     // 4. Teatime
-    patPat: { who: 'narrator', text: 'So they built a brand new castle. Pat, pat, pat.' },
-    sorry: { who: 'bully-bear', text: 'I’m sorry I spoiled your castles. Can I help? I’m good at digging.' },
+    patPat: { who: 'narrator', text: 'Pat, pat, pat! A brand new castle.' },
+    sorry: { who: 'bully-bear', text: 'Sorry I spoiled your castles. Can I help? I’m good at digging.' },
     ofCourse: { who: 'teddy', text: 'Of course you can! Dig us a moat!' },
-    bestMoat: { who: 'barney', text: 'Look! The sea’s come in. The best moat ever!' },
+    bestMoat: { who: 'barney', text: 'Look! The best moat ever!' },
     askFlag: { who: 'teddy', text: 'Now the flag on top. Tap the flag, {name}!' },
     nudgeFlag: { who: 'teddy', text: 'Tap the little red flag!' },
-    bullyFlag: { who: 'bully-bear', text: 'I’ll put it up. There!' },
+    teenyFlag: { who: 'teeny-bear', text: 'I’ll put it up! There!' },
     finished: { who: 'teeny-bear', text: 'Hooray! It’s finished!' },
-    thanksBully: { who: 'teddy', text: 'Thank you, Bully! It’s finished!' },
+    thanksTeeny: { who: 'teddy', text: 'Thank you, Teeny! It’s finished!' },
     fetch: { who: 'teeny-bear', text: 'It’s teatime! I’ll fetch Captain Bear!' },
-    judging: { who: 'captain-bear', text: 'Judging time! The prize goes to… this castle! You built it together.' },
-    medals: { who: 'captain-bear', text: 'Shell medals for every builder!' },
+    judging: { who: 'captain-bear', text: 'Judging time! The prize goes to… this castle, built together! Medals for everyone!' },
     forMe: { who: 'bully-bear', text: 'For me too? Oh, thank you, Captain Bear!' },
-    forTeeny: { who: 'captain-bear', text: 'And one for Teeny. Take it to her, Teddy!' },
-    teaTime: { who: 'teddy', text: 'Yes! Come on, everyone. It’s teatime!' },
-    end: { who: 'narrator', text: 'And Teeny wore her shell medal all through tea.' },
+    teaTime: { who: 'teddy', text: 'Come on, everyone. It’s teatime!' },
+    end: { who: 'narrator', text: 'And Teddy took Teeny her medal, just in time for tea.' },
   },
   scenes: [
     // ==================================================== 1. The competition
@@ -221,8 +217,7 @@ export default defineCartoon({
         // Thud… thud… Bully Bear.
         k.music('sneaky');
         k.fx.stomp(3, 0.5);
-        await k.wait(800);
-        await k.all(k.say('whatsThat', barney), k.shake(teddy, 4, 2));
+        await k.all(k.shake(teddy, 4, 2), k.shake(barney, 4, 2));
         k.fx.stomp(2, 0.4);
         await k.enter(bully, 'right', 1);
         await k.say('babies', bully);
@@ -283,7 +278,6 @@ export default defineCartoon({
         await k.to(teddy, 0.4, { x: 30, rotation: 6 });
         await k.say('whisper', teddy);
         await k.to(teddy, 0.3, { x: 0, rotation: 0 });
-        await k.all(k.say('butNot', barney), k.shake(barney, 4, 2));
         await k.say('notTrue', teddy);
 
         // Scribble, scribble: the letter.
@@ -440,7 +434,7 @@ export default defineCartoon({
         // Slow footsteps: Bully comes back, head down.
         k.fx.patter(4, 0.4);
         await k.to(bully, 0, { x: 300 });
-        await k.all(k.fade(bully, 1, 0.3), k.to(bully, 2, { x: 0, ease: 'sine.out' }));
+        await k.all(k.fade(bully, 1, 0.3), k.to(bully, 1.6, { x: 0, ease: 'sine.out' }));
         await k.all(k.shake(teeny, 4, 2), k.shake(teddy, 3, 2));
         await k.wait(400);
         await k.say('sorry', bully);
@@ -448,7 +442,7 @@ export default defineCartoon({
 
         // The moat: dig, dig, and the sea runs in.
         k.pose(bully, 'dig');
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 2; i++) {
           dig(1);
           await k.to(bully, 0.22, { rotation: -8, x: -14 });
           k.puff(930, 610, 90, '#e3c07e');
@@ -462,7 +456,7 @@ export default defineCartoon({
         k.pose(barney, 'default');
 
         // His turn: the flag on top.
-        const how = await k.tapToHelp(flag, { ask: 'askFlag', nudge: 'nudgeFlag', helped: 'bullyFlag', by: teddy, helper: bully, size: 130 });
+        const how = await k.tapToHelp(flag, { ask: 'askFlag', nudge: 'nudgeFlag', helped: 'teenyFlag', by: teddy, helper: teeny, size: 130 });
         k.fx.whizz();
         k.set(flag, { zIndex: 25 });
         await k.to(flag, 1, { x: 575, y: -124, ease: 'power1.inOut' });
@@ -472,7 +466,7 @@ export default defineCartoon({
         k.sfx.sparkle();
         k.sparkle(770, 430, 14, 160);
         k.pose(teeny, 'happy');
-        await k.all(k.say(how === 'tapped' ? 'finished' : 'thanksBully', how === 'tapped' ? teeny : teddy), k.hop(teeny, 22, 2));
+        await k.all(k.say(how === 'tapped' ? 'finished' : 'thanksTeeny', how === 'tapped' ? teeny : teddy), k.hop(teeny, 22, 2));
 
         // Teeny runs to fetch Captain Bear.
         await k.say('fetch', teeny);
@@ -481,13 +475,12 @@ export default defineCartoon({
         await k.wait(600);
         sounds.whistle();
         await k.enter(captain, 'left', 1);
-        k.fx.drumroll(1.2);
-        await k.wait(1300);
+        k.fx.drumroll(1);
+        await k.wait(900);
         k.sfx.fanfare();
         k.pose(captain, 'point');
         await k.say('judging', captain);
         k.pose(captain, 'happy');
-        await k.say('medals', captain);
         // A shell medal on every builder.
         for (const el of [barney, teddy, bully]) {
           k.fx.jingle();
@@ -498,7 +491,6 @@ export default defineCartoon({
         k.pose(bully, 'default');
         k.set(k.part(bully, 'brows'), { opacity: 0 });
         await k.all(k.say('forMe', bully), k.hop(bully, 24));
-        await k.say('forTeeny', captain);
         k.pose(teddy, 'happy');
         await k.say('teaTime', teddy);
         sounds.seagull();

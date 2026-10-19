@@ -98,27 +98,24 @@ export default defineCartoon({
     bored: { who: 'narrator', text: 'Teddy Bear was feeling so bored! Mummy was busy, and Daddy was at the market.' },
     jigsaws: { who: 'teddy', text: 'I’ve done all my jigsaws. And I’ve tidied the toy cupboard!' },
     nothingToDo: { who: 'teddy', text: 'There’s nothing to do, {name}. Nothing at all!' },
-    butterfly: { who: 'teddy', text: 'Even the butterfly has somewhere to go. Hmph.' },
     digging: { who: 'mummy-bear', text: 'What about digging in the garden, Teddy?' },
     allRight: { who: 'teddy', text: 'All right… I’ll go and ask Barney to help.' },
     cheerUp: { who: 'mummy-bear', text: 'Cheer up, Teddy! You might have a nice surprise before long!' },
     dontThink: { who: 'teddy', text: 'A surprise? I don’t think so.' },
-    secret: { who: 'mummy-bear', text: 'Shh, {name}! I know a secret. You’ll see!' },
+    secret: { who: 'mummy-bear', text: 'Shh, {name}! I know a secret!' },
     // 2. Nobody home
-    bestFriend: { who: 'teddy', text: 'Here’s Barney’s house. Barney’s my best friend!' },
+    bestFriend: { who: 'teddy', text: 'Here’s Barney’s house. He’s my best friend!' },
     askKnock: { who: 'teddy', text: 'Will you knock for me, {name}? Tap the shiny knocker!' },
     nudgeKnock: { who: 'teddy', text: 'Tap the knocker on the green door.' },
     knockMyself: { who: 'teddy', text: 'I’ll knock myself, then. Knock, knock!' },
     anyoneHome: { who: 'teddy', text: 'Barney? It’s me, Teddy! Are you there?' },
-    notHome: { who: 'narrator', text: 'Nobody came. Barney Bear was not at home.' },
-    notFair: { who: 'teddy', text: 'It’s not fair! There’s nobody to play with!' },
+    notFair: { who: 'teddy', text: 'Barney’s not at home! It’s not fair! There’s nobody to play with!' },
     shouldHave: { who: 'narrator', text: 'Teddy should have gone straight back home. Instead, he just marched away.' },
-    allTheSame: { who: 'teddy', text: 'Oh. These trees all look the same.' },
     sadLonely: { who: 'narrator', text: 'Teddy felt so sad and lonely, he might have begun to cry…' },
     laughing: { who: 'narrator', text: '…except, just then, he heard somebody laughing!' },
     // 3. Ahoy, ship-mates!
     shipmates: { who: 'uncle-bill', text: 'That’s right, ship-mates! Just enjoy yourselves!' },
-    itsMe: { who: 'teddy', text: 'Uncle Sailor Bill! It’s me, Teddy Bear!' },
+    itsMe: { who: 'teddy', text: 'Uncle Sailor Bill! It’s me, Teddy!' },
     scupper: { who: 'uncle-bill', text: 'Well, scupper me scallywags! Come and meet my friends, Teddy!' },
     treasureHunt: { who: 'posy', text: 'I’m Posy! We’re going on a treasure hunt!' },
     picnicFirst: { who: 'bella', text: 'I’m Bella. And there’s a picnic first!' },
@@ -127,20 +124,16 @@ export default defineCartoon({
     askHole: { who: 'uncle-bill', text: 'The first clue is in the hollow tree. Tap the hidey-hole, {name}!' },
     nudgeHole: { who: 'uncle-bill', text: 'Tap the dark hole in the big tree.' },
     fishItOut: { who: 'uncle-bill', text: 'I’ll fish it out. Got it!' },
-    aMap: { who: 'teddy', text: 'A treasure map!' },
     readMap: { who: 'uncle-bill', text: 'It says the treasure is where the ducks swim!' },
     whereDucks: { who: 'teddy', text: 'Where do the ducks swim, Uncle Bill?' },
     soonEnough: { who: 'uncle-bill', text: 'You’ll find out soon enough, Teddy!' },
     boo: { who: 'bobby', text: 'Boo! I’m Bobby. I was hiding behind your stone!' },
     raceYou: { who: 'bobby', text: 'Race you through the trees, Teddy!' },
-    waitForMe: { who: 'teddy', text: 'Wait for me!' },
     // 4. The best surprise
-    sunshine: { who: 'narrator', text: 'Out they ran, into the sunshine!' },
     pondSwing: { who: 'teddy', text: 'A duck pond… a swing… a wishing well…' },
     myHouse: { who: 'teddy', text: 'That’s my house! It’s just across the path!' },
     funNow: { who: 'bobby', text: 'Now for some fun! I’ll fetch the others.' },
-    newFriends: { who: 'mummy-bear', text: 'I see you’ve met your new friends, Teddy!' },
-    toldYou: { who: 'mummy-bear', text: 'Didn’t I say you’d get a nice surprise?' },
+    newFriends: { who: 'mummy-bear', text: 'I see you’ve met your new friends, Teddy! Didn’t I say you’d get a nice surprise?' },
     youDid: { who: 'teddy', text: 'Yes, Mummy. You did!' },
     duckPond: { who: 'teddy', text: 'Where the ducks swim… the duck pond! There’s the treasure!' },
     askChest: { who: 'teddy', text: 'Open it, {name}! Tap the treasure chest!' },
@@ -150,7 +143,7 @@ export default defineCartoon({
     thanksName: { who: 'teddy', text: 'Thank you, {name}! Mmm!' },
     thanksBill: { who: 'teddy', text: 'Thank you, Uncle Bill! Mmm!' },
     bestOfAll: { who: 'teddy', text: 'But coming home was the best surprise of all!' },
-    end: { who: 'narrator', text: 'And all the bears had a picnic on the green, right by Teddy’s home.' },
+    end: { who: 'narrator', text: 'And they all had a picnic, right by Teddy’s home.' },
   },
   scenes: [
     // ==================================================== 1. Bored
@@ -167,7 +160,7 @@ export default defineCartoon({
       },
       async play(k) {
         const { teddy, mummy, butterfly } = cast;
-        await k.wait(400);
+        await k.wait(200);
         sigh();
         await k.say('bored');
         await k.all(k.say('jigsaws', teddy), k.wait(300).then(() => k.shake(teddy, 4, 2)));
@@ -177,9 +170,9 @@ export default defineCartoon({
 
         // A butterfly flutters across over his head, and away.
         k.fx.twinkle();
-        await k.all(k.to(butterfly, 3.4, { x: -760, y: 60, ease: 'sine.inOut' }), flutter(k, butterfly, 12));
+        await k.all(k.to(butterfly, 2.8, { x: -760, y: 60, ease: 'sine.inOut' }), flutter(k, butterfly, 10));
         sigh();
-        await k.say('butterfly', teddy);
+        await k.wait(400);
         k.set(butterfly, { opacity: 0 });
 
         // Mummy comes out of the door and down the path.
@@ -199,14 +192,12 @@ export default defineCartoon({
 
         // Off he trudges, out of the gate on the right.
         k.face(teddy, false);
-        await march(k, teddy, 0, 2);
         await k.all(k.walk(teddy, 620, 2, 5), k.wait(200).then(() => k.fx.patter(6, 0.2)));
         await k.wait(400);
         // Mummy, to him: she knows a secret.
         giggle();
         await k.say('secret', mummy);
         await k.blink(mummy);
-        await k.wait(500);
       },
     },
 
@@ -237,7 +228,6 @@ export default defineCartoon({
         await k.all(k.say('anyoneHome', teddy), k.to(teddy, 0.5, { x: '-=20' }));
         // Nothing. A long quiet.
         await k.wait(1200);
-        await k.say('notHome');
         k.pose(teddy, 'sad');
         await k.wait(500);
         k.pose(teddy, 'cross');
@@ -258,19 +248,9 @@ export default defineCartoon({
           k.set(cast.teddy, { x: -640 });
         });
         const t = cast.teddy;
-        k.fx.stomp(4, 0.3);
-        await march(k, t, 640, 5);
-        k.pose(t, 'default');
-        await k.wait(300);
-        // He looks one way, then the other.
-        k.face(t, true);
-        await k.wait(500);
-        k.face(t, false);
-        await k.wait(300);
-        await k.say('allTheSame', t);
+        k.fx.stomp(6, 0.3);
+        await march(k, t, 640 + SITTING.x - 380, 6);
         k.pose(t, 'sad');
-        k.fx.patter(4, 0.25);
-        await k.walk(t, SITTING.x - 380, 1.4, 3);
         // Up he hops, and sits on the stone.
         k.fx.boing();
         await k.to(t, 0.25, { y: SITTING.y - 417 - 30, ease: 'power2.out' });
@@ -308,11 +288,11 @@ export default defineCartoon({
       async play(k) {
         const { teddy, bill, basket, bella, posy, bobby, hole } = cast;
         laugh();
-        await k.wait(600);
+        await k.wait(300);
         // A loud, jolly voice Teddy knows well, coming through the trees.
         k.fx.patter(5, 0.2);
-        void k.to(basket, 1.6, { x: 0, ease: 'power2.out' });
-        await k.all(k.to(bill, 1.6, { x: 0, ease: 'power2.out' }), k.wait(500).then(() => k.say('shipmates', bill)));
+        void k.to(basket, 1.3, { x: 0, ease: 'power2.out' });
+        await k.all(k.to(bill, 1.3, { x: 0, ease: 'power2.out' }), k.wait(400).then(() => k.say('shipmates', bill)));
 
         // Teddy jumps up and runs to him.
         k.pose(teddy, 'happy');
@@ -342,7 +322,6 @@ export default defineCartoon({
         await k.say('mummyMind', teddy);
         await k.blink(bill);
         await k.say('findOut', bill);
-        await k.hop(teddy, 30);
 
         // The first clue, in the hollow tree.
         k.face(teddy, false);
@@ -354,7 +333,6 @@ export default defineCartoon({
         await k.to(roll, 0.3, { scale: 1, opacity: 1 });
         k.fx.whizz();
         await k.to(roll, 0.7, { x: -200, y: 100, rotation: -360, ease: 'power1.out' });
-        await k.say('aMap', teddy);
         // It opens out, big enough to read.
         k.sfx.page();
         void k.vanish(roll, 0.3);
@@ -390,7 +368,7 @@ export default defineCartoon({
         k.face(bobby, false);
         k.fx.patter(6, 0.12);
         await k.exit(bobby, 'right', 0.7);
-        await k.say('waitForMe', teddy);
+        giggle();
         k.fx.patter(6, 0.12);
         laugh();
         await k.all(k.exit(teddy, 'right', 0.8), k.wait(200).then(() => k.hop(bill, 20)));
@@ -420,15 +398,13 @@ export default defineCartoon({
         await k.all(
           k.to(teddy, 1.1, { x: 0, ease: 'power2.out' }),
           k.wait(250).then(() => k.to(bobby, 1.1, { x: 0, ease: 'power2.out' })),
-          k.wait(500).then(() => k.to(bill, 1.3, { x: 0, ease: 'power2.out' })),
+          k.wait(400).then(() => k.to(bill, 1.1, { x: 0, ease: 'power2.out' })),
         );
-        await k.say('sunshine');
         // Teddy looks all round: the pond, the swing, the well.
-        await k.camera({ zoom: 1.25, x: 820, y: 460 }, 1.3);
         quack();
         void k.to(duck, 3, { x: -80, ease: 'sine.inOut' });
+        await k.all(k.say('pondSwing', teddy), k.camera({ zoom: 1.2, x: 740, y: 460 }, 1.3));
         await k.camera({}, 1.1);
-        await k.say('pondSwing', teddy);
         // …and turns round: his own cottage, across the path.
         k.face(teddy, true);
         k.fx.twinkle();
@@ -445,12 +421,10 @@ export default defineCartoon({
 
         // Mummy comes over with a plate of cherry buns.
         k.fx.creak();
-        await k.wait(400);
         k.fx.patter(5, 0.18);
         await k.all(k.to(mummy, 1.3, { x: 0, ease: 'sine.out' }), k.to(plate, 1.3, { x: 0, ease: 'sine.out' }));
         await k.say('newFriends', mummy);
-        await k.say('toldYou', mummy);
-        await k.blink(mummy);
+        void k.blink(mummy);
         await k.all(k.say('youDid', teddy), k.wait(200));
         await k.hop(teddy, 30);
         k.face(teddy, false);
@@ -465,7 +439,7 @@ export default defineCartoon({
         await k.fade(k.part(chest, 'gold'), 1, 0.4);
         k.sparkle(680, 560, 18, 200);
         k.sfx.success();
-        await k.wait(500);
+        await k.wait(300);
         await k.say('honeySweets', bill);
         yum();
         k.pose(teddy, 'happy');
@@ -474,16 +448,14 @@ export default defineCartoon({
 
         // All the places he loves.
         quack();
-        await k.wait(500);
         k.face(teddy, true);
         await k.say('bestOfAll', teddy);
-        await k.wait(500);
         k.pose(bill, 'laugh');
         laugh();
-        await k.all(k.shake(bill, 4, 3), k.wait(900));
+        await k.shake(bill, 4, 3);
         k.pose(teddy, 'happy');
         void k.wait(220).then(() => k.hop(plate, 30, 3));
-        await warmEnding(k, { cast: [teddy, mummy, bill], end: 'end', sparkleAt: [400, 300] });
+        await warmEnding(k, { cast: [teddy, mummy, bill], end: 'end', sparkleAt: [400, 300], hold: 700 });
       },
     },
   ],

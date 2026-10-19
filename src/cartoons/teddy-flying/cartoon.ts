@@ -102,9 +102,8 @@ export default defineCartoon({
   lines: {
     // 1. The window
     whatLooking: { who: 'mummy-bear', text: 'What are you looking at, Teddy?' },
-    birds: { who: 'teddy', text: 'The birds, Mummy. Look, a blackbird!' },
-    lovely: { who: 'teddy', text: 'Oh, Mummy! It must be lovely to fly!' },
-    wings: { who: 'mummy-bear', text: 'Birds have feathery wings, Teddy. Bears can do other things!' },
+    birds: { who: 'teddy', text: 'The birds, Mummy! It must be lovely to fly!' },
+    wings: { who: 'mummy-bear', text: 'Birds have feathery wings. Bears can do other things!' },
     noWings: { who: 'teddy', text: 'But bears haven’t got wings. It’s not fair!' },
     ladybird: { who: 'teddy', text: 'Oh, look, {name}! A ladybird, on the window sill!' },
     rhyme: { who: 'teddy', text: 'Ladybird, ladybird… I know! Let’s blow, very gently.' },
@@ -118,30 +117,25 @@ export default defineCartoon({
     // 2. The garden
     butterflies: { who: 'teddy', text: 'Butterflies! More things that can fly!' },
     newKite: { who: 'barney', text: 'Teddy! Come and see my new kite!' },
-    wontGo: { who: 'barney', text: 'But it won’t go up. It just flops!' },
-    puff: { who: 'teddy', text: 'It needs a puff of wind!' },
-    askKite: { who: 'barney', text: '{name}, can you tap the kite? Send it up to the sky!' },
+    wontGo: { who: 'barney', text: 'But it won’t go up!' },
+    askKite: { who: 'barney', text: 'It needs a puff of wind! {name}, can you tap the kite?' },
     nudgeKite: { who: 'barney', text: 'Tap the kite, and up it goes!' },
     gust: { who: 'teddy', text: 'Here comes a puff of wind! Whoosh!' },
     kiteThanks: { who: 'barney', text: 'Up it goes! It’s flying! You did it!' },
     kiteUp: { who: 'barney', text: 'Look, up it goes! It’s flying!' },
     kitesToo: { who: 'teddy', text: 'Kites fly too! And they haven’t got wings either!' },
-    howFly: { who: 'teddy', text: 'An aeroplane! Its wings don’t flap. So how does it fly?' },
-    tryMe: { who: 'teddy', text: 'I’ll try! Watch me, Barney!' },
+    howFly: { who: 'teddy', text: 'An aeroplane! Its wings don’t flap. So how does it fly? I’ll try!' },
     flapHarder: { who: 'barney', text: 'Flap harder, Teddy! Higher!' },
     outOfBreath: { who: 'teddy', text: 'Phew! I’m all hot and out of breath.' },
     higher: { who: 'teddy', text: 'Maybe if I was up higher… Honeypot Hill!' },
-    careful: { who: 'barney', text: 'Ooh. Be careful, Teddy!' },
     // 3. Honeypot Hill
     offHeWent: { who: 'narrator', text: 'So off Teddy went, to the top of Honeypot Hill.' },
     soHigh: { who: 'teddy', text: 'Ooh! It looks much higher from up here.' },
     nothingStop: { who: 'teddy', text: 'But nothing’s going to stop me now!' },
-    eyesTight: { who: 'narrator', text: 'He shut his eyes. He made a little run. He held his breath…' },
+    eyesTight: { who: 'narrator', text: 'He shut his eyes tight. He made a little run…' },
     jumped: { who: 'narrator', text: 'And he jumped!' },
-    gooey: { who: 'teddy', text: 'Mummy! Daddy! I’m all sticky and squelchy and gooey!' },
-    forgotFlap: { who: 'teddy', text: 'Oops. I forgot to flap!' },
+    gooey: { who: 'teddy', text: 'Oops! I forgot to flap! I’m all sticky and squelchy and gooey!' },
     whatDoing: { who: 'uncle-bill', text: 'Teddy! What are you doing down there?' },
-    uncleBill: { who: 'teddy', text: 'Uncle Bill! I landed in the mud!' },
     scupper: { who: 'uncle-bill', text: 'Well, scupper me scallywags! Hold tight, ship-mate!' },
     askRope: { who: 'uncle-bill', text: '{name}, can you let the rope down for him? Tap the rope!' },
     nudgeRope: { who: 'uncle-bill', text: 'Tap the rope, and down it goes!' },
@@ -152,9 +146,9 @@ export default defineCartoon({
     // 4. Flying home
     onlyWanted: { who: 'teddy', text: 'I only wanted to fly!' },
     gotWish: { who: 'uncle-bill', text: 'Ha-ha! Well, you got your wish!' },
-    soEasy: { who: 'teddy', text: 'The birds, the butterflies, the ladybird and the kite made it look so easy!' },
+    soEasy: { who: 'teddy', text: 'The birds and the ladybird and the kite made it look so easy!' },
+    downWeGo: { who: 'uncle-bill', text: 'Hold tight, ship-mate! Down we go, to Bear Cottage!' },
     whatever: { who: 'mummy-bear', text: 'Teddy! Whatever happened? You’re all muddy!' },
-    nearly: { who: 'teddy', text: 'I went flying, Mummy! Well… nearly.' },
     liftHome: { who: 'uncle-bill', text: 'He landed SPLAT, so I gave him a lift home!' },
     bath: { who: 'mummy-bear', text: 'Into the bath, Teddy! Then honey on hot toast.' },
     yum: { who: 'teddy', text: 'Mmm! My favourite!' },
@@ -170,51 +164,49 @@ export default defineCartoon({
       set(k) {
         k.backdrop('bear-kitchen');
         k.music('cosy');
-        k.add(stool(), { x: 390, y: 535, w: 160, z: 11 });
-        cast.teddy = k.character('teddy', { x: 360, y: 300, w: 220, z: 12 });
+        k.add(stool(), { x: 355, y: 535, w: 160, z: 11 });
+        cast.teddy = k.character('teddy', { x: 325, y: 300, w: 220, z: 12 });
         cast.mummy = k.character('mummy-bear', { x: 830, y: 330, w: 280, flip: true, z: 13 });
         cast.bird = k.prop('blackbird', { x: 588, y: 312, w: 100, z: 9 });
         // The ladybird comes along the sill from the right, walking head first (to the left).
-        cast.lady = k.prop('ladybird', { x: 690, y: 330, w: 56, z: 14 });
+        cast.lady = k.prop('ladybird', { x: 690, y: 326, w: 64, z: 14 });
         k.set(cast.lady, { opacity: 0, rotation: -90 });
       },
       async play(k) {
         const { teddy, mummy, bird, lady } = cast;
         await k.wait(400);
         await k.say('whatLooking', mummy);
-        await k.say('birds', teddy);
-        // The blackbird flies off, up and away past the window.
+        // The blackbird flies off, up and away past the window, as he answers.
         flutter();
-        await k.to(bird, 1.4, { x: 260, y: -260, scale: 0.4, opacity: 0, ease: 'power1.in' });
-        await k.say('lovely', teddy);
+        await k.all(k.say('birds', teddy), k.to(bird, 1.6, { x: 260, y: -260, scale: 0.4, opacity: 0, ease: 'power1.in' }));
         await k.say('wings', mummy);
         k.pose(teddy, 'sad');
         await k.say('noWings', teddy);
-        await k.wait(500);
+        await k.wait(200);
 
         // A ladybird walks along the sill.
         k.fx.patter(6, 0.14);
         void k.fade(lady, 1, 0.4);
-        await k.to(lady, 1.6, { x: -70, ease: 'none' });
+        await k.to(lady, 2, { x: -128, ease: 'none' });
         await k.to(lady, 0.4, { rotation: 0 });
         k.pose(teddy, 'default');
         await k.hop(teddy, 14);
         await k.say('ladybird', teddy);
         // He holds out his paw to her, thinking.
-        const arm = k.pivot(k.part(teddy, 'armL'));
-        await k.to(arm, 0.5, { rotation: -50 });
+        k.pose(teddy, 'wave');
+        await k.wait(400);
         await k.say('rhyme', teddy);
 
         // His turn: the ladybird flies.
         const how = await k.tapToHelp(lady, { ask: 'askBlow', nudge: 'nudgeBlow', helped: 'iBlow', by: teddy, size: 150 });
-        k.puff(640, 340, 50, '#ffffff');
+        k.puff(594, 346, 50, '#ffffff');
         await k.wait(300);
         const wings = k.pivot([...k.part(lady, 'wingL'), ...k.part(lady, 'wingR')]);
         k.fx.twinkle();
         await k.to(wings, 0.3, { rotation: (i: number) => (i ? 50 : -50) });
         flutter();
-        await k.to(lady, 2, { x: -170, y: -190, scale: 0.6, opacity: 0, ease: 'sine.in' });
-        await k.to(arm, 0.4, { rotation: 0 });
+        await k.to(lady, 2, { x: -230, y: -180, scale: 0.6, opacity: 0, ease: 'sine.in' });
+        k.pose(teddy, 'default');
         await k.say(how === 'tapped' ? 'thanksBlow' : 'offSheGoes', teddy);
         await k.say('beetles', teddy);
         common.giggle();
@@ -255,14 +247,14 @@ export default defineCartoon({
         // Butterflies flit past.
         void flapWings(k, fly1, 10);
         void flapWings(k, fly2, 10);
-        void k.to(fly2, 2, { x: -120, y: -60, ease: 'sine.inOut' });
-        await k.to(fly1, 2, { x: 90, y: -110, ease: 'sine.inOut' });
+        void k.to(fly2, 1.6, { x: -120, y: -60, ease: 'sine.inOut' });
+        await k.to(fly1, 1.6, { x: 90, y: -110, ease: 'sine.inOut' });
         k.fx.twinkle();
         await k.say('butterflies', teddy);
         void flapWings(k, fly1, 8);
         void flapWings(k, fly2, 8);
-        void k.to(fly2, 2, { x: 200, y: -380, opacity: 0, ease: 'sine.in' });
-        await k.to(fly1, 2, { x: 400, y: -420, opacity: 0, ease: 'sine.in' });
+        void k.to(fly2, 1.6, { x: 200, y: -380, opacity: 0, ease: 'sine.in' });
+        await k.to(fly1, 1.6, { x: 400, y: -420, opacity: 0, ease: 'sine.in' });
 
         await k.say('newKite', barney);
         // The kite won't go up: it lifts a little and flops back down.
@@ -271,7 +263,6 @@ export default defineCartoon({
         await k.to(kite, 0.5, { y: 150, rotation: 75, ease: 'power2.in' });
         k.fx.thud();
         await k.say('wontGo', barney);
-        await k.say('puff', teddy);
 
         // His turn: up goes the kite.
         const how = await k.tapToHelp(kite, { ask: 'askKite', nudge: 'nudgeKite', helped: 'gust', by: barney, helper: teddy, size: 170 });
@@ -291,10 +282,9 @@ export default defineCartoon({
         await k.say('kitesToo', teddy);
 
         // An aeroplane streaks across the sky.
-        drone(3.4);
-        await k.to(plane, 3.4, { x: 1400, y: -170, ease: 'none' });
+        drone(2.6);
+        await k.to(plane, 2.6, { x: 1400, y: -170, ease: 'none' });
         await k.say('howFly', teddy);
-        await k.say('tryMe', teddy);
 
         // Teddy tries: jumping and flapping…
         k.pose(teddy, 'fly');
@@ -303,14 +293,14 @@ export default defineCartoon({
         common.giggle();
         await k.say('flapHarder', barney);
         k.fx.boing();
-        await moves.flap(k, teddy, 4);
+        await moves.flap(k, teddy, 2);
         k.pose(teddy, 'default');
         // …hopping on one leg, then the other.
         for (const side of ['legL', 'legR'] as const) {
           const leg = k.pivot(k.part(teddy, side));
           await k.to(leg, 0.2, { rotation: side === 'legL' ? 30 : -30 });
           k.fx.patter(3, 0.3);
-          await k.hop(teddy, 18, 3);
+          await k.hop(teddy, 18, 2);
           await k.to(leg, 0.2, { rotation: 0 });
         }
         k.pose(teddy, 'sad');
@@ -318,13 +308,11 @@ export default defineCartoon({
         await k.say('outOfBreath', teddy);
         common.giggle();
         await k.shake(barney, 4, 2);
-        await k.wait(400);
         k.pose(teddy, 'default');
         await k.say('higher', teddy);
         k.pose(teddy, 'happy');
         k.fx.boing();
         await k.hop(teddy, 30);
-        await k.say('careful', barney);
       },
     },
 
@@ -354,7 +342,7 @@ export default defineCartoon({
         const path: [number, number, number][] = [[700, 485, 0.95], [762, 405, 0.9], [790, 335, 0.85], [800, 284, 0.8]];
         for (const [fx, fy, s] of path) {
           k.fx.patter(4, 0.14);
-          await k.to(teddy, 1.1, { x: fx - 770, y: fy - 590, scale: s, ease: 'sine.inOut' });
+          await k.to(teddy, 0.9, { x: fx - 770, y: fy - 590, scale: s, ease: 'sine.inOut' });
         }
         await k.wait(300);
         await k.camera({ zoom: 1.6, x: 790, y: 250 }, 1.2);
@@ -367,7 +355,7 @@ export default defineCartoon({
         await k.camera({}, 1);
         k.pose(teddy, 'fly');
         k.fx.drumroll(3);
-        await k.all(k.say('eyesTight'), k.wait(2200).then(() => k.to(teddy, 0.8, { x: '-=24', ease: 'power1.in' })));
+        await k.all(k.say('eyesTight'), k.wait(1600).then(() => k.to(teddy, 0.8, { x: '-=24', ease: 'power1.in' })));
         k.fx.whizz();
         void k.say('jumped');
         await k.to(teddy, 0.6, { x: 600 - 770, y: 190 - 590, scale: 1.1, rotation: -15, ease: 'power2.out' });
@@ -380,22 +368,19 @@ export default defineCartoon({
         muddy(teddy);
         k.quake(5);
         await k.to(splash, 0.25, { opacity: 1, scale: 1, ease: 'back.out(2)' });
-        await k.wait(700);
+        await k.wait(500);
         void k.to(splash, 1.2, { opacity: 0 });
-        await k.wait(600);
+        await k.wait(300);
         sounds.squelch(2);
         await k.shake(teddy, 4, 2);
         await k.say('gooey', teddy);
-        common.giggle();
-        await k.say('forgotFlap', teddy);
 
         // A whirr in the sky: Uncle Bill.
         k.music('adventure');
         rotor(k, heli, 3.5);
         sounds.whirr(3);
-        await k.all(...[heli, coil, rope].map((el) => k.to(el, 2.4, { x: 0, ease: 'power2.out' })));
+        await k.all(...[heli, coil, rope].map((el) => k.to(el, 2, { x: 0, ease: 'power2.out' })));
         await k.say('whatDoing', heli);
-        await k.say('uncleBill', teddy);
         await k.say('scupper', heli);
 
         // His big turn: let the rope down.
@@ -414,7 +399,7 @@ export default defineCartoon({
         await k.all(k.to(teddy, 1.6, { y: -96, ease: 'sine.inOut' }), k.to(rope, 1.6, { scaleY: 0.42, ease: 'sine.inOut' }));
         rotor(k, heli, 2);
         sounds.whirr(2);
-        await k.all(...[heli, rope, teddy].map((el) => k.to(el, 1.6, { y: '-=70', ease: 'sine.inOut' })));
+        await k.all(...[heli, rope, teddy].map((el) => k.to(el, 1.6, { y: '-=40', ease: 'sine.inOut' })));
         k.sparkle(280, 260, 12, 160);
         k.fx.twinkle();
         await k.say('imFlying', teddy);
@@ -446,9 +431,10 @@ export default defineCartoon({
         common.laugh();
         await k.say('gotWish', heli);
         await k.say('soEasy', teddy);
+        await k.say('downWeGo', heli);
         rotor(k, heli, 2.4);
         sounds.whirr(2);
-        await k.all(k.to(heli, 1.6, { y: 140, ease: 'power1.in' }), k.to(teddy, 1.6, { y: 140, ease: 'power1.in' }));
+        await k.all(k.to(heli, 1.1, { y: 140, ease: 'power1.in' }), k.to(teddy, 1.1, { y: 140, ease: 'power1.in' }));
 
         // Down into Bear Cottage's garden.
         await k.cut(() => {
@@ -460,23 +446,26 @@ export default defineCartoon({
           muddy(cast.teddy);
           cast.mummy = k.character('mummy-bear', { x: 170, y: 333, w: 280, z: 13 });
           k.set(cast.mummy, { x: -480 });
-          cast.honey = k.prop('honey-pot', { x: 268, y: 526, w: 90, z: 14 });
+          // The honey pot rides in Mummy's paws (inside her actor, so it hops with her).
+          cast.honey = k.prop('honey-pot', { x: 0, y: 0, w: 90, z: 14 });
+          cast.mummy.append(cast.honey);
+          Object.assign(cast.honey.style, { left: '98px', top: '193px' });
           k.set(cast.honey, { opacity: 0 });
         });
         ({ heli, teddy } = cast);
         const { rope, mummy, honey } = cast;
         rotor(k, heli, 3);
         sounds.whirr(2.5);
-        await k.all(k.to(teddy, 2, { y: 112, ease: 'sine.inOut' }), k.to(rope, 2, { scaleY: 1, ease: 'sine.inOut' }));
-        k.fx.thud();
-        k.pose(teddy, 'default');
+        // Teddy is let down softly onto the grass, and Mummy runs out of Bear Cottage.
+        const landed = k.all(k.to(teddy, 2, { y: 112, ease: 'sine.inOut' }), k.to(rope, 2, { scaleY: 1, ease: 'sine.inOut' })).then(() => {
+          k.fx.thud();
+          k.pose(teddy, 'default');
+        });
         await k.wait(300);
-        // Mummy runs out of Bear Cottage.
         k.fx.patter(6, 0.12);
-        await k.to(mummy, 1, { x: 0, ease: 'power2.out' });
-        await k.say('whatever', mummy);
+        await k.to(mummy, 0.9, { x: 0, ease: 'power2.out' });
+        await k.all(k.say('whatever', mummy), landed);
         k.pose(teddy, 'happy');
-        await k.say('nearly', teddy);
         common.laugh();
         await k.say('liftHome', heli);
         await k.say('bath', mummy);
@@ -492,8 +481,7 @@ export default defineCartoon({
         // Wave goodbye to Uncle Bill.
         await k.say('cheerio', heli);
         k.pose(teddy, 'wave');
-        await helicopterVisit.leave(k, { heli }, { side: 'right', with: [rope] });
-        await k.say('byeBill', teddy);
+        await k.all(helicopterVisit.leave(k, { heli }, { side: 'right', with: [rope] }), k.wait(500).then(() => k.say('byeBill', teddy)));
         await warmEnding(k, { cast: [mummy, teddy], end: 'end', music: 'cosy', sparkleAt: [520, 360] });
       },
     },

@@ -81,7 +81,7 @@ const cast = {} as Record<Who, HTMLElement>;
 function wearScarf(teddy: HTMLElement, show = true): HTMLElement {
   const d = document.createElement('div');
   d.innerHTML = scarf();
-  Object.assign(d.style, { position: 'absolute', left: '23%', top: '56%', width: '54%', pointerEvents: 'none', opacity: show ? '1' : '0' });
+  Object.assign(d.style, { position: 'absolute', left: '23%', top: '47%', width: '54%', pointerEvents: 'none', opacity: show ? '1' : '0' });
   const s = d.querySelector('svg');
   if (s) Object.assign(s.style, { width: '100%', height: 'auto', display: 'block' });
   teddy.append(d);
@@ -122,8 +122,8 @@ export default defineCartoon({
     // 2. Mummy's story
     onceUpon: { who: 'mummy-bear', text: 'Well. There was a Daddy Bear, a Mummy Bear and a Baby Bear.' },
     justLikeUs: { who: 'teddy', text: 'Just like us!' },
-    tooHotWalk: { who: 'mummy-bear', text: 'Their porridge was too hot. So they went for a walk while it cooled.' },
-    alongCame: { who: 'mummy-bear', text: 'Along came a little girl with golden curls. Goldilocks! And in she went.' },
+    tooHotWalk: { who: 'mummy-bear', text: 'Their porridge was too hot. So off they went for a walk.' },
+    alongCame: { who: 'mummy-bear', text: 'Along came a little girl with golden curls. Goldilocks!' },
     daddysBowl: { who: 'mummy-bear', text: 'She tried Daddy Bear’s porridge. Too hot!' },
     mummysBowl: { who: 'mummy-bear', text: 'She tried Mummy Bear’s porridge. Too cold!' },
     babysBowl: { who: 'teddy', text: 'And Baby Bear’s?' },
@@ -134,9 +134,9 @@ export default defineCartoon({
     chairs: { who: 'mummy-bear', text: 'Then she tried the chairs. Too hard! Too soft!' },
     crackChair: { who: 'mummy-bear', text: 'And Baby Bear’s chair went… CRACK!' },
     tooMuchPorridge: { who: 'daddy-bear', text: 'Too much porridge, I expect.' },
-    upstairs: { who: 'mummy-bear', text: 'Then up she went, for a nice long sleep.' },
-    walk: { who: 'daddy-bear', text: 'Our porridge is too hot as well. Let’s go for a walk, to the edge of the wood!' },
-    scarfOn: { who: 'mummy-bear', text: 'Put your scarf on, Teddy. It’s a crisp morning.' },
+    upstairs: { who: 'mummy-bear', text: 'Then up she went for a sleep.' },
+    walk: { who: 'daddy-bear', text: 'Ours is too hot as well! Let’s walk to the edge of the wood.' },
+    scarfOn: { who: 'mummy-bear', text: 'Put your scarf on, Teddy. It’s chilly.' },
     // 3. The edge of the wood
     cameHome: { who: 'mummy-bear', text: 'The three bears came home and found her asleep. She woke up and ran away!' },
     whyGoIn: { who: 'teddy', text: 'But why did she go in?' },
@@ -157,7 +157,7 @@ export default defineCartoon({
     afterAll: { who: 'teddy', text: 'Mmm! I got my honey after all!' },
     ownPorridge: { who: 'teddy', text: 'Goldilocks can have her own porridge. This one’s mine!' },
     window: { who: 'mummy-bear', text: 'Look, Teddy. Who’s that at the window?' },
-    byeGoldi: { who: 'teddy', text: 'Hello, Goldilocks! Bye-bye! Bye, {name}!' },
+    byeGoldi: { who: 'teddy', text: 'Hello, Goldilocks! Bye-bye, {name}!' },
     end: { who: 'narrator', text: 'And from that day on, Teddy always ate up his porridge. Just in case!' },
   },
   scenes: [
@@ -281,7 +281,7 @@ export default defineCartoon({
         await k.all(
           k.say('tooHotWalk', mummy),
           (async () => {
-            await k.wait(1800);
+            await k.wait(1400);
             k.fx.patter(5, 0.14);
             await k.all(...bears.map((b) => k.to(b, 1.2, { x: '+=70', opacity: 0, ease: 'power1.in' })));
           })(),
@@ -372,15 +372,15 @@ export default defineCartoon({
       set(k) {
         k.backdrop('bear-wood');
         k.music('adventure');
-        cast.daddy = k.character('daddy-bear', { x: 200, y: 355, w: 260 });
-        cast.mummy = k.character('mummy-bear', { x: 410, y: 355, w: 260 });
+        cast.daddy = k.character('daddy-bear', { x: 110, y: 355, w: 260 });
+        cast.mummy = k.character('mummy-bear', { x: 335, y: 355, w: 260 });
         cast.teddy = k.character('teddy', { x: 640, y: 435, w: 190 });
         wearScarf(cast.teddy);
         for (const el of [cast.daddy, cast.mummy, cast.teddy]) k.set(el, { x: -900 });
         // Goldilocks peeks round the right-hand trunk: she stands behind a copy
         // of the trunk cut from the backdrop, so she can slide out from it.
         cast.goldi = k.character('goldilocks', { x: 783, y: 433, w: 200, pose: 'peek', flip: true, z: 12 });
-        k.set(cast.goldi, { x: 130 });
+        k.set(cast.goldi, { x: 150 });
         const wood = findBackdrop('bear-wood', 'bears')?.art() ?? '';
         cast.trunk = k.add(wood, { x: 900, y: 160, w: 190, h: 540, crop: '900 160 190 540', z: 15 });
         // Actors' SVGs draw outside their box (overflow: visible); this copy must stop at the crop.
@@ -405,14 +405,14 @@ export default defineCartoon({
         k.silence();
         await k.wait(500);
         k.sfx.rustle();
-        await k.to(goldi, 0.6, { x: 90, ease: 'sine.inOut' });
-        await k.to(goldi, 0.6, { x: 130, ease: 'sine.inOut' });
+        await k.to(goldi, 0.6, { x: 60, ease: 'sine.inOut' });
+        await k.to(goldi, 0.6, { x: 150, ease: 'sine.inOut' });
         k.music('sneaky');
         await k.shake(teddy, 5, 2);
         await k.say('whatWasThat', teddy);
         k.sfx.rustle();
-        await k.to(goldi, 0.5, { x: 95, yoyo: true, repeat: 1, ease: 'sine.inOut' });
-        k.set(goldi, { x: 130 });
+        await k.to(goldi, 0.6, { x: 60, ease: 'sine.inOut' });
+        await k.to(goldi, 0.6, { x: 85, ease: 'sine.inOut' });
         await k.wait(400);
 
         // His turn: who's behind the tree?
@@ -423,11 +423,11 @@ export default defineCartoon({
         await k.all(k.shake(goldi, 3, 3), k.wait(300).then(() => k.say('goldenCurls', teddy)));
         // Off she skips, up the path towards the cottage.
         k.fx.patter(3, 0.12);
-        await k.to(goldi, 0.6, { x: 150, ease: 'power1.in' });
+        await k.to(goldi, 0.6, { x: 170, ease: 'power1.in' });
         k.set(goldi, { opacity: 0 });
         k.fx.patter(6, 0.16);
         await k.fade(tinyGoldi, 1, 0.3);
-        await k.to(tinyGoldi, 1.8, { x: -75, y: -16, ease: 'sine.inOut' });
+        await k.to(tinyGoldi, 1.6, { x: -40, y: -14, ease: 'sine.inOut' });
         await k.fade(tinyGoldi, 0, 0.4);
 
         k.music('adventure');
