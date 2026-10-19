@@ -1,7 +1,9 @@
 /**
  * The bears' signature sounds and moves: the sea and its gulls, Captain
  * Bear's whistle and his roar, Uncle Bill's helicopter, a muddy splat,
- * stirring porridge, Teddy flapping his arms to fly. Check here (and
+ * stirring porridge, Teddy flapping his arms to fly; a big bear sneeze, a
+ * grumpy sigh, the Musical Chairs tune, candles blown out, and bears ducking
+ * down behind a bush and peeping up again. Check here (and
  * common/moves.ts) before writing your own (docs/WORLDS.md, "moves.ts").
  *
  *   import { sounds, moves } from '../../worlds/bears/moves';
@@ -79,6 +81,51 @@ export const sounds = {
     for (let i = 0; i < 4; i++) tone(320 + i * 30, t + i * 0.18, { wave: 'square', peak: 0.025, decay: 0.1, lowpass: 900 });
     bell(NOTE.A5, t + 0.8, 0.07, 0.6);
   },
+
+  // From the Teddy Bear Treasury episodes (the party, Grumpy Bertie).
+  /** A big bear sneeze: "ah… ah…" rising, then the ATISHOO burst (about 1.1 s in). Say the line after it. */
+  sneeze(): void {
+    const t = now();
+    tone(NOTE.A3, t, { wave: 'triangle', peak: 0.05, attack: 0.2, decay: 0.5, glideTo: NOTE.E4 });
+    tone(NOTE.C4, t + 0.55, { wave: 'triangle', peak: 0.05, attack: 0.2, decay: 0.4, glideTo: NOTE.G4 });
+    noiseBurst(t + 1.05, { freq: 2200, q: 0.8, peak: 0.12, attack: 0.01, decay: 0.35 });
+  },
+
+  /** A long, grumpy sigh: a low breath sliding down. Use for a bear who is put out. */
+  sigh(): void {
+    noiseBurst(now(), { freq: 600, q: 0.7, peak: 0.05, attack: 0.25, decay: 1.1, sweepTo: 300 });
+  },
+
+  /** A sip of something hot (hot chocolate, tea). */
+  sip(): void {
+    noiseBurst(now(), { freq: 1400, q: 2, peak: 0.04, attack: 0.05, decay: 0.3, sweepTo: 900 });
+  },
+
+  /** The Musical Chairs tune: a bouncy little march on a toy piano, `bars` long (1.6 s a bar). */
+  chairsTune(bars = 2): void {
+    const t = now();
+    const tune = [NOTE.C5, NOTE.E5, NOTE.G5, NOTE.E5, NOTE.F5, NOTE.A5, NOTE.G5, NOTE.E5];
+    for (let b = 0; b < bars; b++) {
+      tune.forEach((n, i) => tone(n, t + b * 1.6 + i * 0.2, { wave: 'triangle', peak: 0.06, attack: 0.01, decay: 0.22 }));
+      tone(NOTE.C4, t + b * 1.6, { wave: 'sine', peak: 0.05, attack: 0.01, decay: 0.5 });
+      tone(NOTE.G4, t + b * 1.6 + 0.8, { wave: 'sine', peak: 0.05, attack: 0.01, decay: 0.5 });
+    }
+  },
+
+  /** The music stopping with a plonk (Musical Chairs, a sudden halt). */
+  plonk(): void {
+    tone(NOTE.C4, now(), { wave: 'triangle', peak: 0.08, attack: 0.01, decay: 0.4, glideTo: NOTE.A3 });
+  },
+
+  /** A sad little slide down: something broken is shown, a plan falls through. */
+  sadSlide(): void {
+    tone(NOTE.G4, now(), { wave: 'sine', peak: 0.06, attack: 0.05, decay: 0.9, glideTo: NOTE.C4, vibrato: [5, 10] });
+  },
+
+  /** Blowing out candles: one long soft puff. */
+  blow(): void {
+    noiseBurst(now(), { freq: 900, q: 0.6, peak: 0.07, attack: 0.08, decay: 0.9, sweepTo: 500 });
+  },
 };
 
 export const moves = {
@@ -122,5 +169,29 @@ export const moves = {
       await k.to(a, 0.22, { rotation: -6 });
     }
     await k.to(a, 0.2, { rotation: 0 });
+  },
+
+  // From the Teddy Bear Treasury episodes (the party, Grumpy Bertie).
+  /**
+   * Bears hiding behind a bush duck down out of sight: they sink `by` px and
+   * fade away as they go (so nothing pokes out under the bush). Pair with `peep`.
+   */
+  async duck(k: Kit, who: HTMLElement[], by = 120, seconds = 0.5): Promise<void> {
+    await k.all(...who.map((el, i) => k.wait(i * 80).then(() => k.to(el, seconds, { y: by, opacity: 0, ease: 'power2.in' }))));
+  },
+
+  /** Bears who ducked (or were set ducked: `{ y: 120, opacity: 0 }`) peep up again to where they were placed. */
+  async peep(k: Kit, who: HTMLElement[], seconds = 0.5): Promise<void> {
+    await k.all(...who.map((el, i) => k.wait(i * 80).then(() => k.to(el, seconds, { y: 0, opacity: 1, ease: 'back.out(1.6)' }))));
+  },
+
+  /** A bear's little sad droop: sinks a touch and tilts, then holds there. */
+  async droop(k: Kit, el: HTMLElement): Promise<void> {
+    await k.to(el, 0.8, { y: '+=10', rotation: -4, ease: 'power2.out' });
+  },
+
+  /** Back up from a droop, cheered. */
+  async perkUp(k: Kit, el: HTMLElement): Promise<void> {
+    await k.to(el, 0.5, { y: '-=10', rotation: 0, ease: 'back.out(2)' });
   },
 };

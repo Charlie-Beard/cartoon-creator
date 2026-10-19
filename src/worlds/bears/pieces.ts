@@ -1,9 +1,10 @@
 /**
  * The bears' set pieces (docs/WORLDS.md, "pieces.ts"): Mummy's story
  * cloud (a story told inside a dream cloud above the teller), and Uncle
- * Bill's helicopter flying in, letting its rope down and flying off.
+ * Bill's helicopter flying in, letting its rope down and flying off, a
+ * round of Musical Chairs, and birthday candles blown out.
  *
- *   import { storyCloud, helicopterVisit } from '../../worlds/bears/pieces';
+ *   import { candles, helicopterVisit, musicalChairs, storyCloud } from '../../worlds/bears/pieces';
  *
  * Lines are keys, never text; his turn (k.tapToHelp) stays in the script,
  * between a piece's parts.
@@ -102,3 +103,35 @@ export const helicopterVisit = {
     await k.all(k.to(a.heli, 2.6, { x: `+=${dx}`, y: '-=60', ease: 'power2.in' }), ...(o.with ?? []).map((el) => k.to(el, 2.6, { x: `+=${dx}`, y: '-=60', ease: 'power2.in' })));
   },
 };
+
+// ------------------------------------------------- party games and candles
+
+/**
+ * A round of Musical Chairs: the tune plays while the players hop along
+ * and back, it stops with a plonk, and everyone freezes with a wobble and a
+ * giggle. About 6 s. Fades the music bed first; start it again after.
+ */
+export async function musicalChairs<K extends string>(k: Kit<K>, o: { players: HTMLElement[]; distance?: number }): Promise<void> {
+  const d = o.distance ?? 120;
+  k.silence();
+  sounds.chairsTune(2);
+  await k.all(...o.players.map((el) => k.walk(el, d, 1.5, 5)));
+  await k.all(...o.players.map((el) => k.walk(el, -d, 1.5, 5)));
+  sounds.plonk();
+  await k.all(...o.players.map((el) => k.shake(el, 6, 2)));
+}
+
+/**
+ * Candles blown out on a `birthday-cake` prop: a puff, the flames fade, a
+ * curl of smoke, confetti and a fanfare, then (if given) `line` by `by`
+ * ("Happy birthday!"). Put his `k.tapToHelp` on the cake just before it.
+ */
+export async function candles<K extends string>(k: Kit<K>, o: { cake: HTMLElement; line?: K; by?: HTMLElement }): Promise<void> {
+  sounds.blow();
+  await k.fade(k.part(o.cake, 'flames'), 0, 0.6);
+  await k.fade(k.part(o.cake, 'smoke'), 1, 0.4);
+  void k.fade(k.part(o.cake, 'smoke'), 0, 1.5);
+  k.confetti(30);
+  k.sfx.fanfare();
+  if (o.line) await k.say(o.line, o.by);
+}

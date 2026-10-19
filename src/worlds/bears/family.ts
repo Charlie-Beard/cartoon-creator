@@ -14,7 +14,7 @@ const YELLOW = '#f0c43c';
 const WHITE = '#f6f1e6';
 
 /** Teddy's own options, so his poses only change what moves. */
-const teddyBase = (): BearOpts => ({
+export const teddyBase = (): BearOpts => ({
   name: 'teddy',
   label: 'Teddy',
   fur: FUR.honey,

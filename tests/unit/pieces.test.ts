@@ -21,7 +21,7 @@ const PIECES: Record<keyof typeof loaders, string[]> = {
   common: ['meanwhile', 'noiseOff', 'sneakIn', 'warmEnding'],
   faraway: ['ladderArrival', 'landMovesOn', 'slipperySlip', 'teaTime', 'trapdoorArrival', 'snapLoom', 'snapDefeat'],
   hogwarts: ['owlPost', 'greatHall', 'spellLesson', 'broomArrival', 'apparateArrival', 'voldemortLoom'],
-  bears: ['storyCloud', 'helicopterVisit'],
+  bears: ['storyCloud', 'helicopterVisit', 'musicalChairs', 'candles'],
 };
 
 /** Pieces that come in parts must have a `set` and a `play` (or at least some parts, all functions). */
