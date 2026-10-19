@@ -6,8 +6,8 @@
  * From the book's story of the same name.
  *
  *   1. Bored. Bear Cottage's garden. Teddy is so bored: he's done all his
- *      jigsaws and tidied the toy cupboard, and there's nothing to do. Even a
- *      butterfly has somewhere to go. Mummy comes out: what about digging in
+ *      jigsaws and tidied the toy cupboard, and there's nothing to do. A
+ *      butterfly flutters past and away. Mummy comes out: what about digging in
  *      the garden? All right… he'll ask Barney to help. "Cheer up, Teddy! You
  *      might have a nice surprise before long!" He doesn't think so, and off
  *      he goes. Mummy, to him: shh, she knows a secret.
@@ -79,7 +79,7 @@ type Who = 'teddy' | 'mummy' | 'bill' | 'posy' | 'bella' | 'bobby' | 'knocker' |
 const cast = {} as Record<Who, HTMLElement>;
 
 /** Where Teddy sits on his stone in the wood (scenes 2 and 3): on its top, legs over the front. */
-const SITTING = { x: 690, y: 378, w: 210 };
+const SITTING = { x: 690, y: 400, w: 210 };
 
 /** Flaps the butterfly's wings `times` times while it flies. */
 async function flutter(k: Kit, el: HTMLElement, times: number): Promise<void> {
@@ -110,7 +110,8 @@ export default defineCartoon({
     knockMyself: { who: 'teddy', text: 'I’ll knock myself, then. Knock, knock!' },
     anyoneHome: { who: 'teddy', text: 'Barney? It’s me, Teddy! Are you there?' },
     notFair: { who: 'teddy', text: 'Barney’s not at home! It’s not fair! There’s nobody to play with!' },
-    shouldHave: { who: 'narrator', text: 'Teddy should have gone straight back home. Instead, he just marched away.' },
+    shouldHave: { who: 'narrator', text: 'Teddy should have gone straight back home.' },
+    marchedAway: { who: 'narrator', text: 'Instead, he just marched away, and he didn’t look where he was going.' },
     sadLonely: { who: 'narrator', text: 'Teddy felt so sad and lonely, he might have begun to cry…' },
     laughing: { who: 'narrator', text: '…except, just then, he heard somebody laughing!' },
     // 3. Ahoy, ship-mates!
@@ -249,15 +250,16 @@ export default defineCartoon({
         });
         const t = cast.teddy;
         k.fx.stomp(6, 0.3);
-        await march(k, t, 640 + SITTING.x - 380, 6);
+        await k.all(march(k, t, 640 + SITTING.x - 380, 6), k.wait(200).then(() => k.say('marchedAway')));
         k.pose(t, 'sad');
-        // Up he hops, and sits on the stone.
-        k.fx.boing();
-        await k.to(t, 0.25, { y: SITTING.y - 417 - 30, ease: 'power2.out' });
-        k.fx.thud();
-        await k.to(t, 0.2, { y: SITTING.y - 417, ease: 'power2.in' });
-        await k.wait(600);
-        await k.say('sadLonely');
+        // Up he hops and sits on the stone, as the narrator says how he feels.
+        const sitDown = async (): Promise<void> => {
+          k.fx.boing();
+          await k.to(t, 0.25, { y: SITTING.y - 417 - 30, ease: 'power2.out' });
+          k.fx.thud();
+          await k.to(t, 0.2, { y: SITTING.y - 417, ease: 'power2.in' });
+        };
+        await k.all(sitDown(), k.wait(300).then(() => k.say('sadLonely')));
         sniffle();
         await k.wait(1000);
         await k.say('laughing');
