@@ -125,9 +125,10 @@ export default defineCartoon({
         cast.daddy = k.character('daddy-bear', { x: 60, y: 390, w: 260 });
         cast.teddy = k.character('teddy', { x: 290, y: 460, w: 200 });
         cast.umbrella = k.prop('umbrella', { x: 90, y: 150, w: 330, z: 12 });
-        cast.bertie = k.character('bertie', { x: 760, y: 470, w: 190, pose: 'soaked', z: 9 });
+        cast.bertie = k.character('bertie', { x: 850, y: 470, w: 190, pose: 'soaked', z: 9 });
         cast.bush = k.prop('bush', { x: 640, y: 450, w: 380, z: 10 });
-        k.set(cast.bertie, { y: 60 });
+        // Hidden behind the bush's taller right-hand clump: only the tips of his ears show.
+        k.set(cast.bertie, { y: -10 });
       },
       async play(k) {
         const { daddy, teddy, bertie, bush } = cast;
@@ -147,7 +148,7 @@ export default defineCartoon({
         await k.shake(bush, 8, 2);
         // Out he crawls, in front of the bush.
         k.set(bertie, { zIndex: 12 });
-        await k.all(k.to(bertie, 0.9, { x: -230, ease: 'power2.out' }), k.to(bertie, 0.9, { y: 0, ease: 'back.out(1.4)' }));
+        await k.all(k.to(bertie, 0.9, { x: -320, ease: 'power2.out' }), k.to(bertie, 0.9, { y: 0, ease: 'back.out(1.4)' }));
         if (how === 'tapped') await k.all(k.say('foundHim', teddy), k.hop(teddy, 30));
         await k.say('whoAreYou', teddy);
         sneeze();
