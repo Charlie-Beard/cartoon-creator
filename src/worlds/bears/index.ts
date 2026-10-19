@@ -19,6 +19,9 @@ import { homeProps } from './homeProps';
 import { outdoors } from './outdoors';
 import { places } from './places';
 import { seaProps } from './seaProps';
+import { treasury } from './treasury';
+import { treasuryPeople } from './treasuryPeople';
+import { treasuryProps } from './treasuryProps';
 
 /** Parts every bear has (parts.ts). Bears in long dresses have no legs to move. */
 const BEAR_PARTS = ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'legL', 'legR'];
@@ -139,6 +142,57 @@ export default defineWorld({
       about: 'Bella, a treasure-hunt bear: a girl cub in a yellow-striped dress. Sporty and kind; can\'t wait for rounders. Pose: happy.',
       voice: 'A sunny, kind little girl of about six.',
     },
+    // From the Teddy Bear Treasury: "Teddy's Birthday Party" and "Grumpy Bertie Bear".
+    'grandpa-bear': {
+      name: 'Grandpa Bear',
+      ...from(treasury, 'grandpa-bear'),
+      parts: BEAR_PARTS,
+      about:
+        'Teddy’s Grandpa: greyer round the muzzle, round spectacles, a purple waistcoat and a blue bow tie. An old showman: he does the puppet shows at birthdays (Mr Punch, and Marmaduke, his talking dummy who sits on his knee). Sighs dramatically when things go wrong, then twinkles when he has an idea. Can do a squeaky voice without moving his lips. ' +
+        'Pose marmaduke: sitting, with Teddy on his knee pretending to be Marmaduke. In it the talking mouth is Teddy’s, not Grandpa’s, so lines said by the `marmaduke` speaker with this pose as the actor move Teddy’s mouth.',
+      voice: 'A twinkly, theatrical old English grandad, seventies, warm and a bit gravelly.',
+    },
+    'aunt-bertha': {
+      name: 'Aunt Bertha',
+      ...from(treasury, 'aunt-bertha'),
+      parts: DRESS_PARTS,
+      about: 'Aunt Bertha Bear: big and jolly in a white mob cap and a yellow check dress with a cameo brooch. Loves parties, especially her own birthday. Organises lots of jolly games. Laughs a big laugh.',
+      voice: 'A big, jolly, plummy English aunt, sixties, a hearty laugh, sing-song.',
+    },
+    bertie: {
+      name: 'Bertie Bear',
+      ...from(treasury, 'bertie'),
+      parts: BEAR_PARTS,
+      about:
+        'Grumpy Bertie Bear: an older, paler bear in a red, white and blue striped blazer, with cross little brows. Belongs to a girl called Lavinia, and is a bit grand about it ("The house where we live is much bigger than this!"). Grumbles, sighs, and forgets to say thank you; underneath he is lonely and wants to be loved. Softens by the end. ' +
+        'Poses: soaked (dripping, mid-sneeze), gown (in Teddy’s red dressing gown, sitting), jumper (the green jumper, "not really my colour"), sad (about to cry), happy.',
+      voice: 'A grumpy, slightly pompous old English bear, gruff and sniffly, harrumphing; secretly soft. Older than Teddy.',
+    },
+    marmaduke: {
+      name: 'Marmaduke',
+      art: teddy,
+      parts: BEAR_PARTS,
+      about:
+        'Not a bear of his own: the speaker for Marmaduke, Grandpa Bear’s talking dummy, when Teddy pretends to be him. His lines are Grandpa doing a squeaky voice. Say them with the grandpa-bear marmaduke pose as the actor (its talking mouth is Teddy’s); never put this character on stage. Cheeky, tells silly jokes.',
+      voice: 'Grandpa Bear doing a high, squeaky, cheeky puppet voice: an old man’s falsetto, a bit wobbly, very jolly.',
+    },
+    lavinia: {
+      name: 'Lavinia',
+      ...from(treasuryPeople, 'lavinia'),
+      parts: GIRL_PARTS,
+      about:
+        'Lavinia, about seven: curly ginger-blonde ringlets, a big red-and-white spotted bow, a blue dress with a white frilled collar, and her new doll held in her arms. Slightly spoilt but not wicked. She owns Bertie Bear but has a new doll now, so she is careless rather than cruel ("What, that old thing?"). Humans are big here: the bears are toys to her, so stand her taller than the bears (w 280–320).',
+      voice: 'A posh little English girl, about seven: careless and sing-song, bright and breezy, not nasty.',
+    },
+    'great-aunt': {
+      name: 'Great Aunt Edie',
+      ...from(treasuryPeople, 'great-aunt'),
+      parts: GIRL_PARTS,
+      about:
+        'Lavinia’s great-aunt, a little old lady: grey curls, round glasses, a straw hat with a black ribbon, a lilac spotted dress with a lace collar and a black handbag. Kind, gentle and old-fashioned; calls people "dear". She had a bear just like Bertie when she was a girl, and takes him home for her grandchildren to play with. ' +
+        'Pose cuddle: holding Bertie (small and happy, in his striped blazer) against her chest. Humans are big here: stand her taller than the bears (w 320–360).',
+      voice: 'A gentle, kind, elderly English lady, seventies: soft and warm, a little quavery.',
+    },
   },
   backdrops: {
     'bear-garden': {
@@ -182,5 +236,17 @@ export default defineWorld({
     duck: { art: homeProps.duck, size: [120, 100], about: 'A white duck swimming, facing right (water line y ≈ 80).' },
     'treasure-chest': { art: homeProps['treasure-chest'], size: [160, 130], about: 'A wooden chest with brass bands. Part `lid` (hinged at the back, 80 60) opens; part `gold` (hidden) is coins and sweets inside: fade it in.' },
     'thought-cloud': { art: homeProps['thought-cloud'], size: [520, 360], about: 'A big scalloped dream cloud for a story-within-a-story; plain white inside (x 70–450, y 70–260 in its own units) for characters and props; two little puffs trail off bottom left towards the teller.' },
+    // From the Teddy Bear Treasury: the party and Grumpy Bertie.
+    'birthday-cake': { art: treasuryProps['birthday-cake'], size: [260, 220], about: 'A big round sponge cake on a stand: jam in the middle, pink icing, five striped candles. Parts: `flames` (the five candle flames: fade them out to blow them out) and `smoke` (curls of smoke, hidden: fade them in after). Stand it on the party table.' },
+    'mr-punch': { art: treasuryProps['mr-punch'], size: [150, 230], about: 'Grandpa’s glove puppet, Mr Punch: a red jester hat with a bell, a red-and-yellow diamond costume, a white ruff, and a big nose squashed sideways with a sticking plaster on it (he was caught in the case). Sorry for himself, never frightening. No parts.' },
+    'travelling-case': { art: treasuryProps['travelling-case'], size: [220, 150], about: 'An old brown leather travelling case with two straps, brass catches and a handle. Part `lid` (hinged at the top back) lifts to show a red lining.' },
+    'show-curtains': { art: treasuryProps['show-curtains'], size: [560, 520], about: 'A little garden puppet stage: wooden posts, a top rail with bunting, a scalloped pelmet and two red curtains with yellow stars meeting in the middle, hanging right down to the ground (y 500), so whoever waits behind is hidden. Parts `curtainL` and `curtainR` (each hinged at its outer top corner: slide or squash it sideways to open). Put the performers behind (lower z).' },
+    bush: { art: treasuryProps.bush, size: [380, 230], about: 'A big round clump of leafy bush with a few red berries, for hiding behind: the middle top is low (y ≈ 80) and the ends higher, so a small bear behind it (lower z) peeps over the middle. Part `leaves` (hinged at the bottom middle) shakes when someone is inside.' },
+    mug: { art: treasuryProps.mug, size: [90, 90], about: 'A blue-and-white banded mug of hot chocolate with a pink marshmallow. Part `steam` (two curls above it).' },
+    jumper: { art: treasuryProps.jumper, size: [200, 190], about: 'A green woolly jumper with cream stripes and red elbow patches, laid flat with its sleeves out. No parts.' },
+    umbrella: { art: treasuryProps.umbrella, size: [300, 300], about: 'An open umbrella with red, white and blue striped panels and a wooden hooked handle (bottom middle). No parts: tilt or bob it.' },
+    balloons: { art: treasuryProps.balloons, size: [200, 300], about: 'A bunch of four balloons (green, red, yellow, blue) tied at a knot, with a long string. Part `bunch` (hinged at the knot, y ≈ 214): sway it a few degrees.' },
+    'party-table': { art: treasuryProps['party-table'], size: [620, 200], about: 'A long party table with a white blue-checked cloth: iced biscuits, a green jelly and a pie on the left; sandwiches, a red jelly and banana boats on the right; the middle (x 290–350) clear for the cake. The tabletop is at y ≈ 95 of 200. No parts.' },
+    parcel: { art: treasuryProps.parcel, size: [140, 120], about: 'A pass-the-parcel present in blue paper with yellow spots and a red ribbon bow. No parts.' },
   },
 });
