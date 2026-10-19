@@ -49,7 +49,7 @@ const cast = {} as Record<Actor, HTMLElement>;
 /** The party table with the cake on it, at the right. */
 function partyTable<K extends string>(k: Kit<K>): void {
   cast.table = k.prop('party-table', { x: 600, y: 500, w: 560, z: 14 });
-  cast.cake = k.prop('birthday-cake', { x: 780, y: 360, w: 220, z: 15 });
+  cast.cake = k.prop('birthday-cake', { x: 780, y: 395, w: 220, z: 15 });
 }
 
 export default defineCartoon({
