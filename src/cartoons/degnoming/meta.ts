@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'gnomeChief, who only wants a go on the spin',
     places: ['the-burrow', 'kitchen'],
     cast: ['mrsWeasley', 'harry', 'ron', 'gnome', 'gnomeChief'],
-    turns: ['tap the rustling bush so a gnome pops out', 'tap the gnome to spin him over the hedge'],
+    turns: ['tap the gnome at the window to shoo him', 'tap the rustling bush so a gnome pops out', 'tap the gnome to spin him over the hedge', 'tap the Gnome Chief to start his spin', 'drag the pie to the Gnome Chief'],
     jokes: ['Wheee! Again!', 'the gnomes always come back'],
     ending: 'pie in the garden, and the Gnome Chief wants another go',
   },

@@ -10,6 +10,8 @@
  *      they come? Perhaps this year the Headless Hunt will let him join!
  *      Ron: but the feast! Hermione: a real ghost party! Harry:
  *      we'd love to. Nick: seven o'clock, the dungeons. Wrap up warm!
+ *      His turn (drag): Nick holds out the gold-inked invitation, and he
+ *      drags it across to Hermione, who thanks him for it.
  *   2. The blue party. A cold dungeon, candles burning blue, a band of ghosts
  *      with musical saws waiting on their platform. His first turn: he bangs
  *      the gong. BWONG! The saws wail and wobble, two ghosts waltz past. Ron:
@@ -18,7 +20,8 @@
  *      ghosts can't eat, so it's extra smelly; he floats right through the
  *      cake to almost taste it. Ron isn't hungry any more. Moaning Myrtle
  *      drifts in, sulking: nobody wants to talk to Myrtle. Hermione does, and
- *      Myrtle giggles. Then a hunting horn, far off. Nick: "Oh no. The
+ *      Myrtle giggles. His turn (tap): he taps sulking Myrtle to wave hello,
+ *      and Hermione's kind words follow. Then a hunting horn, far off. Nick: "Oh no. The
  *      Headless Hunt."
  *   4. The Headless Hunt. Silence; the horn; hooves. Through the wall gallops
  *      Sir Patrick on a ghost horse, holding his own head, which he tosses up
@@ -29,7 +32,9 @@
  *      and ride with us!" Nick whoops round the dungeon with the Hunt.
  *   5. The Hallowe'en feast. Up in the Great Hall there's still pudding:
  *      pumpkin pie, real and hot and not furry. Nick floats in, beaming: the
- *      best Ghost Day in five hundred years. Thank you, {name}!
+ *      best Ghost Day in five hundred years. His last turn (drag): ghosts
+ *      can't eat but can smell, so he drags a pie to Nick, who floats
+ *      through it. Thank you, {name}!
  *
  * In the book it is a "deathday party", the day Nick died. Here it is his
  * "Ghost Day", five hundred years of being a ghost: the house style never
@@ -119,8 +124,6 @@ type Actor =
   | 'gong' | 'band' | 'dancers' | 'feast';
 const cast = {} as Record<Actor, HTMLElement>;
 let hall: ReturnType<typeof greatHall.set>;
-/** How his big turn went, for the thank-you at the feast. */
-let flopped: 'tapped' | 'helped' = 'tapped';
 
 /** The ghosts drift gently up and down wherever they are. */
 function drift<K extends string>(k: Kit<K>, ...ghosts: HTMLElement[]): void {
@@ -161,6 +164,11 @@ export default defineCartoon({
     ghostDay: { who: 'nick', text: 'Tonight is my five hundredth Ghost Day. I’m having a party!' },
     willYouCome: { who: 'nick', text: 'Ghosts are coming from all over the country. Will you come?' },
     wishHunt: { who: 'nick', text: 'And perhaps, this year, the Headless Hunt will let me join them!' },
+    askLetter: { who: 'nick', text: 'Here is your invitation, in gold ink. Can you drag it to Hermione?' },
+    nudgeLetter: { who: 'nick', text: 'Drag the invitation to Hermione!' },
+    helpedLetter: { who: 'nick', text: 'Never mind. I’ll float it over myself.' },
+    thanksLetter: { who: 'hermione', text: 'Thank you! Oh, look. It’s written in gold ink!' },
+    thanksNickLetter: { who: 'hermione', text: 'Thank you, Nick! Oh, look. It’s written in gold ink!' },
     butFeast: { who: 'ron', text: 'But… the feast! There’s pumpkin pie!' },
     realGhost: { who: 'hermione', text: 'Ron! A real ghost party! Hardly anybody gets invited to one.' },
     weCome: { who: 'harry', text: 'We’d love to come, Nick.' },
@@ -185,6 +193,9 @@ export default defineCartoon({
     notHungry: { who: 'ron', text: 'Er… I’m not that hungry any more.' },
     nobody: { who: 'myrtle', text: 'Oh. A party. Nobody ever wants to talk to Moaning Myrtle.' },
     weDo: { who: 'hermione', text: 'We do, Myrtle! You look ever so nice tonight.' },
+    askMyrtle: { who: 'hermione', text: 'Poor Myrtle. Let’s cheer her up. Tap Myrtle to wave hello!' },
+    nudgeMyrtle: { who: 'hermione', text: 'Tap Myrtle to say hello!' },
+    helpedMyrtle: { who: 'hermione', text: 'I’ll say hello myself. Hello, Myrtle!' },
     doI: { who: 'myrtle', text: 'Do I? Oh! Hee hee hee!' },
     ohNo: { who: 'nick', text: 'Oh! That horn! It’s the Headless Hunt!' },
     // 4. The Headless Hunt
@@ -207,8 +218,12 @@ export default defineCartoon({
     strangest: { who: 'hermione', text: 'That was the strangest party ever.' },
     andBest: { who: 'harry', text: 'And the best!' },
     bestGhostDay: { who: 'nick', text: 'Thank you, dear friends! The best Ghost Day in five hundred years!' },
-    thanksName: { who: 'nick', text: 'And thank you, {name}. My head has never flopped so well!' },
-    thanksAll: { who: 'nick', text: 'My head has never flopped so well. Happy Hallowe’en!' },
+    askPie: { who: 'hermione', text: 'Nick can’t eat, but he can smell! Drag the pie to Nick, {name}!' },
+    nudgePie: { who: 'hermione', text: 'Drag the pie to Nick!' },
+    helpedPie: { who: 'hermione', text: 'Wingardium Leviosa! Off you go, pie.' },
+    thanksPie: { who: 'nick', text: 'Mmm! Pumpkin! Thank you, {name}. Almost tasted it!' },
+    thanksPieHermione: { who: 'nick', text: 'Mmm! Pumpkin! Thank you, Hermione. Almost tasted it!' },
+    flopWell: { who: 'nick', text: 'And my head has never flopped so well. Happy Hallowe’en!' },
     end: { who: 'narrator', text: 'Happy Hallowe’en, everybody. And happy Ghost Day, Nick!' },
   },
   scenes: [
@@ -245,6 +260,13 @@ export default defineCartoon({
         await k.say('ghostDay', nick);
         await k.say('willYouCome', nick);
         await k.say('wishHunt', nick);
+
+        // His first turn: drag the invitation to Hermione.
+        const letter = k.prop('owlPostLetter', { x: 770, y: 230, w: 160, z: 17 });
+        k.appear(letter);
+        const gotLetter = await k.dragToHelp(letter, { to: hermione, ask: 'askLetter', nudge: 'nudgeLetter', helped: 'helpedLetter', by: nick, dropSize: 200 });
+        await k.say(gotLetter === 'dragged' ? 'thanksLetter' : 'thanksNickLetter', hermione);
+        await k.vanish(letter);
         await k.all(k.say('butFeast', ron), k.shake(ron, 4, 2));
         await k.all(k.say('realGhost', hermione), k.hop(hermione, 20));
         await k.say('weCome', harry);
@@ -345,6 +367,8 @@ export default defineCartoon({
         drift(k, myrtle);
         await k.say('nobody', myrtle);
         k.face(hermione, true);
+        await k.tapToHelp(myrtle, { ask: 'askMyrtle', nudge: 'nudgeMyrtle', helped: 'helpedMyrtle', by: hermione, size: 220 });
+        void k.hop(myrtle, 20);
         k.music('magic');
         await k.say('weDo', hermione);
         giggle();
@@ -413,7 +437,7 @@ export default defineCartoon({
         k.music('magic');
 
         // His big turn: tap Nick's ruff, and his head flops right over.
-        flopped = await k.tapToHelp(nick, { ask: 'askRuff', nudge: 'nudgeRuff', helped: 'helpedRuff', by: nick, size: 220 });
+        await k.tapToHelp(nick, { ask: 'askRuff', nudge: 'nudgeRuff', helped: 'helpedRuff', by: nick, size: 220 });
         const head = k.pivot(k.part(nick, 'head'));
         flop();
         await k.to(head, 0.6, { rotation: 80, ease: 'back.out(1.6)' });
@@ -468,7 +492,15 @@ export default defineCartoon({
         const head = k.pivot(k.part(nick, 'head'));
         flop();
         await k.to(head, 0.4, { rotation: 40, yoyo: true, repeat: 1, ease: 'sine.inOut' });
-        await k.say(flopped === 'tapped' ? 'thanksName' : 'thanksAll', nick);
+
+        // His last turn: drag the pie to Nick, to smell.
+        const pie = k.prop('pie', { x: 560, y: 90, w: 190, z: 18 });
+        k.appear(pie);
+        const gotPie = await k.dragToHelp(pie, { to: nick, ask: 'askPie', nudge: 'nudgePie', helped: 'helpedPie', by: hermione, dropSize: 220 });
+        ghostWhoosh();
+        await k.fade(pie, 0, 0.8);
+        await k.say(gotPie === 'dragged' ? 'thanksPie' : 'thanksPieHermione', nick);
+        await k.say('flopWell', nick);
         await warmEnding(k, { cast: [harry, ron, hermione], end: 'end' });
       },
     },
