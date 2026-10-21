@@ -28,7 +28,9 @@ export async function openCorner(page: Page): Promise<void> {
   await expect(sum).toBeVisible();
   await typeAnswer(page, answerTo((await sum.textContent()) ?? ''));
   await expect(page.locator('.gate')).toHaveCount(0);
-  await expect(page.locator('.scene.corner')).toBeVisible();
+  // The corner loads every cartoon's script to list its scenes, which can
+  // take a while on a busy machine.
+  await expect(page.locator('.scene.corner')).toBeVisible({ timeout: 20_000 });
 }
 
 /** The library's card for a cartoon, turning pages if it is not on the first. */
@@ -41,6 +43,17 @@ export async function cardFor(page: Page, id: string) {
     await page.waitForTimeout(600);
   }
   return card;
+}
+
+/**
+ * Moves the page's fake clock (page.clock.install()) on by `ms`, a quarter
+ * second at a time. Each jump fires the timers that fall due and draws one
+ * frame, where clock.runFor would draw every frame on the way (60 a second,
+ * which is most of a play-through's time). GSAP reads a jump of more than
+ * half a second as lag and shortens it, so the jumps stay under that.
+ */
+export async function advance(page: Page, ms: number): Promise<void> {
+  for (let t = 0; t < ms; t += 250) await page.clock.fastForward(Math.min(250, ms - t));
 }
 
 /** What the player is showing: the scene number it has reached, or 'end' once the end button is up. */
