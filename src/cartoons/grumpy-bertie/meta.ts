@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'a rainy day, and a careless girl',
     places: ['bear-wood', 'bear-kitchen'],
     cast: ['teddy', 'daddy-bear', 'mummy-bear', 'bertie', 'lavinia', 'great-aunt'],
-    turns: ['tap the bush that sneezed', 'put the green jumper on Bertie', 'tap Bertie so he sneezes and the lady looks'],
+    turns: ['tap the bush that sneezed', 'drag the hot chocolate to Bertie', 'drag the green jumper to Bertie', 'tap Bertie so he sneezes and the lady looks', 'drag Bertie over to the kind old lady'],
     jokes: ['Atishoo!', 'Not really my colour', 'he hasn’t even said thank you'],
     ending: 'Bertie loved again, and a thank-you at last',
   },
