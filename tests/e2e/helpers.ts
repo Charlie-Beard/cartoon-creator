@@ -37,6 +37,9 @@ export async function openCorner(page: Page): Promise<void> {
 export async function cardFor(page: Page, id: string) {
   const card = page.locator(`[data-cartoon="${id}"]`);
   const more = page.getByRole('button', { name: 'More cartoons' });
+  // Wait for the shelf to be drawn first: on a busy machine the first look
+  // can come before it, when neither the card nor "More" is there yet.
+  await expect(page.locator('.shelf-card').first()).toBeAttached({ timeout: 20_000 });
   for (let guard = 0; guard < 20 && (await card.count()) === 0; guard++) {
     if (!(await more.isVisible())) break;
     await more.click();
