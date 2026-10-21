@@ -88,13 +88,13 @@ let birds: HTMLElement[] = [];
 /** The balcony railing, and the two children behind it (scenes 2 and 5). */
 const RAIL = { x: 640, y: 330, w: 560 };
 function balcony(k: Kit): void {
-  cast.tom = k.character('tom', { x: 700, y: 210, w: 210, z: 12 });
-  cast.daisy = k.character('daisy', { x: 900, y: 210, w: 210, z: 12, flip: true });
+  cast.tom = k.character('tom', { x: 700, y: 185, w: 210, z: 12 });
+  cast.daisy = k.character('daisy', { x: 900, y: 185, w: 210, z: 12, flip: true });
   cast.rail = k.prop('hospital-balcony', { ...RAIL, z: 15 });
 }
 
 /** The bird house on the hospital wall, and its ledge (stage points). */
-const BIRDHOUSE = { x: 200, y: 160, w: 280 };
+const BIRDHOUSE = { x: 220, y: 215, w: 280 };
 const LEDGE_Y = BIRDHOUSE.y + 262;
 
 /** Flies a bird from where it is to (x, y), flapping, in `s` seconds. */

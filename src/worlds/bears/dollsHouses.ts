@@ -251,7 +251,7 @@ const dollsHouse = cached(() => {
     ...tierNodes(ID, 1, 'bare'),
     ...tierNodes(ID, 2, 'bare'),
     ...roofNodes(ID),
-    group({ part: 'fresh', opacity: 1 }, fresh),
+    group({ part: 'fresh', opacity: 0 }, fresh),
   ]);
 });
 
