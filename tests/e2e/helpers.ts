@@ -36,14 +36,21 @@ export async function openCorner(page: Page): Promise<void> {
 /** The library's card for a cartoon, turning pages if it is not on the first. */
 export async function cardFor(page: Page, id: string) {
   const card = page.locator(`[data-cartoon="${id}"]`);
-  const more = page.getByRole('button', { name: 'More cartoons' });
+  const first = page.locator('.shelf-card').first();
   // Wait for the shelf to be drawn first: on a busy machine the first look
   // can come before it, when neither the card nor "More" is there yet.
-  await expect(page.locator('.shelf-card').first()).toBeAttached({ timeout: 20_000 });
-  for (let guard = 0; guard < 20 && (await card.count()) === 0; guard++) {
-    if (!(await more.isVisible())) break;
-    await more.click();
-    await page.waitForTimeout(600);
+  await expect(first).toBeAttached({ timeout: 20_000 });
+  // Back to the first page (the shelf can open where he left it), then on
+  // a page at a time. Each turn waits for the new page's cards to be there,
+  // not a fixed time: a tap that lands as a slow turn finishes is a second
+  // turn, which would skip right past the card's page.
+  for (const name of ['Earlier cartoons', 'More cartoons']) {
+    const button = page.getByRole('button', { name });
+    for (let guard = 0; guard < 20 && (await card.count()) === 0 && (await button.isVisible()); guard++) {
+      const before = await first.getAttribute('data-cartoon');
+      await button.click();
+      await expect.poll(() => first.getAttribute('data-cartoon').catch(() => null), { timeout: 10_000 }).not.toBe(before);
+    }
   }
   return card;
 }
