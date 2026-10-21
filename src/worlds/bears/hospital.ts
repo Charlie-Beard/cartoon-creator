@@ -19,7 +19,7 @@
  */
 import { cached, curve, ellipse, rect, rng, svg, type Node, type Pt } from '../../art/paper';
 import { blot, deeper, INK, pageNodes, paler, pen, wash } from '../../art/watercolour';
-import { bush, cloud, GRASS, GRASS_DARK, LEAF_DARK, path, sky, tufts } from './scenery';
+import { bush, cloud, GRASS, ground, LEAF_DARK, path, sky, tufts } from './scenery';
 
 const W = 1180;
 const H = 820;
@@ -27,6 +27,7 @@ const H = 820;
 const BRICK = '#e3c274';
 const CREAM = '#f4e8c8';
 const WHITE = '#fbf9f1';
+const RAIL = '#eceff0';
 const GLASS = '#a9c4d8';
 const ROOF = '#c4694c';
 const STONE = '#d9d3c4';
@@ -138,7 +139,6 @@ const hospitalGarden = cached(() =>
     ...sky(300),
     blot(ellipse(1085, 40, 150, 90), '#fff3c2', 0.55),
     blot(ellipse(1085, 40, 80, 50), '#fff9dc', 0.7),
-    ...cloud(820, 70, 0.55, 31),
     ...cloud(330, 150, 0.6, 32),
     // trees and bushes peeping over the wall
     ...bush(80, 215, 1.2, 111),
@@ -174,7 +174,6 @@ const hospitalGarden = cached(() =>
     // bunting being hung across the front, and a tail of it along the wall
     ...bunting([[646, 134], [780, 156], [900, 140]], 9, 3, 0.9),
     ...bunting([[900, 140], [1040, 162], [1180, 136]], 9, 8, 0.9),
-    ...bunting([[646, 304], [760, 326], [872, 308]], 7, 6, 0.8),
     // the lawn in front of the hospital, shrubs and a flower bed
     ground(596, GRASS, { amp: 6, seed: 120 }),
     ...bush(720, 590, 0.55, 113),
@@ -212,17 +211,17 @@ function ground0(): Node {
 const hospitalBalcony = cached(() => {
   const bars: Node[] = [];
   for (let x = 20; x <= 530; x += 26) {
-    bars.push(wash(rect(x - 3.5, 14, 7, 80, 3), WHITE, { lineWidth: 1.5, depth: 0.5, light: -170, bloom: false, wobble: 0.4, hatch: false }));
+    bars.push(wash(rect(x - 3.5, 14, 7, 80, 3), RAIL, { shade: '#aab6bf', lineWidth: 1.5, depth: 0.5, light: -170, bloom: false, wobble: 0.4, hatch: false }));
   }
   const posts: Node[] = [];
   for (const x of [6, 273, 540]) {
-    posts.push(wash(rect(x - 8, 10, 16, 84, 4), WHITE, { lineWidth: 2, depth: 0.45, light: -170, bloom: false, wobble: 0.5 }));
-    posts.push(wash(ellipse(x, 6, 11, 11), WHITE, { lineWidth: 2, depth: 0.4, bloom: false, wobble: 0.5 }));
+    posts.push(wash(rect(x - 8, 10, 16, 84, 4), RAIL, { shade: '#aab6bf', lineWidth: 2, depth: 0.45, light: -170, bloom: false, wobble: 0.5 }));
+    posts.push(wash(ellipse(x, 6, 11, 11), RAIL, { shade: '#aab6bf', lineWidth: 2, depth: 0.4, bloom: false, wobble: 0.5 }));
   }
   return svg({ w: 560, h: 200, name: 'bears-hospital-balcony' }, [
     ...bars,
-    wash(rect(0, 70, 546, 9, 3), WHITE, { lineWidth: 1.8, depth: 0.5, light: -90, bloom: false, wobble: 0.5 }),
-    wash(rect(-4, 4, 556, 15, 7), WHITE, { lineWidth: 2.2, depth: 0.5, light: -90, bloom: false, wobble: 0.6 }),
+    wash(rect(0, 70, 546, 9, 3), RAIL, { shade: '#aab6bf', lineWidth: 1.8, depth: 0.5, light: -90, bloom: false, wobble: 0.5 }),
+    wash(rect(-4, 4, 556, 15, 7), RAIL, { shade: '#aab6bf', lineWidth: 2.2, depth: 0.5, light: -90, bloom: false, wobble: 0.6 }),
     ...posts,
     // bunting tied along the top rail, sagging between the posts
     ...bunting([[6, 16], [140, 38], [273, 18]], 9, 3, 1),

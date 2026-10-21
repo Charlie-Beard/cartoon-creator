@@ -280,7 +280,7 @@ function toymaker(pose: ToyPose): string {
     // his right hand (on the left of the picture) up beside his head, holding the brush
     const brush: Node[] = [
       pen([[56, 196], [54, 128]], { width: 5, color: '#a8794a', breaks: 0, taper: false }),
-      wash(curve([[48, 142], [62, 142], [62, 128], [48, 128]], 1), '#aab0b8', { lineWidth: 1.6, bloom: false, shade: false, edge: 'cut' }),
+      wash(curve([[48, 142], [62, 142], [62, 128], [48, 128]], 1), '#aab0b8', { lineWidth: 1.6, bloom: false, shade: false }),
       wash(curve([[44, 130], [66, 130], [64, 98], [55, 90], [46, 98]], 2), '#33302e', { lineWidth: 1.8, bloom: false, depth: 0.2 }),
       wash(curve([[45, 104], [64, 104], [63, 98], [55, 90], [46, 98]], 2), RED, { lineWidth: 1.2, bloom: false, shade: false }),
       wash(circle(56, 196, 14), T_SKIN, { lineWidth: 2, depth: 0.25 }),
@@ -400,7 +400,7 @@ const PJ_BLUE = '#7fa6d8';
 const K_SKIN = '#f6cdb2';
 
 function tom(waving: boolean): string {
-  const [x, y] = [C.cx, C.cy];
+  // (no head-relative coordinates needed here)
   const top = curve([[118, 196], [182, 196], [198, 250], [206, 312], [94, 312], [102, 250]], 2);
   const look: ArmLook = { sleeve: WHITE, skin: K_SKIN, pattern: (o) => stripes(o, PJ_BLUE, 30, 270, 150, 320, 16, 8), hand: 12, sleeveW: 28 };
   const body: Node[] = [
