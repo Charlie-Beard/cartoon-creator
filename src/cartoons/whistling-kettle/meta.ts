@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'dameSnap',
     places: ['snap-school', 'moon-room', 'cloud-top'],
     cast: ['moonface', 'silky', 'saucepan', 'dameSnap'],
-    turns: ['blow the cloud away', 'tap the kettle’s lid to make it whistle'],
+    turns: ['tap the tin so the pop biscuits pop out', 'blow the cloud away', 'tap the kettle’s lid to make it whistle', 'drag the kettle home to the Saucepan Man', 'drag a pop biscuit to Moon-Face'],
     jokes: ['Saucepan Man mishears', 'Dame Snap’s ruler snaps', 'pop biscuits'],
     ending: 'tea party',
   },
