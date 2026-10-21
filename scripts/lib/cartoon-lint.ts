@@ -200,10 +200,16 @@ export function unknownIds(source: string, cat: Catalogue): string[] {
   return [...new Set(problems)];
 }
 
-/** How many times the script calls tapToHelp, and how many of those have no `ask`. */
-export function tapCalls(source: string): { total: number; withoutAsk: number } {
-  const calls = callArguments(stripComments(source), 'tapToHelp');
-  return { total: calls.length, withoutAsk: calls.filter((a) => !/\bask\s*:/.test(a)).length };
+/** The fewest turns an episode has (k.tapToHelp and k.dragToHelp together). */
+export const MIN_TURNS = 5;
+
+/** How many of his turns the script has (tapToHelp and dragToHelp), and how many of those have no `ask`. */
+export function tapCalls(source: string): { total: number; withoutAsk: number; drags: number } {
+  const code = stripComments(source);
+  const taps = callArguments(code, 'tapToHelp');
+  const drags = callArguments(code, 'dragToHelp');
+  const calls = [...taps, ...drags];
+  return { total: calls.length, withoutAsk: calls.filter((a) => !/\bask\s*:/.test(a)).length, drags: drags.length };
 }
 
 /** All the checks together. */
@@ -217,11 +223,12 @@ export function lintCartoon({ id, source, lines, catalogue }: LintInput): LintRe
   for (const p of unknownIds(source, catalogue)) errors.push(p);
 
   const taps = tapCalls(source);
-  if (!taps.total) errors.push('no k.tapToHelp(): every cartoon needs at least one turn for him');
-  else if (taps.withoutAsk) warnings.push(`${taps.withoutAsk} tapToHelp without an \`ask\` line: he is never told what to tap`);
+  if (!taps.total) errors.push(`no k.tapToHelp() or k.dragToHelp(): every cartoon needs at least ${MIN_TURNS} turns for him`);
+  else if (taps.total < MIN_TURNS) warnings.push(`only ${taps.total} of his turns: every cartoon needs at least ${MIN_TURNS} (tapToHelp or dragToHelp)`);
+  if (taps.withoutAsk) warnings.push(`${taps.withoutAsk} of his turns without an \`ask\` line: he is never told what to do`);
 
   const seconds = spokenSeconds(lines);
-  if (seconds > 270) warnings.push(`${Math.round(seconds)} s of speech: with the pictures this runs past 5 minutes`);
+  if (seconds > 315) warnings.push(`${Math.round(seconds)} s of speech: with the pictures this runs past 6 minutes`);
   if (seconds < 45) warnings.push(`only ${Math.round(seconds)} s of speech: probably under the 2 minute minimum`);
   if (!new RegExp(`\\bid\\s*:\\s*${QUOTE}${escapeRe(id)}${QUOTE}`).test(source)) warnings.push(`the script's id does not look like "${id}"`);
 
@@ -340,7 +347,7 @@ export function lintLedger({ ledger, source, lines, taps, catalogue }: LedgerLin
     for (const id of used) if (catalogue.backdrops.has(id) && !ledger.places.includes(id)) warnings.push(`the script shows "${id}" but ledger.places does not list it`);
   }
   if (!stale.has('turns') && Array.isArray(ledger.turns) && ledger.turns.length && ledger.turns.length !== taps) {
-    warnings.push(`ledger.turns has ${ledger.turns.length} but the script has ${taps} tapToHelp: one phrase per turn`);
+    warnings.push(`ledger.turns has ${ledger.turns.length} but the script has ${taps} turns (tapToHelp and dragToHelp): one phrase per turn`);
   }
   return { errors, warnings };
 }

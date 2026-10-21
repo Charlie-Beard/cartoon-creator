@@ -6,7 +6,7 @@ reference it points to.
 
 ## The shape of an episode
 
-**2–5 minutes, 3–5 scenes, 1–3 of his turns.** Lines are the budget
+**2–6 minutes, 3–5 scenes, at least 5 of his turns.** Lines are the budget
 that sets the length: with the action between them, about **13 lines a
 minute** (the first episode: 40 lines, 3 minutes).
 
@@ -14,12 +14,12 @@ minute** (the first episode: 40 lines, 3 minutes).
 |---|---|---|
 | Short, about 2 minutes | 3 | 25–30 |
 | About 3 minutes | 4 | 35–40 |
-| Long, 4–5 minutes | 5 | 50–60 |
+| Long, 4–6 minutes | 5 | 50–65 |
 
 | Part | Scenes | What happens |
 |---|---|---|
 | **Hello** | 1 | Somewhere familiar. The friends, being themselves. Something small is wrong or about to happen (the kettle is gone; a letter arrives). Someone says his name in the first minute. |
-| **Off we go** | 1–2 | The problem grows. They set out, meet someone, try something. **His first turn** comes here: he helps them get going. |
+| **Off we go** | 1–2 | The problem grows. They set out, meet someone, try something. **His first turns** come here: he helps them get going. |
 | **Uh-oh** | 1 | The scary or tricky bit: the villain looms, the way is blocked, someone is caught. Short, then cut back to the heroes. **His big turn** usually saves the day. |
 | **Home** | 1 | Everything put right. A warm, funny ending, everyone together, a sparkle, the end. |
 
@@ -92,8 +92,12 @@ rest.
 
 ## His turns
 
-`k.tapToHelp(target, { ask, nudge, helped, by })` is the only
-interaction. It works like this:
+There are two: **tap** (`k.tapToHelp`) and **drag**
+(`k.dragToHelp`). Every episode has **at least 5** of them, and most
+have a drag or two: he's on an iPad, and dragging the key to the lock
+feels like doing it himself.
+
+`k.tapToHelp(target, { ask, nudge, helped, by })` works like this:
 
 1. `by` says `ask` ("The door's stuck! Can you tap the handle, {name}?").
 2. A gold ring breathes round `target`; everything else holds still.
@@ -110,8 +114,15 @@ Good turns:
 - **It matters:** his tap is what makes the next thing happen. Follow it
   with an immediate, satisfying result (door creaks open, sparkle,
   "You did it, {name}!").
-- **1–3 per episode**, never back to back, never in the scary beat's
-  first seconds (let it land, then ask for help).
+- **At least 5 per episode**, spread through the scenes (one or two a
+  scene), never back to back without a beat of story between, never in
+  the scary beat's first seconds (let it land, then ask for help). The
+  first comes in scene 1 or 2; there is one in the last scene too
+  (lighting the candles, the hug, the final sparkle).
+- **Mix them up:** not five of the same kind. Wake someone, then drag
+  something, then pop something. A turn that only repeats the last one
+  ("tap the next sock") is filler; each makes its own little thing
+  happen.
 - Write the thank-you so it works either way, or branch on the result:
 
 ```ts
@@ -121,13 +132,30 @@ await k.say(how === 'tapped' ? 'thanks' : 'phew', mf);
 
 All four lines are said in some run, so all four count as used.
 
+### Drag to help
+
+`k.dragToHelp(item, { to, ask, nudge, helped, by })` is the same turn,
+but he drags `item` to `to` (an actor, or a world point `[x, y]`): a
+gold ring round the item, a dashed ring where it goes. Let go near the
+dashed ring and it settles there; anywhere else and it glides back to
+try again (nothing is wrong). A tap leans it towards the ring, as a
+hint. Waited out, `helped` is said and the item glides there itself. It
+returns `'dragged'` or `'helped'`, and the item always ends in place.
+
+Good drags: the key to the lock, the letter to the owl, the sock into
+the basket, the sweet into the jar, the star to the top of the tree.
+Short and obvious: the item and where it goes both on stage, not too
+close (200–600 px apart), nothing in between to confuse it. Ask with
+the gesture in it: "Can you drag the key to the door, {name}?"
+
 **Thank whoever did it.** When `helper` is someone else (Ron throws the
 snowball, Silky's wand lights the candles), the thank-you after a
 `'helped'` turn thanks *them*, not him: "Thank you, Silky!" Praising him
 for a tap he didn't make rings false. Branch the line on `how`.
 
 **A turn costs time.** About 5 s if he taps straight away, about 25 s if
-he waits it out (the nudge, the wait, the helped line). Two turns in one
+he waits it out (the nudge, the wait, the helped line). With five or
+more turns, keep the lines lean round them. Two turns in one
 scene that runs 70 s with taps can run past 110 s in the `--no-tap` run:
 spread turns across scenes, or keep that scene's lines lean.
 
@@ -135,7 +163,7 @@ spread turns across scenes, or keep that scene's lines lean.
 
 | | Target |
 |---|---|
-| Whole episode | 2–5 minutes (measured by `npm run shots`) |
+| Whole episode | 2–6 minutes (measured by `npm run shots`) |
 | A scene | 25–90 s |
 | Gap between lines | The kit's 250 ms, plus whatever action you put between |
 | Action without speech | Up to ~4 s at a time, then someone speaks |
@@ -146,9 +174,9 @@ similar. `npm run check -- <id>` prints the speech estimate and, from it,
 the time on screen (about 1.15 × the speech when he taps, measured on
 the episodes so far, plus about 25 s for each turn he waits out). Aim
 the speech at about 105–130 s for a short episode, 155–200 s for 3–4
-minutes and 210–255 s for a long one, before you stage anything: adding
+minutes and 210–290 s for a long one, before you stage anything: adding
 lines after the shots is slower than writing them in. `npm run shots -- <id>` measures each scene for real and flags
-scenes over 90 s and episodes outside 2–5 minutes.
+scenes over 90 s and episodes outside 2–6 minutes.
 
 ## Scenes in code
 
@@ -171,7 +199,7 @@ Each scene is `{ name, set(k), play(k) }`:
 
 - [ ] Beat sheet in the file's top comment; title 2–5 words; summary 1–2
       sentences.
-- [ ] 3–5 scenes, 2–5 minutes, 1–3 turns, `{name}` used 3–6 times.
+- [ ] 3–5 scenes, 2–6 minutes, at least 5 turns (taps and drags), `{name}` used 3–6 times.
 - [ ] `npm run check -- <id>` passes (lines, ids, unused lines, length).
 - [ ] Scary beat follows docs/STYLE.md, and the ending is warm.
 - [ ] `npm run shots -- <id>`: every frame looked at, nothing off stage

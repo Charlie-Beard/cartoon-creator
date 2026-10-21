@@ -1,7 +1,7 @@
 # Cartoons: notes for agents
 
 Torn-paper puppet cartoons for one 6-year-old (autistic, possibly ADHD) on
-an iPad in landscape. Each cartoon is an episode of 2–5 minutes in a few
+an iPad in landscape. Each cartoon is an episode of 2–6 minutes in a few
 scenes, set in the Faraway Tree, at Hogwarts or at Bear Cottage (the
 teddy bear stories), and now and then it's his
 turn to tap and help. Claude writes every cartoon from the skills in
@@ -37,7 +37,7 @@ npm run check -- <id>  # one cartoon against the house rules (lines, ids, length
 npm run check -- --ledger   # what every episode so far was about: read before planning
 npm run shots -- <id> --fast [--scene n]   # frames + contact sheet on a fake clock, ~1 min: for iterating
 npm run shots -- <id> --openings   # only each scene's opening picture + sheet, ~5 s: after moving people
-npm run shots -- <id>  # the same in real time, for the final pacing check (3–5 min)
+npm run shots -- <id>  # the same in real time, for the final pacing check (3–6 min)
 npm run catalogue -- <world> --brief   # a world in text: who, where, props, sounds, moves (read this, not src/worlds/*)
 npm run lab -- <world> # sheets of every character, pose, backdrop and prop with its id
 npm run test:e2e       # Playwright at 1180×820 and 1180×760 (in the cloud: PW_CHROMIUM=/opt/pw-browsers/chromium)
@@ -58,7 +58,8 @@ flagged frames, and fix or justify every flag.
   stage coordinates (`k.character(id, { x, y, w })`, `place(el, x, y, w, h)`).
   No responsive layouts. Captions take the bottom band (y 690–800).
 - **Touch only:** tap targets of 72 px or more (his turns are 120 px or
-  more), no hover.
+  more), no hover. His turns are taps and drags (`k.tapToHelp`,
+  `k.dragToHelp`): at least 5 an episode.
 - **No failing:** a turn he doesn't take is taken for him, kindly. No
   timers on screen, no buzzers, no "wrong".
 - **No flashing.** Washes of light fade in and out (`k.glow`), never

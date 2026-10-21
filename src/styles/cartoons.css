@@ -204,3 +204,17 @@
   background: transparent;
   cursor: pointer;
 }
+/* His turn by dragging (Kit.dragToHelp): the item follows his finger, so the
+   browser must not scroll or zoom; a dashed ring breathes where it goes. */
+.story-drag {
+  touch-action: none;
+}
+.story-drop-ring {
+  position: absolute;
+  z-index: 59;
+  border-radius: 50%;
+  border: 8px dashed rgba(247, 210, 131, 0.95);
+  background: rgba(247, 210, 131, 0.12);
+  box-shadow: 0 0 24px rgba(247, 210, 131, 0.6);
+  pointer-events: none;
+}

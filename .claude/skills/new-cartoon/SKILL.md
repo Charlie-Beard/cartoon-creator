@@ -54,9 +54,9 @@ idea and the world notes. Pick from:
 - **World and cast** (if the idea doesn't make it obvious): who's in it.
 - **The scary bit:** which villain, or a gentler danger (lost, stuck,
   a storm), or none this time.
-- **His turns:** two or three concrete ideas for what he taps.
+- **His turns:** at least five concrete ideas for what he taps or drags.
 - **Length:** short (about 2 min, 3 scenes, 25–30 lines), about 3 min
-  (4 scenes, 35–40 lines) or long (4–5 min, 5 scenes, 50–60 lines).
+  (4 scenes, 35–40 lines) or long (4–6 min, 5 scenes, 50–65 lines).
 - **Ending flavour:** funny, cosy, a party.
 
 If the person said not to ask, or answered everything already, skip
@@ -65,7 +65,7 @@ this and use your recommendations.
 ## 2. Beat sheet
 
 Copy `templates/beat-sheet.md` into your scratchpad and fill it in.
-Check it against the table in docs/WRITING.md (shape, one problem, 1–3
+Check it against the table in docs/WRITING.md (shape, one problem, at least 5
 turns, `{name}` 3–6 times) and docs/STYLE.md (scary, not cruel; warm
 ending). Fix it now: changing a beat sheet is cheap, changing a script
 is not. Show the person the beat sheet in a few lines, and carry on
@@ -135,7 +135,8 @@ yourself when they're done, so no two agents edit the same file.
   `moves.ts` (`import { sounds, moves } from '../../worlds/<world>/moves'`)
   before writing your own; if you do write one a second episode would
   want, promote it there (docs/WORLDS.md, "moves.ts").
-- His turns via `k.tapToHelp` with `ask`, `nudge` and `helped` lines,
+- His turns via `k.tapToHelp` or `k.dragToHelp` (at least 5, mixed) with
+  `ask`, `nudge` and `helped` lines,
   and a thank-you that works either way (after `'helped'`, thank the
   helper, not him).
 - Read docs/KIT.md "Pitfalls" before placing anyone: `flip` mirrors
@@ -159,7 +160,7 @@ npm run shots -- <id> --openings          # each scene's opening picture only, ~
 npm run shots -- <id> --fast              # the whole episode on a fake clock, about a minute
 npm run shots -- <id> --fast --scene 2    # one scene (from 1), while fixing it
 npm run shots -- <id> --fast --no-tap     # lets every turn run out: see the nudge and helped lines
-npm run shots -- <id> --strict            # real time, 3–5 minutes: the final check (fails on any flag)
+npm run shots -- <id> --strict            # real time, 3–6 minutes: the final check (fails on any flag)
 ```
 
 It plays the episode in Chromium at 1180 × 820, saves a frame of every
@@ -186,13 +187,13 @@ justify every flag. For each frame, ask:
 - Is it clear who is speaking and what to look at?
 - Does the scary beat look scary but not cruel? Is the ending warm?
 - Is anything blank, broken, cropped or cluttered?
-- Pacing: every scene 25–90 s, the whole episode 2–5 minutes, no long
+- Pacing: every scene 25–90 s, the whole episode 2–6 minutes, no long
   silent stretches.
 
 Fix, re-run `shots --fast`, look again, until every frame is right. Run
 it once with `--no-tap` too, and look at the turns done for him. Then
 one real-time run for the pacing numbers in the PR. The real-time run
-takes 3–5 minutes: start it in the background and don't edit any file
+takes 3–6 minutes: start it in the background and don't edit any file
 until it finishes (the dev server reloads the page and spoils it); a
 review can read the frames meanwhile.
 

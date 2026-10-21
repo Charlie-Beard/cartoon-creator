@@ -58,8 +58,11 @@ which frames you could not check.
       episodes (`npm run check` warns) unless it is deliberate.
 
 **His turns**
-- [ ] 1–3, never back to back; each target is big, still, obvious and on
-      stage, and the tap makes something happen at once.
+- [ ] At least 5 (taps and drags, mixed), spread through the scenes,
+      never back to back; each target is big, still, obvious and on
+      stage, and the tap or drag makes something happen at once. A
+      drag's item and its drop ring are both on stage, clear of the
+      caption band, 200–600 px apart.
 - [ ] `ask`, `nudge` and `helped` all present and kind; the thank-you
       works either way, and after a `'helped'` turn it thanks the helper,
       not him.
@@ -68,7 +71,7 @@ which frames you could not check.
       tap.
 
 **Pacing**
-- [ ] Measured: each scene 25–90 s, total 2–5 minutes (with taps); the
+- [ ] Measured: each scene 25–90 s, total 2–6 minutes (with taps); the
       `--no-tap` run not far over (a turn waited out adds about 25 s).
 - [ ] No silent stretch over ~4 s; a quiet beat after big moments.
 

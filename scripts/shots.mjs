@@ -40,7 +40,7 @@
  * for how long), and flags silent stretches: more than 4 s with no caption
  * showing and no tap waiting.
  *
- * Flags: a scene over 90 s, an episode outside 2–5 minutes, a silent
+ * Flags: a scene over 90 s, an episode outside 2–6 minutes, a silent
  * stretch, and the layout problems below. Exits 1 on an error (the script
  * threw, a scene never finished); --strict also exits 1 on a flag.
  *
@@ -392,6 +392,21 @@ function timeline(events, from, to) {
 
 // ----------------------------------------------------------- one scene's run
 
+/**
+ * His turn by dragging (k.dragToHelp): the button carries `data-drag-to`,
+ * the drop point in stage coordinates. Press on the item, move there in a
+ * few steps (as a finger does) and let go.
+ */
+async function dragTo(page, box, to) {
+  const stage = await page.locator('.story-stage').boundingBox();
+  const k = stage ? stage.width / 1180 : 1;
+  const [x, y] = to.split(' ').map(Number);
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await page.mouse.move((stage?.x ?? 0) + x * k, (stage?.y ?? 0) + y * k, { steps: 8 });
+  await page.mouse.up();
+}
+
 async function shootScene(browser, context, base, index) {
   const result = { index, name: cartoon.scenes[index].name, frames: [], errors: [], seconds: null, captions: [], silences: [], lines: [], taps: 0, capped: null };
   // A fake clock belongs to a whole browser context, not a page: scenes running at once need a context each.
@@ -467,8 +482,11 @@ async function shootScene(browser, context, base, index) {
         await advance(350); // let the ring fade in
         if (room) await shoot(true);
         if (!NO_TAP) {
-          const box = await page.locator('[data-tap-to-help]').first().boundingBox();
-          if (box) await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+          const target = page.locator('[data-tap-to-help]').first();
+          const box = await target.boundingBox();
+          const to = await target.getAttribute('data-drag-to').catch(() => null);
+          if (box && to) await dragTo(page, box, to);
+          else if (box) await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
         }
         tapped = s.taps;
         nextFrame = now() + EVERY * 1000;
@@ -717,12 +735,12 @@ try {
   const total = timed.reduce((t, r) => t + r.seconds, 0);
   const taps = results.reduce((t, r) => t + r.taps, 0);
   if (only === null) {
-    console.log(`  total  ${fmt(total)} (${total.toFixed(0)} s), ${results.reduce((t, r) => t + r.lines.length, 0)} lines said, ${taps} tap-to-help`);
+    console.log(`  total  ${fmt(total)} (${total.toFixed(0)} s), ${results.reduce((t, r) => t + r.lines.length, 0)} lines said, ${taps} turns for him (tap or drag)`);
     if (taps && !NO_TAP) console.log(`         if he waits out every tap: up to ${fmt(total + taps * TAP_WAIT_SECONDS)} (run with --no-tap to measure it)`);
     console.log(`  the script has ${Object.keys(cartoon.lines).length} lines: ${spokenSeconds(cartoon.lines).toFixed(0)} s of speech if each is said once`);
     if (timed.length === results.length) {
       if (total < 120) flags.push(`the episode runs ${fmt(total)}: under 2 minutes. Add a beat, or a scene.`);
-      if (total > 300) flags.push(`the episode runs ${fmt(total)}: over 5 minutes. Cut something.`);
+      if (total > 360) flags.push(`the episode runs ${fmt(total)}: over 6 minutes. Cut something.`);
     }
     const said = new Set(results.flatMap((r) => r.lines));
     const unseen = Object.entries(cartoon.lines).filter(([, l]) => !said.has(personalise(l.text, DEFAULT_NAME)));

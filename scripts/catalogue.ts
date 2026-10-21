@@ -571,7 +571,7 @@ function piecesLines(worldId: string, b: Budget, intro: boolean): string[] {
   if (intro && b.piece) {
     out.push(
       '  An object piece: `set(k, …)` builds the picture (no waiting, no motion: legal in a scene’s `set`) and returns the actors; `play` and the other parts take them and animate: `await p.play(k, a, …)`.',
-      '  A function piece is just awaited. Options take line KEYS from your `lines`. His turns (k.tapToHelp) are yours. Whole doc and example: --id <piece>.',
+      '  A function piece is just awaited. Options take line KEYS from your `lines`. His turns (k.tapToHelp, k.dragToHelp) are yours. Whole doc and example: --id <piece>.',
     );
   }
   if (!b.piece) {

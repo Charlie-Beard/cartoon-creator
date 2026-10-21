@@ -81,7 +81,8 @@ describe('unknown ids', () => {
 
 describe('tapToHelp', () => {
   it('counts turns and those that never say what to tap', () => {
-    expect(tapCalls("k.tapToHelp(a, { ask: 'x' }); k.tapToHelp(b, { nudge: 'y' }); // k.tapToHelp(c)")).toEqual({ total: 2, withoutAsk: 1 });
+    expect(tapCalls("k.tapToHelp(a, { ask: 'x' }); k.tapToHelp(b, { nudge: 'y' }); // k.tapToHelp(c)")).toEqual({ total: 2, withoutAsk: 1, drags: 0 });
+    expect(tapCalls("k.tapToHelp(a, { ask: 'x' }); k.dragToHelp(b, { to: c, ask: 'y' });")).toEqual({ total: 2, withoutAsk: 0, drags: 1 });
   });
 });
 

@@ -99,7 +99,7 @@ describe('the ledger of one cartoon', () => {
   });
 
   it('warns when the turns and the tapToHelp calls do not match', () => {
-    expect(lint(ledger(), { taps: 2 }).warnings.join('\n')).toMatch(/1 but the script has 2 tapToHelp/);
+    expect(lint(ledger(), { taps: 2 }).warnings.join('\n')).toMatch(/1 but the script has 2 turns/);
   });
 
   it('warns when the villain is a character who is not in the cast', () => {
