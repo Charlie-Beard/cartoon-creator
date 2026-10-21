@@ -4,7 +4,8 @@
  *
  *   1. Washing day. Moon-Face's room. Dame Washalot climbs up through the
  *      trapdoor: any washing? The Saucepan Man hands over his very smelly
- *      socks. Her new soap is the bubbliest in the
+ *      socks. His turn: he drags the smelly socks over to her (or the
+ *      Saucepan Man brings them himself). Her new soap is the bubbliest in the
  *      wood. Off she goes, and a moment later: a gurgle, and one bubble, then
  *      two, float up through the trapdoor.
  *   2. Bubbles! Bubbles pour up through the hatch and fill the room, and the
@@ -18,10 +19,13 @@
  *      STUCK on the last turn, his pots jammed. His big turn: he taps the
  *      Saucepan Man to push him free (or Dame Washalot sends a soapy splash
  *      down to slide him loose). Clatter-bang, flump: down he comes.
- *   4. Splash! Mr Watzisname has slept through the lot. Dame Washalot tips out
- *      the last of the water, SPLASH, all over him. He wakes: is it raining?
+ *   4. Splash! Mr Watzisname has slept through the lot. His turn: he taps
+ *      Dame Washalot's tub to tip out the last of the water (or she does it),
+ *      SPLASH, all over him. He wakes: is it raining?
  *      Bath time, lovely… and he's asleep again. Clean socks float down for
- *      the Saucepan Man (they smell of roses), and one big bubble floats out to him.
+ *      the Saucepan Man: his turn, he drags the socks down to him (or they
+ *      float there by themselves). They smell of roses, and one big bubble
+ *      floats out to him.
  *
  * Nobody is in danger: bubbles are soft and silly. The one tense moment is the
  * Saucepan Man stuck on the slide, and he is cheerful about it. The stuck
@@ -82,6 +86,9 @@ export default defineCartoon({
     everything: { who: 'moonface', text: 'It’s Dame Washalot. She lives just below, and she washes everything!' },
     washingDay: { who: 'washalot', text: 'Washing day, my dears! Any washing for me?' },
     socks: { who: 'saucepan', text: 'Yes, please! Wash my socks. They’re VERY smelly.' },
+    askSocks: { who: 'washalot', text: 'Can you drag his socks over to me, {name}?' },
+    nudgeSocks: { who: 'washalot', text: 'Drag the socks to me. Hold your nose!' },
+    handOver: { who: 'saucepan', text: 'Never mind, I’ll bring them over myself. Pooh!' },
     bigWash: { who: 'washalot', text: 'Phew! These socks need a REALLY big wash.' },
     newSoap: { who: 'washalot', text: 'Pooh! I’ll use my new soap. It’s the bubbliest soap in the wood!' },
     tootle: { who: 'washalot', text: 'Back to my tub! Toodle-oo!' },
@@ -114,11 +121,17 @@ export default defineCartoon({
     thanksWash: { who: 'moonface', text: 'Thank you, Dame Washalot! He’s free!' },
     // 4. Splash!
     sleptThrough: { who: 'moonface', text: 'Look! Mr Watzisname slept through the whole thing.' },
+    askTub: { who: 'washalot', text: 'Shall we wake him? Tap my tub to tip it out!' },
+    nudgeTub: { who: 'washalot', text: 'Tap the tub!' },
+    tipMyself: { who: 'washalot', text: 'Oh, I’ll tip it out myself!' },
     lookOut: { who: 'washalot', text: 'Here comes the last of the water! Look out below!' },
     raining: { who: 'watzisname', text: 'Wha…? Is it raining?' },
     bathTime: { who: 'watzisname', text: 'Oh. Bath time. Lovely…' },
     thunderstorm: { who: 'washalot', text: 'Well! He’d sleep through a thunderstorm!' },
     cleanSocks: { who: 'washalot', text: 'And here are your socks, all clean!' },
+    askBack: { who: 'washalot', text: 'Drag them down to the Saucepan Man!' },
+    nudgeBack: { who: 'washalot', text: 'Drag the socks to the Saucepan Man.' },
+    floatDown: { who: 'washalot', text: 'There, I’ll float them down to him.' },
     roses: { who: 'saucepan', text: 'My socks! They smell of roses now! Thank you!' },
     smell: { who: 'moonface', text: 'Mmm! Roses and soap. Much better!' },
     bubbleFor: { who: 'moonface', text: 'And one last bubble, just for {name}!' },
@@ -131,10 +144,12 @@ export default defineCartoon({
       set(k) {
         k.backdrop('moon-room');
         k.music('cosy');
-        cast.mf = k.character('moonface', { x: 470, y: 380, w: 250 });
-        cast.pan = k.character('saucepan', { x: 730, y: 400, w: 230, flip: true });
+        cast.mf = k.character('moonface', { x: 830, y: 380, w: 250 });
+        cast.pan = k.character('saucepan', { x: 560, y: 400, w: 230, flip: true });
         cast.wash = k.character('washalot', { x: 130, y: 360, w: 240, z: 11 });
         trapdoorArrival.set(k, cast.wash);
+        cast.socks = k.prop('peg', { x: 690, y: 520, w: 130, z: 13 });
+        k.set(cast.socks, { opacity: 0 });
       },
       async play(k) {
         const { mf, pan, wash } = cast;
@@ -150,6 +165,10 @@ export default defineCartoon({
         clank(3, 0.1);
         await k.hop(pan, 24);
         await k.all(k.say('socks', pan), rattle(k, pan));
+        // His turn: the smelly socks come over to her.
+        await k.appear(cast.socks, 0.4);
+        await k.dragToHelp(cast.socks, { to: wash, ask: 'askSocks', nudge: 'nudgeSocks', helped: 'handOver', by: wash, helper: pan });
+        void k.vanish(cast.socks, 0.3);
         sniff();
         await k.all(k.shake(wash, 5, 2), k.shake(mf, 4, 2));
         await k.say('bigWash', wash);
@@ -300,7 +319,7 @@ export default defineCartoon({
         cast.pan = k.character('saucepan', { x: 250, y: 484, w: 190 });
         cast.watz = k.character('watzisname', { x: 900, y: 490, w: 200, flip: true });
         cast.wash = k.character('washalot', { x: 700, y: 380, w: 170, z: 12 });
-        cast.socks = k.prop('peg', { x: 760, y: 420, w: 110, z: 13 });
+        cast.socks = k.prop('peg', { x: 640, y: 520, w: 130, z: 13 });
         k.set(cast.socks, { opacity: 0 });
       },
       async play(k) {
@@ -311,6 +330,8 @@ export default defineCartoon({
         snore();
         await k.wait(1000);
 
+        // His turn: tip out the last of the water.
+        await k.tapToHelp(wash, { ask: 'askTub', nudge: 'nudgeTub', helped: 'tipMyself', by: wash, size: 170 });
         // The last of the water: SPLASH.
         await k.all(k.say('lookOut', wash), k.wait(300).then(() => k.hop(wash, 16)));
         const s = k.add(splash(), { x: 930, y: 300, w: 140, z: 20 });
@@ -334,13 +355,14 @@ export default defineCartoon({
         // Clean socks float down for the Saucepan Man.
         await k.all(k.say('cleanSocks', wash), k.wait(400).then(() => k.hop(wash, 14)));
         await k.appear(socks, 0.4);
-        await k.to(socks, 1.8, { x: -420, y: 120, ease: 'sine.inOut' });
+        await k.dragToHelp(socks, { to: pan, ask: 'askBack', nudge: 'nudgeBack', helped: 'floatDown', by: wash });
+        await k.vanish(socks, 0.3);
         sniff();
         await k.wait(400);
         clank(3, 0.1);
         await k.say('roses', pan);
         giggle();
-        await k.all(k.hop(pan, 30), k.vanish(socks, 0.4));
+        await k.hop(pan, 30);
         sniff();
         await k.say('smell', mf);
 
