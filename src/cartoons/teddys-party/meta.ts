@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'a broken puppet, and no show for the party',
     places: ['bear-garden'],
     cast: ['teddy', 'mummy-bear', 'grandpa-bear', 'aunt-bertha', 'barney', 'marmaduke'],
-    turns: ['open the show’s starry curtains', 'blow out Aunt Bertha’s birthday candles'],
+    turns: ['tap the balloons to bounce them', 'drag Mr Punch back into his case', 'open the show’s starry curtains', 'drag Teddy’s parcel to Aunt Bertha', 'blow out Aunt Bertha’s birthday candles'],
     jokes: ['Who’s Marmaduke?', 'Marmaduke’s squeaky voice is really Grandpa’s'],
     ending: 'birthday cake and a laugh',
   },
