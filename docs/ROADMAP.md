@@ -41,12 +41,12 @@ looked at yet. Tick one off here in the PR that makes it.
 | 25 | The Three Bears | ✅ `three-bears` |
 | 32 | Teddy's Favourites (one page) | not yet |
 | 33 | Teddy Goes Flying | ✅ `teddy-flying` |
-| 40 | Mummy Bear (one page) | not yet |
-| 41 | Uncle Sailor Bill | **to make** |
-| 49 | Teddy Bear's Partytime (one page) | not yet |
+| 40 | Mummy Bear (a poem) | not yet |
+| 41 | Uncle Sailor Bill | ✅ `uncle-sailor-bill` |
+| 49 | Teddy Bear's Partytime (a matching puzzle) | not yet |
 | 50 | Round and Round the Garden (one page) | not yet |
 | 51 | Teddy Bear's Surprise | ✅ `teddy-surprise` |
-| 58 | My Teddy Bear (one page) | not yet |
+| 58 | My Teddy Bear (a poem) | not yet |
 | 59 | The Doll's House | **to make** |
 
 ## Later, when wanted
