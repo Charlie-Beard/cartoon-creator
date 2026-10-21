@@ -5,17 +5,19 @@
  *
  *   1. Breakfast. The Dursleys of Number Four, Privet Drive, are perfectly
  *      normal, thank you very much: "Nothing strange EVER happens on Privet
- *      Drive!" Baby Dudley shouts "More!" and flings his porridge (splat, on
+ *      Drive!" Dudley is hungry: his turn, he drags the porridge pot over
+ *      to him. Baby Dudley shouts "More!" and flings his porridge (splat, on
  *      the wall); Mr Dursley laughs: that's my boy. An owl flies past the
  *      window behind him. Did you see it? He didn't. Off to work.
  *   2. The cat with the map. At his gate, a tabby cat sits very stiffly on the
- *      wall with a map. His first turn: he taps the map, it opens, and the cat
+ *      wall with a map. Another turn: he taps the map, it opens, and the cat
  *      reads it. A cat reading a map? Cats can't read! Then, crack, a jolly
  *      wizard in a cloak pops up and hugs him: what a happy day, even a
  *      Muggle should be dancing! Crack, gone. A WHAT? He goes purple.
  *   3. Owls at Grunnings. At his desk, among his lovely normal drills, owls
  *      fly past the window behind him: one, two, three. He turns just in
- *      time to see the last one. The radio says owls are flying everywhere,
+ *      time to see the last one. His turn: he taps the radio to switch it
+ *      on. The radio says owls are flying everywhere,
  *      and there will be shooting stars tonight. Nonsense! Home, and straight
  *      to bed. But the strangest bit was still to come.
  *   4. Night on Privet Drive. His bedroom light goes out; he snores. The cat
@@ -27,7 +29,8 @@
  *      deep rumble in the sky.
  *   5. A visitor from the sky. A big light comes down out of the dark… it's
  *      only Hagrid, on a flying motorbike. Here he is, fast asleep: baby
- *      Harry, set down on the doorstep with a letter for his aunt and uncle.
+ *      Harry, whom he drags down onto the doorstep (his last turn, a drag),
+ *      with a letter for his aunt and uncle.
  *      One day every child in our world will know his name. Hagrid sniffs.
  *      "Good luck, Harry." Click: the lamps come back on. Upstairs, Mr
  *      Dursley snores on. He has no idea. Goodnight, Harry.
@@ -109,6 +112,18 @@ const flyingOwl = cached(() =>
   ]),
 );
 
+/** The porridge pot, 140 × 110: a round grey pot with a lid, a handle and a wisp of steam. */
+const porridgePot = cached(() =>
+  svg({ w: 140, h: 110, name: 'strange-day-pot', label: 'A pot of porridge' }, [
+    piece(ellipse(70, 62, 52, 40), C.greyDark),
+    piece(rect(24, 30, 92, 14, 6), C.grey, { edge: 'cut' }),
+    piece(circle(70, 24, 8), C.gold, { edge: 'cut' }),
+    ink([[18, 56], [4, 56], [4, 72], [20, 72]], { width: 5, color: C.greyDark }),
+    ink([[118, 56], [136, 56], [136, 72], [120, 72]], { width: 5, color: C.greyDark }),
+    ink([[70, 12], [64, 4]], { width: 2, color: C.greyDark }),
+  ]),
+);
+
 /** Mr Dursley's radio, 150 × 110: a brown box with a round speaker and a dial. */
 const radio = cached(() =>
   svg({ w: 150, h: 110, name: 'strange-day-radio', label: 'A radio' }, [
@@ -145,7 +160,7 @@ function newsChime(): void {
 // ------------------------------------------------------------------ cast
 
 type Actor =
-  | 'vernon' | 'petunia' | 'dudley' | 'cat' | 'map' | 'paper' | 'jolly' | 'radio'
+  | 'vernon' | 'petunia' | 'dudley' | 'pot' | 'cat' | 'map' | 'paper' | 'jolly' | 'radio'
   | 'dumbledore' | 'mcgonagall' | 'hagrid' | 'bike' | 'baby' | 'putOuter' | 'window';
 const cast = {} as Record<Actor, HTMLElement>;
 
@@ -221,7 +236,10 @@ export default defineCartoon({
     // 1. Breakfast
     normal: { who: 'narrator', text: 'Mr and Mrs Dursley, of Number Four, Privet Drive, were perfectly normal. Thank you very much.' },
     nothingStrange: { who: 'vernon', text: 'And nothing strange EVER happens on Privet Drive. Not ever!' },
-    quiteRight: { who: 'petunia', text: 'Quite right, Vernon. We are the most normal family in the street.' },
+    askPot: { who: 'petunia', text: 'Dudley is hungry. Can you drag the porridge pot over to him, {name}?' },
+    nudgePot: { who: 'petunia', text: 'Drag the pot over to Dudley.' },
+    helpedPot: { who: 'petunia', text: 'Never mind, I’ll bring it to him myself.' },
+    thanksPot: { who: 'petunia', text: 'Thank you, {name}! Here you are, Dudley.' },
     more: { who: 'dudley', text: 'More! MORE!' },
     myBoy: { who: 'vernon', text: 'Ha ha! That’s my boy!' },
     sawOwl: { who: 'narrator', text: 'Did you see that, {name}? An owl! In the morning!' },
@@ -236,6 +254,9 @@ export default defineCartoon({
     happyDay: { who: 'slughorn', text: 'Oh, what a happy day! Even a Muggle like you should be dancing!' },
     aWhat: { who: 'vernon', text: 'A what? A MUGGLE?' },
     // 3. Owls at Grunnings
+    askRadio: { who: 'narrator', text: 'Mr Dursley’s radio is on the desk. Tap it to switch it on.' },
+    nudgeRadio: { who: 'narrator', text: 'Just tap the radio!' },
+    helpedRadio: { who: 'vernon', text: 'I’ll switch the radio on myself.' },
     drills: { who: 'vernon', text: 'Ah, my office. Lovely drills. Normal drills. No cats. No cloaks.' },
     behindHim: { who: 'narrator', text: 'But behind him, past the window, flew an owl. And another. And another!' },
     owls: { who: 'vernon', text: 'OWLS? In the daytime?' },
@@ -252,6 +273,10 @@ export default defineCartoon({
     professor: { who: 'dumbledore', text: 'Good evening, Professor McGonagall.' },
     howKnow: { who: 'mcgonagall', text: 'How did you know it was me?' },
     stiffly: { who: 'dumbledore', text: 'My dear Professor, I’ve never seen a cat sit so stiffly.' },
+    askHarry: { who: 'hagrid', text: 'Can you drag little Harry to the doorstep, {name}? Nice and gently.' },
+    nudgeHarry: { who: 'hagrid', text: 'Drag Harry down to the step.' },
+    helpedHarry: { who: 'dumbledore', text: 'Allow me. I shall lay him down myself.' },
+    thanksHarry: { who: 'hagrid', text: 'Lovely and gentle. Thank you.' },
     sherbet: { who: 'dumbledore', text: 'Sherbet lemon?' },
     noThanks: { who: 'mcgonagall', text: 'No, thank you. Where is Hagrid, with the baby? He’s late.' },
     listen: { who: 'mcgonagall', text: 'Listen! What is that noise?' },
@@ -261,7 +286,6 @@ export default defineCartoon({
     fastAsleep: { who: 'hagrid', text: 'Here’s little Harry. Fast asleep, bless him.' },
     letter: { who: 'dumbledore', text: 'There. And a letter, to tell his aunt and uncle.' },
     knowName: { who: 'mcgonagall', text: 'One day, every child in our world will know his name.' },
-    missHim: { who: 'hagrid', text: 'Blimey. I’m gonna miss him.' },
     goodLuck: { who: 'dumbledore', text: 'Good luck, Harry.' },
     end: { who: 'narrator', text: 'Upstairs, Mr Dursley snored. He had no idea. Goodnight, Harry. Goodnight, {name}.' },
   },
@@ -284,7 +308,14 @@ export default defineCartoon({
         await k.wait(400);
         await k.say('normal');
         await k.all(k.say('nothingStrange', vernon), k.wait(300).then(() => k.blink(vernon)));
-        await k.say('quiteRight', petunia);
+
+        // His turn: Dudley is hungry; he drags the porridge pot over to him.
+        const pot = k.add(porridgePot(), { x: 780, y: 540, w: 140, z: 12 });
+        k.sfx.rustle();
+        await k.appear(pot, 0.4);
+        const fed = await k.dragToHelp(pot, { to: dudley, ask: 'askPot', nudge: 'nudgePot', helped: 'helpedPot', by: petunia });
+        await k.vanish(pot, 0.3);
+        if (fed === 'dragged') await k.say('thanksPot', petunia);
 
         // Dudley wants more: the spoon flings the porridge, splat, onto the wall.
         await k.all(k.say('more', dudley), k.shake(dudley, 6, 3));
@@ -402,8 +433,10 @@ export default defineCartoon({
         await k.say('owls', vernon);
         await last;
 
-        // The radio.
+        // His turn: tap the radio to switch it on.
         k.face(vernon, false);
+        await k.tapToHelp(set, { ask: 'askRadio', nudge: 'nudgeRadio', helped: 'helpedRadio', helper: vernon, size: 150 });
+        k.fx.pop();
         newsChime();
         await k.wait(800);
         await k.say('news', set);
@@ -515,12 +548,11 @@ export default defineCartoon({
         await k.appear(baby, 0.5);
         await k.say('fastAsleep', hagrid);
 
-        // Dumbledore lays him on the doorstep, with a letter.
-        // Dumbledore steps over, and the bundle floats gently down onto the step.
-        await k.to(dumbledore, 0.6, { x: 90 });
+        // He lays little Harry on the doorstep, with a letter.
         k.fx.twinkle();
-        await k.to(baby, 1.4, { x: STEP.x - BABY.x, y: STEP.y - BABY.y, ease: 'sine.inOut' });
-        void k.to(dumbledore, 0.6, { x: 0 });
+        // His turn: he drags little Harry down onto the step (the bundle's middle is 75 px in and 55 down).
+        const laid = await k.dragToHelp(baby, { to: [STEP.x + 75, STEP.y + 55], ask: 'askHarry', nudge: 'nudgeHarry', helped: 'helpedHarry', by: dumbledore, dropSize: 200 });
+        if (laid === 'dragged') await k.say('thanksHarry', hagrid);
         k.sfx.page();
         await k.to(k.part(baby, 'letter'), 0.5, { opacity: 1 });
         k.sparkle(STEP.x + 80, STEP.y + 50, 8, 90);
@@ -528,7 +560,6 @@ export default defineCartoon({
         await k.say('knowName', mcgonagall);
         sniff();
         await k.shake(hagrid, 3, 2);
-        await k.say('missHim', hagrid);
         await k.say('goodLuck', dumbledore);
 
         // Click: the lamps come back on. Everyone slips away, and he sleeps on.
