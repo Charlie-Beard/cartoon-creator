@@ -29,8 +29,8 @@
  *      common-room fire: even Peeves is scared of the Baron! Thank you for
  *      ringing the bell (Harry thanks him only if he rang it himself).
  *      Goodnight, Trevor. Nick says goodnight and floats off through the
- *      wall. His fifth turn, a drag: the moon up to the window, so the
- *      castle can sleep. And at the window, one last, very small raspberry.
+ *      wall. His fifth turn, a drag: the teddy over to Neville, for
+ *      bed. And at the window, one last, very small raspberry.
  *
  * The scary beat is the Baron rising (sound first, slowly, one push-in),
  * and he turns out to be on the children's side. Peeves is naughty, never
@@ -125,7 +125,7 @@ function chains(): void {
 
 // ------------------------------------------------------------------ cast
 
-type Actor = 'moon' | 'nick' | 'harry' | 'ron' | 'neville' | 'peeves' | 'baron' | 'sticks' | 'toad' | 'bell' | 'cold';
+type Actor = 'teddy' | 'nick' | 'harry' | 'ron' | 'neville' | 'peeves' | 'baron' | 'sticks' | 'toad' | 'bell' | 'cold';
 const cast = {} as Record<Actor, HTMLElement>;
 /** Whether he rang the bell himself, so Harry thanks him only if so (a scene started on its own never saw it: no thanks). */
 let ranBell = false;
@@ -218,10 +218,10 @@ export default defineCartoon({
     goodBell: { who: 'harry', text: 'It’s a good thing we rang that bell.' },
     nightTrevor: { who: 'neville', text: 'Goodnight, Trevor.' },
     nightBoys: { who: 'nick', text: 'Goodnight, dear boys. Sleep tight!' },
-    askMoon: { who: 'harry', text: 'It’s time for sleep. Can you drag the moon up to the window, {name}?' },
-    nudgeMoon: { who: 'harry', text: 'Drag the moon to the window.' },
-    helpedMoon: { who: 'ron', text: 'I’ll put the moon up myself. Night night!' },
-    moonUp: { who: 'ron', text: 'There. Now the whole castle can sleep.' },
+    askTeddy: { who: 'harry', text: 'Neville can’t sleep without a cuddle. Can you drag the teddy to him, {name}?' },
+    nudgeTeddy: { who: 'harry', text: 'Drag the teddy over to Neville.' },
+    helpedTeddy: { who: 'ron', text: 'I’ll take it over myself.' },
+    cuddle: { who: 'neville', text: 'Thank you, {name}. Now I can sleep.' },
     end: { who: 'narrator', text: 'One last, very small raspberry. And then, at last, Hogwarts went to sleep.' },
   },
   scenes: [
@@ -412,7 +412,7 @@ export default defineCartoon({
         cast.harry = k.character('harry', { x: 40, y: 380, w: 240 });
         cast.neville = k.character('neville', { x: 260, y: 380, w: 240 });
         cast.peeves = k.character('peeves', { x: 520, y: 140, w: 230 });
-        cast.toad = k.prop('toad', { x: 590, y: 400, w: 100, z: 14 });
+        cast.toad = k.prop('toad', { x: 575, y: 395, w: 130, z: 14 });
         cast.baron = k.character('baron', { x: 860, y: 280, w: 300, flip: true });
         cast.cold = chill(k);
         k.set(cast.baron, { opacity: 0, y: 260 });
@@ -465,15 +465,14 @@ export default defineCartoon({
           k.light(560, 470, 220, { color: '#ffb060', strength: 0.4, flicker: true, z: 5 });
           // Ron isn't flipped: his jumper's R would read backwards.
           k.prop('flame', { x: 545, y: 455, w: 110, z: 4 });
-          cast.ron = k.character('ron', { x: 230, y: 400, w: 240 });
-          cast.harry = k.character('harry', { x: 690, y: 400, w: 240, flip: true });
-          cast.neville = k.character('neville', { x: 900, y: 390, w: 240, flip: true });
-          cast.toad = k.prop('toad', { x: 900, y: 580, w: 90, z: 14 });
+          cast.ron = k.character('ron', { x: 150, y: 400, w: 240 });
+          cast.neville = k.character('neville', { x: 690, y: 390, w: 240, flip: true });
+          cast.harry = k.character('harry', { x: 900, y: 400, w: 240, flip: true });
+          cast.toad = k.prop('toad', { x: 830, y: 590, w: 90, z: 14 });
           cast.nick = k.character('nick', { x: 420, y: 130, w: 200 });
           cast.peeves = k.character('peeves', { x: 260, y: 110, w: 170 });
           k.set(cast.peeves, { opacity: 0 });
-          cast.moon = k.prop('crescentMoon', { x: 490, y: 50, w: 140, z: 14 });
-          k.set(cast.moon, { opacity: 0 });
+          cast.teddy = k.prop('teddy', { x: 410, y: 545, w: 130, z: 14 });
         });
         const room = cast;
         void k.float(room.nick, 8, 2.6);
@@ -486,10 +485,9 @@ export default defineCartoon({
         k.fx.twinkle();
         await k.fade(room.nick, 0, 1);
 
-        // His fifth turn, a drag: the moon goes up to the window, and the castle can sleep.
-        await k.fade(room.moon, 1, 0.5);
-        const moonUp = await k.dragToHelp(room.moon, { to: [165, 235], ask: 'askMoon', nudge: 'nudgeMoon', helped: 'helpedMoon', by: room.harry, helper: room.ron, dropSize: 200 });
-        if (moonUp === 'dragged') await k.say('moonUp', room.ron);
+        // His fifth turn, a drag: the teddy goes to Neville, for bed.
+        const cuddled = await k.dragToHelp(room.teddy, { to: [760, 640], ask: 'askTeddy', nudge: 'nudgeTeddy', helped: 'helpedTeddy', by: room.harry, helper: room.ron, dropSize: 160 });
+        if (cuddled === 'dragged') await k.say('cuddle', room.neville);
         await k.wait(300);
 
         // At the window: one last, very small raspberry.
