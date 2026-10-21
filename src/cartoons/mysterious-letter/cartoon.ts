@@ -490,7 +490,7 @@ export default defineCartoon({
         await k.all(k.shake(hagrid, 4, 3), k.shake(harry, 3, 3));
 
         // The very first slice for the birthday owl.
-        const first = k.add(cakeSlice(), { x: 130, y: 250, w: 110, z: 17 });
+        const first = k.add(cakeSlice(), { x: 385, y: 560, w: 100, z: 17 });
         k.set(first, { opacity: 0 });
         await k.appear(first, 0.3);
         // His turn: drag the first slice to Hedwig.
