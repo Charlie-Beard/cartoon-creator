@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'snape, on patrol in the dark corridor (a near miss)',
     places: ['astronomy-tower', 'hagrids-hut', 'castle-corridor'],
     cast: ['hagrid', 'harry', 'hermione', 'norbert', 'snape', 'dragonKeeper', 'hedwig'],
-    turns: ['pop the teddy in the crate so Norbert settles', 'tuck the crate back under the Invisibility Cloak', 'light the lantern so the broomstick sees them'],
+    turns: ['drag Hagrid’s pie to hungry Norbert', 'pop the teddy in the crate so Norbert settles', 'tuck the crate back under the Invisibility Cloak', 'light the lantern so the broomstick sees them', 'drag Hagrid’s dropped hanky up to him'],
     jokes: ['Norbert hiccups smoke', 'Hagrid’s enormous hanky'],
     ending: 'a letter from Romania, and happy tears',
   },
