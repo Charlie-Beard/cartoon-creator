@@ -331,7 +331,10 @@ export default defineCartoon({
         await k.wait(1000);
 
         // His turn: tip out the last of the water.
-        await k.tapToHelp(wash, { ask: 'askTub', nudge: 'nudgeTub', helped: 'tipMyself', by: wash, size: 170 });
+        // The ring goes on the tub in her arms, not her face: an invisible spot over it.
+        const tub = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', { x: 722, y: 495, w: 140, h: 140, z: 1 });
+        await k.tapToHelp(tub, { ask: 'askTub', nudge: 'nudgeTub', helped: 'tipMyself', by: wash, size: 150 });
+        k.remove(tub);
         // The last of the water: SPLASH.
         await k.all(k.say('lookOut', wash), k.wait(300).then(() => k.hop(wash, 16)));
         const s = k.add(splash(), { x: 930, y: 300, w: 140, z: 20 });
