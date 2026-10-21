@@ -21,14 +21,43 @@ jobs:
       # Every cartoon against the house rules (scripts/check-cartoon.ts).
       - run: npm run check
       - run: npm run build
-      - run: npx playwright install --with-deps chromium
-      # Builds the site itself (playwright.config.ts), checks the screens at both iPad sizes,
-      # and plays every cartoon through at 1180 × 820.
-      - run: npm run test:e2e
+
+  # The screens at both iPad sizes, and every cartoon played through at 1180 × 820.
+  # Playing them through is the slow part, so it is shared out over a few
+  # machines at once (each runs its share on every core: playwright.config.ts).
+  e2e:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # The check job typechecks; here the site only needs building.
+      - run: npx vite build
+      - id: pw
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+      - uses: actions/cache@v4
+        id: pw-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+      - if: steps.pw-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+      - if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+      - run: npm run test:e2e -- --shard=${{ matrix.shard }}/3
+        env:
+          PW_PREBUILT: 1
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: playwright-report
+          name: playwright-report-${{ matrix.shard }}
           path: |
             playwright-report/
             test-results/
