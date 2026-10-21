@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'a gusty wind that blows the spell away',
     places: ['birthdays', 'moon-room', 'tree'],
     cast: ['moonface', 'silky', 'saucepan', 'oomBoomBoom'],
-    turns: ['tap the drum to start the party', 'light the birthday candles', 'blow out the candles and make a wish'],
+    turns: ['tap the Saucepan Man’s hat (clang)', 'drag the drumstick to the drum to start the party', 'light the birthday candles', 'blow out the candles and make a wish', 'drag a balloon to the Saucepan Man'],
     jokes: ['Saucepan Man mishears', 'the Saucepan Man’s best hat is his saucepan'],
     ending: 'floating home by balloon, and a balloon for him',
   },
