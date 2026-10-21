@@ -122,9 +122,8 @@ export default defineCartoon({
     nudgePaint: { who: 'toymaker', text: 'Tap the doll’s house, and the brush will paint it blue.' },
     paintMyself: { who: 'toymaker', text: 'I’ll paint it myself, then. Swish, swish!' },
     thanksPaintName: { who: 'toymaker', text: 'Beautiful! Thank you, {name}!' },
-    thanksPaint: { who: 'teddy', text: 'Beautiful! What a lovely blue door!' },
+    thanksPaint: { who: 'teddy', text: 'Beautiful! What a lovely blue door! Thank you, Toymaker!' },
     windowOpen: { who: 'toymaker', text: 'I’ll leave the window open tonight, so the paint can dry.' },
-    seeYou: { who: 'teddy', text: 'Goodbye, Toymaker! See you tomorrow!' },
     thatNight: { who: 'narrator', text: 'But that night, it began to rain…' },
     // 2. The ugly wall
     nextDay: { who: 'narrator', text: 'Next day, Teddy went past the Children’s Hospital.' },
@@ -145,7 +144,7 @@ export default defineCartoon({
     hooks: { who: 'teddy', text: 'Toymaker, can you fix some hooks to the bottom of the house?' },
     backWall: { who: 'teddy', text: 'And take out the back wall? And make the roof a bit thicker?' },
     yesBut: { who: 'toymaker', text: 'Yes, I can do that. But…' },
-    meetThere: { who: 'teddy', text: 'Then bring it to the hospital wall. I’ll meet you there!' },
+    meetThere: { who: 'teddy', text: 'Don’t worry! Just bring it to the hospital wall. I’ll meet you there!' },
     secret: { who: 'teddy', text: 'Shh, {name}! It’s a surprise. Now I need some berries!' },
     // 4. Nuts and berries
     whatFor: { who: 'daddy-bear', text: 'Nuts and berries, Teddy? Whatever are they for?' },
@@ -164,13 +163,14 @@ export default defineCartoon({
     forBirds: { who: 'teddy', text: 'It’s not for dolls. It’s for the birds!' },
     putOut: { who: 'teddy', text: 'Berries and nuts, and pips, and bread.' },
     askSaucer: { who: 'teddy', text: 'And water to drink. Tap the saucer, {name}, to fill it up!' },
-    nudgeSaucer: { who: 'teddy', text: 'Tap the little saucer on the shelf.' },
+    nudgeSaucer: { who: 'teddy', text: 'Tap the saucer on the ledge.' },
     pourIt: { who: 'toymaker', text: 'I’ll pour the water in. There!' },
     thanksSaucerName: { who: 'teddy', text: 'Thank you, {name}! Look, here come the birds!' },
     thanksSaucer: { who: 'teddy', text: 'Thank you, Toymaker! Look, here come the birds!' },
     inAndOut: { who: 'daisy', text: 'Birds! Flying in and out of their new home!' },
     whatASight: { who: 'tom', text: 'What a sight to see from our balcony! Thank you, Toymaker!' },
     thankYouTeddy: { who: 'toymaker', text: 'And thank you, Teddy! It was all your idea.' },
+    newDollsHouse: { who: 'toymaker', text: 'And I’ll make you a new doll’s house, too!' },
     end: { who: 'narrator', text: 'And every day after that, the children watched the birds from their balcony.' },
   },
   scenes: [
@@ -218,7 +218,7 @@ export default defineCartoon({
         await k.say(how === 'tapped' ? 'thanksPaintName' : 'thanksPaint', how === 'tapped' ? toymaker : teddy);
         await k.say('windowOpen', toymaker);
         k.face(teddy, true);
-        await k.all(k.say('seeYou', teddy), wave(k, teddy, 2));
+        await wave(k, teddy, 2);
 
         // Off he goes, and the Toymaker too. Night falls, and the rain comes.
         k.fx.patter(5, 0.18);
@@ -390,8 +390,9 @@ export default defineCartoon({
         k.music('cosy');
         balcony(k);
         cast.house = k.prop('bird-house', { ...BIRDHOUSE, z: 6 });
-        cast.food = k.prop('bird-food', { x: BIRDHOUSE.x + 40, y: LEDGE_Y - 48, w: 120, z: 7 });
-        cast.saucer = k.prop('saucer', { x: BIRDHOUSE.x + 170, y: LEDGE_Y - 39, w: 90, z: 7 });
+        cast.food = k.prop('bird-food', { x: BIRDHOUSE.x + 34, y: LEDGE_Y - 38, w: 95, z: 7 });
+        // The saucer on its own at the ledge's right end, big enough to find.
+        cast.saucer = k.prop('saucer', { x: BIRDHOUSE.x + 140, y: LEDGE_Y - 51, w: 120, z: 7 });
         k.set([cast.food, cast.saucer], { opacity: 0 });
         cast.toymaker = k.character('toymaker', { x: -60, y: 297, w: 300, z: 10 });
         cast.teddy = k.character('teddy', { x: 480, y: 414, w: 210, flip: true, z: 12 });
@@ -421,24 +422,31 @@ export default defineCartoon({
         const how = await k.tapToHelp(saucer, { ask: 'askSaucer', nudge: 'nudgeSaucer', helped: 'pourIt', by: teddy, helper: toymaker, size: 130 });
         pour();
         await k.fade(k.part(saucer, 'water'), 1, 0.8);
-        k.sparkle(BIRDHOUSE.x + 215, LEDGE_Y - 20, 8, 80);
+        k.sparkle(BIRDHOUSE.x + 200, LEDGE_Y - 20, 8, 80);
         await k.say(how === 'tapped' ? 'thanksSaucerName' : 'thanksSaucer', teddy);
 
         // In fly the birds: to the ledge, in at the windows, out again.
         k.music('triumph');
         const perches: [number, number][] = [
           // feet on the ledge either side of the food, then on the twig perches under the middle holes
-          [BIRDHOUSE.x + 55, LEDGE_Y],
-          [BIRDHOUSE.x + 238, LEDGE_Y],
+          [BIRDHOUSE.x + 40, LEDGE_Y],
           [BIRDHOUSE.x + 90, BIRDHOUSE.y + 205],
           [BIRDHOUSE.x + 190, BIRDHOUSE.y + 205],
+          [BIRDHOUSE.x + 140, BIRDHOUSE.y + 262],
         ];
         for (let i = 0; i < birds.length; i++) {
           cheep();
           void fly(k, birds[i], perches[i][0], perches[i][1], 1.6);
           await k.wait(450);
         }
-        await k.wait(1300);
+        await k.wait(800);
+        // One hops in at a top window… and pops out again.
+        await fly(k, birds[2], BIRDHOUSE.x + 192, BIRDHOUSE.y + 142, 0.7);
+        await k.fade(birds[2], 0, 0.3);
+        await k.wait(600);
+        cheep();
+        await k.fade(birds[2], 1, 0.3);
+        await fly(k, birds[2], BIRDHOUSE.x + 190, BIRDHOUSE.y + 205, 0.7);
         await k.say('inAndOut', daisy);
         cheep();
         // One flies over to say hello on the balcony rail.
@@ -449,6 +457,7 @@ export default defineCartoon({
         cheep();
         void fly(k, birds[3], perches[3][0], perches[3][1], 1.6);
         await k.say('thankYouTeddy', toymaker);
+        await k.all(k.say('newDollsHouse', toymaker), k.wait(300).then(() => k.hop(cast.tom, 20)));
         void house;
         k.sparkle(590, 300, 18, 320);
         k.fx.twinkle();
