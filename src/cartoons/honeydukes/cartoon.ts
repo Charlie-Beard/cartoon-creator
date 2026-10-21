@@ -14,19 +14,21 @@
  *   2. The one-eyed witch. A quiet corridor and a funny old statue. The map
  *      says: tap her hump and say "Dissendium". His second turn: he taps
  *      the hump, and it swings open. A slide! Wheeee!
- *   3. The secret tunnel. Bump. Dark. "Lumos!" On and on under the ground.
- *      Drip. A squeak. A huge shadow with big ears creeps up the wall… and
- *      it's only a tiny mouse, close to the light. Then stairs, and a
- *      trapdoor, and a smell of chocolate.
+ *   3. The secret tunnel. Bump. Dark. His third turn: he taps the tip of
+ *      Harry's wand, and "Lumos!" lights the way. On and on under the
+ *      ground. Drip. A squeak. A huge shadow with big ears creeps up the
+ *      wall… and it's only a tiny mouse, close to the light. Then stairs,
+ *      and a trapdoor, and a smell of chocolate.
  *   4. Honeydukes. Up through the trapdoor into the shop. "Harry?!" Ron
- *      shows off a Pepper Imp (smoke out of his mouth), Hermione the Ice
- *      Mice (chattering teeth). His third turn: he gives Ron a Fizzing
- *      Whizbee, and Ron floats up to the ceiling, till Hermione pulls him
+ *      wants to show off a Pepper Imp: his fourth turn, he drags it over
+ *      to Ron, and smoke puffs out of Ron's mouth. Hermione does the Ice
+ *      Mice (chattering teeth). His fifth turn: he drags a Fizzing Whizbee
+ *      to Ron, and Ron floats up to the ceiling, till Hermione pulls him
  *      down by his scarf. Back, before anybody notices!
  *   5. Mischief managed. By the common-room fire, sweets for everyone.
  *      Harry's Pepper Imp makes him puff like a little dragon. Fred and
- *      George: did you like our present? "Mischief managed", and the map
- *      goes blank again. A Chocolate Frog for {name}… and it hops away.
+ *      George: did you like our present? His sixth turn: he taps the map,
+ *      "Mischief managed", and it goes blank again. A Chocolate Frog for {name}… and it hops away.
  *
  * The scary beat is the tunnel: dark, drips, and a big shadow that turns
  * out to be a little mouse. In the book Harry also hides from the
@@ -161,6 +163,9 @@ export default defineCartoon({
     wheee: { who: 'harry', text: 'Here goes… Wheeeee!' },
     // 3. The secret tunnel
     bump: { who: 'harry', text: 'Oof! I’m at the bottom. It’s ever so dark.' },
+    askLumos: { who: 'harry', text: 'Can you tap the end of my wand to light it?' },
+    nudgeLumos: { who: 'harry', text: 'Tap my wand!' },
+    helpedLumos: { who: 'harry', text: 'I’ll light it myself.' },
     lumos: { who: 'harry', text: 'Lumos!' },
     onAndOn: { who: 'narrator', text: 'The tunnel went on and on, twisting and turning, under the ground.' },
     whatNoise: { who: 'harry', text: 'What was that noise?' },
@@ -172,12 +177,15 @@ export default defineCartoon({
     howGetHere: { who: 'ron', text: 'Harry?! How did you get here?' },
     tunnel: { who: 'harry', text: 'A secret tunnel! Fred and George’s map showed me.' },
     notSupposed: { who: 'hermione', text: 'Harry! You’re not supposed to be here! Well… just this once. Look at all these sweets!' },
-    pepperImps: { who: 'ron', text: 'Pepper Imps! They make smoke come out of your mouth. Watch!' },
+    pepperImps: { who: 'ron', text: 'Pepper Imps! They make smoke come out of your mouth!' },
+    askImp: { who: 'ron', text: 'Can you drag one over to me?' },
+    nudgeImp: { who: 'ron', text: 'Drag the little Imp to me!' },
+    helpedImp: { who: 'ron', text: 'Never mind, I’ll grab one myself.' },
     iceMice: { who: 'hermione', text: 'And Ice Mice! They make your teeth chatter and squeak.' },
     pinkOnes: { who: 'harry', text: 'What are these big pink ones?' },
     whizbees: { who: 'hermione', text: 'Fizzing Whizbees. They make you float off the ground!' },
-    askWhizbee: { who: 'ron', text: '{name}, give me a Whizbee! Tap it!' },
-    nudgeWhizbee: { who: 'ron', text: 'Tap the pink fizzy sweet!' },
+    askWhizbee: { who: 'ron', text: '{name}, can you drag the pink Whizbee to me?' },
+    nudgeWhizbee: { who: 'ron', text: 'Drag the pink fizzy sweet to me!' },
     helpedWhizbee: { who: 'harry', text: 'Here you are, Ron!' },
     floating: { who: 'ron', text: 'Whoaaa! I’m floating! Look at me!' },
     comeDown: { who: 'hermione', text: 'Ron! Come down this minute!' },
@@ -188,7 +196,9 @@ export default defineCartoon({
     dragon: { who: 'ron', text: 'You look like a little dragon!' },
     likePresent: { who: 'fred', text: 'So, Harry. Did you like our present?' },
     bestPresent: { who: 'harry', text: 'It was the best present ever. Thank you!' },
-    mischief: { who: 'george', text: 'Now tap it, and say “Mischief managed”. Then nobody else can read it.' },
+    askMischief: { who: 'george', text: 'Now tap the map, and say “Mischief managed”. Then nobody else can read it.' },
+    nudgeMischief: { who: 'fred', text: 'Tap the map!' },
+    helpedMischief: { who: 'harry', text: 'I’ll tap it myself.' },
     managed: { who: 'harry', text: 'Mischief managed!' },
     frogForYou: { who: 'harry', text: 'What a day! Would you like a Chocolate Frog, {name}?' },
     end: { who: 'narrator', text: 'But the Chocolate Frog hopped away! Goodnight, {name}. Mischief managed.' },
@@ -327,6 +337,15 @@ export default defineCartoon({
         await k.to(harry, 0.6, { y: 0, ease: 'bounce.out' });
         k.fx.thud();
         await k.say('bump', harry);
+
+        // His turn: tap the end of Harry's wand to light it. The ring goes on the wand tip
+        // (an invisible spot over it), just right of his hand.
+        const hb = k.box(harry);
+        const wandSpot = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', {
+          x: hb.x + hb.w * 0.83 - 70, y: hb.y + hb.h * 0.74 - 70, w: 140, h: 140, z: 20,
+        });
+        await k.tapToHelp(wandSpot, { ask: 'askLumos', nudge: 'nudgeLumos', helped: 'helpedLumos', by: harry, size: 130 });
+        k.remove(wandSpot);
         await castSpell(k, harry);
         await k.say('lumos', harry);
         k.fx.twinkle();
@@ -375,9 +394,9 @@ export default defineCartoon({
         // Ron's jumper has an R, so he faces right, towards Harry coming up on the right.
         cast.hermione = k.character('hermione', { x: 90, y: 396, w: 230 });
         cast.ron = k.character('ron', { x: 340, y: 396, w: 230 });
-        cast.imp = k.prop('pepperImp', { x: 620, y: 560, w: 80, z: 16 });
+        cast.imp = k.prop('pepperImp', { x: 720, y: 350, w: 110, z: 16 });
         cast.iceMouse = k.prop('iceMouse', { x: 600, y: 590, w: 100, z: 16 });
-        cast.whizbee = k.prop('fizzingWhizbee', { x: 610, y: 540, w: 130, z: 16 });
+        cast.whizbee = k.prop('fizzingWhizbee', { x: 640, y: 350, w: 130, z: 16 });
         cast.trapdoor = k.prop('trapdoor', { x: 860, y: 600, w: 220, z: 15 });
         cast.harry = k.character('harry', { x: 860, y: 380, w: 230, z: 14, flip: true });
         k.set(cast.harry, { opacity: 0, y: 160 });
@@ -399,6 +418,8 @@ export default defineCartoon({
         // A Pepper Imp: smoke!
         await k.fade(imp, 1, 0.3);
         await k.say('pepperImps', ron);
+        // His turn: drag the Imp to Ron.
+        await k.dragToHelp(imp, { to: ron, ask: 'askImp', nudge: 'nudgeImp', helped: 'helpedImp', by: ron, dropSize: 200 });
         await k.vanish(imp, 0.3);
         await pepperPuff(k, ron);
         laugh();
@@ -409,14 +430,13 @@ export default defineCartoon({
         chatter();
         await k.shake(hermione, 3, 4);
 
-        // His third turn: a Fizzing Whizbee for Ron.
+        // His fifth turn: drag a Fizzing Whizbee to Ron.
         await k.fade(whizbee, 1, 0.3);
         await k.say('pinkOnes', harry);
         await k.say('whizbees', hermione);
-        await k.tapToHelp(whizbee, { ask: 'askWhizbee', nudge: 'nudgeWhizbee', helped: 'helpedWhizbee', by: ron, helper: harry, size: 150 });
+        await k.dragToHelp(whizbee, { to: ron, ask: 'askWhizbee', nudge: 'nudgeWhizbee', helped: 'helpedWhizbee', by: ron, helper: harry, dropSize: 200 });
         k.fx.whizz();
-        await k.to(whizbee, 0.5, { x: -170, y: -60, scale: 0.4, ease: 'power1.inOut' });
-        k.remove(whizbee);
+        await k.vanish(whizbee, 0.3);
         fizz();
         k.sparkle(455, 520, 10, 120);
         await k.to(ron, 1.6, { y: -250, ease: 'sine.inOut' });
@@ -466,7 +486,8 @@ export default defineCartoon({
         await k.all(k.enter(george, 'left', 0.7), k.wait(200).then(() => k.enter(fred, 'left', 0.7)));
         await k.say('likePresent', fred);
         await k.all(k.say('bestPresent', harry), k.hop(harry, 24));
-        await k.say('mischief', george);
+        // His last turn: tap the map to hide it again.
+        await k.tapToHelp(map, { ask: 'askMischief', nudge: 'nudgeMischief', helped: 'helpedMischief', by: george, helper: harry, size: 240 });
         await castSpell(k, harry);
         await k.say('managed', harry);
         await mapInk(k, map, false);
