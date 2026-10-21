@@ -193,7 +193,8 @@ export default defineCartoon({
         await k.all(k.to(teddy, 1.4, { x: 0, ease: 'power2.out' }), k.wait(200).then(() => k.say('callsIn')));
         await k.all(k.say('niceToSee', toymaker), k.wait(400).then(() => wave(k, toymaker, 2)));
         k.fx.twinkle();
-        await k.all(k.say('forHospital', toymaker), k.sparkle(460, 300, 10, 160) as unknown as Promise<void>);
+        k.sparkle(460, 300, 10, 160);
+        await k.say('forHospital', toymaker);
         k.pose(teddy, 'happy');
         await k.all(k.say('wow', teddy), k.hop(teddy, 30));
         k.pose(teddy, 'default');
@@ -284,7 +285,7 @@ export default defineCartoon({
         k.prop('hospital-balcony', { ...RAIL, z: 15 });
         cast.teddy = k.character('teddy', { x: 420, y: 414, w: 210, flip: true, z: 12 });
         cast.toymaker = k.character('toymaker', { x: 60, y: 297, w: 320, pose: 'upset', z: 10 });
-        cast.house = k.prop('dolls-house-warped', { x: 110, y: 450, w: 200, z: 13 });
+        cast.house = k.prop('dolls-house-warped', { x: 120, y: 478, w: 170, z: 13 });
         k.set([cast.toymaker, cast.house], { x: -500 });
       },
       async play(k) {
@@ -294,9 +295,9 @@ export default defineCartoon({
         await k.say('dreadful', toymaker);
         k.face(teddy, true);
         await k.say('rainCameIn', toymaker);
-        // He puts the poor house down: everything crooked.
+        // He puts the poor house down beside him: everything crooked.
+        await k.to(house, 0.6, { x: 190, ease: 'power2.inOut' });
         k.fx.thud();
-        await k.to(house, 0.6, { y: 30, ease: 'power2.in' });
         sadSlide();
         await k.say('swelled', toymaker);
         await k.all(k.say('noFloors', toymaker), k.shake(house, 4, 2));
@@ -358,7 +359,8 @@ export default defineCartoon({
         drops.forEach((d) => k.remove(d));
         await k.fade(k.part(basket, 'berries'), 1, 0.4);
         k.sparkle(485, 560, 10, 100);
-        await k.say(how === 'tapped' ? 'whatALot' : 'whatALot', daddy);
+        void how;
+        await k.say('whatALot', daddy);
         k.face(teddy, true);
         await k.say('homeWeGo', teddy);
 
@@ -425,10 +427,11 @@ export default defineCartoon({
         // In fly the birds: to the ledge, in at the windows, out again.
         k.music('triumph');
         const perches: [number, number][] = [
-          [BIRDHOUSE.x + 70, LEDGE_Y - 30],
-          [BIRDHOUSE.x + 120, LEDGE_Y - 34],
-          [BIRDHOUSE.x + 210, LEDGE_Y - 30],
-          [BIRDHOUSE.x + 140, BIRDHOUSE.y + 150],
+          // feet on the ledge either side of the food, then on the twig perches under the middle holes
+          [BIRDHOUSE.x + 55, LEDGE_Y],
+          [BIRDHOUSE.x + 238, LEDGE_Y],
+          [BIRDHOUSE.x + 90, BIRDHOUSE.y + 205],
+          [BIRDHOUSE.x + 190, BIRDHOUSE.y + 205],
         ];
         for (let i = 0; i < birds.length; i++) {
           cheep();
@@ -438,7 +441,8 @@ export default defineCartoon({
         await k.wait(1300);
         await k.say('inAndOut', daisy);
         cheep();
-        void fly(k, birds[3], 900, 200, 1.6);
+        // One flies over to say hello on the balcony rail.
+        void fly(k, birds[3], 1080, 336, 1.6);
         k.pose(tom, 'wave');
         await k.say('whatASight', tom);
         k.pose(tom, 'default');
