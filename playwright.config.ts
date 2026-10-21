@@ -3,6 +3,9 @@ import { defineConfig } from '@playwright/test';
 /** PW_PORT lets several worktrees run their e2e tests at once. */
 const port = Number(process.env.PW_PORT ?? 4173);
 
+/** PW_WORKERS is a count ("8") or a share of the cores ("150%"). */
+const workers = (v: string): number | string => (v.endsWith('%') ? v : Number(v));
+
 /**
  * The cartoons target one device: iPad (11th gen), landscape.
  *
@@ -13,6 +16,12 @@ const port = Number(process.env.PW_PORT ?? 4173);
 export default defineConfig({
   testDir: 'tests/e2e',
   timeout: 60_000,
+  // Every cartoon's tests are in one file (cartoons.spec.ts), and each test
+  // opens its own page, so they can share out among the workers rather than
+  // queue up behind one. The tests spend most of their time waiting on the
+  // page, so a worker per core keeps the machine busy (PW_WORKERS to change it).
+  fullyParallel: true,
+  workers: workers(process.env.PW_WORKERS ?? '100%'),
   use: {
     baseURL: `http://localhost:${port}`,
     hasTouch: true,
@@ -28,7 +37,8 @@ export default defineConfig({
     { name: 'safari-tab', use: { viewport: { width: 1180, height: 760 } }, testIgnore: /cartoons\.spec/ },
   ],
   webServer: {
-    command: `npm run build && npx vite preview --port ${port} --strictPort`,
+    // PW_PREBUILT=1 serves the dist/ already there (CI builds it once, before the tests).
+    command: `${process.env.PW_PREBUILT ? '' : 'npm run build && '}npx vite preview --port ${port} --strictPort`,
     port,
     reuseExistingServer: true,
     timeout: 120_000,
