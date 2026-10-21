@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'voldemort',
     places: ['forbidden-forest', 'common-room', 'castle-grounds', 'hagrids-hut'],
     cast: ['harry', 'hermione', 'hedwig', 'voldemort', 'hagrid'],
-    turns: ['tap the letter to bring back the invisible ink', 'tap Harry’s wand to cast Expelliarmus'],
+    turns: ['tap the letter to bring back the invisible ink', 'tap Harry’s wand to light it with Lumos', 'tap Harry’s wand to cast Expelliarmus', 'drag the rock cake to Hermione', 'drag the first slice of cake to Hedwig'],
     jokes: ['Hagrid’s rock cakes', 'Voldemort hates parties'],
     ending: 'birthday party',
   },
