@@ -164,7 +164,7 @@ export default defineCartoon({
     leaveToMe: { who: 'mrsWeasley', text: 'Leave this one to me, dears.' },
     askChief: { who: 'mrsWeasley', text: 'Help me spin him! Tap the Gnome Chief.' },
     nudgeChief: { who: 'mrsWeasley', text: 'Tap the Gnome Chief!' },
-    helpedChief: { who: 'ron', text: 'Go on, Mum! You can do it!' },
+    helpedChief: { who: 'mrsWeasley', text: 'Never mind, dear. I’ll grab him myself.' },
     roundYouGo: { who: 'mrsWeasley', text: 'Round you go!' },
     chiefWheee: { who: 'gnomeChief', text: 'Wheeeeeee!' },
     pie: { who: 'mrsWeasley', text: 'Well done, boys. And well done, {name}! Pie for everyone.' },
@@ -368,7 +368,7 @@ export default defineCartoon({
         await k.say('leaveToMe', mum);
 
         // His turn: tap the Chief to start the spin.
-        await k.tapToHelp(chief, { ask: 'askChief', nudge: 'nudgeChief', helped: 'helpedChief', by: mum, helper: ron, size: 260 });
+        await k.tapToHelp(chief, { ask: 'askChief', nudge: 'nudgeChief', helped: 'helpedChief', by: mum, size: 260 });
         await k.say('roundYouGo', mum);
         k.music('adventure');
         await whirl(k, chief, -40, -250, 3, 80);
@@ -396,8 +396,7 @@ export default defineCartoon({
         await k.all(k.say('chiefAgain', lunch.chief), k.hop(lunch.chief, 18, 2));
 
         // His last turn: drag the pie to the Chief, who has been watching it.
-        const fed = await k.dragToHelp(lunch.pie, { to: [1000, 520], ask: 'askPie', nudge: 'nudgePie', helped: 'helpedPie', by: lunch.mum, helper: lunch.ron, dropSize: 200 });
-        void fed;
+        await k.dragToHelp(lunch.pie, { to: [1000, 520], ask: 'askPie', nudge: 'nudgePie', helped: 'helpedPie', by: lunch.mum, helper: lunch.ron, dropSize: 200 });
         await k.vanish(lunch.pie);
         await k.say('chiefPie', lunch.chief);
         laugh();
