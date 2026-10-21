@@ -11,7 +11,7 @@
  *   - every line is used by the script (an unused line would be recorded
  *     for nothing) and every line the script says exists
  *   - every character, pose, backdrop and prop it asks for exists in a world
- *   - there is at least one k.tapToHelp()
+ *   - there are at least 5 of his turns (k.tapToHelp or k.dragToHelp)
  *   - the folder, its meta.ts and the script agree, and the id is kebab-case
  *   - how long the speech alone runs, and roughly how long the episode runs on
  *     screen (speech × 1.15, plus about 25 s for each turn he waits out)
@@ -99,10 +99,10 @@ for (const entry of chosen) {
       const onScreen = result.spokenSeconds * 1.15;
       const mmss = (s: number): string => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
       if (onScreen < 120) warnings.push(`about ${mmss(onScreen)} on screen: under the 2 minute floor (add a beat or a few lines)`);
-      if (onScreen > 300) warnings.push(`about ${mmss(onScreen)} on screen: over the 5 minute ceiling (trim lines)`);
-      else if (onScreen + result.taps * 25 > 330) warnings.push(`up to ${mmss(onScreen + result.taps * 25)} on screen if he waits out every turn: long (fine if a real run with --no-tap says otherwise)`);
+      if (onScreen > 360) warnings.push(`about ${mmss(onScreen)} on screen: over the 6 minute ceiling (trim lines)`);
+      else if (onScreen + result.taps * 25 > 480) warnings.push(`up to ${mmss(onScreen + result.taps * 25)} on screen if he waits out every turn: long (fine if a real run with --no-tap says otherwise)`);
       info.push(
-        `${cartoon.scenes.length} scenes, ${n} lines, about ${Math.round(result.spokenSeconds)} s of speech, ${result.taps} tapToHelp`,
+        `${cartoon.scenes.length} scenes, ${n} lines, about ${Math.round(result.spokenSeconds)} s of speech, ${result.taps} turns for him`,
         `on screen: about ${mmss(onScreen)} if he taps, up to ${mmss(onScreen + result.taps * 25)} if he waits out every turn (shots measures it)`,
         `scenes: ${cartoon.scenes.map((s, i) => `${i + 1} ${s.name}`).join(' · ')}`,
       );

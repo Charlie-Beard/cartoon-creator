@@ -96,7 +96,18 @@ for (const entry of CARTOONS) {
       for (let second = 0; second < 700; second++) {
         const tap = page.locator('[data-tap-to-help]');
         if (await tap.count()) {
-          await tap.first().click({ timeout: 3000 }).catch(() => {});
+          // A drag-to-help carries where it goes, in stage points: drag it there.
+          const to = await tap.first().getAttribute('data-drag-to').catch(() => null);
+          const box = await tap.first().boundingBox().catch(() => null);
+          const stage = await page.locator('.story-stage').boundingBox();
+          if (to && box && stage) {
+            const k = stage.width / 1180;
+            const [x, y] = to.split(' ').map(Number);
+            await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+            await page.mouse.down();
+            await page.mouse.move(stage.x + x * k, stage.y + y * k, { steps: 8 });
+            await page.mouse.up();
+          } else await tap.first().click({ timeout: 3000 }).catch(() => {});
           taps++;
           await advance(page, 500);
         }

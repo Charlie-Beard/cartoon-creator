@@ -158,7 +158,8 @@ way:
 - **One thing at a time** on screen to look at. Actors who aren't in the
   beat stay still.
 - **His turns are clear:** one glowing target, one spoken ask, big
-  enough to hit (120 px or more). Never two targets at once.
+  enough to hit (120 px or more). Never two targets at once (a drag's
+  dashed drop ring is where the one target goes, not a second one).
 - **No dead air and no rushing.** A beat of quiet after a big moment is
   good; ten seconds of nothing is not.
 - Endings are warm and settled: everyone safe, a joke or a hug, a

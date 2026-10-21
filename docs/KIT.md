@@ -63,6 +63,33 @@ it resolves. The ring is the target's size, capped at 260 px; pass
 `size` to choose (a big cloud: `size: 300`). Either way it ends with a
 sparkle on the target, tapped or helped.
 
+### Drag to help
+
+```ts
+const how = await k.dragToHelp(item, { to, ask, nudge, helped, by, helper?, dropSize? });
+// how: 'dragged' | 'helped'
+```
+
+He drags `item` (any actor) to `to`: another actor (its middle) or a
+world point `[x, y]`. A gold ring breathes round the item and a dashed
+one (`dropSize`, default 180) where it goes. Let go within the dashed
+ring (with 40 px to spare) and the item settles there, its middle on
+`to`; anywhere else, it glides back to try again. A tap without a drag
+leans it towards the drop ring. Waited out, as `tapToHelp`: `nudge`,
+then `helped`, then the item glides there by itself (never while his
+finger is on it). Either way it ends in place, with a sparkle there.
+
+```ts
+const key = k.prop('key', { x: 200, y: 520, w: 110 });
+const how = await k.dragToHelp(key, { to: lock, ask: 'askKey', nudge: 'nudgeKey', helped: 'silkyKey', by: silky });
+await k.say(how === 'dragged' ? 'thanksKey' : 'thanksSilky', mf);
+```
+
+The item moves by its x/y, so it stays where it was dropped: move it on
+from there, or `k.vanish` it (into the basket, into the lock). Keep both
+the item and `to` well inside the stage and above the caption band, and
+200–600 px apart.
+
 ## Movement
 
 All return promises; `await` to wait, `void` to let it run alongside.

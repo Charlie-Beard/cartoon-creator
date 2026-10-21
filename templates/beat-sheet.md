@@ -6,7 +6,7 @@
 - **Cast:** <ids from the world, 3–5; anyone new? → new-character>
 - **Places:** <backdrop ids; anything new? → new-backdrop>
 - **The problem (said out loud in scene 1):** <…>
-- **His turns (1–3):** <what he taps, and what it makes happen>
+- **His turns (at least 5, taps and drags):** <what he taps or drags, and what it makes happen>
 - **The scary beat:** <who looms, how it's built, how it cuts back to the heroes>
 - **The warm ending:** <…>
 - **Length:** <3–5 scenes, about N minutes>
