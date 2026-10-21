@@ -201,7 +201,7 @@ export default defineCartoon({
         k.fx.patter(6, 0.12);
         clank(3, 0.12);
         whirr(6);
-        await k.all(k.to(mf, 1.2, { x: 330, y: -420, ease: 'power1.in' }), k.wait(200).then(() => k.to(silky, 1.2, { x: 110, y: -420, ease: 'power1.in' })), k.wait(400).then(() => k.to(pan, 1.2, { x: -280, y: -420, ease: 'power1.in' })));
+        await k.all(k.to(mf, 1.2, { x: 230, y: -420, ease: 'power1.in' }), k.wait(200).then(() => k.to(silky, 1.2, { x: 230, y: -420, ease: 'power1.in' })), k.wait(400).then(() => k.to(pan, 1.2, { x: -140, y: -420, ease: 'power1.in' })));
       },
     },
 
