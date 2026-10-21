@@ -12,24 +12,27 @@
  *   2. The cage of books. In the bookshop, something is growling. In a big
  *      iron cage the Monster Books are snapping and fighting like grumpy
  *      puppies. The poor shop manager, in enormous gloves, reaches in for
- *      one, and out it jumps. It's loose!
+ *      one. His second turn, a drag: he drags the manager's thick spare glove
+ *      from a pile of books to the manager. Then out jumps a book. It's loose!
  *   3. The book on the loose. It scuttles round the shop, snapping at
  *      Harry's shoelaces. Hedwig flies in with a note from Hagrid: "P.S.
- *      Stroke the spine." His second turn: he strokes the book's back. It
+ *      Stroke the spine." His third turn: he strokes the book's back. It
  *      purrs and falls open like a sleepy cat. The manager strokes the books
  *      in the cage, and they all purr too.
  *   4. Old friends. On the last day of the summer, Ron and Hermione arrive.
  *      Hermione has a new cat, Crookshanks, who leaps straight onto Ron's
- *      head. His third turn: he taps Crookshanks, who jumps down.
- *   5. Ice creams for everyone. Three enormous ice creams in the sunshine,
- *      and the Monster Book purring on the table. You just have to know the
+ *      head. His fourth turn: he taps Crookshanks, who jumps down.
+ *   5. Ice creams for everyone. Three enormous ice creams in the sunshine.
+ *      His fifth turn, a drag: he drags Ron's ice cream across from Mr
+ *      Fortescue to Ron. The Monster Book is purring on the table. You just have to know the
  *      trick.
  *
  * There's no villain: the trouble is a book with teeth. It snaps at air and
  * shoelaces and chews gloves, never a person. Crookshanks sits on Ron's
  * head because he likes him.
  */
-import { NOTE, defineCartoon, noiseBurst, now, tone, type Kit } from '../../kit';
+import { curve, ellipse, ink, piece, poly, rect, type Node } from '../../art/paper';
+import { NOTE, defineCartoon, noiseBurst, now, svg, tone, type Kit } from '../../kit';
 import { sounds as commonSounds } from '../../worlds/common/moves';
 import { warmEnding } from '../../worlds/common/pieces';
 import { sounds as hogSounds } from '../../worlds/hogwarts/moves';
@@ -72,9 +75,33 @@ function mrrow(): void {
   tone(700, t, { wave: 'triangle', peak: 0.05, attack: 0.04, decay: 0.45, glideTo: 520, vibrato: [8, 20] });
 }
 
+// ------------------------------------------------------------------- art
+
+/** The manager's thick spare glove: a big brown leather gauntlet, 110 × 130, standing up as if on a hand. */
+function glove(): string {
+  const leather = '#9a6234';
+  const dark = '#7a4a26';
+  const nodes: Node[] = [
+    // the cuff, then the palm
+    piece(rect(26, 82, 58, 42, 5), dark),
+    piece(poly([[22, 86], [18, 50], [26, 24], [86, 24], [94, 50], [88, 86]]), leather),
+    // four fat fingers and a thumb
+    piece(ellipse(32, 22, 11, 20, -0.1), leather),
+    piece(ellipse(51, 14, 11, 22), leather),
+    piece(ellipse(70, 16, 11, 21), leather),
+    piece(ellipse(87, 28, 10, 18, 0.2), leather),
+    piece(curve([[20, 66], [6, 56], [4, 42], [14, 44], [24, 54]], 2), leather),
+    // stitching and a patch
+    ink([[28, 90], [82, 90]], { width: 2.5, color: '#e9d3a3' }),
+    piece(rect(40, 52, 30, 22, 4), '#c9a24a', { edge: 'cut' }),
+    ink([[46, 63], [64, 63]], { width: 2.5, color: dark }),
+  ];
+  return svg({ w: 110, h: 130, name: 'monster-book-glove' }, nodes);
+}
+
 // ------------------------------------------------------------------ cast
 
-type Actor = 'harry' | 'ron' | 'hermione' | 'fortescue' | 'manager' | 'book' | 'bookA' | 'bookB' | 'cat' | 'cage' | 'sundae' | 'broom' | 'list';
+type Actor = 'glove' | 'pile' | 'harry' | 'ron' | 'hermione' | 'fortescue' | 'manager' | 'book' | 'bookA' | 'bookB' | 'cat' | 'cage' | 'sundae' | 'broom' | 'list';
 const cast = {} as Record<Actor, HTMLElement>;
 /** Whether he stroked the spine himself in scene 3, for Harry's last word on it. */
 let strokedBy: 'tapped' | 'helped' = 'tapped';
@@ -124,7 +151,11 @@ export default defineCartoon({
     puppies: { who: 'narrator', text: 'In a big iron cage, the books were snapping and fighting like grumpy puppies.' },
     nipped: { who: 'bookManager', text: 'They’ve chewed my gloves fourteen times this week.' },
     gloves: { who: 'harry', text: 'Is that why you’re wearing those enormous gloves?' },
-    standBack: { who: 'bookManager', text: 'Yes, that’s why. Now stand back, Harry!' },
+    askGlove: { who: 'bookManager', text: 'Yes, that’s why! My thickest glove is on the books. Drag it to me, {name}!' },
+    nudgeGlove: { who: 'bookManager', text: 'Drag the big brown glove over to me.' },
+    helpedGlove: { who: 'bookManager', text: 'Never mind, I’ll fetch it myself.' },
+    thanksGlove: { who: 'bookManager', text: 'Thank you! Now stand back, Harry!' },
+    gloveOn: { who: 'bookManager', text: 'Got it. Now stand back, Harry!' },
     loose: { who: 'bookManager', text: 'Oh no! It’s loose! Catch it!' },
     // 3. The book on the loose
     shoelaces: { who: 'harry', text: 'It’s chasing my shoelaces!' },
@@ -155,6 +186,9 @@ export default defineCartoon({
     allThere: { who: 'harry', text: 'All there, Ron. Come on. I know where to get ice cream.' },
     // 5. Ice creams for everyone
     three: { who: 'narrator', text: 'Mr Fortescue brought three enormous ice creams to the table.' },
+    askIce: { who: 'fortescue', text: 'And this one is for Ron. Will you drag it over to him, {name}?' },
+    nudgeIce: { who: 'fortescue', text: 'Drag the ice cream across to Ron.' },
+    helpedIce: { who: 'fortescue', text: 'Here you go, Ron. I’ll bring it myself.' },
     onTheHouse: { who: 'fortescue', text: 'For Harry and his friends. Enjoy!' },
     brilliant: { who: 'ron', text: 'Brilliant!' },
     isItPurring: { who: 'hermione', text: 'Harry, is your book purring?' },
@@ -228,11 +262,14 @@ export default defineCartoon({
         cast.bookB = k.character('monsterBook', { x: 990, y: 474, w: 130, z: 4 });
         cast.cage = k.prop('bookCage', { ...CAGE, z: 6 });
         cast.harry = k.character('harry', { x: 30, y: 432, w: 220, z: 10 });
-        cast.manager = k.character('bookManager', { x: 470, y: 420, w: 240, z: 10 });
+        cast.manager = k.character('bookManager', { x: 520, y: 420, w: 240, z: 10 });
+        // His spare glove waits on a pile of books between the two of them.
+        cast.pile = k.prop('bookPile', { x: 290, y: 510, w: 200, z: 5 });
+        cast.glove = k.add(glove(), { x: 335, y: 392, w: 110, h: 130, z: 7 });
         k.set(cast.harry, { x: -400 });
       },
       async play(k) {
-        const { harry, manager, bookA, bookB, cage } = cast;
+        const { harry, manager, bookA, bookB, cage, glove: spare } = cast;
         k.fx.patter(6);
         await k.all(k.say('bookshop'), k.to(harry, 1.6, { x: 0, ease: 'power1.out' }));
         grr(1.2);
@@ -244,7 +281,12 @@ export default defineCartoon({
         await fight(k, [bookB, bookA], cage);
         await k.say('nipped', manager);
         await k.say('gloves', harry);
-        await k.say('standBack', manager);
+
+        // His second turn, a drag: the thick spare glove from the books to the manager.
+        const gb = k.box(manager);
+        const gHow = await k.dragToHelp(spare, { to: [gb.x + gb.w / 2, gb.y + gb.h * 0.62], ask: 'askGlove', nudge: 'nudgeGlove', helped: 'helpedGlove', by: manager, dropSize: 200 });
+        await k.vanish(spare);
+        await k.say(gHow === 'dragged' ? 'thanksGlove' : 'gloveOn', manager);
 
         // He opens the cage and reaches in… and out jumps a book!
         commonSounds.click();
@@ -295,7 +337,7 @@ export default defineCartoon({
         void k.fade(bookB, 1, 0.5);
         await k.say('stroke', harry);
 
-        // His second turn: stroke the book's spine (its furry back, on the left).
+        // His third turn: stroke the book's spine (its furry back, on the left).
         const bb = k.box(book);
         const spine = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', { x: bb.x + bb.w * 0.2 - 60, y: bb.y + bb.h * 0.5 - 60, w: 120, h: 120, z: 20 });
         const how = (strokedBy = await k.tapToHelp(spine, { ask: 'askSpine', nudge: 'nudgeSpine', helped: 'helpedSpine', by: harry, size: 140 }));
@@ -356,7 +398,7 @@ export default defineCartoon({
         await k.all(k.say('offMyHead', ron), k.shake(ron, 6, 4));
         await k.say('likesYou', hermione);
 
-        // His third turn: tap Crookshanks, and down he jumps.
+        // His fourth turn: tap Crookshanks, and down he jumps.
         await k.tapToHelp(cat, { ask: 'askCat', nudge: 'nudgeCat', helped: 'helpedCat', by: hermione, size: 160 });
         mrrow();
         await k.to(cat, 0.7, { x: 0, y: 0, scale: 1, ease: 'power1.inOut' });
@@ -374,20 +416,21 @@ export default defineCartoon({
       set(k) {
         k.backdrop('diagon-alley');
         k.music('cosy');
-        cast.harry = k.character('harry', { x: 380, y: 432, w: 210 });
-        cast.ron = k.character('ron', { x: 580, y: 432, w: 210 });
-        cast.hermione = k.character('hermione', { x: 780, y: 436, w: 210 });
+        // Ron sits next to Mr Fortescue, so his ice cream has a clear way to go.
+        cast.ron = k.character('ron', { x: 500, y: 432, w: 210 });
+        cast.harry = k.character('harry', { x: 745, y: 432, w: 210 });
+        cast.hermione = k.character('hermione', { x: 950, y: 436, w: 210 });
         cast.fortescue = k.character('fortescue', { x: 60, y: 430, w: 240 });
-        cast.book = k.character('monsterBook', { x: 250, y: 520, w: 120, pose: 'purring', z: 12 });
+        cast.book = k.character('monsterBook', { x: 330, y: 520, w: 120, pose: 'purring', z: 12 });
         k.set(cast.book, { opacity: 0 });
       },
       async play(k) {
         const { harry, ron, hermione, fortescue, book } = cast;
         await k.say('three');
-        // Three ice creams, one for each.
-        const ices = [harry, ron, hermione].map((el) => {
+        // Three ice creams, one for each. Harry's and Hermione's land by themselves.
+        const ices = [harry, hermione].map((el) => {
           const b = k.box(el);
-          const s = k.prop('sundae', { x: b.x + b.w * 0.68, y: 572, w: 80, z: 15 });
+          const s = k.prop('sundae', { x: b.x + b.w * 0.68, y: 540, w: 100, z: 15 });
           k.set(s, { opacity: 0, y: 30 });
           return s;
         });
@@ -395,10 +438,18 @@ export default defineCartoon({
           plop();
           await k.to(s, 0.35, { opacity: 1, y: 0, ease: 'back.out(1.6)' });
         }
+
+        // His fifth turn, a drag: the last ice cream, held out by Mr Fortescue, to Ron.
+        const ronBox = k.box(ron);
+        const last = k.prop('sundae', { x: 255, y: 540, w: 100, z: 15 });
+        k.set(last, { opacity: 0 });
+        plop();
+        await k.fade(last, 1, 0.35);
+        await k.dragToHelp(last, { to: [ronBox.x + ronBox.w * 0.68 + 50, 540 + 70], ask: 'askIce', nudge: 'nudgeIce', helped: 'helpedIce', by: fortescue, dropSize: 180 });
         await k.say('onTheHouse', fortescue);
         await k.all(k.say('brilliant', ron), k.hop(ron, 24));
 
-        // Mr Fortescue goes back to his shop. Beside Harry, the Monster Book is purring.
+        // Mr Fortescue goes back to his shop. On the table, the Monster Book is purring.
         await k.to(fortescue, 0.8, { x: -360, opacity: 0, ease: 'power1.in' });
         purr();
         await k.fade(book, 1, 0.5);
