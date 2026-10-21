@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'the rain in the night, which makes the wood swell',
     places: ['hospital-garden', 'toy-workshop', 'bear-wood', 'bear-kitchen'],
     cast: ['teddy', 'toymaker', 'matron', 'tom', 'daisy', 'daddy-bear', 'mummy-bear'],
-    turns: ['paint the doll’s house door blue', 'tap the bush to shake the berries down', 'fill the birds’ saucer with water'],
+    turns: ['paint the doll’s house door blue', 'tap the bush to shake the berries down', 'drag the bread into the berry basket', 'drag the basket of berries to the bird house', 'fill the birds’ saucer with water'],
     jokes: ['It’s not for dolls. It’s for the birds!'],
     ending: 'birds flying in and out, and thank-yous both ways',
   },
