@@ -4,7 +4,8 @@
  * the boys out to clear the garden of gnomes.
  *
  *   1. Gnomes again! Breakfast in the Burrow's kitchen. A little bald face
- *      giggles at the window: gnomes! The garden's full of them again. Out
+ *      giggles at the window: gnomes! The garden's full of them again. His
+ *      first turn: he taps the gnome at the window and it ducks away. Out
  *      you go, boys, and de-gnome it before lunch. "De-what?" Ron: it's
  *      brilliant, I'll show you.
  *   2. Round and round. Out in the wild garden, a bush is giggling. His
@@ -23,7 +24,10 @@
  *      asks, "Can I have a go?" Mrs Weasley rolls up her sleeves: leave this
  *      one to me. Round and round and WHEEE, over the hedge. Then pie in the
  *      garden, well done everyone, they'll be back tomorrow… and over the
- *      hedge the Chief pops up: "Again!"
+ *      hedge the Chief pops up: "Again!" His last turn: he drags the pie
+ *      over the hedge to the Chief, who says "Mmm. Pie." (Mrs Weasley,
+ *      rolling up her sleeves, first waits for him to tap the Chief to
+ *      start the spin.)
  *
  * Swinging gnomes is fine because the gnomes love it: they giggle, shout
  * "Wheee!" and come straight back for another go, and they land out of
@@ -116,6 +120,11 @@ export default defineCartoon({
     window: { who: 'harry', text: 'Er, Mrs Weasley? Something’s looking in at the window.' },
     gnomesAgain: { who: 'mrsWeasley', text: 'Gnomes! The garden’s full of gnomes again!' },
     heeHee: { who: 'gnome', text: 'Hee hee hee!' },
+    askShoo: { who: 'mrsWeasley', text: 'Quick, {name}! Tap that gnome at the window!' },
+    nudgeShoo: { who: 'mrsWeasley', text: 'Tap the gnome, dear!' },
+    helpedShoo: { who: 'harry', text: 'I’ll wave him off!' },
+    shooed: { who: 'mrsWeasley', text: 'Well done! Shoo, little gnome. Shoo!' },
+    shooedHarry: { who: 'mrsWeasley', text: 'Thank you, Harry. That’s got rid of him. For now.' },
     outYouGo: { who: 'mrsWeasley', text: 'Out you go, boys. De-gnome my garden before lunch, please.' },
     deWhat: { who: 'harry', text: 'De-gnome? What does that mean?' },
     showYou: { who: 'ron', text: 'It’s brilliant, Harry. Come on, I’ll show you!' },
@@ -152,11 +161,19 @@ export default defineCartoon({
     hmph: { who: 'gnomeChief', text: 'Hmph. Spinning. Round and round. Over the hedge.' },
     haveAGo: { who: 'gnomeChief', text: '…Can I have a go?' },
     heWantsAGo: { who: 'ron', text: 'He wants a go!' },
-    leaveToMe: { who: 'mrsWeasley', text: 'Leave this one to me, dears. Round you go!' },
+    leaveToMe: { who: 'mrsWeasley', text: 'Leave this one to me, dears.' },
+    askChief: { who: 'mrsWeasley', text: 'Help me spin him! Tap the Gnome Chief.' },
+    nudgeChief: { who: 'mrsWeasley', text: 'Tap the Gnome Chief!' },
+    helpedChief: { who: 'mrsWeasley', text: 'Never mind, dear. I’ll grab him myself.' },
+    roundYouGo: { who: 'mrsWeasley', text: 'Round you go!' },
     chiefWheee: { who: 'gnomeChief', text: 'Wheeeeeee!' },
     pie: { who: 'mrsWeasley', text: 'Well done, boys. And well done, {name}! Pie for everyone.' },
     tomorrow: { who: 'ron', text: 'They’ll all be back tomorrow, you know.' },
     chiefAgain: { who: 'gnomeChief', text: 'Again! Again!' },
+    askPie: { who: 'mrsWeasley', text: 'Not yet, dear. Pie first! Drag the pie to the Chief, {name}.' },
+    nudgePie: { who: 'mrsWeasley', text: 'Drag the pie over to the hedge!' },
+    helpedPie: { who: 'ron', text: 'I’ll pass it over!' },
+    chiefPie: { who: 'gnomeChief', text: 'Mmm. Pie. Best garden ever.' },
     end: { who: 'narrator', text: 'And the gnomes came back the next day, and the next, and the next…' },
   },
   scenes: [
@@ -185,6 +202,11 @@ export default defineCartoon({
         await k.say('window', harry);
         await k.all(k.say('gnomesAgain', mum), k.shake(mum, 6, 2));
         await k.say('heeHee', gnome);
+
+        // His first turn: tap the gnome at the window.
+        const shoo = await k.tapToHelp(gnome, { ask: 'askShoo', nudge: 'nudgeShoo', helped: 'helpedShoo', by: mum, helper: harry, size: 170 });
+        await k.say(shoo === 'tapped' ? 'shooed' : 'shooedHarry', mum);
+        giggle();
         k.sfx.whoosh();
         await k.to(gnome, 0.3, { y: 60, opacity: 0, ease: 'power2.in' });
         await k.wait(300);
@@ -344,6 +366,10 @@ export default defineCartoon({
         k.fx.patter(5, 0.12);
         await k.all(k.fade(mum, 1, 0.4), k.walk(mum, 120, 0.8, 3));
         await k.say('leaveToMe', mum);
+
+        // His turn: tap the Chief to start the spin.
+        await k.tapToHelp(chief, { ask: 'askChief', nudge: 'nudgeChief', helped: 'helpedChief', by: mum, size: 260 });
+        await k.say('roundYouGo', mum);
         k.music('adventure');
         await whirl(k, chief, -40, -250, 3, 80);
         await k.all(k.say('chiefWheee', chief), fling(k, chief));
@@ -353,10 +379,10 @@ export default defineCartoon({
         await k.cut(() => {
           garden(k);
           k.music('cosy');
-          cast.mum = k.character('mrsWeasley', { x: 40, y: 370, w: 260 });
-          cast.harry = k.character('harry', { x: 290, y: 390, w: 240 });
-          cast.pie = k.prop('pie', { x: 490, y: 560, w: 180, z: 14 });
-          cast.ron = k.character('ron', { x: 620, y: 390, w: 240 });
+          cast.mum = k.character('mrsWeasley', { x: 10, y: 370, w: 260 });
+          cast.harry = k.character('harry', { x: 230, y: 390, w: 240 });
+          cast.ron = k.character('ron', { x: 440, y: 390, w: 240 });
+          cast.pie = k.prop('pie', { x: 690, y: 540, w: 160, z: 14 });
           cast.chief = k.character('gnomeChief', { x: 900, y: 250, w: 240, z: 10 });
           k.set(cast.chief, { y: 200 });
         });
@@ -368,6 +394,11 @@ export default defineCartoon({
         giggle();
         await k.to(lunch.chief, 0.5, { y: 0, ease: 'back.out(1.6)' });
         await k.all(k.say('chiefAgain', lunch.chief), k.hop(lunch.chief, 18, 2));
+
+        // His last turn: drag the pie to the Chief, who has been watching it.
+        await k.dragToHelp(lunch.pie, { to: [1000, 520], ask: 'askPie', nudge: 'nudgePie', helped: 'helpedPie', by: lunch.mum, helper: lunch.ron, dropSize: 200 });
+        await k.vanish(lunch.pie);
+        await k.say('chiefPie', lunch.chief);
         laugh();
         await k.all(k.hop(lunch.harry, 26), k.wait(150).then(() => k.hop(lunch.ron, 26)), k.wait(300).then(() => k.hop(lunch.mum, 20)));
         k.music('dreamy');
