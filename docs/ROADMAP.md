@@ -23,6 +23,32 @@ the shelf and world catalogues are append-only, so PRs merge cleanly.
 New reusable art lands in the world as part of the episode that first
 needs it.
 
+## The Teddy Bear Treasury
+
+Every `bears` episode comes from one book, the *Teddy Bear Treasury*
+(Brown Watson, 1994). Its contents page, in book order, with what's been
+made of each. The eight stories run 6–8 pages each; the seven one-page
+pieces between them are probably rhymes or short verses, and haven't been
+looked at yet. Tick one off here in the PR that makes it.
+
+| Page | In the book | Cartoon |
+|---|---|---|
+| 3 | Teddy's Birthday Party | ✅ `teddys-party` |
+| 10 | All Year Round (one page) | not yet |
+| 11 | Grumpy Bertie Bear | ✅ `grumpy-bertie` |
+| 18 | Teddy Bear's Storytime (one page) | not yet |
+| 19 | Teddy's Seaside Adventure | ✅ `seaside-adventure` |
+| 25 | The Three Bears | ✅ `three-bears` |
+| 32 | Teddy's Favourites (one page) | not yet |
+| 33 | Teddy Goes Flying | ✅ `teddy-flying` |
+| 40 | Mummy Bear (a poem) | not yet |
+| 41 | Uncle Sailor Bill | ✅ `uncle-sailor-bill` |
+| 49 | Teddy Bear's Partytime (a matching puzzle) | not yet |
+| 50 | Round and Round the Garden (one page) | not yet |
+| 51 | Teddy Bear's Surprise | ✅ `teddy-surprise` |
+| 58 | My Teddy Bear (a poem) | not yet |
+| 59 | The Doll's House | **to make** |
+
 ## Later, when wanted
 
 - **Voices:** record the cartoons with ElevenLabs (`voice-cartoon`),
