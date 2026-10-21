@@ -435,7 +435,7 @@ export default defineCartoon({
 
         // His turn: tap the radio to switch it on.
         k.face(vernon, false);
-        await k.tapToHelp(set, { ask: 'askRadio', nudge: 'nudgeRadio', helped: 'helpedRadio', by: vernon, size: 150 });
+        await k.tapToHelp(set, { ask: 'askRadio', nudge: 'nudgeRadio', helped: 'helpedRadio', helper: vernon, size: 150 });
         k.fx.pop();
         newsChime();
         await k.wait(800);
