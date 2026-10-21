@@ -3,6 +3,9 @@ import { defineConfig } from '@playwright/test';
 /** PW_PORT lets several worktrees run their e2e tests at once. */
 const port = Number(process.env.PW_PORT ?? 4173);
 
+/** PW_WORKERS is a count ("8") or a share of the cores ("150%"). */
+const workers = (v: string): number | string => (v.endsWith('%') ? v : Number(v));
+
 /**
  * The cartoons target one device: iPad (11th gen), landscape.
  *
@@ -18,7 +21,7 @@ export default defineConfig({
   // queue up behind one. The tests spend most of their time waiting on the
   // page, so a worker per core keeps the machine busy (PW_WORKERS to change it).
   fullyParallel: true,
-  workers: process.env.PW_WORKERS ?? '100%',
+  workers: workers(process.env.PW_WORKERS ?? '100%'),
   use: {
     baseURL: `http://localhost:${port}`,
     hasTouch: true,
