@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { cardFor, CARTOONS, openCorner, playerState } from './helpers';
+import { advance, cardFor, CARTOONS, openCorner, playerState } from './helpers';
 
 /**
  * Every cartoon on the shelf (CARTOON=<id> for just one) is opened from the
@@ -11,14 +11,22 @@ import { cardFor, CARTOONS, openCorner, playerState } from './helpers';
  * tapping the first tap-to-help when it appears.
  */
 
+/**
+ * A cartoon's "play from" list in the corner, once it is filled in. Until
+ * the script has loaded it holds one stand-in, "From the start", in place
+ * of "1. <first scene>".
+ */
+async function sceneOptions(page: Page, id: string) {
+  const options = page.locator(`[data-corner="${id}"] select option`);
+  await expect(options.first()).toHaveText(/^1\. /, { timeout: 20_000 });
+  return options;
+}
+
 /** How many scenes a cartoon has, as the corner's "play from" list shows. */
 async function sceneCount(page: Page, id: string): Promise<number> {
   await page.goto('/');
   await openCorner(page);
-  const options = page.locator(`[data-corner="${id}"] select option`);
-  // The list fills in once the script has loaded.
-  await expect.poll(() => options.count(), { timeout: 20_000 }).toBeGreaterThan(0);
-  const n = await options.count();
+  const n = await (await sceneOptions(page, id)).count();
   await page.locator('[data-back]').click();
   await expect(page.locator('.scene.library')).toBeVisible();
   return n;
@@ -41,6 +49,9 @@ for (const entry of CARTOONS) {
       const scenes = await sceneCount(page, entry.id);
       expect(scenes, 'a cartoon has scenes').toBeGreaterThan(0);
 
+      // The curtains and paper wipes run on the fake clock, pushed along
+      // rather than waited for.
+      await page.clock.install();
       await page.goto('/');
       await (await cardFor(page, entry.id)).click();
       await expect(page.locator('.scene.library')).toHaveCount(0);
@@ -48,25 +59,21 @@ for (const entry of CARTOONS) {
       const seen: string[] = [];
       for (let guard = 0; guard < scenes + 4; guard++) {
         // Curtains up, or already at the end.
-        await expect.poll(() => playerState(page), { timeout: 30_000 }).not.toBe('');
+        for (let s = 0; s < 30 && (await playerState(page)) === ''; s++) await advance(page, 1000);
         const at = await playerState(page);
+        expect(at, 'the curtains never opened').not.toBe('');
         if (at === 'end') break;
         seen.push(at);
         // Skip until it takes: between scenes the skip button waits for the paper wipe.
-        await expect
-          .poll(
-            async () => {
-              await page.locator('[data-skip]').click({ timeout: 2000 }).catch(() => {});
-              await page.waitForTimeout(300);
-              return playerState(page);
-            },
-            { timeout: 30_000, message: `scene ${at} did not skip` },
-          )
-          .not.toBe(at);
+        for (let s = 0; s < 60 && (await playerState(page)) === at; s++) {
+          await page.locator('[data-skip]').click({ timeout: 2000 }).catch(() => {});
+          await advance(page, 500);
+        }
+        expect(await playerState(page), `scene ${at} did not skip`).not.toBe(at);
       }
       expect(await playerState(page)).toBe('end');
       expect(seen[0]).toBe('0');
-      expect(seen.length).toBeLessThanOrEqual(scenes);
+      expect(seen.length, seen.join(',') + ' of ' + scenes).toBeLessThanOrEqual(scenes);
       expect(Number(seen[seen.length - 1])).toBeLessThanOrEqual(scenes - 1);
 
       await backToTheShelf(page, entry.id);
@@ -91,11 +98,11 @@ for (const entry of CARTOONS) {
         if (await tap.count()) {
           await tap.first().click({ timeout: 3000 }).catch(() => {});
           taps++;
-          await page.clock.runFor(500);
+          await advance(page, 500);
         }
         at = await playerState(page);
         if (at === 'end') break;
-        await page.clock.runFor(1000);
+        await advance(page, 1000);
         // Real time for the audio and fetches the page is waiting on.
         await page.waitForTimeout(15);
       }
@@ -107,15 +114,15 @@ for (const entry of CARTOONS) {
     });
 
     test('can be started from its last scene in the grown-ups’ corner', async ({ page }) => {
+      await page.clock.install();
       await page.goto('/');
       await openCorner(page);
       const row = page.locator(`[data-corner="${entry.id}"]`);
-      const options = row.locator('select option');
-      await expect.poll(() => options.count(), { timeout: 20_000 }).toBeGreaterThan(0);
-      const last = (await options.count()) - 1;
+      const last = (await (await sceneOptions(page, entry.id)).count()) - 1;
       await row.locator('select').selectOption(String(last));
       await row.locator('[data-play]').click();
-      await expect.poll(() => playerState(page), { timeout: 30_000 }).toBe(String(last));
+      for (let s = 0; s < 30 && (await playerState(page)) === ''; s++) await advance(page, 1000);
+      expect(await playerState(page)).toBe(String(last));
     });
   });
 }
