@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'the land moving on with Moon-Face still topsy-turvy',
     places: ['topsy-turvy', 'tree', 'cloud-top', 'moon-room'],
     cast: ['moonface', 'silky', 'saucepan', 'topsyTurvyMan'],
-    turns: ['turn the upside-down things the right way up', 'turn Moon-Face the right way up'],
+    turns: ['drag the cake to Silky', 'turn the upside-down things the right way up', 'drag the Saucepan Man to the ladder', 'turn Moon-Face the right way up', 'tap the cake to cut a slice'],
     jokes: ['hello means goodbye in Topsy-Turvy', 'upside-down cake', 'Saucepan Man mishears'],
     ending: 'upside-down cake in Moon-Face’s room',
   },
