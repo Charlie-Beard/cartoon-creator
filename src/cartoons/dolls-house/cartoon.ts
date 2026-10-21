@@ -22,13 +22,15 @@
  *   4. Nuts and berries. The wood with Daddy. His second turn: he taps the
  *      bush and the berries shake down into the basket (or Daddy shakes it).
  *      Nuts and pips too. Then the kitchen: Mummy gives them stale bread and
- *      an old saucer. "Now, to the hospital!"
+ *      an old saucer. His third turn: he drags the loaf of bread into the
+ *      basket (or Teddy pops it in). "Now, to the hospital!"
  *   5. A home for the birds. The Toymaker is fixing the strange-looking house
- *      onto the wall. "It's not for dolls. It's for the birds!" Teddy puts out
- *      the food. His third turn: he taps the saucer and it fills with water
- *      (or the Toymaker pours it). In fly the birds, in and out of their new
- *      home. Daisy: what a sight from our balcony! Thank you, Toymaker. "And
- *      thank you, Teddy!"
+ *      onto the wall. "It's not for dolls. It's for the birds!" Teddy feeds
+ *      the birds. His fourth turn: he drags the basket of berries up to the
+ *      ledge (or Teddy carries it) and the food is put out. His fifth: he
+ *      taps the saucer and it fills with water (or the Toymaker pours it). In
+ *      fly the birds, in and out of their new home. Daisy: what a sight from
+ *      our balcony! Thank you, Toymaker. "And thank you, Teddy!"
  *
  * The tricky bit is sad, not scary: a spoilt present, and a kind man upset.
  * It turns on Teddy's idea, said plainly. The children are well and happy
@@ -36,8 +38,8 @@
  * scene 2 only, so the children say the thank-yous at the end.
  */
 import { defineCartoon, noiseBurst, now, svg, tone, type Kit } from '../../kit';
-import { ellipse } from '../../art/paper';
-import { blot } from '../../art/watercolour';
+import { curve, ellipse, type Pt } from '../../art/paper';
+import { blot, deeper, pen, wash } from '../../art/watercolour';
 import { moves as commonMoves, sounds as commonSounds } from '../../worlds/common/moves';
 import { moves as bearMoves, sounds as bearSounds } from '../../worlds/bears/moves';
 import meta from './meta';
@@ -52,6 +54,22 @@ const { sadSlide, sigh } = bearSounds;
 /** One red berry, falling from the bush. 24 × 24. */
 const berry = (n: number): string =>
   svg({ w: 24, h: 24, name: `dolls-house-berry-${n}` }, [blot(ellipse(12, 12, 9, 9), n % 3 === 0 ? '#4a2a4a' : '#c8433a', 0.95)]);
+
+/** Flat x, y, x, y … numbers as points. */
+const pts = (...n: number[]): Pt[] => Array.from({ length: n.length / 2 }, (_, i) => [n[i * 2], n[i * 2 + 1]] as Pt);
+
+/** A stale loaf of bread, scored along the top. 150 × 90. */
+const loaf = (): string => {
+  const crust = '#c98f4e';
+  const score = { width: 2, color: deeper(crust, 0.55), opacity: 0.7 };
+  return svg({ w: 150, h: 90, name: 'dolls-house-loaf' }, [
+    wash(curve(pts(10, 62, 8, 38, 30, 16, 75, 12, 120, 16, 142, 38, 140, 62, 120, 78, 75, 82, 30, 78), 2), crust, { shade: deeper(crust, 0.3), light: -140, depth: 0.4, lineWidth: 2.2 }),
+    pen(pts(42, 28, 52, 52), score),
+    pen(pts(72, 24, 82, 50), score),
+    pen(pts(102, 28, 110, 52), score),
+    blot(ellipse(50, 24, 22, 5, -8), '#ffffff', 0.4),
+  ]);
+};
 
 // ---------------------------------------------------------------- sounds
 
@@ -145,7 +163,7 @@ export default defineCartoon({
     backWall: { who: 'teddy', text: 'And take out the back wall? And make the roof a bit thicker?' },
     yesBut: { who: 'toymaker', text: 'Yes, I can do that. But…' },
     meetThere: { who: 'teddy', text: 'Don’t worry! Just bring it to the hospital wall. I’ll meet you there!' },
-    secret: { who: 'teddy', text: 'Shh, {name}! It’s a surprise. Now I need some berries!' },
+    secret: { who: 'teddy', text: 'Shh! It’s a surprise. Now I need some berries!' },
     // 4. Nuts and berries
     whatFor: { who: 'daddy-bear', text: 'Nuts and berries, Teddy? Whatever are they for?' },
     youllSee: { who: 'teddy', text: 'You’ll see, Daddy! Look, that bush is full of berries!' },
@@ -155,12 +173,18 @@ export default defineCartoon({
     whatALot: { who: 'daddy-bear', text: 'What a lot! And here are some nuts and pips, too.' },
     homeWeGo: { who: 'teddy', text: 'Now we need some bread, and something for water.' },
     staleBread: { who: 'mummy-bear', text: 'Here’s some stale bread. And you can have this old saucer.' },
+    askBread: { who: 'teddy', text: 'Can you drag the bread into the basket, {name}?' },
+    nudgeBread: { who: 'teddy', text: 'Drag the loaf over to the berry basket.' },
+    breadMyself: { who: 'teddy', text: 'I’ll pop it in the basket myself.' },
     thanksMummy: { who: 'teddy', text: 'Thank you, Mummy! Now, to the hospital!' },
     goodIdea: { who: 'narrator', text: 'It really was a very good idea…' },
     // 5. A home for the birds
     fixing: { who: 'narrator', text: 'Soon, the Toymaker was fixing the strange-looking house onto the wall.' },
     funnyHouse: { who: 'tom', text: 'What a funny-looking house! It hasn’t got a back!' },
     forBirds: { who: 'teddy', text: 'It’s not for dolls. It’s for the birds!' },
+    askBasket: { who: 'teddy', text: 'Let’s feed them! Can you drag the basket to the bird house, {name}?' },
+    nudgeBasket: { who: 'teddy', text: 'Drag the basket of berries up to the ledge.' },
+    carryBasket: { who: 'teddy', text: 'I’ll carry it up there myself.' },
     putOut: { who: 'teddy', text: 'Berries and nuts, and pips, and bread.' },
     askSaucer: { who: 'teddy', text: 'And water to drink. Tap the saucer, {name}, to fill it up!' },
     nudgeSaucer: { who: 'teddy', text: 'Tap the saucer on the ledge.' },
@@ -367,14 +391,22 @@ export default defineCartoon({
         // Home to Mummy, for bread and a saucer.
         await k.cut(() => {
           k.backdrop('bear-kitchen');
-          cast.mummy = k.character('mummy-bear', { x: 330, y: 357, w: 260, pose: 'hold', z: 11 });
-          cast.saucer = k.prop('saucer', { x: 405, y: 520, w: 110, z: 14 });
-          cast.teddy = k.character('teddy', { x: 650, y: 414, w: 210, flip: true, z: 12 });
-          cast.basket = k.prop('berry-basket', { x: 790, y: 545, w: 150, z: 14 });
+          cast.mummy = k.character('mummy-bear', { x: 150, y: 357, w: 260, pose: 'hold', z: 11 });
+          cast.saucer = k.prop('saucer', { x: 225, y: 520, w: 110, z: 14 });
+          cast.teddy = k.character('teddy', { x: 400, y: 414, w: 210, flip: true, z: 12 });
+          cast.basket = k.prop('berry-basket', { x: 930, y: 545, w: 150, z: 14 });
           k.set(k.part(cast.basket, 'berries'), { opacity: 1 });
         });
         const { mummy } = cast;
         await k.say('staleBread', mummy);
+        k.fx.pop();
+        const bread = k.add(loaf(), { x: 470, y: 302, w: 130, h: 78, z: 15 });
+        k.sparkle(695, 590, 8, 80);
+
+        // His turn: the bread goes into the basket.
+        await k.dragToHelp(bread, { to: cast.basket, ask: 'askBread', nudge: 'nudgeBread', helped: 'breadMyself', by: cast.teddy, dropSize: 200 });
+        k.fx.pop();
+        await k.vanish(bread);
         k.pose(cast.teddy, 'happy');
         await k.all(k.say('thanksMummy', cast.teddy), k.hop(cast.teddy, 30));
         k.pose(cast.teddy, 'default');
@@ -396,6 +428,8 @@ export default defineCartoon({
         k.set([cast.food, cast.saucer], { opacity: 0 });
         cast.toymaker = k.character('toymaker', { x: -60, y: 297, w: 300, z: 10 });
         cast.teddy = k.character('teddy', { x: 480, y: 414, w: 210, flip: true, z: 12 });
+        cast.basket = k.prop('berry-basket', { x: 830, y: 548, w: 150, z: 14 });
+        k.set(k.part(cast.basket, 'berries'), { opacity: 1 });
         birds = [0, 1, 2, 3].map((i) => k.prop('songbird', { x: 1180 + i * 90, y: 60 + i * 50, w: 60, z: 20 }));
         birds.forEach((b) => k.face(b, true));
       },
@@ -412,10 +446,11 @@ export default defineCartoon({
         k.pose(teddy, 'happy');
         await k.say('forBirds', teddy);
         k.pose(teddy, 'default');
-        // Teddy puts out the food along the ledge.
+        // His turn: the basket goes up to the ledge, and the food is put out.
         k.face(teddy, true);
+        await k.dragToHelp(cast.basket, { to: [BIRDHOUSE.x + 90, LEDGE_Y - 20], ask: 'askBasket', nudge: 'nudgeBasket', helped: 'carryBasket', by: teddy, dropSize: 200 });
         k.fx.pop();
-        await k.all(k.fade(food, 1, 0.6), k.fade(saucer, 1, 0.6));
+        await k.all(k.vanish(cast.basket), k.fade(food, 1, 0.6), k.fade(saucer, 1, 0.6));
         await k.say('putOut', teddy);
 
         // His turn: fill the saucer.
