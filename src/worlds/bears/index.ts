@@ -21,11 +21,16 @@ import { places } from './places';
 import { seaProps } from './seaProps';
 import { treasury } from './treasury';
 import { treasuryPeople } from './treasuryPeople';
+import { dollsHousePeople } from './dollsHousePeople';
 import { treasuryProps } from './treasuryProps';
 import { riverbank } from './riverbank';
 import { boathouse } from './boathouse';
 import { island } from './island';
 import { sailorProps } from './sailorProps';
+import { workshop } from './workshop';
+import { hospital } from './hospital';
+import { dollsHouses } from './dollsHouses';
+import { birdThings } from './birdThings';
 
 /** Parts every bear has (parts.ts). Bears in long dresses have no legs to move. */
 const BEAR_PARTS = ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'legL', 'legR'];
@@ -197,6 +202,40 @@ export default defineWorld({
         'Pose cuddle: holding Bertie (small and happy, in his striped blazer) against her chest. Humans are big here: stand her taller than the bears (w 320–360).',
       voice: 'A gentle, kind, elderly English lady, seventies: soft and warm, a little quavery.',
     },
+    toymaker: {
+      name: 'the Toymaker',
+      ...from(dollsHousePeople, 'toymaker'),
+      parts: GIRL_PARTS,
+      about:
+        'Teddy’s friend the Toymaker: a kind, bald, middle-aged man with tufts of ginger hair over his ears, big round blue-rimmed spectacles, a big nose, a green-and-white check shirt with rolled sleeves, a brown waistcoat, a red spotted neckerchief and a long white apron. Warm, fussy and proud of his work; gets in a flap when things go wrong ("Such a dreadful thing has happened!"). ' +
+        'Poses: upset (one hand to his cheek, worried brows: the morning his doll’s house is spoilt) and paint (his right hand, on the left of the picture, held up with a paintbrush, as if painting). Humans are big here: the bears are small beside him; stand him w 300–340.',
+      voice: 'A kindly, slightly fussy English craftsman in his fifties: warm, a little flustered when worried.',
+    },
+    matron: {
+      name: 'Matron',
+      ...from(dollsHousePeople, 'matron'),
+      parts: GIRL_PARTS,
+      about:
+        'The young Matron of the Children’s Hospital: brown hair in a ponytail, a white nurse’s cap with a small red cross, a blue dress with short puffed sleeves, a white apron and black stockings. Kind and busy, a bit wistful about the ugly old wall the children have to look at from their balcony. ' +
+        'Pose point: pointing up and to the side (the picture’s right; flip to point left), the fingertip at about (285, 125) in the portrait, at a wall. Humans are big here: stand her w 280–320.',
+      voice: 'A warm, brisk young English nurse: kind, busy, a little wistful.',
+    },
+    tom: {
+      name: 'Tom',
+      ...from(dollsHousePeople, 'tom'),
+      parts: GIRL_PARTS,
+      about:
+        'A little boy of about six from the Children’s Hospital, in blue-and-white striped pyjamas, with sandy hair. Cheerful and well: it is the hospital’s party day. Seen leaning on a balcony rail, so the top half matters most (put the rail or balcony in front of his lower half). Pose wave: his hand up beside his face at about (246, 138) in the portrait.',
+      voice: 'A cheerful little English boy of six: bright and chatty.',
+    },
+    daisy: {
+      name: 'Daisy',
+      ...from(dollsHousePeople, 'daisy'),
+      parts: GIRL_PARTS,
+      about:
+        'A little girl of about six from the Children’s Hospital: a long dark plait over her shoulder (on the picture’s right), a pink-and-white spotted nightie with a frilled collar, and a small teddy hugged at her chest (on the picture’s left). Bright and well: it is the hospital’s party day. Pose wave: her free hand up beside her face at about (244, 138) in the portrait.',
+      voice: 'A bright little English girl of six: sweet, quick and happy.',
+    },
   },
   backdrops: {
     'bear-garden': {
@@ -214,6 +253,9 @@ export default defineWorld({
     'bear-river': { art: riverbank['bear-river'], about: 'The river bank by the old boat-house on a sunny summer day: an open sky (one small cloud at about 560, 150) left clear for storm clouds to drift in, a weeping willow on the left (trunk base 110, 560; fronds stay left of x 270) with bulrushes, and lily pads and a white water lily in the river bay at the bottom left. A back river behind (x 0–770, y 400–470). On the right, the grey-blue plank boat-house with a red-tiled gable (wall x 850–1125, ground y 664), a weathercock on the ridge (x 986, y 300–398) and a wide dark doorway (x 880–1010, y 535–664: run into it by moving to x ≈ 945 and fading); a sandy path to it, a stone edge at y ≈ 690–712 and an old rowing boat pulled up at x 1000–1150. Open grass x 250–820, feet y 620–660; room for 3–4. Sunny: darken it with k.dim, rain and storm-cloud props.' },
     'boat-house': { art: boathouse['boat-house'], about: 'Inside the old boat-house: a grey stone wall with plank panelling low down and a flagstone floor (no rug: use the rag-mat prop). A window with cross bars, glass x 330–620, y 120–340 (rain: k.ambient(\'rain\', { area: [330, 120, 290, 220], z: 2 }); sun: a k.light there), on a sill with flowerpots and a model ship. A shelf (x 700–970, top y 262), a map top left, a picture of a sailing boat, a life ring at (130, 330), an old rowing boat upturned along the back wall (x 230–800, y 486–584), barrels at the left edge (x 0–220) and a plain door far right (x 996–1156, bottom y 578) with a coil of rope. Floor from y 578; feet y 640–660; the middle is open for the shipwreck prop (x 210–970) and 3–4 bears.' },
     'plumtree-island': { art: island['plumtree-island'], about: 'Plumtree Island on a fresh sunny day after rain: a wide calm river, a pale sky with clouds at the corners (x 250–950, y 0–300 clear for a rainbow), green hills and hedges on the far bank (water from y ≈ 440). Left, a small round grassy island (x 120–560, grass top y ≈ 470, shore y ≈ 560) with two leaning plum trees, red flowers, a white mother duck (470, 540) and three yellow ducklings (x 260–390, y ≈ 550), all painted in. Open water for the motor-boat x 450–1180, y 430–680 (waterline y 600–640); calm water in the caption band.' },
+    // From the Teddy Bear Treasury: The Doll's House.
+    'toy-workshop': { art: workshop['toy-workshop'], about: 'The Toymaker’s cosy workshop. A wooden bench across the left and middle: top at y 470 (x 120–700), cupboard doors below to the floor (y 600); paint pots at the far left end (x 126–295); the bench top x 300–620 clear for the dolls-house prop (stand it with its bottom at y 472). A green shelf of books above (x 90–350, y 290), shelves of wooden toys (x 380–740, y 190), a toy boat far right. An open window with red spotted curtains, glass x 760–1040, y 130–360 (lay night rain over it). Flagstone floor from y 600; feet y 640–670: a bear in front of the bench at the left, a grown-up at the right (x 720–1000).' },
+    'hospital-garden': { art: hospital['hospital-garden'], about: 'The Children’s Hospital garden on a sunny party day. Left and back-left, a big plain old wall of sandy blocks (x 0–640, top y ≈ 200, foot y ≈ 600) with weeds at its ends; its plain face (x 200–520, y 260–480) is where the bird-house goes (centre about 360, 370). Right, the cream hospital (x 640–1180) with bunting, a red cross and an open French window (x 840–1000, y 215–420) onto a first-floor balcony (floor y 420): add the hospital-balcony prop at x 640, y 330 and stand children behind it, feet at y 420. Lawn and a sandy path: open ground x 120–640, feet y 630–660.' },
   },
   props: {
     sandcastle: { art: seaProps.sandcastle, size: [200, 160], about: 'A bucket-shaped sand-castle with turrets, a little door, shells and a moat line; its bottom edge is the sand. Make several at different w; flatten one with k.to(scaleY) and a puff when Bully spoils it.' },
@@ -262,5 +304,15 @@ export default defineWorld({
     concertina: { art: sailorProps.concertina, size: [200, 150], about: 'A sailor’s concertina: hexagonal wooden ends with buttons and a strap, red-and-cream bellows (x 44–156). Parts `endL`, `bellows` (origin 100 75) and `endR`. To squeeze: bellows scaleX s (0.6 squeezed), endL x += 56·(1−s), endR x −= 56·(1−s).' },
     'rag-mat': { art: sailorProps['rag-mat'], size: [260, 120], about: 'An old striped rag rug on the floor (floor line y 112). Part `flat` (x 6–254, y 76–112) and part `rolled` (hidden: rolled up at the left end, x 10–136, y 44–112): fade `flat` out and `rolled` in to roll it up.' },
     shipwreck: { art: sailorProps.shipwreck, size: [760, 320], about: 'Uncle Bill’s pretend shipwreck in the boat-house (base y 316): a barrel on its side with a short plank on top, a long plank on two upturned chairs, sacks, a rolled mat and a sea chest. Three places to stand (feet, in its own units): left x 22–198 at y 172, middle (highest) x 212–478 at y 132, right (the chest) x 620–745 at y 232. The floor between is “the sea”. No parts.' },
+    // From the Teddy Bear Treasury: The Doll's House.
+    'hospital-balcony': { art: hospital['hospital-balcony'], size: [560, 200], about: 'The hospital balcony’s white iron railing with bunting, transparent between the bars. Place it at x 640, y 330 on hospital-garden: top rail y 334–348, bars to y 420, stone slab y 420–458. Children stand behind it (lower z), feet at y 420, so only their top halves show.' },
+    'dolls-house': { art: dollsHouses['dolls-house'], size: [260, 300], about: 'The Toymaker’s red-brick three-storey doll’s house on a stone base (bottom edge = the bench top): grey slate roof, two chimneys, white sash windows, a white door with a fanlight and steps. The door and shutters are bare wood; part `fresh` (hidden) is the wet blue paint (#3f82c8) on the door, shutters and frames: fade it in to paint them.' },
+    'dolls-house-warped': { art: dollsHouses['dolls-house-warped'], size: [300, 300], about: 'The same doll’s house after the rain got in: each storey swollen and slipped, dark gaps at the corners, the roof askew, two floor-boards sticking out, drips and a puddle; door and shutters blue. Sad, not scary. No parts.' },
+    'bird-house': { art: dollsHouses['bird-house'], size: [280, 300], about: 'The doll’s house made into a bird house, for fixing to a wall: open dark holes for windows (centres, in its own units, (88,125) (192,125) (88,181) (192,181) (88,236) (192,236)) and an arched door hole (140, 238), a thick overhanging roof, twig perches under the middle holes (y ≈ 205), and a feeding ledge (top y 262, x 30–250) with two iron hooks under it. No birds; no parts.' },
+    paintbrush: { art: birdThings.paintbrush, size: [60, 180], about: 'A wide flat paintbrush: wooden handle at the top, bristles at the bottom dipped in door-blue paint (#3f82c8). No parts.' },
+    songbird: { art: birdThings.songbird, size: [90, 70], about: 'A little round yellow songbird facing right, wings a little spread. Parts `wingL` and `wingR`, hinged at the shoulder (46, 34): flap with scaleY. Fly several at w 50–80.' },
+    'berry-basket': { art: birdThings['berry-basket'], size: [180, 150], about: 'A wicker basket with a big arched handle. Part `berries` (hidden): red berries, blackberries and hazelnuts heaped over the rim; fade it in when they’re picked.' },
+    saucer: { art: birdThings.saucer, size: [140, 60], about: 'An old white saucer with a blue rim, a little chipped. Part `water` (hidden): a pale blue shine of water; fade it in to fill it.' },
+    'bird-food': { art: birdThings['bird-food'], size: [200, 80], about: 'Bird food spread along a ledge: red berries, hazelnuts, seeds and bread crumbs, low and wide, base along the bottom edge. No parts.' },
   },
 });

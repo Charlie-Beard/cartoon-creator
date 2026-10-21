@@ -47,7 +47,7 @@ looked at yet. Tick one off here in the PR that makes it.
 | 50 | Round and Round the Garden (one page) | not yet |
 | 51 | Teddy Bear's Surprise | ✅ `teddy-surprise` |
 | 58 | My Teddy Bear (a poem) | not yet |
-| 59 | The Doll's House | **to make** |
+| 59 | The Doll's House | ✅ `dolls-house` |
 
 ## Later, when wanted
 
