@@ -348,7 +348,7 @@ export default defineCartoon({
         cast.harry = k.character('harry', { x: 300, y: 392, w: 220 });
         cast.hagrid = k.character('hagrid', { x: 790, y: 232, w: 380, flip: true });
         // Hagrid's flute lies on the floor, across the hearth from Harry, where he can drag it over.
-        cast.flute = k.prop('woodenFlute', { x: 590, y: 565, w: 200, z: 20 });
+        cast.flute = k.prop('woodenFlute', { x: 610, y: 565, w: 190, z: 20 });
         k.set(cast.flute, { opacity: 0 });
       },
       async play(k) {
@@ -373,14 +373,14 @@ export default defineCartoon({
 
         // His turn: the flute lies on the floor; he drags it over to Harry.
         await k.fade(flute, 1, 0.3);
-        const bring = await k.dragToHelp(flute, { to: [520, 590], ask: 'askBring', nudge: 'nudgeBring', helped: 'helpedBring', by: harry, helper: ron });
+        const bring = await k.dragToHelp(flute, { to: [460, 595], ask: 'askBring', nudge: 'nudgeBring', helped: 'helpedBring', by: harry, helper: ron });
         await k.say(bring === 'dragged' ? 'thanksBring' : 'thanksRonBring', harry);
 
         // Harry holds it up.
         k.music('magic');
         k.fx.twinkle();
         await k.to(flute, 0.6, { y: '-=25', rotation: -10, ease: 'back.out(1.6)' });
-        k.sparkle(520, 520, 10, 120);
+        k.sparkle(460, 520, 10, 120);
         await k.all(k.say('withThis', harry), k.hop(harry, 20));
         await k.wait(500);
       },
