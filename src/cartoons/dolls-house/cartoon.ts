@@ -400,7 +400,7 @@ export default defineCartoon({
         const { mummy } = cast;
         await k.say('staleBread', mummy);
         k.fx.pop();
-        const bread = k.add(loaf(), { x: 630, y: 550, w: 130, h: 78, z: 15 });
+        const bread = k.add(loaf(), { x: 470, y: 302, w: 130, h: 78, z: 15 });
         k.sparkle(695, 590, 8, 80);
 
         // His turn: the bread goes into the basket.
