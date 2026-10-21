@@ -183,7 +183,7 @@ export default defineCartoon({
         await k.all(k.say('cakeIdea', pan), rattle(k, pan));
 
         // His turn: the cake comes out of his pots, and goes into Silky's bag.
-        const treat = k.add(cake(), { x: 560, y: 520, w: 180, z: 20 });
+        const treat = k.add(cake(), { x: 870, y: 600, w: 160, z: 20 });
         k.set(treat, { opacity: 0 });
         clank(4, 0.1);
         k.fx.pop();
