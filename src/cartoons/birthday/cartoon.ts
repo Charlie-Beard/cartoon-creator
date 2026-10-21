@@ -30,7 +30,7 @@
  * home in time. The cake is the world's (`birthday-cake`, its flames a part);
  * his name is written on its plaque here, so it is drawn fresh each time.
  */
-import { C, cached, defineCartoon, ink, piece, rect, svg, type Kit } from '../../kit';
+import { C, cached, defineCartoon, ellipse, ink, piece, rect, svg, type Kit } from '../../kit';
 import { moves as commonMoves, sounds as commonSounds } from '../../worlds/common/moves';
 import { noiseOff, warmEnding } from '../../worlds/common/pieces';
 import { moves as farawayMoves, sounds as farawaySounds } from '../../worlds/faraway/moves';
@@ -48,6 +48,14 @@ const unlitFlames = cached(() =>
   svg({ w: 210, h: 30, name: 'birthday-unlit' }, [
     piece(rect(0, 0, 210, 30), '#f3d79a', { edge: 'clean', shadow: false, fibre: false }),
     ...Array.from({ length: 10 }, (_, i) => ink([[14 + i * 20, 28], [14 + i * 20, 21]], { width: 2, color: C.charcoal })),
+  ]),
+);
+
+/** Mr Oom Boom Boom's spare drumstick: a wooden stick with a red knob (180 × 44). */
+const drumstick = cached(() =>
+  svg({ w: 180, h: 44, name: 'birthday-drumstick', label: 'A drumstick' }, [
+    piece(rect(4, 16, 140, 13, 6), '#6e4426'),
+    piece(ellipse(152, 22, 22, 20), C.red),
   ]),
 );
 
@@ -219,8 +227,7 @@ export default defineCartoon({
         await k.say('noBoom', oom);
 
         // His turn: start the party.
-        const stick = k.prop('stick', { x: 610, y: 470, w: 160, z: 16 });
-        k.set(stick, { rotation: -20 });
+        const stick = k.add(drumstick(), { x: 620, y: 600, w: 180, z: 16 });
         await k.dragToHelp(stick, { to: oom, ask: 'askDrum', nudge: 'nudgeDrum', helped: 'panDrum', by: oom, helper: pan });
         void k.vanish(stick, 0.2);
         k.sfx.boom();
