@@ -9,8 +9,8 @@
  *      moonrise. Bring Hedwig. It's a surprise!" Harry is a bit scared;
  *      Hermione says they'll be brave together, and Hedwig leads the way.
  *   2. Moonrise. They creep out across the grounds under the moon, guessing
- *      who sent it. Hedwig flies on into the Forbidden Forest. "Lumos!": the
- *      tip of Harry's wand lights up. Hook: deep in the trees, something was
+ *      who sent it. Hedwig flies on into the Forbidden Forest. His turn: he
+ *      taps the tip of Harry's wand and "Lumos!" lights it up. Hook: deep in the trees, something was
  *      waiting.
  *   3. The Forbidden Forest. Hedwig's urgent double hoot, the trees creak, a
  *      long soft hiss, and Voldemort looms out of the dark: what is in that
@@ -24,7 +24,9 @@
  *      letter: a year ago he gave Hedwig to Harry, so today she gets a cake,
  *      and she carried her own party invitation. A rock cake (crunch!);
  *      Hedwig has the very first slice of birthday cake, then a slice for
- *      him, and it's her best birthday ever.
+ *      him, and it's her best birthday ever. Two drags here: he drags
+ *      Hagrid's rock cake across the table to Hermione, then the first slice
+ *      of birthday cake to Hedwig.
  *
  * Scary, never cruel (docs/STYLE.md): Voldemort looms and hisses and wants
  * the letter; nobody is touched, and his wand is only ever lifted to the
@@ -176,7 +178,11 @@ export default defineCartoon({
     guess: { who: 'hermione', text: 'Someone who knows Hedwig very well. Look how she leads the way!' },
     edge: { who: 'harry', text: 'She’s flying into the Forbidden Forest. It’s so dark in there!' },
     needLight: { who: 'hermione', text: 'Then we need some light. Go on, Harry.' },
+    askLumos: { who: 'hermione', text: 'Tap the tip of his wand, and he’ll make a light!' },
+    nudgeLumos: { who: 'hermione', text: 'Just tap his wand. Go on!' },
+    helpedLumos: { who: 'harry', text: 'Here I go, then.' },
     lumos: { who: 'harry', text: 'Lumos!' },
+    thanksLumos: { who: 'hermione', text: 'Oh, that’s much better. Thank you!' },
     waiting: { who: 'narrator', text: 'And deep in the trees, something was waiting.' },
     // 3. The Forbidden Forest
     creak: { who: 'narrator', text: 'The trees creaked. The wind went cold. Then came a long, soft hiss.' },
@@ -201,7 +207,15 @@ export default defineCartoon({
     ownInvite: { who: 'hermione', text: 'So Hedwig carried her OWN party invitation?' },
     bestOwl: { who: 'hagrid', text: 'Who better? She’s the best owl in the world!' },
     rockCake: { who: 'hagrid', text: 'Rock cake, anyone? Made ’em meself!' },
+    askRock: { who: 'hagrid', text: 'Drag the rock cake over to Hermione!' },
+    nudgeRock: { who: 'hagrid', text: 'Just drag it across the table.' },
+    helpedRock: { who: 'hagrid', text: 'Here, Hermione. Have one!' },
+    thanksRock: { who: 'hagrid', text: 'Ha! Cheers! Go on, Hermione, try it.' },
     crunch: { who: 'hermione', text: 'Er… I think I’ll have birthday cake, please.' },
+    askSlice: { who: 'harry', text: 'The first slice is for Hedwig. Can you drag it to her?' },
+    nudgeSlice: { who: 'harry', text: 'Drag the cake over to Hedwig!' },
+    helpedSlice: { who: 'harry', text: 'I’ll pass it along to her.' },
+    thanksSlice: { who: 'hermione', text: 'Well done! Look how happy she is!' },
     slice: { who: 'harry', text: 'And a slice for {name}, for being so brave!' },
     end: { who: 'narrator', text: 'And that was Hedwig’s best birthday ever.' },
   },
@@ -304,13 +318,20 @@ export default defineCartoon({
         await flyOff(k, hedwig, 'left', 1.4);
         await k.all(k.say('edge', harry), k.shake(harry, 3, 2));
         await k.say('needLight', hermione);
+        // His turn: tap the tip of Harry's wand and it lights up (the wand faces left here).
+        const lx = 840 + 52 * (230 / 300);
+        const ly = 385 + 198 * (230 / 300);
+        const lspot = k.add(wandSpot(), { x: lx - 55, y: ly - 40, w: 110, h: 140, z: 29 });
+        const lhow = await k.tapToHelp(lspot, { ask: 'askLumos', nudge: 'nudgeLumos', helped: 'helpedLumos', by: hermione, helper: harry, size: 150 });
+        k.remove(lspot);
 
         // Lumos: the tip of his wand lights up.
         await k.all(k.say('lumos', harry), k.wait(300).then(() => castSpell(k, harry)));
         k.fx.twinkle();
         // Facing left, his wand is on his left side: its tip at x + (300 − 248) of his 300-wide box.
-        lumos(k, [840 + 52 * (230 / 300), 385 + 198 * (230 / 300)]);
-        await k.wait(900);
+        lumos(k, [lx, ly]);
+        await k.wait(700);
+        if (lhow === 'tapped') await k.say('thanksLumos', hermione);
 
         // Something in the trees.
         k.silence();
@@ -452,13 +473,16 @@ export default defineCartoon({
         // A rock cake, set down on the table in front of Hermione. She tries it: crunch.
         k.music('cosy');
         await k.say('rockCake', hagrid);
-        const rock = k.add(rockCake(), { x: 395, y: 545, w: 64, z: 17 });
+        const rock = k.add(rockCake(), { x: 705, y: 500, w: 110, z: 17 });
         k.set(rock, { opacity: 0 });
         k.fx.pop();
         await k.appear(rock, 0.3);
-        await k.wait(400);
+        // His turn: drag the rock cake across the table to Hermione.
+        const rhow = await k.dragToHelp(rock, { to: hermione, ask: 'askRock', nudge: 'nudgeRock', helped: 'helpedRock', by: hagrid, dropSize: 200 });
+        if (rhow === 'dragged') await k.say('thanksRock', hagrid);
+        await k.wait(300);
         crunch();
-        k.puff(427, 560, 60, '#8a7a64');
+        k.puff(340, 500, 60, '#8a7a64');
         await k.all(k.shake(hermione, 4, 2), k.vanish(rock, 0.3));
         await k.say('crunch', hermione);
         laugh();
@@ -466,13 +490,15 @@ export default defineCartoon({
         await k.all(k.shake(hagrid, 4, 3), k.shake(harry, 3, 3));
 
         // The very first slice for the birthday owl.
-        const first = k.add(cakeSlice(), { x: 430, y: 500, w: 70, z: 17 });
+        const first = k.add(cakeSlice(), { x: 130, y: 250, w: 110, z: 17 });
         k.set(first, { opacity: 0 });
         await k.appear(first, 0.3);
-        k.fx.whizz();
-        await k.to(first, 0.6, { x: 120, y: 30, ease: 'power1.inOut' });
+        // His turn: drag the first slice to Hedwig.
+        const show = await k.dragToHelp(first, { to: hedwig, ask: 'askSlice', nudge: 'nudgeSlice', helped: 'helpedSlice', by: harry, dropSize: 200 });
         k.sparkle(620, 540, 8, 80);
+        await k.vanish(first, 0.3);
         await k.all(hoot(k, hedwig, 2), k.hop(hedwig, 20));
+        if (show === 'dragged') await k.say('thanksSlice', hermione);
 
         // And a slice for him: it flies out of the cake towards the screen.
         await k.say('slice', harry);
