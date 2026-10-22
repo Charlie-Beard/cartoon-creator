@@ -33,14 +33,27 @@ export async function openCorner(page: Page): Promise<void> {
   await expect(page.locator('.scene.corner')).toBeVisible({ timeout: 20_000 });
 }
 
-/** The library's card for a cartoon, turning pages if it is not on the first. */
+/** The library's card for a cartoon: opens its world's book, then turns pages if it is not on the first. */
 export async function cardFor(page: Page, id: string) {
+  const world = SHELF.find((c) => c.id === id)?.world ?? '';
   const card = page.locator(`[data-cartoon="${id}"]`);
+  const deck = page.locator('.shelf-deck');
   const first = page.locator('.shelf-card').first();
-  // Wait for the shelf to be drawn first: on a busy machine the first look
-  // can come before it, when neither the card nor "More" is there yet.
-  await expect(first).toBeAttached({ timeout: 20_000 });
-  // Back to the first page (the shelf can open where he left it), then on
+  // Wait for the library to be drawn first: on a busy machine the first
+  // look can come before it, when neither a book nor a card is there yet.
+  await expect(page.locator('.shelf-book, .shelf-card').first()).toBeAttached({ timeout: 20_000 });
+  // The library can open inside the book he left: back to the bookcase if
+  // that is another world's, then into this one.
+  if ((await deck.getAttribute('data-open')) !== world) {
+    if (await page.locator('.shelf-card').count()) {
+      await page.getByRole('button', { name: 'All the books' }).click();
+      await expect(deck).toHaveAttribute('data-open', '');
+    }
+    await page.locator(`[data-book="${world}"]`).click();
+    await expect(deck).toHaveAttribute('data-open', world);
+  }
+  await expect(first).toBeAttached();
+  // Back to the book's first page (it can open where he left it), then on
   // a page at a time. Each turn waits for the new page's cards to be there,
   // not a fixed time: a tap that lands as a slow turn finishes is a second
   // turn, which would skip right past the card's page.

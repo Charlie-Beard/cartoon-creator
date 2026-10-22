@@ -7,7 +7,7 @@
 - The kit, generalised: worlds by id, episodes of scenes, `tapToHelp`.
 - Worlds: `common`, `faraway` (ported from maths-game), `hogwarts`, `bears` (Teddy Bear, in watercolour and ink)
   (ported from spelling-game).
-- Screens: the library (shelf), the player, the grown-ups' corner.
+- Screens: the library (a bookcase with one book per world, each opening to its cartoons), the player, the grown-ups' corner.
 - Tooling: `check`, `shots` (frames, contact sheet, pacing), the voice
   pipeline with a cast file, unit and e2e tests, CI and Pages deploy.
 - Docs and skills: CLAUDE.md, STYLE, WRITING, KIT, WORLDS; new-cartoon,
