@@ -62,7 +62,14 @@ export async function cardFor(page: Page, id: string) {
     for (let guard = 0; guard < 20 && (await card.count()) === 0 && (await button.isVisible()); guard++) {
       const before = await first.getAttribute('data-cartoon');
       await button.click();
-      await expect.poll(() => first.getAttribute('data-cartoon').catch(() => null), { timeout: 10_000 }).not.toBe(before);
+      // A tap that lands while the shelf is still busy is ignored, so if the
+      // page hasn't turned after a few seconds, tap once more (a tap during a
+      // turn that is under way is ignored too, so this can't skip a page).
+      const turned = () => expect.poll(() => first.getAttribute('data-cartoon').catch(() => null), { timeout: 4_000 }).not.toBe(before);
+      if (!(await turned().then(() => true, () => false))) {
+        await button.click();
+        await expect.poll(() => first.getAttribute('data-cartoon').catch(() => null), { timeout: 10_000 }).not.toBe(before);
+      }
     }
   }
   return card;
