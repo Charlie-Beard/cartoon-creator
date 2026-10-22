@@ -18,7 +18,8 @@
  *      bottle of all. But there's only one sip in it: enough for one.
  *   3. Through the fire. Hermione will drink the round one, go back, and
  *      send an owl to Dumbledore. "You're a great wizard, Harry." "Not as
- *      great as you." She walks back through the purple fire, safe. Harry
+ *      great as you." His third turn: he drags the fat round bottle across
+ *      to Hermione (a drag). She walks back through the purple fire, safe. Harry
  *      drinks the tiny one (brr, like ice down to his toes!) and walks into
  *      the black flames, cold as snow, and out the other side.
  *   4. The mirror. In the very last room stands the tall golden mirror Harry
@@ -29,9 +30,9 @@
  *      the Stone, but not use it, could get it from the mirror."
  *   5. Sherbet lemons. Dumbledore's office, all three friends together. The
  *      Stone will be kept safe. Hermione worked out the riddle, Ron won the
- *      chess, Hagrid's flute got them past Fluffy, and the riddle was made by
- *      Professor Snape, to keep the Stone safe. "Snape was helping?
- *      Blimey!" A sherbet lemon, anyone?
+ *      chess, and the riddle was made by Professor Snape, to keep the Stone safe. "Snape was helping?
+ *      Blimey!" A sherbet lemon, anyone? His fifth turn (a drag): he passes
+ *      the jar of sherbet lemons across to the friends.
  *
  * The scary beat is the two fires leaping up and shutting them in: sound
  * first (a roar of flame), the camera on the black fire for one line, then
@@ -189,6 +190,11 @@ export default defineCartoon({
     careful: { who: 'harry', text: 'Be careful, Hermione.' },
     greatWizard: { who: 'hermione', text: 'You be careful too. You’re a great wizard, Harry.' },
     notAsGreat: { who: 'harry', text: 'Not as great as you.' },
+    askRound: { who: 'harry', text: '{name}, can you pass Hermione the round bottle? Drag it to her!' },
+    nudgeRound: { who: 'harry', text: 'Drag the fat round bottle across to Hermione.' },
+    helpedRound: { who: 'harry', text: 'I’ll pass it to you, Hermione.' },
+    thanksRound: { who: 'hermione', text: 'Thank you! Just what I needed.' },
+    thanksHarry: { who: 'hermione', text: 'Thank you, Harry.' },
     notHot: { who: 'narrator', text: 'Hermione walked into the purple fire. It didn’t feel hot at all. And she was safely through.' },
     brr: { who: 'harry', text: 'Brr! It’s like ice, all the way down to my toes!' },
     hereIGo: { who: 'harry', text: 'Here I go.' },
@@ -210,10 +216,14 @@ export default defineCartoon({
     keptSafe: { who: 'dumbledore', text: 'The stone is safe now. Thank you, all three of you.' },
     team: { who: 'harry', text: 'Hermione worked out the riddle. And Ron won the giant chess game!' },
     nameFound: { who: 'hermione', text: 'And {name} helped us with the bottles!' },
-    flute: { who: 'hermione', text: 'And Hagrid’s flute got us past Fluffy.' },
     snape: { who: 'dumbledore', text: 'Did you know? Professor Snape, the Potions teacher, made that riddle. He wanted to keep the stone safe too.' },
     blimey: { who: 'ron', text: 'Snape was helping? Blimey!' },
     sherbet: { who: 'dumbledore', text: 'Now. Would anybody like a sherbet lemon?' },
+    askJar: { who: 'dumbledore', text: 'Please pass the jar to my friends. Drag it over!' },
+    nudgeJar: { who: 'dumbledore', text: 'Drag the jar of sherbet lemons across to the friends.' },
+    helpedJar: { who: 'hermione', text: 'I’ll fetch the jar myself.' },
+    thanksJar: { who: 'ron', text: 'Thanks! Yum.' },
+    thanksHermione: { who: 'ron', text: 'Thanks, Hermione. Yum.' },
     end: { who: 'narrator', text: 'And the three friends ate sherbet lemons until their tongues fizzed.' },
   },
   scenes: [
@@ -339,12 +349,16 @@ export default defineCartoon({
         burn(k, purple);
         burn(k, black);
         // The two bottles, off the table: one for each friend.
-        const round = k.add(roundBottle(), { x: ROUND[0] - 30, y: ROUND[1] - 80, w: 60, z: 20 });
+        const round = k.add(roundBottle(), { x: ROUND[0] - 45, y: ROUND[1] - 120, w: 90, z: 20 });
         const tiny = k.add(tinyBottle(), { x: TINY[0] - 22, y: TINY[1] - 75, w: 45, z: 20 });
         await k.say('owl', hermione);
         await k.say('careful', harry);
         await k.say('greatWizard', hermione);
         await k.say('notAsGreat', harry);
+
+        // His turn: pass Hermione the round bottle.
+        const gave = await k.dragToHelp(round, { to: hermione, ask: 'askRound', nudge: 'nudgeRound', helped: 'helpedRound', by: harry, dropSize: 200 });
+        await k.say(gave === 'dragged' ? 'thanksRound' : 'thanksHarry', hermione);
 
         // Hermione drinks the round one and walks back through the purple fire.
         await drink(k, hermione, round);
@@ -392,7 +406,7 @@ export default defineCartoon({
         await k.say('theMirror', harry);
         await k.say('wantMost', harry);
 
-        // His third turn: look in the mirror.
+        // His fourth turn: look in the mirror.
         await k.tapToHelp(mirror, { ask: 'askMirror', nudge: 'nudgeMirror', helped: 'helpedMirror', by: harry, size: 240 });
         k.music('magic');
         k.fx.twinkle();
@@ -444,13 +458,16 @@ export default defineCartoon({
         await k.vanish(stone);
         await k.say('team', harry);
         await k.all(k.say('nameFound', hermione), k.hop(hermione, 20));
-        await k.say('flute', hermione);
         await k.say('snape', dumbledore);
         await k.all(k.say('blimey', ron), k.shake(ron, 4, 2));
         bellyLaugh();
         await k.wait(300);
         await k.fade(jar, 1, 0.4);
         await k.say('sherbet', dumbledore);
+        // His turn: pass the jar along to the friends.
+        const passed = await k.dragToHelp(jar, { to: [570, 625], ask: 'askJar', nudge: 'nudgeJar', helped: 'helpedJar', by: dumbledore, helper: hermione, dropSize: 200 });
+        await k.vanish(jar);
+        await k.say(passed === 'dragged' ? 'thanksJar' : 'thanksHermione', ron);
         await warmEnding(k, { cast: [harry, ron, hermione], end: 'end' });
       },
     },

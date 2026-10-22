@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'malfoy, who cheats and dresses up as a Dementor',
     places: ['quidditch-pitch', 'quidditch-stands'],
     cast: ['harry', 'wood', 'malfoy', 'ron', 'hermione', 'hagrid', 'mcgonagall', 'dumbledore'],
-    turns: ['wave the Gryffindor banner to cheer Harry on', 'tap Harry’s wand for his Patronus', 'catch the golden Snitch'],
+    turns: ['drag the golden Snitch up to the hoops to let it go', 'wave the Gryffindor banner to cheer Harry on', 'tap Harry’s wand for his Patronus', 'catch the golden Snitch', 'drag the Quidditch Cup over to Harry'],
     jokes: ['Wood has waited seven years', 'Wood has something in his eye'],
     ending: 'lifting the Quidditch Cup',
   },
