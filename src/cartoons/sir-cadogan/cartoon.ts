@@ -10,23 +10,26 @@
  *      was rude to her, and she ran off to hide. Without her, nobody can get
  *      in. Clip-clop: into the painting gallops a little knight on a round
  *      pony. "Fear not! Sir Cadogan is here!" The pony stops dead, and over
- *      he goes: "I meant to do that."
+ *      he goes: "I meant to do that." His first turn comes before the knight
+ *      does: he taps the empty painting to knock on it.
  *   2. Silly passwords. He changes the password every day, sometimes twice.
  *      Harry tries yesterday's, "Scurvy cur!", which is wrong. Neville has
  *      written them all down on a very long list. Sir Cadogan challenges Ron
  *      to a duel (Ron has only a sandwich). Neville can't read his own
- *      writing, so his first turn: he taps the list and finds today's
+ *      writing, so his second turn: he taps the list and finds today's
  *      password. "Oddsbodikins!" The painting swings open.
  *   3. The runaway pony. Next morning a painted butterfly flutters by, the
- *      pony trots off after it, and the knight lands in a heap. His second
- *      turn: he taps the pony to call it back, and Sir Cadogan climbs on.
+ *      pony trots off after it, and the knight lands in a heap. His
+ *      third turn: he taps the pony to call it back, and Sir Cadogan climbs on.
  *      "Onward, my noble steed!" The pony yawns. It would rather have a nap.
  *   4. Hide and seek. Where is the Lady in Pink? Sir Cadogan gallops from
  *      painting to painting to look: not in this one, not in that one. His
- *      third turn: he spots something pink in a little painting and taps
+ *      fourth turn: he spots something pink in a little painting and taps
  *      it. It's her! Peeves was so rude, she didn't want to come back. Sir
  *      Cadogan bows: "Fair lady, your door misses you!" Very well, then.
- *   5. Home again. Sir Cadogan says farewell and rides off into his own
+ *   5. Home again. Sir Cadogan says farewell, and Ron wants him to have a
+ *      snack for the road. His fifth turn is a drag: Ron's sandwich up to the
+ *      knight. Then Sir Cadogan rides off into his own
  *      painting. The Lady in Pink comes home, and the new password is
  *      "Brave knight!" She sings a happy song, very loudly.
  *
@@ -75,6 +78,17 @@ const butterfly = cached(() =>
   ]),
 );
 
+/** Ron's sandwich (120 × 90): two slices of bread with cheese and lettuce between. */
+const sandwich = cached(() =>
+  svg({ w: 120, h: 90, name: 'cadogan-sandwich', label: 'A sandwich' }, [
+    piece([[6, 40], [114, 40], [112, 78], [10, 80]], '#e0b070'),
+    piece([[4, 52], [30, 44], [50, 54], [74, 44], [96, 54], [116, 46], [116, 58], [4, 62]], '#7fb35a'),
+    piece([[8, 40], [112, 40], [108, 50], [10, 50]], '#f2c94c', { edge: 'clean', shadow: false }),
+    piece([[6, 40], [10, 18], [40, 8], [80, 8], [110, 18], [114, 40]], '#ecc489'),
+    piece([[22, 20], [60, 14], [96, 22]], '#f6dcae', { edge: 'clean', shadow: false }),
+  ]),
+);
+
 // ---------------------------------------------------------------- sounds
 
 /** Hooves on painted grass: a round pony's clip-clop, `steps` of them. */
@@ -120,7 +134,7 @@ function sing(): void {
 
 type Actor =
   | 'harry' | 'ron' | 'hermione' | 'neville' | 'knight' | 'pony' | 'lady'
-  | 'frame' | 'canvas' | 'parlour' | 'hole' | 'list' | 'butterfly' | 'hem';
+  | 'frame' | 'canvas' | 'parlour' | 'hole' | 'list' | 'butterfly' | 'hem' | 'sandwich';
 const cast = {} as Record<Actor, HTMLElement>;
 /** Who found the Lady in Pink in scene 4 (he did, or Hermione helped), for her thank-you at the end. */
 let foundBy: 'tapped' | 'helped' = 'tapped';
@@ -182,6 +196,9 @@ export default defineCartoon({
     empty: { who: 'hermione', text: 'But look! Her painting is empty!' },
     peeves: { who: 'ron', text: 'Peeves was rude to her. So she ran off to hide in another painting!' },
     cantGetIn: { who: 'hermione', text: 'But without her, nobody can get into Gryffindor Tower!' },
+    askKnock: { who: 'hermione', text: '{name}, can you knock on the empty painting? Tap it!' },
+    nudgeKnock: { who: 'hermione', text: 'Tap the big painting, to knock.' },
+    helpedKnock: { who: 'ron', text: 'Oh, I’ll do it. Knock, knock!' },
     fearNot: { who: 'sirCadogan', text: 'Fear not! Sir Cadogan is here!' },
     illGuard: { who: 'sirCadogan', text: 'I shall guard your door! Have at you, scurvy knaves!' },
     knave: { who: 'ron', text: 'What’s a knave? Is that us?' },
@@ -233,6 +250,11 @@ export default defineCartoon({
     // 5. Home again
     farewell: { who: 'sirCadogan', text: 'Farewell, friends! If you ever need a hero, just call!' },
     byeKnight: { who: 'hermione', text: 'Goodbye, Sir Cadogan! Thank you!' },
+    takeSandwich: { who: 'ron', text: 'Wait! A knight needs a snack for the road.' },
+    askSandwich: { who: 'ron', text: '{name}, drag my sandwich to Sir Cadogan!' },
+    nudgeSandwich: { who: 'ron', text: 'Drag the sandwich up to the knight.' },
+    helpedSandwich: { who: 'harry', text: 'I’ll pass it up to him. Here you are!' },
+    thanksSandwich: { who: 'sirCadogan', text: 'A feast! My thanks, good Ron!' },
     homeSweet: { who: 'pinkLady', text: 'Ah, home sweet home! Now, my dears. Let me think of a new password.' },
     whatNow: { who: 'ron', text: 'Oh no. What is it now?' },
     braveKnight: { who: 'pinkLady', text: 'I know! Today the password is: brave knight!' },
@@ -265,6 +287,10 @@ export default defineCartoon({
         await k.say('peeves', ron);
         k.music('sneaky');
         await k.say('cantGetIn', hermione);
+
+        // His first turn: knock on the empty painting.
+        await k.tapToHelp(cast.frame, { ask: 'askKnock', nudge: 'nudgeKnock', helped: 'helpedKnock', by: hermione, helper: ron, size: 280 });
+        k.fx.knock(2);
 
         // Clip-clop: into the painting gallops a little knight on a round pony.
         k.music('adventure');
@@ -318,7 +344,7 @@ export default defineCartoon({
         giggle();
         await k.say('cantRead', neville);
 
-        // His first turn: find today's password on the list.
+        // His second turn: find today's password on the list.
         const how = await k.tapToHelp(list, { ask: 'askList', nudge: 'nudgeList', helped: 'helpedList', by: neville, helper: harry, size: 160 });
         const lb = k.box(list);
         k.sparkle(lb.x + lb.w / 2, lb.y + lb.h * 0.8, 10, 80);
@@ -366,7 +392,7 @@ export default defineCartoon({
         await k.say('neverBetter', cast.knight);
         await k.say('munching', hermione);
 
-        // His second turn: call the pony back.
+        // His third turn: call the pony back.
         const how = await k.tapToHelp(pony, { ask: 'askPony', nudge: 'nudgePony', helped: 'helpedPony', by: hermione, helper: harry, size: 200 });
         neigh();
         await k.to(k.pivot(k.part(pony, 'head')), 0.4, { rotation: 0 });
@@ -424,7 +450,7 @@ export default defineCartoon({
         await k.fade(cast.hem, 1, 0.4);
         await k.say('pink', hermione);
 
-        // His third turn: tap the painting with something pink in it.
+        // His fourth turn: tap the painting with something pink in it.
         const spot = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', { x: 960, y: 220, w: 140, h: 180, z: 20 });
         foundBy = await k.tapToHelp(spot, { ask: 'askPainting', nudge: 'nudgePainting', helped: 'helpedPainting', by: harry, helper: hermione, size: 190 });
         k.remove(spot);
@@ -457,11 +483,18 @@ export default defineCartoon({
         cast.harry = k.character('harry', { x: 40, y: 445, w: 200 });
         cast.ron = k.character('ron', { x: 190, y: 445, w: 200 });
         cast.hermione = k.character('hermione', { x: 340, y: 448, w: 200 });
+        cast.sandwich = k.add(sandwich(), { x: 235, y: 595, w: 110, z: 12 });
       },
       async play(k) {
         const { harry, ron, hermione, knight, pony, parlour, lady } = cast;
         await k.all(k.say('farewell', knight), brandish(k, knight));
         await k.say('byeKnight', hermione);
+        await k.say('takeSandwich', ron);
+
+        // His fifth turn (a drag): Ron's sandwich up to Sir Cadogan.
+        await k.dragToHelp(cast.sandwich, { to: knight, ask: 'askSandwich', nudge: 'nudgeSandwich', helped: 'helpedSandwich', by: ron, helper: harry, dropSize: 200 });
+        await k.vanish(cast.sandwich);
+        await k.say('thanksSandwich', knight);
         // Off he rides, out of the painting. The Lady in Pink's own painting comes back.
         clipClop(8);
         await k.to([pony, knight], 1.4, { x: 380, opacity: 0, ease: 'power1.in' });
