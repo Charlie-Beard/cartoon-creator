@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'a thunderstorm, and Uncle Bill playing the pirate king',
     places: ['boat-house', 'bear-river', 'plumtree-island'],
     cast: ['teddy', 'barney', 'mummy-bear', 'uncle-bill'],
-    turns: ['roll up the stripy mat', 'tap the plank so Barney can jump off the wobbly barrel', 'tap the engine to start the boat again'],
+    turns: ['roll up the stripy mat', 'tap the plank so Barney can jump off the wobbly barrel', 'drag the concertina from the hamper to Uncle Bill', 'tap the mummy duck to say hello', 'tap the engine to start the boat again'],
     jokes: ['Just the weather for a shipwreck!', 'First time I’ve ever been called that!'],
     ending: 'a boat ride round Plumtree Island under a rainbow',
   },

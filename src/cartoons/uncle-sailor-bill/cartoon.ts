@@ -25,14 +25,17 @@
  *      barrel wobbles. His big turn: he taps the plank so Barney jumps to
  *      it (or Teddy calls him across). "Blow me down! Missed you!" Round
  *      the wreck twice, then: time for ship's rations!
- *   4. Ship's rations. The picnic hamper; Uncle Bill's concertina and a
- *      sing-song, everyone bobbing. The rain stops and the sun comes in at
- *      the window. A voyage to Plumtree Island after all! Get the
- *      boat-house shipshape. Mummy: thank goodness!
+ *   4. Ship's rations. The picnic hamper. Where's Uncle Bill's concertina?
+ *      It pops up on the hamper, and his turn (a drag) is to drag it
+ *      across to Uncle Bill (or Barney brings it). Then the sing-song,
+ *      everyone bobbing. The rain stops and the sun comes in at the
+ *      window. A voyage to Plumtree Island after all! Get the boat-house
+ *      shipshape. Mummy: thank goodness!
  *   5. Plumtree Island. The motor boat on the river; the engine goes phut
- *      and stops. His third turn: he taps the engine and it starts again
+ *      and stops. His turn: he taps the engine and it starts again
  *      (or Uncle Bill pulls the cord). To the island: a duck and her
- *      ducklings, but it's far too wet to land. Maybe next time. Barney:
+ *      ducklings (his turn: he taps the mummy duck to say hello, or Barney
+ *      quacks for him), but it's far too wet to land. Maybe next time. Barney:
  *      the shipwreck was the best bit! Can we have another one next time?
  *      A rainbow, and the end.
  *
@@ -208,7 +211,12 @@ export default defineCartoon({
     rations: { who: 'uncle-bill', text: 'Time for ship’s rations!' },
     // 4. Ship's rations
     goodThings: { who: 'barney', text: 'Sandwiches! Buns! And lemonade!' },
-    singSong: { who: 'uncle-bill', text: 'And now for a sing-song! Out comes my old concertina!' },
+    singSong: { who: 'uncle-bill', text: 'And now for a sing-song! Where’s my old concertina?' },
+    askConcertina: { who: 'uncle-bill', text: 'There it is, in the hamper! Can you drag it over to me, {name}?' },
+    nudgeConcertina: { who: 'uncle-bill', text: 'Drag the concertina over to me, shipmate.' },
+    fetchConcertina: { who: 'barney', text: 'I’ll bring it, Uncle Bill!' },
+    thanksConcertinaName: { who: 'uncle-bill', text: 'Thank you, {name}! Now, a tune!' },
+    thanksConcertinaBarney: { who: 'uncle-bill', text: 'Thank you, Barney! Now, a tune!' },
     joinedIn: { who: 'narrator', text: 'And everyone joined in with all the jolly songs they knew.' },
     stopped: { who: 'barney', text: 'Look, everyone! It’s stopped raining!' },
     afterAll: { who: 'uncle-bill', text: 'So it’s a voyage to Plumtree Island after all!' },
@@ -224,6 +232,11 @@ export default defineCartoon({
     offWeGoName: { who: 'uncle-bill', text: 'Well done, {name}! Putt-putt-putt! Off we go again!' },
     offWeGo: { who: 'uncle-bill', text: 'There she goes! Putt-putt-putt! Off we go again!' },
     ducklings: { who: 'teddy', text: 'Look! A mummy duck and her ducklings!' },
+    askDuck: { who: 'teddy', text: 'Let’s say hello! Tap the mummy duck, {name}!' },
+    nudgeDuck: { who: 'teddy', text: 'Tap the white duck on the water.' },
+    quackHello: { who: 'barney', text: 'Hello, ducks! Quack, quack!' },
+    duckName: { who: 'teddy', text: 'Quack! She says hello, {name}!' },
+    duckBarney: { who: 'teddy', text: 'Quack! She says hello, Barney!' },
     tooWet: { who: 'uncle-bill', text: 'Sorry, shipmates. The island’s too wet to land on today.' },
     nextTime: { who: 'uncle-bill', text: 'Maybe next time, eh? When it’s fair weather for sailing.' },
     bestBit: { who: 'barney', text: 'The shipwreck was the best bit!' },
@@ -484,7 +497,7 @@ export default defineCartoon({
         cast.barney = k.character('barney', { x: 410, y: 414, w: 200, z: 11 });
         cast.bill = k.character('uncle-bill', { x: 780, y: 346, w: 270, flip: true, z: 10 });
         cast.basket = k.prop('picnic-basket', { x: 590, y: 548, w: 150, z: 14 });
-        cast.concertina = k.prop('concertina', { x: 790, y: 470, w: 150, z: 15 });
+        cast.concertina = k.prop('concertina', { x: 612, y: 436, w: 150, z: 15 });
         k.set(cast.concertina, { opacity: 0, scale: 0.4 });
       },
       async play(k) {
@@ -499,12 +512,16 @@ export default defineCartoon({
         await k.say('goodThings', barney);
         k.pose(barney, 'default');
 
-        // Out comes the concertina, and the sing-song.
+        // Where's the concertina? Up it pops from the hamper.
         k.pose(bill, 'laugh');
         await k.say('singSong', bill);
         k.pose(bill, 'default');
         k.fx.pop();
         await k.to(concertina, 0.5, { opacity: 1, scale: 1, ease: 'back.out(1.6)' });
+
+        // His turn: drag it from the hamper to Uncle Bill.
+        const got = await k.dragToHelp(concertina, { to: [905, 570], ask: 'askConcertina', nudge: 'nudgeConcertina', helped: 'fetchConcertina', by: bill, helper: barney, dropSize: 200 });
+        await k.say(got === 'dragged' ? 'thanksConcertinaName' : 'thanksConcertinaBarney', bill);
         shanty(3);
         await k.all(
           squeeze(k, concertina, 12),
@@ -553,6 +570,7 @@ export default defineCartoon({
       },
       async play(k) {
         const { teddy, barney, bill, boat, engine } = cast;
+        const duck = k.prop('duck', { x: 80, y: 548, w: 150, z: 8 });
         const all = [bill, teddy, barney, boat, engine];
         putt(3);
         await k.all(together(k, all, 3, { x: 0, ease: 'power1.out' }), k.wait(400).then(() => k.say('offTheySailed')));
@@ -572,6 +590,12 @@ export default defineCartoon({
         k.pose(teddy, 'happy');
         await k.say('ducklings', teddy);
         k.pose(teddy, 'default');
+
+        // His turn: say hello to the mummy duck.
+        const hello = await k.tapToHelp(duck, { ask: 'askDuck', nudge: 'nudgeDuck', helped: 'quackHello', by: teddy, helper: barney, size: 170 });
+        k.fx.boing();
+        await k.hop(duck, 30, 2);
+        await k.say(hello === 'tapped' ? 'duckName' : 'duckBarney', teddy);
         k.face(teddy, false);
         await k.say('tooWet', bill);
         await k.say('nextTime', bill);
