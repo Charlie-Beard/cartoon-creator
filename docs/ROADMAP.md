@@ -49,13 +49,13 @@ looked at yet. Tick one off here in the PR that makes it.
 | 58 | My Teddy Bear (a poem) | not yet |
 | 59 | The Doll's House | ✅ `dolls-house` |
 
-## More turns for him (in progress)
+## More turns for him ✅
 
 Every episode now has at least 5 of his turns, taps and drags
-(`k.dragToHelp`, new), and runs 2–6 minutes. The episodes made before
-the rule are being brought up to it one PR at a time; `npm run check`
-warns on any still short of 5, and becomes an error once all are done.
-New lines are unrecorded until a grown-up runs `voice-cartoon`.
+(`k.dragToHelp`), and runs 2–6 minutes. The episodes made before the
+rule were all brought up to it, one PR each; `npm run check` (and
+`npm test`) now fail any episode with fewer than 5. The new lines are
+unrecorded until a grown-up runs `voice-cartoon`.
 
 ## Later, when wanted
 

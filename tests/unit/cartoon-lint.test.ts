@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { SHELF } from '../../src/cartoons';
 import type { Line } from '../../src/core/cartoon';
-import { callArguments, stripComments, tapCalls, undefinedLines, unknownIds, unusedLines, withoutLinesTable } from '../../scripts/lib/cartoon-lint';
+import { callArguments, MIN_TURNS, stripComments, tapCalls, undefinedLines, unknownIds, unusedLines, withoutLinesTable } from '../../scripts/lib/cartoon-lint';
 import { catalogue } from '../../scripts/lib/catalogue';
 
 const cat = {
@@ -117,6 +117,11 @@ describe('every cartoon on the shelf', () => {
       it('asks only for characters, backdrops, props and poses that exist', () => {
         if (!source) return;
         expect(unknownIds(source, catalogue())).toEqual([]);
+      });
+
+      it(`gives him at least ${MIN_TURNS} turns`, () => {
+        if (!source) return;
+        expect(tapCalls(source).total).toBeGreaterThanOrEqual(MIN_TURNS);
       });
     });
   }
