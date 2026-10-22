@@ -22,12 +22,15 @@
  *      red, then laughs too. Ginny goes very pink and hurries away. Who
  *      sent it?
  *   4. Lockhart's hearts. At teatime Lockhart's marvellous idea, a shower of
- *      hearts, makes one giant heart that grows and grows. His third turn:
+ *      hearts, makes one giant heart that grows and grows. His fourth turn:
  *      he pops it. Confetti everywhere, and Lockhart's hair goes fluffy:
  *      "My beautiful hair!" Hermione thinks she knows who sent Harry's
  *      valentine: someone kind, and very shy. "Never you mind, Ron."
+ *      After the song (his third turn) one of Harry's books is still on the
+ *      floor: he drags it back into the bag.
  *   5. A card for someone shy. By the common-room fire Harry makes a
- *      thank-you card, and Hedwig flies off with it. Meanwhile: Ginny opens
+ *      thank-you card. His fifth turn: he drags it to Hedwig, who flies off
+ *      with it. Meanwhile: Ginny opens
  *      it, "From Harry!", and hugs it. Happy Valentine's Day.
  *
  * The chase is the "scary" bit, and it is played for laughs: the cupid is
@@ -167,6 +170,10 @@ export default defineCartoon({
     pickled: { who: 'ron', text: 'A fresh pickled toad! Ha ha ha!' },
     tomato: { who: 'harry', text: 'My face is as red as a tomato! But… that was quite funny.' },
     mustGo: { who: 'ginny', text: 'Oh! Er… I have to go!' },
+    askBook: { who: 'ron', text: 'Harry’s book is on the floor. {name}, can you drag it back into his bag?' },
+    nudgeBook: { who: 'ron', text: 'Drag the book into the bag!' },
+    helpedBook: { who: 'harry', text: 'Never mind. I’ll pop it in myself.' },
+    thanksBook: { who: 'harry', text: 'Thank you! Safe and sound.' },
     whoSent: { who: 'harry', text: 'Who sent it, I wonder?' },
     // 4. Lockhart's hearts
     teatime: { who: 'narrator', text: 'At teatime, Professor Lockhart had one more marvellous idea.' },
@@ -185,6 +192,10 @@ export default defineCartoon({
     evening: { who: 'narrator', text: 'That evening, by the fire, Harry made a card of his own.' },
     thankYou: { who: 'harry', text: 'Whoever sent my song was being kind. So I’ll say thank you.' },
     hedwigTake: { who: 'harry', text: 'Hedwig, take this to Ginny, please. Shh! Don’t tell Ron.' },
+    askCard: { who: 'harry', text: 'Can you drag my card to Hedwig, {name}?' },
+    nudgeCard: { who: 'harry', text: 'Drag the card to Hedwig!' },
+    helpedCard: { who: 'harry', text: 'Never mind. I’ll give it to her myself.' },
+    thanksCard: { who: 'harry', text: 'Perfect! Off you go, Hedwig.' },
     ronCard: { who: 'ron', text: 'Does anybody want to send me a valentine?' },
     notSinging: { who: 'hermione', text: 'Only if it’s not a singing one!' },
     meanwhileGinny: { who: 'narrator', text: 'And in a quiet corner of the common room…' },
@@ -310,7 +321,7 @@ export default defineCartoon({
         const { ginny, harry, bag, cupid, harp, ron } = cast;
         await k.wait(300);
         const spill: HTMLElement[] = [
-          k.prop('spellbook', { x: 430, y: 560, w: 90, z: 16 }),
+          k.prop('spellbook', { x: 430, y: 560, w: 110, z: 16 }),
           k.prop('quill', { x: 470, y: 570, w: 80, z: 16 }),
           k.prop('spellbook', { x: 500, y: 570, w: 80, z: 16 }),
         ];
@@ -325,7 +336,7 @@ export default defineCartoon({
           }),
         );
         await k.all(
-          k.to(spill[0], 0.5, { x: -170, y: 60, rotation: -40, ease: 'power2.out' }),
+          k.to(spill[0], 0.5, { x: -230, y: 0, rotation: -40, ease: 'power2.out' }),
           k.to(spill[1], 0.5, { x: 120, y: 70, rotation: 70, ease: 'power2.out' }),
           k.to(spill[2], 0.5, { x: 40, y: 80, rotation: 20, ease: 'power2.out' }),
           k.shake(bag, 6, 2),
@@ -362,6 +373,11 @@ export default defineCartoon({
         await k.say('mustGo', ginny);
         k.fx.patter(6);
         await k.exit(ginny, 'left', 0.7);
+
+        // His third turn: drag the fallen book back into Harry's bag.
+        const bookHow = await k.dragToHelp(spill[0], { to: bag, ask: 'askBook', nudge: 'nudgeBook', helped: 'helpedBook', by: ron, helper: harry, dropSize: 170 });
+        await k.all(k.vanish(spill[0]), k.shake(bag, 5, 2));
+        if (bookHow === 'dragged') await k.say('thanksBook', harry);
         await k.say('whoSent', harry);
       },
     },
@@ -398,7 +414,7 @@ export default defineCartoon({
         await k.to(heart, 1.4, { scale: 2.2, ease: 'sine.inOut' });
         await k.say('nonsense', lockhart);
 
-        // His third turn: pop it.
+        // His fourth turn: pop it.
         await k.tapToHelp(heart, { ask: 'askPop', nudge: 'nudgePop', helped: 'helpedPop', by: hermione, helper: ron, size: 240 });
         const hb = k.box(heart);
         const [hx, hy] = [hb.x + hb.w / 2, hb.y + hb.h / 2];
@@ -448,14 +464,13 @@ export default defineCartoon({
         await k.pop(card, 1.1);
         await k.say('thankYou', harry);
         await k.say('hedwigTake', harry);
-
-        // Hedwig takes the card and flies off with it.
         await swoopIn(k, hedwig, 'right', 1.1);
         await hoot(k, hedwig, 1);
-        const cb = k.box(card);
-        const hb = k.box(hedwig);
-        await k.to(hedwig, 0.6, { x: `+=${cb.x - hb.x - 10}`, y: `+=${cb.y - hb.y - 110}`, ease: 'power1.inOut' });
-        await k.all(flyOff(k, hedwig, 'right', 1.2), k.to(card, 1.2, { x: 700, y: -200, opacity: 0, ease: 'power1.in' }));
+
+        // His fifth turn: drag the card to Hedwig, who flies off with it.
+        const cardHow = await k.dragToHelp(card, { to: hedwig, ask: 'askCard', nudge: 'nudgeCard', helped: 'helpedCard', by: harry, dropSize: 200 });
+        if (cardHow === 'dragged') await k.say('thanksCard', harry);
+        await k.all(flyOff(k, hedwig, 'right', 1.2), k.to(card, 1.2, { x: '+=420', y: '-=420', opacity: 0, ease: 'power1.in' }));
         await k.say('ronCard', ron);
         await k.say('notSinging', hermione);
         giggle();

@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'dwarfCupid, gruff and determined to sing (a chase, played for laughs)',
     places: ['castle-corridor', 'great-hall', 'classroom', 'common-room'],
     cast: ['harry', 'ron', 'hermione', 'ginny', 'lockhart', 'dwarfCupid', 'hedwig'],
-    turns: ['hide Harry behind the suit of armour', 'twang the cupid’s harp to start the song', 'pop Lockhart’s giant heart'],
+    turns: ['hide Harry behind the suit of armour', 'twang the cupid’s harp to start the song', 'drag Harry’s fallen book into his bag', 'pop Lockhart’s giant heart', 'drag the thank-you card to Hedwig'],
     jokes: ['a fresh pickled toad', 'Lockhart’s forty-six valentines', 'Hmph.'],
     ending: 'a thank-you card for someone shy',
   },
