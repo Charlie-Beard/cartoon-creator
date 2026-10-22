@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'bully-bear, who is caught out by Captain Bear and says sorry',
     places: ['bear-beach', 'bear-dunes'],
     cast: ['teddy', 'barney', 'teeny-bear', 'bully-bear', 'captain-bear'],
-    turns: ['tip the bucket to make a sand tower', 'send the pretend letter to Teeny', 'plant the flag on top of the castle'],
+    turns: ['drag the bucket onto the castle to make a sand tower', 'drag the pretend letter to Teeny', 'tap Captain Bear for a tickle', 'tap the castle to pat it smooth', 'plant the flag on top of the castle'],
     jokes: ['Well, scupper me scallywags!', 'Clever Teddy Bear!'],
     ending: 'a castle built together, shell medals for everyone, teatime',
   },
