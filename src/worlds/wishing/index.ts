@@ -16,6 +16,8 @@ import { giantKitchen } from './kitchen';
 import { playroom } from './playroom';
 import { curiosityShop } from './shop';
 import { wishingSky } from './sky';
+import { grim, grimBack, grimDizzy, grimLaugh, grimShout } from './grim';
+import { grimSchoolroom, schoolCupboard } from './schoolroom';
 
 export default defineWorld({
   id: 'wishing',
@@ -57,6 +59,14 @@ export default defineWorld({
       about: 'A huge, grumpy giant with a bushy grey beard, wild eyebrows and a big red nose; so big that only his face and one hand fit in the picture. Roars “SHINIER!” and stomps (pose roar), sleeps (sleep) and beams when pleased (beam), but he is more silly than scary: he is grumpy because he is tired, and he never hurts anyone. Always show him big, looking down.',
       voice: 'Very deep, slow and booming, grumbly and huffy; a big old grump with a hidden soft side.',
     },
+    grim: {
+      name: 'Mr Grim',
+      art: grim,
+      poses: { shout: grimShout, dizzy: grimDizzy, laugh: grimLaugh, back: grimBack },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Mr Grim, headmaster of Mr Grim’s School for Bad Brownies: a tall, thin, stern old brownie with a long pointed nose, bushy black brows, little round spectacles, a long pointed grey beard, pointy ears, a black gown with a plum lining and a black mortarboard (part hat: tip it, slide it, lift it). His long ruler is part of armR, so raising the arm raises it. Barks “SILENCE!” and smacks his ruler down, but never touches anyone: strict, pompous and more silly than scary. Poses: shout (brows down, mouth wide, ruler high), dizzy (swirly eyes, hat askew), laugh (crescent eyes, a big laugh), back (seen from behind, writing on the blackboard; no face, so he can’t speak in it).',
+      voice: 'Dry, clipped, stern old schoolmaster; a thin sharp voice that barks when he shouts, a bit pompous and fussy, cracking into a wheezy, surprised giggle when he laughs.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -79,6 +89,10 @@ export default defineWorld({
       art: giantKitchen,
       about: 'Inside the giant’s kitchen, from a mouse’s eye: an enormous table leg on the left, a huge fireplace glowing low at the back, flagstones. The right third is clear for the giant’s face to loom in. Ground line y ≈ 640; room for 3 small actors on the left and middle.',
     },
+    'grim-schoolroom': {
+      art: grimSchoolroom,
+      about: 'Mr Grim’s School for Bad Brownies, the schoolroom: grey stone walls, warm wood, a little gloomy but not dark. An open arched window on the left (x 50–270, y 70–420) with sky beyond: a way in for the chair. A blackboard on the back wall (x 380–800, y 120–380) with a chalk ledge and a duster, its middle (x 470–720, y 170–330) clear for chalk writing. A bare wall at x 820, y 300 for a key hook, and plain stone at x 860–1160 for the school-cupboard prop (x 870, y 200, w 280). Three low brownie desks at the front left (x 40–330, tops y 612). Ground line y ≈ 640; open floor x 300–860.',
+    },
   },
   props: {
     'wishing-chair': {
@@ -93,5 +107,10 @@ export default defineWorld({
     },
     'jigs-umbrella': { art: umbrella, size: [160, 180], about: 'Jigs’s red spotty umbrella, open the right way up, with a curly handle.' },
     'jigs-umbrella-blown': { art: umbrellaBlown, size: [160, 180], about: 'Jigs’s red spotty umbrella blown inside out by the wind.' },
+    'school-cupboard': {
+      art: schoolCupboard,
+      size: [280, 440],
+      about: 'Mr Grim’s tall dark-wood cupboard, with a brass keyhole. Its doors (parts doorL, doorR, hinged at their outer edges) open with scaleX towards 0.2 to show a big dark inside, room for the Wishing-Chair. Stands on y 640 when placed at y 200 at w 280.',
+    },
   },
 });
