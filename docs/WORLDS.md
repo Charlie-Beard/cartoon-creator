@@ -9,6 +9,7 @@ there can use by id. Source: [`src/worlds/`](../src/worlds/).
 | The Faraway Tree | `faraway` | [Up the Faraway Tree](https://github.com/charlie-beard/maths-game) |
 | Hogwarts | `hogwarts` | [Wizard Words](https://github.com/charlie-beard/spelling-game) |
 | Bear Cottage (Teddy Bear; watercolour, not paper: docs/STYLE.md, "The bears") | `bears` | a 1994 book of teddy bear stories |
+| The Wishing-Chair (Mollie, Peter, Jigs the pixie, the flying chair) | `wishing` | Enid Blyton's Wishing-Chair books, made here |
 
 See what's in each, drawn: `npm run lab -- faraway` saves a sheet of
 every character, pose, backdrop and prop, each with its id, to
@@ -138,6 +139,7 @@ made from them. `common/pieces.ts` has the world-neutral ones.
 | common | `meanwhile`, `noiseOff`, `sneakIn`, `warmEnding` |
 | faraway | `ladderArrival`, `landMovesOn`, `slipperySlip`, `teaTime`, `trapdoorArrival`, `snapLoom`, `snapDefeat` |
 | hogwarts | `owlPost`, `greatHall`, `spellLesson`, `broomArrival`, `apparateArrival`, `voldemortLoom` |
+| wishing | `chairRide` (riders sitting in the Wishing-Chair, flying, landing, hopping off) |
 
 ```ts
 import { ladderArrival } from '../../worlds/faraway/pieces';

@@ -2,8 +2,8 @@
 
 Torn-paper puppet cartoons for one 6-year-old (autistic, possibly ADHD) on
 an iPad in landscape. Each cartoon is an episode of 2–6 minutes in a few
-scenes, set in the Faraway Tree, at Hogwarts or at Bear Cottage (the
-teddy bear stories), and now and then it's his
+scenes, set in the Faraway Tree, at Hogwarts, at Bear Cottage (the
+teddy bear stories) or with the Wishing-Chair, and now and then it's his
 turn to tap and help. Claude writes every cartoon from the skills in
 `.claude/skills/`. To make one, follow **`new-cartoon`**.
 
@@ -115,7 +115,7 @@ the checks above pass and CI is green); don't stop at a pushed branch.
 |---|---|
 | `src/cartoons/` | One folder per cartoon (`meta.ts`, `cartoon.ts`); `index.ts` finds them for the shelf |
 | `src/kit/` | `kit.ts` (the stage and its tools), `cartoon.ts` (`defineCartoon`, scenes) |
-| `src/worlds/` | `types.ts`, `index.ts` (lookups), and one folder per world: `common`, `faraway`, `hogwarts`, `bears` |
+| `src/worlds/` | `types.ts`, `index.ts` (lookups), and one folder per world: `common`, `faraway`, `hogwarts`, `bears`, `wishing` |
 | `src/core/` | Pure: lines and their checks (`cartoon.ts`), `{name}` and voice ids (`phrases.ts`) |
 | `src/scenes/` | The library (shelf), the player, the grown-ups' corner |
 | `src/art/` | The paper engine, the watercolour engine (bears), palette, grain, UI pieces (seals, parchment, stars) |

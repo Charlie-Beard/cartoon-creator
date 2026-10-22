@@ -5,7 +5,7 @@
 - The engine, ported from Up the Faraway Tree: paper art, audio, voice
   (with the iPad's fallback), the fixed stage, pause, rotate, the gear.
 - The kit, generalised: worlds by id, episodes of scenes, `tapToHelp`.
-- Worlds: `common`, `faraway` (ported from maths-game), `hogwarts`, `bears` (Teddy Bear, in watercolour and ink)
+- Worlds: `common`, `faraway` (ported from maths-game), `hogwarts`, `bears` (Teddy Bear, in watercolour and ink), `wishing` (the Wishing-Chair)
   (ported from spelling-game).
 - Screens: the library (shelf), the player, the grown-ups' corner.
 - Tooling: `check`, `shots` (frames, contact sheet, pacing), the voice
