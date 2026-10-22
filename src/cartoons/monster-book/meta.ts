@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'a snapping book (a grumpy puppy, really)',
     places: ['flourish-and-blotts', 'diagon-alley'],
     cast: ['harry', 'ron', 'hermione', 'fortescue', 'bookManager', 'monsterBook', 'hedwig', 'crookshanks'],
-    turns: ['put the cherry on the ice cream', 'stroke the Monster Book’s spine', 'tap Crookshanks off Ron’s head'],
+    turns: ['put the cherry on the ice cream', 'drag the spare glove to the manager', 'stroke the Monster Book’s spine', 'tap Crookshanks off Ron’s head', 'drag Ron’s ice cream to him'],
     jokes: ['free ice cream every day', 'the manager’s enormous gloves', 'Crookshanks sits on Ron’s head'],
     ending: 'ice creams in the sunshine',
   },

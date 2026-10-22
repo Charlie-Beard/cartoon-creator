@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'cheeky creatures: a grabbing Grindylow, Red Caps and a sly Hinkypunk',
     places: ['sunny-grounds', 'marsh'],
     cast: ['harry', 'ron', 'neville', 'lupin', 'grindylow', 'redCap', 'hinkypunk'],
-    turns: ['tickle the Grindylow’s fingers', 'tap the Red Cap so everybody laughs', 'tap the next stepping stone'],
+    turns: ['drag the chocolate to Neville', 'tickle the Grindylow’s fingers', 'tap the Red Cap so everybody laughs', 'tap the next stepping stone', 'drag a spare chocolate bar to Ron'],
     jokes: ['Hermione has done it twice', 'Red Caps can’t bear being laughed at', 'Neville’s gran'],
     ending: 'chocolate in the sunshine',
   },
