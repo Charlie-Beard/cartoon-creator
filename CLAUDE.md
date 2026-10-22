@@ -52,6 +52,9 @@ job, not optional: `shots` flags layout slips itself ("Frames to look
 at"), so read the contact sheet, each scene's opening frame and the
 flagged frames, and fix or justify every flag.
 
+**When a piece of work is done, always open a PR and merge it** (once
+the checks above pass and CI is green); don't stop at a pushed branch.
+
 ## Rules that never bend
 
 - **One fixed stage, 1180 × 820, landscape only.** Place everything with
