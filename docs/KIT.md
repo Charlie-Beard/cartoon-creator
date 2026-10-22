@@ -36,8 +36,8 @@ sparkles 50 · confetti 55 · his-turn ring 60 · captions 70.
 
 | Call | Does |
 |---|---|
-| `await k.say('key', speaker?)` | Says the line (its own voice), shows the caption with the speaker's name tag, bobs `speaker` and moves their mouth. Resolves after the line and a 250 ms gap. |
-| `k.caption(text, who?)` | A caption without speech; `''` hides it. |
+| `await k.say('key', speaker?)` | Says the line (its own voice; no caption is shown), bobs `speaker` and moves their mouth. Resolves after the line and a 250 ms gap. |
+| `k.caption(text, who?)` | Sets the hidden caption without speech (`''` clears it). Nothing shows on screen; only the pacing tools read it. |
 | `k.talk(el)` | Bobs an actor as if talking; returns a stopper. (`say` does this for you.) |
 
 Say lines while something happens:

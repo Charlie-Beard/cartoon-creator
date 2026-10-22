@@ -114,7 +114,10 @@ export class Kit<K extends string = string> {
     this.name = o.name;
     this.lines = o.lines;
     this.alive = o.alive;
-    const captionEl = place(h('div', { class: 'story-caption', 'aria-live': 'polite' }), 150, 690, 880, 110);
+    // No captions are shown: the voices carry the story. The caption box is
+    // still kept up to date, hidden, because the screenshot and pacing
+    // tools read it to know which line is being said and when.
+    const captionEl = place(h('div', { class: 'story-caption', hidden: '' }), 150, 690, 880, 110);
     const box = h('div', { class: 'story-caption-text' });
     const tag = h('div', { class: 'story-tag', style: `background:${o.world.accent}` });
     const captionLine = h('span');
@@ -280,7 +283,7 @@ export class Kit<K extends string = string> {
   // ----------------------------------------------------------------- speech
 
   /**
-   * Says a line (by key) with a caption, and makes the speaker bob (and
+   * Says a line (by key), and makes the speaker bob (and
    * their mouth move) while talking. Resolves when it has been said.
    */
   async say(key: K, speaker?: HTMLElement): Promise<void> {
@@ -299,8 +302,9 @@ export class Kit<K extends string = string> {
   }
 
   /**
-   * Shows a caption without speech ('' hides it). With `who` (a character
-   * id), a name tag with their little face sits on the caption.
+   * Sets the (hidden) caption without speech ('' clears it). With `who` (a
+   * character id), a name tag with their little face sits on it. Nothing
+   * shows on screen: captions are hidden for good (see the constructor).
    */
   caption(text: string, who?: string): void {
     const { captionEl, captionLine, tag } = this.show;

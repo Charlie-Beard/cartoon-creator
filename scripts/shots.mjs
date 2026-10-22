@@ -325,7 +325,9 @@ function collectFrame() {
     stage: { w: 1180, h: 820 },
     zoom,
     actors,
-    caption: { on, box: bubble ? box(bubble) : null },
+    // The bubble is hidden for good (no captions on screen), so it measures 0 × 0: leave the box
+    // out and the band check falls back to the whole caption band.
+    caption: { on, box: bubble && bubble.getBoundingClientRect().width ? box(bubble) : null },
     tap: tap ? { box: box(tap) } : null,
   };
 }

@@ -56,7 +56,8 @@ flagged frames, and fix or justify every flag.
 
 - **One fixed stage, 1180 × 820, landscape only.** Place everything with
   stage coordinates (`k.character(id, { x, y, w })`, `place(el, x, y, w, h)`).
-  No responsive layouts. Captions take the bottom band (y 690–800).
+  No responsive layouts. **No captions or subtitles**: the voices carry
+  the story. Keep the bottom band (y 690–800) calm all the same.
 - **Touch only:** tap targets of 72 px or more (his turns are 120 px or
   more), no hover. His turns are taps and drags (`k.tapToHelp`,
   `k.dragToHelp`): at least 5 an episode.
