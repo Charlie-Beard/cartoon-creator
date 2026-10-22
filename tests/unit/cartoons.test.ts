@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SHELF } from '../../src/cartoons';
+import { ALL_CARTOONS as SHELF } from '../../src/cartoons';
 import { SHELF as ON_DISK } from '../../scripts/lib/shelf';
 import { checkLines, isKebab } from '../../src/core/cartoon';
 import { speakers, WORLDS } from '../../src/worlds';

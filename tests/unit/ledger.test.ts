@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SHELF } from '../../src/cartoons';
+import { ALL_CARTOONS as SHELF } from '../../src/cartoons';
 import type { Ledger } from '../../src/cartoons/shelf';
 import type { Line } from '../../src/core/cartoon';
 import { compareLedgers, formatLedgers, lintLedger, phraseWords, placeholderFields, similarity, type LedgerEntry } from '../../scripts/lib/cartoon-lint';

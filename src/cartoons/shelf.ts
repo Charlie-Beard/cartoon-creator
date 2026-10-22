@@ -69,3 +69,16 @@ export const defineMeta = (m: CartoonMeta): CartoonMeta => m;
 export function sortShelf<T extends CartoonMeta>(entries: T[]): T[] {
   return entries.sort((a, b) => b.added.localeCompare(a.added) || a.title.localeCompare(b.title));
 }
+
+/**
+ * The cartoons he can see, by id, while a grown-up wants a short shelf (a
+ * special day, a new favourite). The others stay in their folders, still
+ * checked and tested, and come back when this is null again. The scripts
+ * keep the whole shelf; only the app (and the end-to-end tests of it) use this.
+ */
+export const SHOWING: string[] | null = ['grims-school', 'teddy-surprise'];
+
+/** Only the cartoons in SHOWING, or all of them when it is null. */
+export function showing<T extends CartoonMeta>(entries: T[]): T[] {
+  return SHOWING ? entries.filter((c) => SHOWING!.includes(c.id)) : entries;
+}

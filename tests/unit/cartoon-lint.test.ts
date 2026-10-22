@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { SHELF } from '../../src/cartoons';
+import { ALL_CARTOONS as SHELF } from '../../src/cartoons';
 import type { Line } from '../../src/core/cartoon';
 import { callArguments, MIN_TURNS, stripComments, tapCalls, undefinedLines, unknownIds, unusedLines, withoutLinesTable } from '../../scripts/lib/cartoon-lint';
 import { catalogue } from '../../scripts/lib/catalogue';
