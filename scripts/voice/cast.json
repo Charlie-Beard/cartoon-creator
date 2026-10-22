@@ -52,5 +52,15 @@
   "myrtle": { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "name": "Moaning Myrtle", "settings": { "stability": 0.3, "speed": 0.95 } },
   "ginny": { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "name": "Ginny", "settings": { "stability": 0.45, "speed": 0.98 } },
   "fawkes": { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "name": "Fawkes", "settings": { "stability": 0.55, "speed": 0.9 } },
-  "buckbeak": { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "name": "Buckbeak", "settings": { "stability": 0.55, "speed": 0.9 } }
+  "buckbeak": { "voice_id": "pFZP5JQG7iQjIQuC4Bku", "name": "Buckbeak", "settings": { "stability": 0.55, "speed": 0.9 } },
+  "mollie": { "voice_id": "nDJIICjR9zfJExIFeSCN", "name": "Emmaline - young British girl", "owner": "2d45e341c1672ec1b7a9c952a12dc504a49a8b21a672441a7a5f4e9fa1ee4029", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "jigs": { "voice_id": "yBXjgyIwt8fF3slvxWZi", "name": "James - Energetic & Charismatic", "owner": "2640ead46d8bbfe0ad2f3436f5e2b054d85e4431065bed1cae5797767e0f68f7", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "grim": { "voice_id": "ttNi9wVM8M97tsxE7PFZ", "name": "Victor - Eloquent Evil Villain", "owner": "9b177c40010aa8845eb4c86e5a49a736707982eb75caf442262f6bdee6a16e09", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "peter": { "voice_id": "kmSVBPu7loj4ayNinwWM", "name": "Peter (shares Joe)", "owner": "89befade7c13aab22ca8c36dfb1892f659fd750058462eeed6b05ab238204d74", "settings": { "stability": 0.45, "speed": 1.0 } },
+  "teddy": { "voice_id": "XjGYkUkzth8BPs29fmcV", "name": "Teddy Twinkle - Cute Cartoon", "owner": "119adcff6f9d8ee3d5194065d19fb9b473760336ad4a7227a6890226bc62167b", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "mummy-bear": { "voice_id": "8N2ng9i2uiUWqstgmWlH", "name": "Beth - Calm, Gentle and Nurturing", "owner": "19fcb4e5d0eecf957a34b0ee7f007dfaf98b53a2e66fc5185dbec50e9de84e3e", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "uncle-bill": { "voice_id": "4Vl3K2x290GidNvuaLm7", "name": "Matthew Schmitz - Old Pirate Captain", "owner": "1bdf478ac5e1a81b0b8423faadde277a29cb25195ed2c86adcb0622464c9b930", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "posy": { "voice_id": "jkUnCsbErmJrcbWk1Hmh", "name": "Sally - Youthful Children's Storyteller", "owner": "082419206ac9f545a2b4677848e66d4e6237bd374374c5795555784a8b477823", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "bella": { "voice_id": "GPTk4QbvF7snDhImF5UF", "name": "Lucie - Clear and Professional Actress", "owner": "a07944774a2d417a8dccd25f1107a076b91455fb52f54a571c6927e47b4c0667", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "bobby": { "voice_id": "bTrXJpbeuC5KgriLhQeC", "name": "Peter", "owner": "64cbc624eb5aab4e95a968e1f41d75402277cca6e549036ed17e56ea33bbbc9e", "settings": { "stability": 0.5, "speed": 1.0 } }
 }
