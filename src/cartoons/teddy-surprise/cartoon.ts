@@ -8,7 +8,9 @@
  *   1. Bored. Bear Cottage's garden. Teddy is so bored: he's done all his
  *      jigsaws and tidied the toy cupboard, and there's nothing to do. A
  *      butterfly flutters past and away. Mummy comes out: what about digging in
- *      the garden? All right… he'll ask Barney to help. "Cheer up, Teddy! You
+ *      the garden? His turn: Mummy has a spade, and he drags it across to
+ *      Teddy (or she passes it herself). All right… he'll ask Barney to
+ *      help. "Cheer up, Teddy! You
  *      might have a nice surprise before long!" He doesn't think so, and off
  *      he goes. Mummy, to him: shh, she knows a secret.
  *   2. Nobody home. Barney's green front door. His turn: he taps the brass
@@ -19,7 +21,8 @@
  *      except he hears somebody laughing.
  *   3. Ahoy, ship-mates! The wood. It's Uncle Sailor Bill: "Well, scupper me
  *      scallywags!" Posy and Bella are going on a treasure hunt, with a picnic
- *      first. Will Mummy mind? "I think she'll find out soon enough!" The first
+ *      first. His turn: he drags the picnic basket over to the big stone (or
+ *      Bella carries it). Will Mummy mind? "I think she'll find out soon enough!" The first
  *      clue is in the hollow tree. His turn: he taps the hidey-hole (or Uncle
  *      Bill fishes it out), and out pops a map: the treasure is where the
  *      ducks swim. Where's that? "You'll find out soon enough, Teddy!" Bobby
@@ -75,7 +78,7 @@ const holeArt = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><
 
 // ------------------------------------------------------------------ cast
 
-type Who = 'teddy' | 'mummy' | 'bill' | 'posy' | 'bella' | 'bobby' | 'knocker' | 'stone' | 'hole' | 'basket' | 'chest' | 'plate' | 'duck' | 'butterfly';
+type Who = 'teddy' | 'mummy' | 'bill' | 'posy' | 'bella' | 'bobby' | 'knocker' | 'stone' | 'hole' | 'basket' | 'chest' | 'plate' | 'duck' | 'butterfly' | 'spade';
 const cast = {} as Record<Who, HTMLElement>;
 
 /** Where Teddy sits on his stone in the wood (scenes 2 and 3): on its top, legs over the front. */
@@ -99,6 +102,11 @@ export default defineCartoon({
     jigsaws: { who: 'teddy', text: 'I’ve done all my jigsaws. And I’ve tidied the toy cupboard!' },
     nothingToDo: { who: 'teddy', text: 'There’s nothing to do, {name}. Nothing at all!' },
     digging: { who: 'mummy-bear', text: 'What about digging in the garden, Teddy?' },
+    askSpade: { who: 'mummy-bear', text: 'Here’s a spade. Can you drag it over to Teddy, {name}?' },
+    nudgeSpade: { who: 'mummy-bear', text: 'Drag the spade across to Teddy.' },
+    passSpade: { who: 'mummy-bear', text: 'Never mind, I’ll pass it to him myself.' },
+    thanksSpade: { who: 'teddy', text: 'Ooh, a spade! Thank you!' },
+    thanksMummy: { who: 'teddy', text: 'Ooh, a spade! Thank you, Mummy!' },
     allRight: { who: 'teddy', text: 'All right… I’ll go and ask Barney to help.' },
     cheerUp: { who: 'mummy-bear', text: 'Cheer up, Teddy! You might have a nice surprise before long!' },
     dontThink: { who: 'teddy', text: 'A surprise? I don’t think so.' },
@@ -122,6 +130,10 @@ export default defineCartoon({
     picnicFirst: { who: 'bella', text: 'I’m Bella. And there’s a picnic first!' },
     mummyMind: { who: 'teddy', text: 'Can I come too? Do you think Mummy will mind?' },
     findOut: { who: 'uncle-bill', text: 'Ha! I think she’ll find out soon enough!' },
+    askBasket: { who: 'bella', text: 'Can you drag the picnic basket to the big stone, {name}?' },
+    nudgeBasket: { who: 'bella', text: 'Drag the basket over to the stone.' },
+    carryBasket: { who: 'bella', text: 'I’ll carry it over myself. There!' },
+    thanksBasket: { who: 'bella', text: 'Thank you, {name}! Lovely!' },
     askHole: { who: 'uncle-bill', text: 'The first clue is in the hollow tree. Tap the hidey-hole, {name}!' },
     nudgeHole: { who: 'uncle-bill', text: 'Tap the dark hole in the big tree.' },
     fishItOut: { who: 'uncle-bill', text: 'I’ll fish it out. Got it!' },
@@ -153,14 +165,17 @@ export default defineCartoon({
       set(k) {
         k.backdrop('bear-garden');
         k.music('cosy');
-        cast.teddy = k.character('teddy', { x: 660, y: 412, w: 210, flip: true });
+        cast.teddy = k.character('teddy', { x: 820, y: 412, w: 210, flip: true });
         cast.mummy = k.character('mummy-bear', { x: 340, y: 362, w: 250 });
         // Mummy starts small at the cottage door, to walk down the path.
         k.set(cast.mummy, { x: -150, y: -70, scale: 0.42, opacity: 0 });
         cast.butterfly = k.prop('butterfly', { x: 1180, y: 250, w: 80, z: 20 });
+        // The spade Mummy brings, leaning by her; it fades in when she speaks.
+        cast.spade = k.prop('spade', { x: 580, y: 430, w: 80, z: 13 });
+        k.set(cast.spade, { opacity: 0 });
       },
       async play(k) {
-        const { teddy, mummy, butterfly } = cast;
+        const { teddy, mummy, butterfly, spade } = cast;
         await k.wait(200);
         sigh();
         await k.say('bored');
@@ -184,6 +199,12 @@ export default defineCartoon({
         k.pose(teddy, 'default');
         k.face(teddy, true);
         await k.say('digging', mummy);
+
+        // His turn: drag the spade across to Teddy.
+        await k.to(spade, 0.4, { opacity: 1 });
+        const gift = await k.dragToHelp(spade, { to: teddy, ask: 'askSpade', nudge: 'nudgeSpade', helped: 'passSpade', by: mummy });
+        await k.say(gift === 'dragged' ? 'thanksSpade' : 'thanksMummy', teddy);
+        void k.vanish(spade, 0.4);
         sigh();
         await k.say('allRight', teddy);
         await k.say('cheerUp', mummy);
@@ -193,7 +214,7 @@ export default defineCartoon({
 
         // Off he trudges, out of the gate on the right.
         k.face(teddy, false);
-        await k.all(k.walk(teddy, 620, 2, 5), k.wait(200).then(() => k.fx.patter(6, 0.2)));
+        await k.all(k.walk(teddy, 460, 2, 5), k.wait(200).then(() => k.fx.patter(6, 0.2)));
         await k.wait(400);
         // Mummy, to him: she knows a secret.
         giggle();
@@ -321,6 +342,10 @@ export default defineCartoon({
         k.pose(bella, 'happy');
         await k.say('picnicFirst', bella);
         k.pose(bella, 'default');
+
+        // His turn: drag the picnic basket over to the stone.
+        const set = await k.dragToHelp(basket, { to: [850, 590], ask: 'askBasket', nudge: 'nudgeBasket', helped: 'carryBasket', by: bella, dropSize: 170 });
+        if (set === 'dragged') await k.say('thanksBasket', bella);
         await k.say('mummyMind', teddy);
         await k.blink(bill);
         await k.say('findOut', bill);
