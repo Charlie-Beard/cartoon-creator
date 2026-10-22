@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'leaping purple and black fire (and a riddle)',
     places: ['potion-chamber', 'headmasters-office'],
     cast: ['harry', 'hermione', 'ron', 'dumbledore'],
-    turns: ['unroll the riddle scroll', 'find the smallest bottle', 'look in the golden mirror'],
+    turns: ['unroll the riddle scroll', 'find the smallest bottle', 'pass Hermione the round bottle', 'look in the golden mirror', 'pass the sherbet lemon jar'],
     jokes: ['nettle juice, yuck', 'Snape was helping?'],
     ending: 'sherbet lemons in Dumbledore’s office',
   },
