@@ -45,7 +45,8 @@ npm run build
 ```
 
 All of typecheck, `npm test`, `npm run check` and `npm run test:e2e` must
-pass before a PR. **Look at the screenshots** of every scene you make or
+pass before a PR. CI on a PR runs only the quick ones; **the e2e tests are
+yours to run locally**, and a local pass is enough. **Look at the screenshots** of every scene you make or
 change (`npm run shots`), at 1180 × 820. Iterate with `--fast`; the
 last run before a PR is in real time. Reading the PNGs is part of the
 job, not optional: `shots` flags layout slips itself ("Frames to look

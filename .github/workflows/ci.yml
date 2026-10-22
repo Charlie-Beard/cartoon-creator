@@ -23,9 +23,12 @@ jobs:
       - run: npm run build
 
   # The screens at both iPad sizes, and every cartoon played through at 1180 × 820.
-  # Playing them through is the slow part, so it is shared out over a few
-  # machines at once (each runs its share on every core: playwright.config.ts).
+  # Too slow to run on every PR: they're run locally before a PR (npm run
+  # test:e2e), and here only when started by hand (Actions → CI → Run workflow).
+  # When they do run, they're shared out over a few machines at once (each
+  # runs its share on every core: playwright.config.ts).
   e2e:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
