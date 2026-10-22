@@ -223,8 +223,7 @@ export function lintCartoon({ id, source, lines, catalogue }: LintInput): LintRe
   for (const p of unknownIds(source, catalogue)) errors.push(p);
 
   const taps = tapCalls(source);
-  if (!taps.total) errors.push(`no k.tapToHelp() or k.dragToHelp(): every cartoon needs at least ${MIN_TURNS} turns for him`);
-  else if (taps.total < MIN_TURNS) warnings.push(`only ${taps.total} of his turns: every cartoon needs at least ${MIN_TURNS} (tapToHelp or dragToHelp)`);
+  if (taps.total < MIN_TURNS) errors.push(`only ${taps.total} of his turns: every cartoon needs at least ${MIN_TURNS} (tapToHelp or dragToHelp)`);
   if (taps.withoutAsk) warnings.push(`${taps.withoutAsk} of his turns without an \`ask\` line: he is never told what to do`);
 
   const seconds = spokenSeconds(lines);
