@@ -43,6 +43,10 @@
 .story-caption.on {
   opacity: 1;
 }
+/* Captions are hidden for good: the voices carry the story. */
+.story-caption[hidden] {
+  display: none;
+}
 .story-caption-text {
   max-width: 100%;
   padding: 14px 30px;

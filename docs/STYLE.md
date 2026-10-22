@@ -6,9 +6,8 @@ as his two games. This is what that means.
 ## Who is watching
 
 **Jasper, 6.** Autistic, possibly ADHD. He watches on an iPad (11th gen)
-held in landscape, usually on his own. He is only just reading, so the
-captions are for a grown-up beside him or for later; **the voices carry
-the story**.
+held in landscape, usually on his own. He is only just reading, so there
+are **no captions**: **the voices carry the story**.
 
 He loves **the scary bits**: Dame Snap, Voldemort, being nearly caught.
 Villains get real screen time and real menace, as cartoon paper
@@ -92,15 +91,17 @@ way:
   always the same.
 - Our own drawings in that style: never a traced or scanned page.
 - Everything else here still holds: drawn once and held still, smooth
-  motion, no flashing, Andika, the same stage and caption band.
+  motion, no flashing, Andika, the same stage, no captions.
 - The book's Bully Bear story has Captain Bear wanting to give Bully "a
   good spanking" and nearly throwing him: never. He roars and sends Bully
   off, and Bully comes back and says sorry.
 
 ## Composition
 
-- The stage is **1180 × 820**. Captions sit in the band **y 690–800**:
-  keep faces and anything important above y ≈ 660.
+- The stage is **1180 × 820**. No captions are shown, but the
+  bottom band (**y 690–800**) is kept calm all the same, as every
+  backdrop and episode is laid out that way: keep faces and anything
+  important above y ≈ 660.
 - The ground line in most backdrops is about **y 640** (each backdrop's
   `about` says). Portraits are **head and shoulders** (300 × 340 at
   natural size, no legs); most scenes use them at w 220–280. Stand them
