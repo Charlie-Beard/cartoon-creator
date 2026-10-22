@@ -25,6 +25,30 @@ test('the library shows a card for every cartoon on the shelf', async ({ page })
   }
 });
 
+/** The library opens on a bookcase, one book per world, and each book goes in and back out. */
+test('the bookcase has a book for every world, and each opens and closes', async ({ page }) => {
+  test.skip(!SHELF.length, 'nothing on the shelf');
+  await page.goto('/');
+  const worlds = [...new Set(SHELF.map((c) => c.world))];
+  await expect(page.locator('.shelf-book')).toHaveCount(worlds.length);
+  await expect(page.locator('[data-cartoon]')).toHaveCount(0);
+
+  for (const world of worlds) {
+    const book = page.locator(`.shelf-book[data-book="${world}"]`);
+    const box = await book.boundingBox();
+    expect(box!.width).toBeGreaterThanOrEqual(120);
+    expect(box!.height).toBeGreaterThanOrEqual(120);
+    await book.click();
+    await expect(page.locator('.shelf-deck')).toHaveAttribute('data-open', world);
+    // Only this world's cartoons are inside.
+    const first = SHELF.find((c) => c.world === world)!;
+    await expect(page.locator(`[data-cartoon="${first.id}"]`)).toBeVisible();
+    for (const other of SHELF.filter((c) => c.world !== world)) await expect(page.locator(`[data-cartoon="${other.id}"]`)).toHaveCount(0);
+    await page.getByRole('button', { name: 'All the books' }).click();
+    await expect(page.locator('.shelf-book')).toHaveCount(worlds.length);
+  }
+});
+
 test('the library has the gear in the corner and no scrolling', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('.gear-btn')).toBeVisible();

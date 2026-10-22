@@ -120,6 +120,51 @@
   height: 100%;
 }
 
+/* One world's book on the bookcase. Like a card, GSAP owns the button and
+   the press shows on the face. */
+.shelf-book {
+  position: absolute;
+  display: block;
+  padding: 0;
+  overflow: visible;
+}
+.shelf-book.is-pressed .shelf-face {
+  transform: translateY(4px) scale(0.98);
+}
+/* The backdrop at full height, its sides trimmed to the cover's window. */
+.book-thumb svg {
+  left: -19px;
+  top: 0;
+  width: 240px;
+  height: 167px;
+}
+.book-label {
+  position: absolute;
+  left: 40px;
+  top: 236px;
+  width: 232px;
+  height: 150px;
+  pointer-events: none;
+}
+.book-label svg {
+  width: 100%;
+  height: 100%;
+}
+.book-title {
+  position: absolute;
+  left: 52px;
+  top: 240px;
+  width: 208px;
+  height: 142px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font: 700 38px/1.1 Andika, sans-serif;
+  color: var(--ink-900);
+  pointer-events: none;
+}
+
 .shelf-empty-text {
   display: grid;
   place-items: center;
