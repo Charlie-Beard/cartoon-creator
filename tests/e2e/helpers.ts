@@ -1,5 +1,9 @@
 import { expect, type Page } from '@playwright/test';
-import { SHELF } from '../../scripts/lib/shelf';
+import { SHELF as ALL } from '../../scripts/lib/shelf';
+import { showing } from '../../src/cartoons/shelf';
+
+/** The shelf as the app shows it (src/cartoons/shelf.ts, SHOWING). */
+export const SHELF = showing(ALL);
 
 /**
  * The cartoons to play through: the whole shelf, or just CARTOON=<id>

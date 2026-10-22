@@ -1,6 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { SHELF } from '../../scripts/lib/shelf';
-import { answerTo, openCorner } from './helpers';
+import { answerTo, openCorner, SHELF } from './helpers';
 
 test('the sum is worked out right', () => {
   expect(answerTo('6 × 8 =')).toBe(48);
