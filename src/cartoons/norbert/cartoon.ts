@@ -6,31 +6,35 @@
  *
  *   1. Too big for the hut. Hagrid's secret: a baby dragon called Norbert,
  *      by the fire in the hut. He hiccups smoke. "He's only little!" Not
- *      any more: he grows with a pop and his tail knocks the pans flying.
+ *      any more. His first turn: Hagrid's pie sits on the floor and Norbert's
+ *      tummy rumbles, so he drags the pie to Norbert. Gulp! Norbert grows
+ *      with a pop and his tail knocks the pans flying.
  *      Hermione: the hut is wooden, and dragons breathe fire. Harry: dragons
  *      aren't allowed. But Ron's brother Charlie looks after dragons, and he
  *      wrote back: his friend will fetch Norbert at midnight on Saturday,
  *      from the top of the tallest tower. Honk! Hagrid's enormous hanky.
  *   2. Packing the crate. Saturday night. Norbert peeps out of his crate,
- *      but he's too wriggly to settle. He wants his teddy. His first turn:
+ *      but he's too wriggly to settle. He wants his teddy. His second turn:
  *      he taps the teddy and it hops into the crate. A tiny snore. Hagrid:
  *      "Goodbye, Norbert. Mummy will never forget you." Then the
  *      Invisibility Cloak sweeps over Harry, Hermione and the crate, and
  *      they're gone (Hagrid: "Blimey! Where've you gone?").
  *   3. Under the cloak. Creeping up the dark stairs, faint and shimmering.
  *      Footsteps. A lantern. Professor Snape, slowly: "Who… is… there?" The
- *      crate is poking out of the cloak! His second turn: he taps it, and it
+ *      crate is poking out of the cloak! His third turn: he taps it, and it
  *      tucks back under. Norbert hiccups one little puff of smoke. "Smoke?
  *      Peeves, no doubt." Snape sweeps off. Phew!
  *   4. Midnight at the top. Off with the cloak at the top of the tower. It's
- *      too dark for anyone to see them. His third turn: he lights the
+ *      too dark for anyone to see them. His fourth turn: he lights the
  *      lantern. A broomstick swoops down past the moon: Charlie's friend.
  *      Norbert peeps out and squeaks; she ties the crate under her broom and
  *      off they fly, past the moon. Goodbye, Norbert! Be a good dragon!
  *   5. A letter from Romania. A week later, Hagrid misses him. Hedwig brings
  *      a letter: Norbert is happy, with lots of dragon friends, and there's
  *      a wizard picture of him waving. Happy tears, and one last honk. Far
- *      away, a little dragon hiccups a puff of smoke.
+ *      away, a little dragon hiccups a puff of smoke. Hagrid's happy tears
+ *      need his hanky, which he's dropped: his fifth turn, he drags it up to
+ *      him. Honk!
  *
  * The scary beat is Snape in the dark corridor: sound first (footsteps, a
  * lantern), one push-in, then back to the friends, who are clever and
@@ -140,7 +144,7 @@ function shimmer(): void {
 
 type Actor =
   | 'hagrid' | 'harry' | 'hermione' | 'norbert' | 'snape' | 'keeper' | 'hedwig'
-  | 'crate' | 'teddy' | 'cloak' | 'lantern' | 'glow' | 'broom' | 'hanky';
+  | 'crate' | 'teddy' | 'cloak' | 'lantern' | 'glow' | 'broom' | 'hanky' | 'pie';
 const cast = {} as Record<Actor, HTMLElement>;
 let arrival: ReturnType<typeof broomArrival.set>;
 let post: ReturnType<typeof owlPost.set>;
@@ -184,6 +188,10 @@ export default defineCartoon({
     comeIn: { who: 'hagrid', text: 'Come in, come in! Say hello to Norbert, {name}. Isn’t he lovely?' },
     hiccupSmoke: { who: 'harry', text: 'He just hiccupped smoke!' },
     onlyLittle: { who: 'hagrid', text: 'Bless him. He’s only little.' },
+    askPie: { who: 'hagrid', text: 'His tummy is rumbling. Can you drag his pie to Norbert, {name}?' },
+    nudgePie: { who: 'hagrid', text: 'Drag the pie over to Norbert!' },
+    helpedPie: { who: 'hagrid', text: 'Never mind, I’ll pass it over myself. Here you go, Norbert.' },
+    gobbled: { who: 'harry', text: 'Wow, he gobbled it all up! Oh… he’s getting bigger!' },
     notLittle: { who: 'hermione', text: 'Little? Hagrid, he’s twice as big as last week!' },
     woodenHut: { who: 'hermione', text: 'And your hut is made of wood. Dragons breathe fire!' },
     notAllowed: { who: 'harry', text: 'And dragons aren’t allowed at Hogwarts!' },
@@ -243,6 +251,11 @@ export default defineCartoon({
     happy: { who: 'hagrid', text: 'Norbert is very happy. He’s got lots of dragon friends.' },
     picture: { who: 'hermione', text: 'And there’s a wizard picture! Look, he’s waving!' },
     happyTears: { who: 'hagrid', text: 'Don’t mind me. Happy tears! Only happy ones.' },
+    askHanky: { who: 'hermione', text: 'Oh, Hagrid’s dropped his hanky! Can you drag it to him, {name}?' },
+    nudgeHanky: { who: 'hermione', text: 'Drag the hanky up to Hagrid!' },
+    helpedHanky: { who: 'harry', text: 'I’ll hand it to him. Here, Hagrid.' },
+    thanksHanky: { who: 'hagrid', text: 'Thank you! Just what I needed!' },
+    thanksHarry: { who: 'hagrid', text: 'Thanks, Harry. Just what I needed!' },
     thanksName: { who: 'hagrid', text: 'Thank you, {name}. You helped my Norbert get a proper home.' },
     end: { who: 'narrator', text: 'And far away in Romania, a little dragon hiccupped a puff of smoke, and smiled.' },
   },
@@ -259,9 +272,11 @@ export default defineCartoon({
         cast.hermione = k.character('hermione', { x: 230, y: 378, w: 240 });
         cast.norbert = k.character('norbert', { x: 500, y: 420, w: 190, z: 12 });
         cast.hagrid = k.character('hagrid', { x: 780, y: 232, w: 380, flip: true });
+        // Hagrid's pie for Norbert, on the floor in front of him.
+        cast.pie = k.prop('pie', { x: 780, y: 545, w: 170, z: 16 });
       },
       async play(k) {
-        const { harry, hermione, norbert, hagrid } = cast;
+        const { harry, hermione, norbert, hagrid, pie } = cast;
         fireCrackle(4);
         await k.wait(400);
         await k.say('secret');
@@ -272,13 +287,18 @@ export default defineCartoon({
         await k.all(k.say('hiccupSmoke', harry), k.shake(harry, 3, 2));
         await k.say('onlyLittle', hagrid);
 
+        // His first turn: drag the pie to Norbert. He gobbles it, and grows.
+        await k.dragToHelp(pie, { to: norbert, ask: 'askPie', nudge: 'nudgePie', helped: 'helpedPie', by: hagrid, dropSize: 200 });
+        await k.all(k.vanish(pie), k.pop(norbert, 1.1));
+        chirrup();
+
         // Not little any more: he grows with a pop, and his tail knocks the pans flying.
-        await k.say('notLittle', hermione);
         k.fx.boing();
         await k.to(norbert, 0.6, { scale: 1.22, ease: 'back.out(2)' });
         clatter();
         k.quake(3);
-        await k.all(k.shake(hermione, 4, 2), k.shake(hagrid, 3, 2));
+        await k.all(k.say('gobbled', harry), k.shake(hermione, 4, 2), k.shake(hagrid, 3, 2));
+        await k.say('notLittle', hermione);
         await k.say('woodenHut', hermione);
         await k.say('notAllowed', harry);
         k.music('dreamy');
@@ -329,7 +349,7 @@ export default defineCartoon({
         await k.all(k.shake(norbert, 6, 2), k.shake(crate, 4, 2));
         await k.say('wantsTeddy', hagrid);
 
-        // His first turn: pop the teddy in the crate.
+        // His second turn: pop the teddy in the crate.
         const how = await k.tapToHelp(teddy, { ask: 'askTeddy', nudge: 'nudgeTeddy', helped: 'helpedTeddy', by: hagrid, size: 130 });
         k.fx.boing();
         await k.to(teddy, 0.45, { x: -130, y: -150, rotation: -20, ease: 'power1.out' });
@@ -408,7 +428,7 @@ export default defineCartoon({
         await k.shake(crate, 5, 2);
         await k.say('pokingOut', harry);
 
-        // His second turn: tuck the crate back under the cloak.
+        // His third turn: tuck the crate back under the cloak.
         await k.tapToHelp(crate, { ask: 'askTuck', nudge: 'nudgeTuck', helped: 'helpedTuck', by: hermione, helper: harry, size: 190 });
         shimmer();
         await k.to(crate, 0.5, { opacity: CLOAKED, y: 0, ease: 'power1.inOut' });
@@ -466,7 +486,7 @@ export default defineCartoon({
         await k.say('whereFriend', hermione);
         await k.say('dark', harry);
 
-        // His third turn: light the lantern.
+        // His fourth turn: light the lantern.
         await k.tapToHelp(lantern, { ask: 'askLantern', nudge: 'nudgeLantern', helped: 'helpedLantern', by: hermione, helper: harry, size: 130 });
         k.fx.twinkle();
         await k.to(glow, 0.9, { opacity: 1 });
@@ -556,8 +576,16 @@ export default defineCartoon({
         void flutterWings(k, pic, 3);
         await k.all(k.say('picture', hermione), k.hop(hermione, 20));
 
-        await blowNose(k, hagrid);
         await k.say('happyTears', hagrid);
+
+        // His fifth turn: Hagrid has dropped his hanky; drag it up to him.
+        const hanky = k.prop('hanky', { x: 520, y: 540, w: 150, z: 25 });
+        await k.appear(hanky);
+        const how = await k.dragToHelp(hanky, { to: hagrid, ask: 'askHanky', nudge: 'nudgeHanky', helped: 'helpedHanky', by: hermione, helper: harry });
+        honk();
+        await k.shake(hagrid, 5, 3);
+        await k.vanish(hanky);
+        await k.say(how === 'dragged' ? 'thanksHanky' : 'thanksHarry', hagrid);
         bellyLaugh();
         await k.say('thanksName', hagrid);
         await k.all(...picture.map((el) => k.fade(el, 0, 0.5)));
