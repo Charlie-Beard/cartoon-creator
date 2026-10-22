@@ -290,7 +290,8 @@ export default defineCartoon({
         k.music('adventure');
         await chairRide.fly(k, ride, { y: -70, s: 1.2 });
         highWind(3);
-        await k.all(k.say('wheee', peter), chairRide.fly(k, ride, { x: 980, s: 2.6, tilt: 6 }));
+        await k.all(k.say('wheee', peter), chairRide.fly(k, ride, { x: 280, s: 1.6 }));
+        await chairRide.fly(k, ride, { x: 980, s: 1.4, tilt: 6 });
       },
     },
 
