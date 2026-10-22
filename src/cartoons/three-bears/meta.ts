@@ -12,7 +12,7 @@ export default defineMeta({
     villain: 'golden curls bobbing behind a tree, heading for the cottage (it is only Goldilocks, waving)',
     places: ['bear-kitchen', 'bear-wood'],
     cast: ['teddy', 'mummy-bear', 'daddy-bear', 'goldilocks'],
-    turns: ['stir the porridge round and round', 'tap the little bowl that was just right', 'tap the tree to see who is hiding'],
+    turns: ['stir the porridge round and round', 'tap the little bowl that was just right', 'drag the scarf to Teddy', 'tap the tree to see who is hiding', 'drag the honey pot to the bowl'],
     jokes: ['Someone might come along and eat it for you', 'too hot, too cold, just right'],
     ending: 'porridge all eaten, honey on top, and Goldilocks waving at the window',
   },

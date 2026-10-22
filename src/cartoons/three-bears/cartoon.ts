@@ -19,8 +19,9 @@
  *      taps the little bowl that was just right (or Teddy guesses it), and she
  *      gobbles it all up. The chairs: too hard, too soft, and Baby Bear's goes
  *      CRACK. Up she goes for a sleep. The cloud goes; their own porridge is
- *      poured, and it's too hot too. A walk to the edge of the wood; Teddy's
- *      scarf goes on.
+ *      poured, and it's too hot too. A walk to the edge of the wood. His turn:
+ *      Mummy holds out Teddy's scarf and he drags it over to Teddy (or Mummy
+ *      brings it herself), and on it goes.
  *   3. The edge of the wood. Mummy finishes the story: the bears came home,
  *      Goldilocks woke and ran away. Why did she go in? She smelt the
  *      porridge. "But it's only a story…" A rustle, sneaky music, something
@@ -30,7 +31,9 @@
  *      he can.
  *   4. Just right. Teddy bursts in, puffing. His porridge is still there, and
  *      now it's just right. He eats every bit. Mummy and Daddy arrive laughing:
- *      "Clever Teddy Bear!", and a spoonful of honey on top. Goldilocks can
+ *      "Clever Teddy Bear!" His turn: he drags the honey pot from Mummy's
+ *      paws to Teddy's bowl (or Mummy carries it), and a spoonful of honey
+ *      goes on top. Goldilocks can
  *      have her own porridge. Golden curls at the window: she waves, Teddy
  *      waves back. From that day on, Teddy always ate up his porridge.
  *
@@ -137,6 +140,11 @@ export default defineCartoon({
     upstairs: { who: 'mummy-bear', text: 'Then up she went for a sleep.' },
     walk: { who: 'daddy-bear', text: 'Ours is too hot as well! Let’s walk to the edge of the wood.' },
     scarfOn: { who: 'mummy-bear', text: 'Put your scarf on, Teddy. It’s chilly.' },
+    askScarf: { who: 'mummy-bear', text: 'Can you drag the scarf to Teddy, {name}?' },
+    nudgeScarf: { who: 'mummy-bear', text: 'Drag the scarf over to Teddy.' },
+    scarfMyself: { who: 'mummy-bear', text: 'Never mind. I’ll bring it to you myself.' },
+    scarfThanks: { who: 'teddy', text: 'Thank you, {name}! Now I’m snug as a bug.' },
+    scarfThanksMummy: { who: 'teddy', text: 'Thank you, Mummy! Now I’m snug as a bug.' },
     // 3. The edge of the wood
     cameHome: { who: 'mummy-bear', text: 'The three bears came home and found her asleep. She woke up and ran away!' },
     whyGoIn: { who: 'teddy', text: 'But why did she go in?' },
@@ -154,6 +162,9 @@ export default defineCartoon({
     nowJustRight: { who: 'teddy', text: 'And it’s not too hot now. It’s just right!' },
     everyBit: { who: 'daddy-bear', text: 'Well, I never! Every last bit!' },
     clever: { who: 'mummy-bear', text: 'Clever Teddy Bear! That deserves a spoonful of honey, on top.' },
+    askHoney: { who: 'mummy-bear', text: 'Can you drag the honey to Teddy’s bowl, {name}?' },
+    nudgeHoney: { who: 'mummy-bear', text: 'Drag the honey pot to the bowl.' },
+    honeyMyself: { who: 'mummy-bear', text: 'Here we are. I’ll carry it over myself.' },
     afterAll: { who: 'teddy', text: 'Mmm! I got my honey after all!' },
     ownPorridge: { who: 'teddy', text: 'Goldilocks can have her own porridge. This one’s mine!' },
     window: { who: 'mummy-bear', text: 'Look, Teddy. Who’s that at the window?' },
@@ -303,8 +314,7 @@ export default defineCartoon({
         await k.say('babysBowl', teddy);
 
         // His turn: the little bowl was just right.
-        const how = await k.tapToHelp(bowlB, { ask: 'askBowl', nudge: 'nudgeBowl', helped: 'littleOne', by: mummy, helper: teddy, size: 130 });
-        void how;
+        await k.tapToHelp(bowlB, { ask: 'askBowl', nudge: 'nudgeBowl', helped: 'littleOne', by: mummy, helper: teddy, size: 130 });
         k.fx.patter(2, 0.14);
         await k.to(goldi, 0.6, { x: 108, ease: 'sine.inOut' });
         scrape(3);
@@ -357,10 +367,17 @@ export default defineCartoon({
         k.fx.boing();
         await k.hop(teddy, 20);
         await k.say('scarfOn', mummy);
+        // His turn: Mummy holds the scarf out, and he drags it to Teddy.
+        const loose = k.add(scarf(), { x: 165, y: 540, w: 150, z: 15 });
+        k.fx.twinkle();
+        await k.appear(loose, 0.4);
+        const got = await k.dragToHelp(loose, { to: teddy, ask: 'askScarf', nudge: 'nudgeScarf', helped: 'scarfMyself', by: mummy, dropSize: 200 });
         // On goes the scarf.
         const s = wearScarf(teddy, false);
         k.fx.whizz();
-        await k.to(s, 0.5, { opacity: 1 });
+        await k.all(k.to(s, 0.5, { opacity: 1 }), k.fade(loose, 0, 0.4));
+        k.remove(loose);
+        await k.say(got === 'dragged' ? 'scarfThanks' : 'scarfThanksMummy', teddy);
         k.pose(teddy, 'happy');
         await k.hop(teddy, 26);
       },
@@ -468,7 +485,7 @@ export default defineCartoon({
         // Mummy and Daddy come home after him (Daddy's armchair stays empty).
         cast.daddy = k.character('daddy-bear', { x: 40, y: 345, w: 260 });
         cast.mummy = k.character('mummy-bear', { x: 255, y: 355, w: 250, pose: 'hold' });
-        cast.honey = k.prop('honey-pot', { x: 335, y: 530, w: 90, z: 12 });
+        cast.honey = k.prop('honey-pot', { x: 330, y: 525, w: 100, z: 12 });
         for (const el of [cast.daddy, cast.mummy, cast.honey]) k.set(el, { x: -700 });
         // Golden curls at the window, cut off at the sill.
         cast.goldi = k.character('goldilocks', { x: 470, y: 250, w: 140, z: 5 });
@@ -506,12 +523,12 @@ export default defineCartoon({
         await k.all(k.to(mummy, 1.2, { x: 0, ease: 'power2.out' }), k.to(honey, 1.2, { x: 0, ease: 'power2.out' }));
         await k.say('everyBit', daddy);
         await k.say('clever', mummy);
-        // A spoonful of honey, on top.
-        const pot = k.box(honey);
+        // His turn: a spoonful of honey, on top. He drags the pot from Mummy's paws to the bowl.
         const target = k.box(myBowlEmpty);
         k.set(honey, { zIndex: 14 });
-        // Over to the bowl, beside Teddy's face, and tip.
-        await k.to(honey, 1.1, { x: target.x - pot.x + 75, y: target.y - pot.y - 70, ease: 'sine.inOut' });
+        await k.dragToHelp(honey, { to: myBowlEmpty, ask: 'askHoney', nudge: 'nudgeHoney', helped: 'honeyMyself', by: mummy, dropSize: 200 });
+        // Lift the pot up beside Teddy's face and tip.
+        await k.to(honey, 0.5, { y: '-=70', ease: 'sine.inOut' });
         await k.to(honey, 0.4, { rotation: -40 });
         ting();
         await k.fade(dollop, 1, 0.5);
