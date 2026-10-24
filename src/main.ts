@@ -9,7 +9,7 @@ import './styles/cartoons.css';
 import { installGrain } from './art/grain';
 import { parchmentDefs, uiDefs } from './art/ui';
 import { setVolumes, unlock } from './audio/engine';
-import { loadManifest, setPlayerName } from './audio/voice';
+import { loadManifest } from './audio/voice';
 import { CornerScene } from './scenes/corner';
 import { LibraryScene } from './scenes/library';
 import { PlayerScene } from './scenes/player';
@@ -62,7 +62,6 @@ window.addEventListener(
 void loadManifest();
 
 function applySettings(): void {
-  setPlayerName(settings.name);
   if (audioOn) setVolumes({ master: settings.volume });
 }
 applySettings();

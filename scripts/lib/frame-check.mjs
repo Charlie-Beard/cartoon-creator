@@ -21,7 +21,6 @@
  *                 shown: true,              // false for display:none
  *                 speaking: false }],       // k.say is bobbing this one right now
  *     caption: { on: true, box: { x, y, w, h } | null },   // the bubble
- *     tap:     { box: { x, y, w, h } } | null,   // the tap-to-help button, if on screen
  *   }
  *
  * What is flagged, and why these numbers (tuned on whistling-kettle, which
@@ -36,7 +35,6 @@
  *   overlap    two characters share more than 35% of the smaller one's box (both
  *              at least half on stage: two leaving together bunch up off the edge).
  *   crowd      more than 4 characters on stage at once.
- *   tap        a tap-to-help target under 120 px, or partly off stage.
  *   speaker    the actor the kit is bobbing for the line (data-speaking) is off
  *              stage or invisible while the line is captioned.
  *
@@ -57,10 +55,6 @@ export const THRESHOLDS = {
   overlap: 0.35,
   /** More than this many characters at once is flagged. */
   maxCharacters: 4,
-  /** Tap-to-help targets are at least this big (the kit's own floor) ... */
-  tapMin: 120,
-  /** ... within this much (px). */
-  tapSlack: 2,
   /** An actor at or under this opacity can't be seen. */
   invisible: 0.05,
   /** A speaker with less than this fraction of their box on stage counts as off stage. */
@@ -147,17 +141,6 @@ export function checkFrame(frame, { assumeCaption = false } = {}) {
   }
   if (present.length > T.maxCharacters) {
     issues.push({ kind: 'crowd', key: 'crowd', message: `${present.length} characters on stage at once (${present.map((a) => a.key).join(', ')}); more than ${T.maxCharacters}.` });
-  }
-
-  // His turn.
-  if (frame.tap) {
-    const b = frame.tap.box;
-    if (b.w < T.tapMin - T.tapSlack || b.h < T.tapMin - T.tapSlack) {
-      issues.push({ kind: 'tap', key: 'tap:small', message: `the tap-to-help target is ${px(b.w)} × ${px(b.h)}; it should be at least ${T.tapMin}.` });
-    }
-    if (b.x < -T.tapSlack || b.y < -T.tapSlack || b.x + b.w > stage.w + T.tapSlack || b.y + b.h > stage.h + T.tapSlack) {
-      issues.push({ kind: 'tap', key: 'tap:off', message: `the tap-to-help target is partly off the stage (${spot(b)}).` });
-    }
   }
 
   // The speaker, while their line is being said. The kit marks the actor it is bobbing for the line

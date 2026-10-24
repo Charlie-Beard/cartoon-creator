@@ -16,13 +16,11 @@
  *            and the rest are in `also`.
  *   risky    why ElevenLabs might say it wrong (only when it might)
  *
- * Lines with {name} are recorded twice, like the games do: with
- * DEFAULT_NAME ("Well done, Jasper!") and without ("Well done!").
  * Whole lines only: a cartoon has no questions or numbers to piece together.
  */
 import { writeFileSync } from 'node:fs';
 import { SHELF } from '../lib/shelf';
-import { DEFAULT_NAME, generic, personalise, voiceId } from '../../src/core/phrases';
+import { voiceId } from '../../src/core/phrases';
 
 interface LineOut {
   id: string;
@@ -69,10 +67,7 @@ const push = (text: string, speaker: string, where: string) => {
 };
 
 const add = (template: string, speaker: string, where: string) => {
-  if (template.includes('{name}')) {
-    push(personalise(template, DEFAULT_NAME), speaker, where);
-    push(generic(template), speaker, where);
-  } else push(template, speaker, where);
+  push(template, speaker, where);
 };
 
 for (const entry of SHELF) {

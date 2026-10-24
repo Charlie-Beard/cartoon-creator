@@ -12,7 +12,7 @@ export interface Line {
    * (moonface, hedwig …). Each has its own voice (scripts/voice/cast.json).
    */
   who: string;
-  /** What they say. Short and simple: a 6-year-old is listening. {name} is the child's name. */
+  /** What they say. Short and simple: a 6-year-old is listening. */
   text: string;
 }
 
@@ -30,7 +30,7 @@ export interface CartoonInfo {
 
 /** Roughly how many seconds a line takes to say, with the iPad's voice or a recording. */
 export function estimateSeconds(text: string): number {
-  const words = text.replace(/\{name\}/g, 'Jasper').split(/\s+/).filter(Boolean).length;
+  const words = text.split(/\s+/).filter(Boolean).length;
   // About 2.4 words a second for slow, clear speech to a child, plus a beat
   // for each sentence break, plus the kit's 250 ms gap after every line.
   const stops = (text.match(/[.!?…]+/g) ?? []).length;
@@ -102,7 +102,7 @@ export function checkLines(lines: Record<string, Line>, speakers: ReadonlySet<st
     for (const w of CRUEL_WORDS) {
       if (lower.includes(` ${w} `)) say(`"${w}" is not for him: scary is fine, cruel isn't`);
     }
-    if (/\{(?!name\})[^}]*\}/.test(text)) say('only {name} may be filled in');
+    if (/\{[^}]*\}/.test(text)) say('no {placeholders}: a line never names the child or speaks to him');
     if (/[“”]/.test(text) && (text.match(/“/g) ?? []).length !== (text.match(/”/g) ?? []).length) say('unbalanced quotes');
   }
   return issues;

@@ -51,7 +51,7 @@ export class CornerScene extends Scene {
     r.append(this.body);
 
     this.body.append(h('h2', {}, 'Settings'));
-    this.body.append(this.nameRow(), this.volumeRow(), this.tickRow());
+    this.body.append(this.volumeRow(), this.tickRow());
     this.body.append(h('h2', {}, 'Cartoons'));
     if (!SHELF.length) this.body.append(h('p', { class: 'p-note' }, 'No cartoons yet.'));
     for (const entry of SHELF) this.body.append(this.cartoonRow(entry));
@@ -63,24 +63,6 @@ export class CornerScene extends Scene {
   private row(title: string, note: string | HTMLElement, controls: HTMLElement[]): HTMLElement {
     const text = h('div', {}, [h('strong', {}, title), typeof note === 'string' ? h('small', {}, note) : note]);
     return h('div', { class: 'p-row' }, [text, h('div', { class: 'p-controls' }, controls)]);
-  }
-
-  private nameRow(): HTMLElement {
-    const input = h('input', {
-      type: 'text',
-      class: 'p-name',
-      'aria-label': 'His name',
-      maxlength: 20,
-      autocomplete: 'off',
-      autocapitalize: 'words',
-      spellcheck: false,
-    }) as HTMLInputElement;
-    input.value = this.app.settings.name;
-    input.addEventListener('input', () => {
-      this.app.settings.name = input.value.trim();
-      this.app.save();
-    });
-    return this.row('His name', 'Said wherever a line uses it. Leave it empty and the lines are said without a name.', [input]);
   }
 
   private volumeRow(): HTMLElement {

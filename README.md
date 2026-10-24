@@ -4,7 +4,7 @@ Paper-puppet cartoons for one boy's iPad, in the torn-paper style of his
 two games, [Wizard Words](https://github.com/charlie-beard/spelling-game)
 and [Up the Faraway Tree](https://github.com/charlie-beard/maths-game).
 Episodes are 2–5 minutes with a few scenes, set in the Faraway Tree or at
-Hogwarts, and now and then it's his turn to tap and help.
+Hogwarts. They just play, like TV: nothing to tap.
 
 Every cartoon is written by Claude Code from the skills in this repo:
 say `/new-cartoon <a one-line idea>` in a Claude Code session.

@@ -23,9 +23,6 @@ its id, so record last.
    is derived and not committed. By hand, if you want to read it:
    `npm run voice:export`.
 
-   Lines with `{name}` are exported twice, like the games do: with
-   "Jasper" (`DEFAULT_NAME`) and without ("Well done!").
-
 2. **Check everyone has a voice** in `cast.json`:
 
    ```bash

@@ -7,8 +7,8 @@ import { advance, cardFor, CARTOONS, openCorner, playerState } from './helpers';
  * shows the watched tick. With an empty shelf there is nothing here.
  *
  * Two ways through: skipping scene after scene (fast, and checks every
- * scene can be left), and playing it as he would, with the clock sped up,
- * tapping the first tap-to-help when it appears.
+ * scene can be left), and playing it straight through with the clock sped up.
+ * Nothing in a cartoon is interactive, so nothing is tapped on the way.
  */
 
 /**
@@ -79,7 +79,7 @@ for (const entry of CARTOONS) {
       await backToTheShelf(page, entry.id);
     });
 
-    test('plays through as he would, tapping his turn, to the end', async ({ page }) => {
+    test('plays straight through to the end with nothing to tap', async ({ page }) => {
       test.setTimeout(240_000);
       const errors: string[] = [];
       page.on('pageerror', (e) => errors.push(e.message));
@@ -91,26 +91,10 @@ for (const entry of CARTOONS) {
       await page.goto('/');
       await (await cardFor(page, entry.id)).click();
 
-      let taps = 0;
       let at = '';
       for (let second = 0; second < 700; second++) {
-        const tap = page.locator('[data-tap-to-help]');
-        if (await tap.count()) {
-          // A drag-to-help carries where it goes, in stage points: drag it there.
-          const to = await tap.first().getAttribute('data-drag-to').catch(() => null);
-          const box = await tap.first().boundingBox().catch(() => null);
-          const stage = await page.locator('.story-stage').boundingBox();
-          if (to && box && stage) {
-            const k = stage.width / 1180;
-            const [x, y] = to.split(' ').map(Number);
-            await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-            await page.mouse.down();
-            await page.mouse.move(stage.x + x * k, stage.y + y * k, { steps: 8 });
-            await page.mouse.up();
-          } else await tap.first().click({ timeout: 3000 }).catch(() => {});
-          taps++;
-          await advance(page, 500);
-        }
+        // Nothing waits for a tap: if anything tappable-to-help is on stage, that is a bug.
+        expect(await page.locator('[data-tap-to-help]').count(), 'something on stage waits for a tap').toBe(0);
         at = await playerState(page);
         if (at === 'end') break;
         await advance(page, 1000);
@@ -119,7 +103,6 @@ for (const entry of CARTOONS) {
       }
       expect(errors, 'the script threw while it played').toEqual([]);
       expect(at, 'the cartoon never reached its end').toBe('end');
-      expect(taps, 'no tap-to-help came up').toBeGreaterThan(0);
 
       await backToTheShelf(page, entry.id);
     });

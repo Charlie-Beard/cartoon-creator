@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ALL_CARTOONS as SHELF } from '../../src/cartoons';
 import type { Line } from '../../src/core/cartoon';
-import { callArguments, MIN_TURNS, stripComments, tapCalls, undefinedLines, unknownIds, unusedLines, withoutLinesTable } from '../../scripts/lib/cartoon-lint';
+import { callArguments, lintCartoon, stripComments, undefinedLines, unknownIds, unusedLines, withoutLinesTable } from '../../scripts/lib/cartoon-lint';
 import { catalogue } from '../../scripts/lib/catalogue';
 
 const cat = {
@@ -11,8 +11,8 @@ const cat = {
   props: new Set(['star']),
 };
 const lines: Record<string, Line> = {
-  hello: { who: 'narrator', text: 'Hello, {name}! It’s a "test" (really).' },
-  bye: { who: 'moonface', text: "Goodbye // not a comment /* nor this */ {name}." },
+  hello: { who: 'narrator', text: 'Hello! It’s a "test" (really).' },
+  bye: { who: 'moonface', text: "Goodbye // not a comment /* nor this */ ." },
 };
 
 describe('reading the script source', () => {
@@ -42,11 +42,11 @@ describe('unused and undefined lines', () => {
   const src = `
     defineCartoon({
       lines: { hello: { who: 'narrator', text: 'Hi.' }, bye: { who: 'moonface', text: 'Bye.' }, spare: { who: 'narrator', text: 'Spare.' } },
-      scenes: [{ async play(k) { await k.say('hello'); await k.tapToHelp(a, { ask: 'bye' }); } }],
+      scenes: [{ async play(k) { await k.say('hello'); await k.say('bye'); } }],
     });`;
   const l = { hello: lines.hello, bye: lines.bye, spare: { who: 'narrator', text: 'Spare.' } };
 
-  it('reports a line nothing says, but counts ask, nudge and helped as saying', () => {
+  it('reports a line nothing says', () => {
     expect(unusedLines(src, l)).toEqual(['spare']);
   });
 
@@ -55,7 +55,7 @@ describe('unused and undefined lines', () => {
   });
 
   it('reports a line the script says that does not exist', () => {
-    expect(undefinedLines(src + "k.say('typo'); { nudge: 'oops' }", l).sort()).toEqual(['oops', 'typo']);
+    expect(undefinedLines(src + "k.say('typo');", l)).toEqual(['typo']);
   });
 });
 
@@ -79,10 +79,26 @@ describe('unknown ids', () => {
   });
 });
 
-describe('tapToHelp', () => {
-  it('counts turns and those that never say what to tap', () => {
-    expect(tapCalls("k.tapToHelp(a, { ask: 'x' }); k.tapToHelp(b, { nudge: 'y' }); // k.tapToHelp(c)")).toEqual({ total: 2, withoutAsk: 1, drags: 0 });
-    expect(tapCalls("k.tapToHelp(a, { ask: 'x' }); k.dragToHelp(b, { to: c, ask: 'y' });")).toEqual({ total: 2, withoutAsk: 0, drags: 1 });
+describe('nothing is interactive', () => {
+  const cartoon = (body: string) => lintCartoon({ id: 'x', source: `defineCartoon({ id: 'x', scenes: [{ async play(k) { ${body} } }] })`, lines: { hello: { who: 'narrator', text: 'Hello.' } }, catalogue: cat });
+
+  it('passes a script that only plays', () => {
+    expect(cartoon("await k.say('hello');").errors).toEqual([]);
+  });
+
+  it('is an error to wait for a tap or a drag, or to listen for one', () => {
+    expect(cartoon('await k.tapToHelp(a, {});').errors.join('\n')).toMatch(/tapToHelp/);
+    expect(cartoon('await k.dragToHelp(a, { to: b });').errors.join('\n')).toMatch(/dragToHelp/);
+    expect(cartoon('onTap(a, () => {});').errors.join('\n')).toMatch(/onTap/);
+  });
+
+  it('ignores one in a comment', () => {
+    expect(cartoon("await k.say('hello'); /* k.tapToHelp(a, {}) */").errors).toEqual([]);
+  });
+
+  it('is an error for a line to name the child', () => {
+    const r = lintCartoon({ id: 'x', source: "defineCartoon({ id: 'x' })", lines: { a: { who: 'narrator', text: 'Hello, Jasper!' } }, catalogue: cat });
+    expect(r.errors.join('\n')).toMatch(/names the child/);
   });
 });
 
@@ -119,9 +135,9 @@ describe('every cartoon on the shelf', () => {
         expect(unknownIds(source, catalogue())).toEqual([]);
       });
 
-      it(`gives him at least ${MIN_TURNS} turns`, () => {
+      it('is not interactive', () => {
         if (!source) return;
-        expect(tapCalls(source).total).toBeGreaterThanOrEqual(MIN_TURNS);
+        expect(lintCartoon({ id: entry.id, source, lines: {}, catalogue: catalogue() }).errors.filter((e) => /interactive/.test(e))).toEqual([]);
       });
     });
   }
