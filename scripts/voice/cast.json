@@ -62,5 +62,8 @@
   "uncle-bill": { "voice_id": "4Vl3K2x290GidNvuaLm7", "name": "Matthew Schmitz - Old Pirate Captain", "owner": "1bdf478ac5e1a81b0b8423faadde277a29cb25195ed2c86adcb0622464c9b930", "settings": { "stability": 0.5, "speed": 1.0 } },
   "posy": { "voice_id": "jkUnCsbErmJrcbWk1Hmh", "name": "Sally - Youthful Children's Storyteller", "owner": "082419206ac9f545a2b4677848e66d4e6237bd374374c5795555784a8b477823", "settings": { "stability": 0.5, "speed": 1.0 } },
   "bella": { "voice_id": "GPTk4QbvF7snDhImF5UF", "name": "Lucie - Clear and Professional Actress", "owner": "a07944774a2d417a8dccd25f1107a076b91455fb52f54a571c6927e47b4c0667", "settings": { "stability": 0.5, "speed": 1.0 } },
-  "bobby": { "voice_id": "bTrXJpbeuC5KgriLhQeC", "name": "Peter", "owner": "64cbc624eb5aab4e95a968e1f41d75402277cca6e549036ed17e56ea33bbbc9e", "settings": { "stability": 0.5, "speed": 1.0 } }
+  "bobby": { "voice_id": "bTrXJpbeuC5KgriLhQeC", "name": "Peter", "owner": "64cbc624eb5aab4e95a968e1f41d75402277cca6e549036ed17e56ea33bbbc9e", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "vernon": { "voice_id": "b1A9OAVD1Yu0SjoFdv4A", "name": "Raymond - Theatrical Classical Narrator", "owner": "ec52a4cbbbc1814214b3ec72b100d5a67fbd96c74e78538b3790720c0e253dcd", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "petunia": { "voice_id": "PxiDzTegwYFeWabJ8mEd", "name": "Patsy Dahling", "owner": "1b16840cfc23a414653080ff0a46d2646bf80a48618ca60b29a6da47f469b6db", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "dudley": { "voice_id": "4iqKdEXMW8NRF8USiS3Q", "name": "Bittu - Heavy Kid Cartoon Character", "owner": "7398804d9eaf2f463899a907587c33a390591775784f87857b6d0e1e4e3e66f6", "settings": { "stability": 0.5, "speed": 1.0 } }
 }
