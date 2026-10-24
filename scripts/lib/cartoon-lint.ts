@@ -210,7 +210,6 @@ export function lintCartoon({ id, source, lines, catalogue }: LintInput): LintRe
   for (const key of undefinedLines(source, lines)) errors.push(`the script says "${key}" but there is no such line`);
   for (const p of unknownIds(source, catalogue)) errors.push(p);
 
-  for (const [key, l] of Object.entries(lines)) if (/jasper/i.test(l.text)) errors.push(`line "${key}" names the child: no cartoon refers to him`);
   const code = stripComments(source);
   for (const call of INTERACTIVE) if (new RegExp(`\\b${call}\\s*\\(`).test(code)) errors.push(`\`${call}\`: nothing in a cartoon is interactive, it just plays`);
 

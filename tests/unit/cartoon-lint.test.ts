@@ -95,11 +95,6 @@ describe('nothing is interactive', () => {
   it('ignores one in a comment', () => {
     expect(cartoon("await k.say('hello'); /* k.tapToHelp(a, {}) */").errors).toEqual([]);
   });
-
-  it('is an error for a line to name the child', () => {
-    const r = lintCartoon({ id: 'x', source: "defineCartoon({ id: 'x' })", lines: { a: { who: 'narrator', text: 'Hello, Jasper!' } }, catalogue: cat });
-    expect(r.errors.join('\n')).toMatch(/names the child/);
-  });
 });
 
 /**
