@@ -23,9 +23,8 @@
  *   - Lines are never written here. The cartoon passes line keys
  *     (`line: 'newLand'`) that are in its own `lines`, so the voice export
  *     finds them, and `npm run check` counts a key handed to a piece as used.
- *   - A piece never calls `k.tapToHelp` for you (the checker looks for one in
- *     the cartoon, and his turns are yours to write). Where a turn belongs in
- *     the middle, the piece comes in two parts and you put the turn between.
+ *   - Where a beat of your own belongs in the middle, the piece comes in two
+ *     parts and you put it between.
  *   - Everything waits through the kit, so a skipped scene stops where it was.
  *   - A piece that is a whole place (the top of the ladder, Moon-Face's room, the
  *     Great Hall) puts up its backdrop unless the scene already has one. Call
@@ -46,7 +45,7 @@ import { moves, sounds } from './moves';
 
 /**
  * A thick grey cloud (680 × 380, lazy swirls in it) that hides a new land
- * until he taps it away. Pass a `name` to seed the torn edges
+ * until a hero blows it away. Pass a `name` to seed the torn edges
  * ('<cartoon-id>-cloud'); the same name always draws the same paper.
  */
 export const greyCloud = cached((name: string = 'faraway-grey-cloud') => {
@@ -102,11 +101,11 @@ export interface LadderActors {
 /**
  * Climbing the ladder up through the cloud into a new land: the friends
  * pop up one by one at the top of the Tree, the land arrives in the sky
- * ahead of them, and (if it is hidden) he blows the cloud away to see it.
+ * ahead of them, and (if it is hidden) Silky's spell blows the cloud away.
  *
  *   ladderArrival.set(k, { land, friends, cover?, music? })    the picture, in `set`
  *   ladderArrival.play(k, a, { line?, by? })                    the climb, and a line while the cloud churns
- *   ladderArrival.reveal(k, a, { how?, thanks?, by? })          the land appears
+ *   ladderArrival.reveal(k, a, { line?, by? })                  the land appears
  *
  * `set` options: `land` is the far view's id without its `far-` ('snap-school',
  * 'topsy-turvy' …, the lands in ./index.ts); `friends` are `{ id, x, y?, w?, z?,
@@ -119,15 +118,15 @@ export interface LadderActors {
  * land! But this cloud is too thick to see it."). The Saucepan Man clanks and
  * Silky whirrs and flutters as they climb; everyone else just scrambles.
  *
- * `reveal` options: `how` is what `k.tapToHelp` returned ('tapped' by default; 'helped' lets
- * Silky's spell blow the cloud away); `thanks` is said by `by` (who also hops) only when
- * he tapped it himself. With no cover the land just fades in with a twinkle. The camera and
- * the next beat are yours.
+ * `reveal` options: `line` is said by `by` (who also hops) once the land is there ("Look!
+ * Dame Snap's School!"). A cover goes in a little spell from the middle of the cloud, so say
+ * who casts it just before ("Silky can blow it away!"). With no cover the land just fades in
+ * with a twinkle. The camera and the next beat are yours.
  *
  *   const a = ladderArrival.set(k, { land: 'snap-school', cover: true, friends: [{ id: 'moonface', x: 200 }, { id: 'silky', x: 480, y: 382, w: 210 }] });  // in set
  *   await ladderArrival.play(k, a, { line: 'newLand', by: a.friends[0] });
- *   const how = await k.tapToHelp(a.cover!, { ask: 'askCloud', nudge: 'nudgeCloud', helped: 'spellCloud', by: a.friends[0], helper: a.friends[1], size: 300 });
- *   await ladderArrival.reveal(k, a, { how, thanks: 'thanksCloud', by: a.friends[0] });
+ *   await k.say('spellCloud', a.friends[1]);
+ *   await ladderArrival.reveal(k, a, { line: 'thereItIs', by: a.friends[0] });
  */
 export const ladderArrival = {
   /** The cloud at the top of the ladder, the land in the sky, the friends hidden in the cloud below. No motion: legal in `set`. */
@@ -172,14 +171,11 @@ export const ladderArrival = {
   },
 
   /** The cloud blows away in puffs (or, with no cover, the land just fades in) and a sparkle bursts where the land is. */
-  async reveal<K extends string>(k: Kit<K>, a: LadderActors, o: { how?: 'tapped' | 'helped'; thanks?: K; by?: HTMLElement } = {}): Promise<void> {
-    const how = o.how ?? 'tapped';
+  async reveal<K extends string>(k: Kit<K>, a: LadderActors, o: { line?: K; by?: HTMLElement } = {}): Promise<void> {
     if (a.cover) {
-      if (how === 'helped') {
-        // The story does it for him: a little spell from the middle of the cloud.
-        k.fx.spell();
-        await k.beam([590, 470], [590, 240], C.goldLight, 0.4);
-      }
+      // A little spell from the middle of the cloud.
+      k.fx.spell();
+      await k.beam([590, 470], [590, 240], C.goldLight, 0.4);
       sounds.blowAway();
       for (const [x, y] of [[380, 180], [590, 120], [800, 190], [470, 300], [710, 310]] as const) {
         k.puff(x, y, 200, '#c9c5bf');
@@ -191,7 +187,7 @@ export const ladderArrival = {
       await k.fade(a.far, 1, 1.2);
     }
     k.sparkle(590, 240, 14, 260);
-    if (how === 'tapped' && o.thanks) await k.all(k.say(o.thanks, o.by), o.by ? k.hop(o.by, 30, 2) : k.wait(0));
+    if (o.line) await k.all(k.say(o.line, o.by), o.by ? k.hop(o.by, 30, 2) : k.wait(0));
   },
 };
 
@@ -278,8 +274,8 @@ const SLIDE_STANDS: [number, number][] = [[140, 700], [320, 690], [860, 700]];
  * are before and after. The landing is on the grass, above the caption band.
  *
  * `stuck` makes one rider (`rider`, from 0) get stuck part way, on the last turn round
- * the front of the trunk: the slide stops with a thud and waits for `free(el)` (his
- * tap, a shove, a wobble: yours), then the rider whizzes on down to the cushions.
+ * the front of the trunk: the slide stops with a thud and waits for `free(el)` (a
+ * hero's push, a shove, a wobble: yours), then the rider whizzes on down to the cushions.
  *
  *   const a = slipperySlip.set(k, { riders: [{ id: 'tim' }, { id: 'fran' }] });   // in set
  *   await slipperySlip.play(k, a, { lines: [{ start: 'wheee', landed: 'again' }, { landed: 'myGo' }] });

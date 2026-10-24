@@ -12,7 +12,6 @@ export default defineMeta({
     villain: 'the big jump off the top of Honeypot Hill',
     places: ['honeypot-hill', 'bear-kitchen', 'bear-garden', 'bear-sky'],
     cast: ['teddy', 'mummy-bear', 'barney', 'uncle-bill'],
-    turns: ['tap the ladybird so she flies out of the window', 'drag the kite up into the sky', 'let the helicopter’s rope down to Teddy', 'tap the little bird to say hello', 'drag the honey pot to Teddy'],
     jokes: ['I forgot to flap!'],
     ending: 'flown home muddy on a rope, a bath and honey on hot toast',
   },

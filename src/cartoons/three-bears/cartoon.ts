@@ -7,32 +7,30 @@
  *   1. Breakfast. Bear Cottage's kitchen on a cold morning. Teddy loves honey
  *      on hot toast, but Mummy is making porridge. "Can't I have honey?"
  *      Porridge is good for you on cold mornings: come and stir the oats.
- *      Teddy grumbles, and asks him to help. His turn: he taps the bowl and
- *      it goes round and round (or Teddy stirs it himself). Daddy lowers his
+ *      Teddy grumbles, then stirs the bowl round and round. Daddy lowers his
  *      newspaper: don't worry about eating it up, someone might come along
  *      and eat it for you. "Someone eating MY porridge?" That's what the
  *      other three bears thought. "What other bears? Tell me, Mummy!"
  *   2. Mummy's story. A dream cloud grows over Mummy's head, and inside it
  *      Teddy's own family play the three bears ("Just like us!"). Their
  *      porridge is too hot, so off they go for a walk. Along comes Goldilocks.
- *      Daddy Bear's porridge: too hot. Mummy Bear's: too cold. His turn: he
- *      taps the little bowl that was just right (or Teddy guesses it), and she
+ *      Daddy Bear's porridge: too hot. Mummy Bear's: too cold. Teddy
+ *      guesses the little bowl was just right, and she
  *      gobbles it all up. The chairs: too hard, too soft, and Baby Bear's goes
  *      CRACK. Up she goes for a sleep. The cloud goes; their own porridge is
- *      poured, and it's too hot too. A walk to the edge of the wood. His turn:
- *      Mummy holds out Teddy's scarf and he drags it over to Teddy (or Mummy
- *      brings it herself), and on it goes.
+ *      poured, and it's too hot too. A walk to the edge of the wood. Mummy
+ *      brings Teddy's scarf over, and on it goes.
  *   3. The edge of the wood. Mummy finishes the story: the bears came home,
  *      Goldilocks woke and ran away. Why did she go in? She smelt the
  *      porridge. "But it's only a story…" A rustle, sneaky music, something
- *      golden behind the big tree. His turn: he taps the tree (or Daddy calls
- *      "Who's there?"), and Goldilocks peeks out, giggles and skips off up the
+ *      golden behind the big tree. Daddy calls
+ *      "Who's there?", and Goldilocks peeks out, giggles and skips off up the
  *      path towards the cottage. "My porridge!" Teddy runs home as fast as
  *      he can.
  *   4. Just right. Teddy bursts in, puffing. His porridge is still there, and
  *      now it's just right. He eats every bit. Mummy and Daddy arrive laughing:
- *      "Clever Teddy Bear!" His turn: he drags the honey pot from Mummy's
- *      paws to Teddy's bowl (or Mummy carries it), and a spoonful of honey
+ *      "Clever Teddy Bear!" Mummy carries the honey pot from her
+ *      paws to Teddy's bowl, and a spoonful of honey
  *      goes on top. Goldilocks can
  *      have her own porridge. Golden curls at the window: she waves, Teddy
  *      waves back. From that day on, Teddy always ate up his porridge.
@@ -113,10 +111,7 @@ export default defineCartoon({
     goodForYou: { who: 'mummy-bear', text: 'Porridge is good for you on cold mornings like this.' },
     stirOats: { who: 'mummy-bear', text: 'Come and stir the oats, Teddy. Round and round.' },
     notFair: { who: 'teddy', text: 'It’s not fair. I don’t even like porridge.' },
-    askStir: { who: 'teddy', text: 'Will you help me stir, {name}? Tap the bowl!' },
-    nudgeStir: { who: 'teddy', text: 'Tap my bowl, and round it goes!' },
     stirMyself: { who: 'teddy', text: 'Oh, all right. I’ll stir it myself.' },
-    stirThanks: { who: 'mummy-bear', text: 'Lovely stirring! Thank you, {name}.' },
     stirTeddy: { who: 'mummy-bear', text: 'Lovely stirring, Teddy!' },
     eatItForYou: { who: 'daddy-bear', text: 'Don’t worry, Teddy. Someone might come along and eat it for you.' },
     dontBelieve: { who: 'teddy', text: 'Someone eating MY porridge? I don’t believe it!' },
@@ -130,8 +125,6 @@ export default defineCartoon({
     daddysBowl: { who: 'mummy-bear', text: 'She tried Daddy Bear’s porridge. Too hot!' },
     mummysBowl: { who: 'mummy-bear', text: 'She tried Mummy Bear’s porridge. Too cold!' },
     babysBowl: { who: 'teddy', text: 'And Baby Bear’s?' },
-    askBowl: { who: 'mummy-bear', text: '{name}, which one was just right? Tap the little bowl!' },
-    nudgeBowl: { who: 'mummy-bear', text: 'The little bowl. Tap it!' },
     littleOne: { who: 'teddy', text: 'I know! The little one!' },
     justRight: { who: 'mummy-bear', text: 'Just right! And she ate it all up.' },
     chairs: { who: 'mummy-bear', text: 'Then she tried the chairs. Too hard! Too soft!' },
@@ -140,10 +133,7 @@ export default defineCartoon({
     upstairs: { who: 'mummy-bear', text: 'Then up she went for a sleep.' },
     walk: { who: 'daddy-bear', text: 'Ours is too hot as well! Let’s walk to the edge of the wood.' },
     scarfOn: { who: 'mummy-bear', text: 'Put your scarf on, Teddy. It’s chilly.' },
-    askScarf: { who: 'mummy-bear', text: 'Can you drag the scarf to Teddy, {name}?' },
-    nudgeScarf: { who: 'mummy-bear', text: 'Drag the scarf over to Teddy.' },
-    scarfMyself: { who: 'mummy-bear', text: 'Never mind. I’ll bring it to you myself.' },
-    scarfThanks: { who: 'teddy', text: 'Thank you, {name}! Now I’m snug as a bug.' },
+    scarfMyself: { who: 'mummy-bear', text: 'Here, I’ll bring it to you.' },
     scarfThanksMummy: { who: 'teddy', text: 'Thank you, Mummy! Now I’m snug as a bug.' },
     // 3. The edge of the wood
     cameHome: { who: 'mummy-bear', text: 'The three bears came home and found her asleep. She woke up and ran away!' },
@@ -151,8 +141,6 @@ export default defineCartoon({
     smelt: { who: 'mummy-bear', text: 'I think she smelt the porridge.' },
     onlyStory: { who: 'teddy', text: 'But it’s only a story…' },
     whatWasThat: { who: 'teddy', text: 'What was that? Something golden, behind the big tree!' },
-    askTree: { who: 'teddy', text: '{name}, who’s behind that tree? Tap it!' },
-    nudgeTree: { who: 'teddy', text: 'Tap the big tree!' },
     whosThere: { who: 'daddy-bear', text: 'Hello? Who’s there?' },
     goldenCurls: { who: 'teddy', text: 'Golden curls! It’s Goldilocks!' },
     ourHouse: { who: 'teddy', text: 'She’s going to our house! My porridge!' },
@@ -162,13 +150,11 @@ export default defineCartoon({
     nowJustRight: { who: 'teddy', text: 'And it’s not too hot now. It’s just right!' },
     everyBit: { who: 'daddy-bear', text: 'Well, I never! Every last bit!' },
     clever: { who: 'mummy-bear', text: 'Clever Teddy Bear! That deserves a spoonful of honey, on top.' },
-    askHoney: { who: 'mummy-bear', text: 'Can you drag the honey to Teddy’s bowl, {name}?' },
-    nudgeHoney: { who: 'mummy-bear', text: 'Drag the honey pot to the bowl.' },
-    honeyMyself: { who: 'mummy-bear', text: 'Here we are. I’ll carry it over myself.' },
+    honeyMyself: { who: 'mummy-bear', text: 'Here we are. I’ll carry it over.' },
     afterAll: { who: 'teddy', text: 'Mmm! I got my honey after all!' },
     ownPorridge: { who: 'teddy', text: 'Goldilocks can have her own porridge. This one’s mine!' },
     window: { who: 'mummy-bear', text: 'Look, Teddy. Who’s that at the window?' },
-    byeGoldi: { who: 'teddy', text: 'Hello, Goldilocks! Bye-bye, {name}!' },
+    byeGoldi: { who: 'teddy', text: 'Hello, Goldilocks! Bye-bye!' },
     end: { who: 'narrator', text: 'And from that day on, Teddy always ate up his porridge. Just in case!' },
   },
   scenes: [
@@ -202,8 +188,9 @@ export default defineCartoon({
         k.pose(teddy, 'default');
         await k.wait(300);
 
-        // His turn: round and round goes the porridge.
-        const how = await k.tapToHelp(bowl, { ask: 'askStir', nudge: 'nudgeStir', helped: 'stirMyself', by: teddy, size: 160 });
+        // Round and round goes the porridge.
+        await k.say('stirMyself', teddy);
+        k.flourish(bowl);
         scrape(4);
         await k.all(
           moves.stir(k, teddy, 4, 'armR'),
@@ -211,7 +198,7 @@ export default defineCartoon({
         );
         k.set(bowl, { rotation: 0 });
         await k.fade(k.part(bowl, 'steam'), 1, 0.8);
-        await k.say(how === 'tapped' ? 'stirThanks' : 'stirTeddy', mummy);
+        await k.say('stirTeddy', mummy);
 
         k.pose(teddy, 'sad');
         // Daddy lowers his newspaper.
@@ -313,8 +300,9 @@ export default defineCartoon({
         await k.all(k.say('mummysBowl', mummy), k.wait(1600).then(() => k.shake(goldi, 3, 4)));
         await k.say('babysBowl', teddy);
 
-        // His turn: the little bowl was just right.
-        await k.tapToHelp(bowlB, { ask: 'askBowl', nudge: 'nudgeBowl', helped: 'littleOne', by: mummy, helper: teddy, size: 130 });
+        // Teddy guesses: the little bowl was just right.
+        await k.say('littleOne', teddy);
+        k.flourish(bowlB);
         k.fx.patter(2, 0.14);
         await k.to(goldi, 0.6, { x: 108, ease: 'sine.inOut' });
         scrape(3);
@@ -367,17 +355,18 @@ export default defineCartoon({
         k.fx.boing();
         await k.hop(teddy, 20);
         await k.say('scarfOn', mummy);
-        // His turn: Mummy holds the scarf out, and he drags it to Teddy.
+        // Mummy holds the scarf out, and brings it to Teddy.
         const loose = k.add(scarf(), { x: 165, y: 540, w: 150, z: 15 });
         k.fx.twinkle();
         await k.appear(loose, 0.4);
-        const got = await k.dragToHelp(loose, { to: teddy, ask: 'askScarf', nudge: 'nudgeScarf', helped: 'scarfMyself', by: mummy, dropSize: 200 });
+        await k.say('scarfMyself', mummy);
+        await k.carry(loose, teddy);
         // On goes the scarf.
         const s = wearScarf(teddy, false);
         k.fx.whizz();
         await k.all(k.to(s, 0.5, { opacity: 1 }), k.fade(loose, 0, 0.4));
         k.remove(loose);
-        await k.say(got === 'dragged' ? 'scarfThanks' : 'scarfThanksMummy', teddy);
+        await k.say('scarfThanksMummy', teddy);
         k.pose(teddy, 'happy');
         await k.hop(teddy, 26);
       },
@@ -432,8 +421,9 @@ export default defineCartoon({
         await k.to(goldi, 0.6, { x: 85, ease: 'sine.inOut' });
         await k.wait(400);
 
-        // His turn: who's behind the tree?
-        await k.tapToHelp(trunk, { ask: 'askTree', nudge: 'nudgeTree', helped: 'whosThere', by: teddy, helper: daddy, size: 220 });
+        // Daddy calls out: who's behind the tree?
+        await k.say('whosThere', daddy);
+        k.flourish(trunk);
         k.fx.pop();
         await k.to(goldi, 0.7, { x: 0, ease: 'back.out(1.4)' });
         giggle();
@@ -523,10 +513,11 @@ export default defineCartoon({
         await k.all(k.to(mummy, 1.2, { x: 0, ease: 'power2.out' }), k.to(honey, 1.2, { x: 0, ease: 'power2.out' }));
         await k.say('everyBit', daddy);
         await k.say('clever', mummy);
-        // His turn: a spoonful of honey, on top. He drags the pot from Mummy's paws to the bowl.
+        // A spoonful of honey, on top. Mummy carries the pot from her paws to the bowl.
         const target = k.box(myBowlEmpty);
         k.set(honey, { zIndex: 14 });
-        await k.dragToHelp(honey, { to: myBowlEmpty, ask: 'askHoney', nudge: 'nudgeHoney', helped: 'honeyMyself', by: mummy, dropSize: 200 });
+        await k.say('honeyMyself', mummy);
+        await k.carry(honey, myBowlEmpty);
         // Lift the pot up beside Teddy's face and tip.
         await k.to(honey, 0.5, { y: '-=70', ease: 'sine.inOut' });
         await k.to(honey, 0.4, { rotation: -40 });

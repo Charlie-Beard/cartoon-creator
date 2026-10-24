@@ -12,7 +12,6 @@ export default defineMeta({
     villain: 'fluffy, a growling three-headed dog (really a big soppy puppy), and the creeping Devil’s Snare',
     places: ['third-floor-room', 'dormitory', 'hagrids-hut', 'secret-tunnel'],
     cast: ['harry', 'ron', 'hermione', 'hagrid', 'hedwig', 'fluffy'],
-    turns: ['tap the parcel to open it', 'drag the flute over to Harry', 'play Hagrid’s flute', 'tickle Fluffy’s paw off the trapdoor', 'drag Ron to the trapdoor', 'tap Hermione’s wand for a bright light'],
     jokes: ['the flute sounds like an owl', 'a three-headed dog called Fluffy', 'Ron’s singing sends a head to sleep'],
     ending: 'safe together in the light, ready for the next adventure',
   },

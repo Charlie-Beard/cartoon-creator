@@ -4,17 +4,17 @@
  * the boys out to clear the garden of gnomes.
  *
  *   1. Gnomes again! Breakfast in the Burrow's kitchen. A little bald face
- *      giggles at the window: gnomes! The garden's full of them again. His
- *      first turn: he taps the gnome at the window and it ducks away. Out
+ *      giggles at the window: gnomes! The garden's full of them again. Mrs
+ *      Weasley shoos the gnome at the window and it ducks away. Out
  *      you go, boys, and de-gnome it before lunch. "De-what?" Ron: it's
  *      brilliant, I'll show you.
- *   2. Round and round. Out in the wild garden, a bush is giggling. His
- *      first turn: he taps the rustling bush and a gnome pops out: "Found
+ *   2. Round and round. Out in the wild garden,  a bush is giggling. Ron
+ *      calls into the rustling bush and a gnome pops out: "Found
  *      me!" Ron shows how: swing him round and round till he's dizzy, and
  *      over the hedge he goes. "Wheee!" Doesn't it hurt him? No, gnomes love
  *      it: his head pops up over the hedge, "Again! Again!"
- *   3. Harry's go. A gnome comes out on his own: ready for a spin! His big
- *      turn: he taps the gnome, and round and round and over the hedge it
+ *   3. Harry's go. A gnome comes out on his own: ready for a spin! Harry
+ *      gives it a go, and round and round and over the hedge it
  *      goes. Brilliant! But here they come again, marching back, grumbling
  *      and giggling: gnomes always come back. Then STOMP… STOMP. The gnomes
  *      scurry off, and the hedge shakes.
@@ -24,10 +24,8 @@
  *      asks, "Can I have a go?" Mrs Weasley rolls up her sleeves: leave this
  *      one to me. Round and round and WHEEE, over the hedge. Then pie in the
  *      garden, well done everyone, they'll be back tomorrow… and over the
- *      hedge the Chief pops up: "Again!" His last turn: he drags the pie
- *      over the hedge to the Chief, who says "Mmm. Pie." (Mrs Weasley,
- *      rolling up her sleeves, first waits for him to tap the Chief to
- *      start the spin.)
+ *      hedge the Chief pops up: "Again!" Ron passes the pie
+ *      over the hedge to the Chief, who says "Mmm. Pie." 
  *
  * Swinging gnomes is fine because the gnomes love it: they giggle, shout
  * "Wheee!" and come straight back for another go, and they land out of
@@ -116,23 +114,17 @@ export default defineCartoon({
   lines: {
     // 1. Gnomes again!
     morning: { who: 'narrator', text: 'It was Harry’s first morning at the Burrow, Ron’s crooked, happy home.' },
-    morningDears: { who: 'mrsWeasley', text: 'Good morning, dears! And good morning to you too, {name}!' },
+    morningDears: { who: 'mrsWeasley', text: 'Good morning, dears! Breakfast is nearly ready.' },
     window: { who: 'harry', text: 'Er, Mrs Weasley? Something’s looking in at the window.' },
     gnomesAgain: { who: 'mrsWeasley', text: 'Gnomes! The garden’s full of gnomes again!' },
     heeHee: { who: 'gnome', text: 'Hee hee hee!' },
-    askShoo: { who: 'mrsWeasley', text: 'Quick, {name}! Tap that gnome at the window!' },
-    nudgeShoo: { who: 'mrsWeasley', text: 'Tap the gnome, dear!' },
-    helpedShoo: { who: 'harry', text: 'I’ll wave him off!' },
-    shooed: { who: 'mrsWeasley', text: 'Well done! Shoo, little gnome. Shoo!' },
-    shooedHarry: { who: 'mrsWeasley', text: 'Thank you, Harry. That’s got rid of him. For now.' },
+    shooed: { who: 'mrsWeasley', text: 'Shoo, little gnome. Shoo!' },
     outYouGo: { who: 'mrsWeasley', text: 'Out you go, boys. De-gnome my garden before lunch, please.' },
     deWhat: { who: 'harry', text: 'De-gnome? What does that mean?' },
     showYou: { who: 'ron', text: 'It’s brilliant, Harry. Come on, I’ll show you!' },
     // 2. Round and round
     howTo: { who: 'ron', text: 'First, find a gnome. They hide in the bushes.' },
     giggling: { who: 'harry', text: 'Listen! That bush is giggling.' },
-    askBush: { who: 'ron', text: 'Tap the rustly bush, {name}! Let’s see who’s in there.' },
-    nudgeBush: { who: 'ron', text: 'Just tap the wobbly bush!' },
     helpedBush: { who: 'ron', text: 'Come out, you! We know you’re in there!' },
     foundMe: { who: 'gnome', text: 'Hee hee! Found me!' },
     roundAndRound: { who: 'ron', text: 'Then you swing him round and round, till he’s dizzy…' },
@@ -145,8 +137,6 @@ export default defineCartoon({
     // 3. Harry's go
     ready: { who: 'harry', text: 'Hello, little gnome. Ready for a spin?' },
     spinMe: { who: 'gnome', text: 'Ready! Spin me high!' },
-    askSpin: { who: 'harry', text: 'Help me spin him, {name}! Tap the gnome.' },
-    nudgeSpin: { who: 'harry', text: 'Tap the little gnome!' },
     helpedSpin: { who: 'ron', text: 'Go on, Harry! Round and round!' },
     miles: { who: 'ron', text: 'Brilliant! That one went miles!' },
     comingBack: { who: 'harry', text: 'Look! Here they come again!' },
@@ -162,17 +152,12 @@ export default defineCartoon({
     haveAGo: { who: 'gnomeChief', text: '…Can I have a go?' },
     heWantsAGo: { who: 'ron', text: 'He wants a go!' },
     leaveToMe: { who: 'mrsWeasley', text: 'Leave this one to me, dears.' },
-    askChief: { who: 'mrsWeasley', text: 'Help me spin him! Tap the Gnome Chief.' },
-    nudgeChief: { who: 'mrsWeasley', text: 'Tap the Gnome Chief!' },
-    helpedChief: { who: 'mrsWeasley', text: 'Never mind, dear. I’ll grab him myself.' },
     roundYouGo: { who: 'mrsWeasley', text: 'Round you go!' },
     chiefWheee: { who: 'gnomeChief', text: 'Wheeeeeee!' },
-    pie: { who: 'mrsWeasley', text: 'Well done, boys. And well done, {name}! Pie for everyone.' },
+    pie: { who: 'mrsWeasley', text: 'Well done, boys. Pie for everyone.' },
     tomorrow: { who: 'ron', text: 'They’ll all be back tomorrow, you know.' },
     chiefAgain: { who: 'gnomeChief', text: 'Again! Again!' },
-    askPie: { who: 'mrsWeasley', text: 'Not yet, dear. Pie first! Drag the pie to the Chief, {name}.' },
-    nudgePie: { who: 'mrsWeasley', text: 'Drag the pie over to the hedge!' },
-    helpedPie: { who: 'ron', text: 'I’ll pass it over!' },
+    helpedPie: { who: 'ron', text: 'Here you are, Chief. I’ll pass it over!' },
     chiefPie: { who: 'gnomeChief', text: 'Mmm. Pie. Best garden ever.' },
     end: { who: 'narrator', text: 'And the gnomes came back the next day, and the next, and the next…' },
   },
@@ -203,9 +188,9 @@ export default defineCartoon({
         await k.all(k.say('gnomesAgain', mum), k.shake(mum, 6, 2));
         await k.say('heeHee', gnome);
 
-        // His first turn: tap the gnome at the window.
-        const shoo = await k.tapToHelp(gnome, { ask: 'askShoo', nudge: 'nudgeShoo', helped: 'helpedShoo', by: mum, helper: harry, size: 170 });
-        await k.say(shoo === 'tapped' ? 'shooed' : 'shooedHarry', mum);
+        // Mrs Weasley shoos the gnome at the window.
+        await k.say('shooed', mum);
+        k.flourish(gnome);
         giggle();
         k.sfx.whoosh();
         await k.to(gnome, 0.3, { y: 60, opacity: 0, ease: 'power2.in' });
@@ -242,8 +227,9 @@ export default defineCartoon({
         void k.shake(bush, 5, 2);
         await k.say('giggling', harry);
 
-        // His first turn: tap the rustling bush.
-        await k.tapToHelp(bush, { ask: 'askBush', nudge: 'nudgeBush', helped: 'helpedBush', by: ron, size: 200 });
+        // Ron calls into the rustling bush.
+        await k.say('helpedBush', ron);
+        k.flourish(bush);
         k.sfx.rustle();
         await k.to(gnome, 0.45, { y: -130, ease: 'back.out(1.8)' });
         await k.say('foundMe', gnome);
@@ -291,8 +277,9 @@ export default defineCartoon({
         await k.say('ready', harry);
         await k.all(k.say('spinMe', gnome), k.hop(gnome, 24));
 
-        // His big turn: tap the gnome, and round and round he goes.
-        await k.tapToHelp(gnome, { ask: 'askSpin', nudge: 'nudgeSpin', helped: 'helpedSpin', by: harry, size: 170 });
+        // Ron cheers Harry on, and round and round the gnome goes.
+        await k.say('helpedSpin', ron);
+        k.flourish(gnome);
         await whirl(k, gnome, -150, -170, 4);
         await k.all(k.say('wheee', gnome), fling(k, gnome));
         await k.all(k.say('miles', ron), k.wait(300).then(() => k.hop(ron, 26)));
@@ -367,8 +354,8 @@ export default defineCartoon({
         await k.all(k.fade(mum, 1, 0.4), k.walk(mum, 120, 0.8, 3));
         await k.say('leaveToMe', mum);
 
-        // His turn: tap the Chief to start the spin.
-        await k.tapToHelp(chief, { ask: 'askChief', nudge: 'nudgeChief', helped: 'helpedChief', by: mum, size: 260 });
+        // She takes hold of the Chief and starts the spin.
+        k.flourish(chief);
         await k.say('roundYouGo', mum);
         k.music('adventure');
         await whirl(k, chief, -40, -250, 3, 80);
@@ -395,8 +382,9 @@ export default defineCartoon({
         await k.to(lunch.chief, 0.5, { y: 0, ease: 'back.out(1.6)' });
         await k.all(k.say('chiefAgain', lunch.chief), k.hop(lunch.chief, 18, 2));
 
-        // His last turn: drag the pie to the Chief, who has been watching it.
-        await k.dragToHelp(lunch.pie, { to: [1000, 520], ask: 'askPie', nudge: 'nudgePie', helped: 'helpedPie', by: lunch.mum, helper: lunch.ron, dropSize: 200 });
+        // Ron passes the pie over to the Chief, who has been watching it.
+        await k.say('helpedPie', lunch.ron);
+        await k.carry(lunch.pie, [1000, 520]);
         await k.vanish(lunch.pie);
         await k.say('chiefPie', lunch.chief);
         laugh();

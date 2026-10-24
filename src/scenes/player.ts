@@ -6,8 +6,6 @@
  * to the next scene and a small "home" seal goes back to the shelf. At the
  * end the curtains close, the cartoon is ticked as watched, and one big
  * button goes back to the shelf.
- *
- * His turns (k.tapToHelp) wait for him; everything else just plays.
  */
 import { gsap } from 'gsap';
 import { sfx } from '../audio/sfx';
@@ -24,8 +22,7 @@ import { WORLDS } from '../worlds';
 
 /**
  * Longest one scene may run before the player moves on anyway, so a
- * script bug can never trap him. Scenes are 20–90 s; a tapToHelp can add
- * up to about 30 s more.
+ * script bug can never trap the show. Scenes are 20–90 s.
  */
 const MAX_SCENE_SECONDS = 180;
 
@@ -101,7 +98,6 @@ export class PlayerScene extends Scene {
     const kit = (this.kit = new Kit({
       root: this.stage,
       world,
-      name: this.app.settings.name,
       lines: cartoon.lines,
       alive: () => this.alive && !this.finished,
     }));

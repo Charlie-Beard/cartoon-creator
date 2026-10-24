@@ -7,7 +7,7 @@
  * Until a line is recorded (scripts/voice, ElevenLabs), it falls back to
  * the iPad's own British voice. Only one voice clip plays at a time.
  */
-import { generic, personalise, voiceId } from '../core/phrases';
+import { voiceId } from '../core/phrases';
 import { onPause, paused, whenPlaying } from '../ui/pause';
 import { audio, buses } from './engine';
 
@@ -17,12 +17,6 @@ interface Manifest {
 
 let manifest: Manifest = { lines: [] };
 let manifestLoaded: Promise<void> | null = null;
-
-let playerName = '';
-/** The child's name, used in lines containing {name}. */
-export function setPlayerName(name: string): void {
-  playerName = name.trim();
-}
 
 const buffers = new Map<string, Promise<AudioBuffer | null>>();
 let current: { stop: () => void } | null = null;
@@ -230,9 +224,7 @@ const lineUrl = (id: string) => `${base()}lines/${id}.mp3`;
 export const voice = {
   /**
    * Says a line in a speaker's voice (a character id, default the
-   * narrator). "{name}" is filled in with the child's name: the recording
-   * with his name is used if there is one, else the version without a name.
-   *
+   * narrator).   *
    * Resolves true only if the line played to its end. False means it was
    * interrupted or stopped, so callers must not carry on as if it finished.
    */
@@ -241,18 +233,15 @@ export const voice = {
     const token = {};
     speaking = token;
     await loadManifest();
-    const personal = personalise(template, playerName);
-    for (const text of [personal, generic(template)]) {
-      const id = voiceId(text, who);
-      if (manifest.lines.includes(id)) {
-        const buf = await fetchBuffer(lineUrl(id));
-        if (speaking !== token) return false;
-        if (buf) return held(token, () => playBuffer(buf));
-      }
+    const id = voiceId(template, who);
+    if (manifest.lines.includes(id)) {
+      const buf = await fetchBuffer(lineUrl(id));
+      if (speaking !== token) return false;
+      if (buf) return held(token, () => playBuffer(buf));
     }
     if (speaking !== token) return false;
-    unrecorded(`${who}: “${generic(template)}”`);
-    return held(token, () => speak(personal, 0.9));
+    unrecorded(`${who}: “${template}”`);
+    return held(token, () => speak(template, 0.9));
   },
 
   /** Warms the cache so the first tap answers instantly. Lines are the narrator's unless they say who. */
@@ -261,8 +250,8 @@ export const voice = {
     const jobs: Promise<unknown>[] = [];
     for (const l of o.lines ?? []) {
       const { text: t, who } = typeof l === 'string' ? { text: l, who: undefined } : l;
-      const id = [personalise(t, playerName), generic(t)].map((x) => voiceId(x, who)).find((x) => manifest.lines.includes(x));
-      if (id) jobs.push(fetchBuffer(lineUrl(id)));
+      const id = voiceId(t, who);
+      if (manifest.lines.includes(id)) jobs.push(fetchBuffer(lineUrl(id)));
     }
     await Promise.all(jobs);
   },

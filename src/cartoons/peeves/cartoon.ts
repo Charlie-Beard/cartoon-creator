@@ -5,31 +5,31 @@
  *
  *   1. The floating sticks. Nearly Headless Nick leads Harry and Ron up to
  *      Gryffindor Tower after the feast. A bundle of walking sticks is
- *      hanging in the air, all on its own. It's Peeves, invisible. His first
- *      turn: he taps the sticks, and Peeves has to show himself: "Ooooh!
+ *      hanging in the air, all on its own. It's Peeves, invisible. Nick calls
+ *      out, and Peeves has to show himself: "Ooooh!
  *      Ickle firsties!" A raspberry, the sticks clatter down (on the floor,
  *      never on anyone), and Peeves zooms off: catch me if you can!
  *   2. Chalk and a toad. A short cut through a classroom, where Neville is
  *      telling Trevor not to hop off. Peekaboo: Peeves throws chalk (puffs on
  *      the floor round their feet), then floats Trevor up out of reach.
- *      Shan't give him back! His second turn: Trevor hangs in the air, and
- *      he taps him, so he croaks and they know he's all right. Nick: only
+ *      Shan't give him back! Trevor hangs in the air, and
+ *      Neville begs him to croak, so they know he's all right. Nick: only
  *      one ghost can make Peeves behave. The Baron. Neville gulps: he's
  *      ever so scary.
- *   3. The Baron. Down in the cold dungeon hangs the Baron's old bell. His
- *      big turn: he rings it. Bong. The torches dim, chains clink, and the
+ *   3. The Baron. Down in the cold dungeon hangs the Baron's old bell. Harry
+ *      rings it. Bong. The torches dim, chains clink, and the
  *      Baron rises slowly through the floor, grey and staring: "Who… rang…
  *      my bell?" Harry is brave: please, sir, Peeves has taken Neville's
  *      toad. "Peeves. Again. Follow me." He sweeps away through the wall.
  *   4. Goodnight, Peeves. In the classroom Peeves is spinning Trevor round
  *      and round, singing, when the cold comes in behind him. "PEEVES." He
  *      shakes, lets Trevor go (sorry, Baron!) and whizzes off. Trevor is
- *      still up in the air: his fourth turn, a drag, takes him to Neville.
+ *      still up in the air: Neville fetches him down.
  *      The Baron gives the tiniest nod and fades away. Then, cosy by the
- *      common-room fire: even Peeves is scared of the Baron! Thank you for
- *      ringing the bell (Harry thanks him only if he rang it himself).
+ *      common-room fire: even Peeves is scared of the Baron! Harry says it's a good
+ *      thing they rang that bell.
  *      Goodnight, Trevor. Nick says goodnight and floats off through the
- *      wall. His fifth turn, a drag: the teddy over to Neville, for
+ *      wall. Ron takes the teddy over to Neville, for
  *      bed. And at the window, one last, very small raspberry.
  *
  * The scary beat is the Baron rising (sound first, slowly, one push-in),
@@ -127,8 +127,6 @@ function chains(): void {
 
 type Actor = 'teddy' | 'nick' | 'harry' | 'ron' | 'neville' | 'peeves' | 'baron' | 'sticks' | 'toad' | 'bell' | 'cold';
 const cast = {} as Record<Actor, HTMLElement>;
-/** Whether he rang the bell himself, so Harry thanks him only if so (a scene started on its own never saw it: no thanks). */
-let ranBell = false;
 
 /** Peeves floats and bobs in the air wherever he is. */
 function hover<K extends string>(k: Kit<K>, el: HTMLElement): void {
@@ -167,11 +165,9 @@ export default defineCartoon({
   lines: {
     // 1. The floating sticks
     firstNight: { who: 'narrator', text: 'It was Harry’s very first night at Hogwarts. Nick, the Gryffindor ghost, was showing the way to bed.' },
-    thisWay: { who: 'nick', text: 'This way, dear boys! Gryffindor Tower is up these stairs. Welcome to Hogwarts, {name}!' },
+    thisWay: { who: 'nick', text: 'This way, dear boys! Gryffindor Tower is up these stairs. Welcome to Hogwarts!' },
     whySticks: { who: 'ron', text: 'Er… Harry? Why are those sticks floating?' },
     poltergeist: { who: 'nick', text: 'Oh dear. That’s Peeves the poltergeist. He’s invisible, the little rascal.' },
-    askSticks: { who: 'nick', text: 'Tap the floating sticks, {name}! Then he has to show himself.' },
-    nudgeSticks: { who: 'nick', text: 'Just tap the wobbly sticks!' },
     helpedSticks: { who: 'nick', text: 'Peeves! Show yourself, at once!' },
     ickle: { who: 'peeves', text: 'Ooooh! Ickle firsties! What fun!' },
     raspberry: { who: 'harry', text: 'Did he just blow a raspberry at us?' },
@@ -183,8 +179,6 @@ export default defineCartoon({
     upHeGoes: { who: 'peeves', text: 'Ooh, a toady-woady! Up he goes!' },
     giveBack: { who: 'neville', text: 'Trevor! Please give him back!' },
     shant: { who: 'peeves', text: 'Shan’t! Finders keepers!' },
-    askToad: { who: 'harry', text: 'Tap Trevor, so he croaks! Then we will know he is all right.' },
-    nudgeToad: { who: 'harry', text: 'Just tap Trevor!' },
     helpedToad: { who: 'neville', text: 'Croak for me, Trevor! Please!' },
     croaked: { who: 'neville', text: 'He croaked! He’s all right. He’s just stuck up there.' },
     howStop: { who: 'harry', text: 'Nick, how can we stop him?' },
@@ -193,8 +187,6 @@ export default defineCartoon({
     // 3. The Baron
     downDown: { who: 'narrator', text: 'Down, down they went, to the cold, dark dungeon.' },
     hisBell: { who: 'nick', text: 'This is the Baron’s bell. Ring it, and he will come.' },
-    askBell: { who: 'nick', text: 'Will you ring it, {name}? Tap the big old bell.' },
-    nudgeBell: { who: 'nick', text: 'Just tap the bell.' },
     helpedBell: { who: 'harry', text: 'I’ll ring it. Here goes!' },
     soCold: { who: 'narrator', text: 'Bong! Then it went very cold, and very quiet. Something was coming up through the floor…' },
     whoRang: { who: 'baron', text: 'Who… rang… my bell?' },
@@ -207,21 +199,16 @@ export default defineCartoon({
     peevesBaron: { who: 'baron', text: 'PEEVES.' },
     sorryBaron: { who: 'peeves', text: 'B-B-Baron! Sorry, Baron! Here’s the toad, Baron!' },
     offYouGo: { who: 'baron', text: 'Off you go.' },
-    askDragToad: { who: 'harry', text: 'Trevor is up in the air! Can you drag him to Neville, {name}?' },
-    nudgeDragToad: { who: 'harry', text: 'Drag Trevor over to Neville.' },
-    helpedDragToad: { who: 'neville', text: 'I’ll fetch him myself!' },
-    wellDone: { who: 'harry', text: 'Well done! Trevor’s safe.' },
+    helpedDragToad: { who: 'neville', text: 'Come down, Trevor. I’ll fetch you!' },
+    wellDone: { who: 'harry', text: 'Trevor’s safe, Neville.' },
     thankYouSir: { who: 'neville', text: 'Oh, thank you, sir. Thank you ever so much.' },
-    nod: { who: 'narrator', text: 'And the Baron gave {name} the tiniest nod.' },
+    nod: { who: 'narrator', text: 'And the Baron gave the tiniest nod.' },
     evenPeeves: { who: 'ron', text: 'Blimey. Even Peeves is scared of the Baron!' },
-    thanksBell: { who: 'harry', text: 'Thanks for ringing the bell, {name}.' },
     goodBell: { who: 'harry', text: 'It’s a good thing we rang that bell.' },
     nightTrevor: { who: 'neville', text: 'Goodnight, Trevor.' },
     nightBoys: { who: 'nick', text: 'Goodnight, dear boys. Sleep tight!' },
-    askTeddy: { who: 'harry', text: 'Neville can’t sleep without a cuddle. Can you drag the teddy to him, {name}?' },
-    nudgeTeddy: { who: 'harry', text: 'Drag the teddy over to Neville.' },
-    helpedTeddy: { who: 'ron', text: 'I’ll take it over myself.' },
-    cuddle: { who: 'neville', text: 'Thank you, {name}. Now I can sleep.' },
+    helpedTeddy: { who: 'ron', text: 'Neville can’t sleep without a cuddle. I’ll take the teddy over.' },
+    cuddle: { who: 'neville', text: 'Thank you, Ron. Now I can sleep.' },
     end: { who: 'narrator', text: 'One last, very small raspberry. And then, at last, Hogwarts went to sleep.' },
   },
   scenes: [
@@ -255,8 +242,9 @@ export default defineCartoon({
         await k.all(k.say('whySticks', ron), k.shake(ron, 4, 2));
         await k.say('poltergeist', nick);
 
-        // His first turn: tap the sticks, and Peeves has to show himself.
-        await k.tapToHelp(bundle, { ask: 'askSticks', nudge: 'nudgeSticks', helped: 'helpedSticks', by: nick, size: 170 });
+        // Nick calls out, and Peeves has to show himself.
+        await k.say('helpedSticks', nick);
+        k.flourish(bundle);
         k.fx.poof();
         k.puff(840, 300, 220, '#e0c070');
         await k.fade(peeves, 1, 0.3);
@@ -324,8 +312,9 @@ export default defineCartoon({
         await k.say('shant', peeves);
         await blowRaspberry(k, peeves);
 
-        // His second turn: tap Trevor, up in the air, so he croaks.
-        await k.tapToHelp(toad, { ask: 'askToad', nudge: 'nudgeToad', helped: 'helpedToad', by: harry, helper: neville, size: 170 });
+        // Neville begs Trevor, up in the air, to croak.
+        await k.say('helpedToad', neville);
+        k.flourish(toad);
         croak();
         await k.pop(toad, 1.15);
         await k.say('croaked', neville);
@@ -362,8 +351,9 @@ export default defineCartoon({
         await k.say('downDown');
         await k.say('hisBell', nick);
 
-        // His big turn: ring the bell.
-        const rang = await k.tapToHelp(theBell, { ask: 'askBell', nudge: 'nudgeBell', helped: 'helpedBell', by: nick, helper: harry, size: 180 });
+        // Harry rings the bell.
+        await k.say('helpedBell', harry);
+        k.flourish(theBell);
         const swing = k.pivot(k.part(theBell, 'bell'));
         bong();
         await k.to(swing, 0.5, { rotation: 14, yoyo: true, repeat: 3, ease: 'sine.inOut' });
@@ -392,7 +382,6 @@ export default defineCartoon({
         // Back to the friends: Harry is brave.
         await k.camera({}, 0.9);
         k.music('magic');
-        ranBell = rang === 'tapped';
         await k.say('please', harry);
         await k.say('onlyLittle', neville);
         await k.say('followMe', baron);
@@ -451,9 +440,10 @@ export default defineCartoon({
         await k.fade(cold, 0, 0.8);
         k.music('cosy');
 
-        // His fourth turn, a drag: Trevor is still up in the air. Take him to Neville.
-        const back = await k.dragToHelp(toad, { to: [380, 590], ask: 'askDragToad', nudge: 'nudgeDragToad', helped: 'helpedDragToad', by: harry, helper: neville, dropSize: 200 });
-        if (back === 'dragged') await k.say('wellDone', harry);
+        // Trevor is still up in the air. Neville fetches him down.
+        await k.say('helpedDragToad', neville);
+        await k.carry(toad, [380, 590]);
+        await k.say('wellDone', harry);
         await k.all(k.say('thankYouSir', neville), k.hop(neville, 30));
         await k.all(k.say('nod'), k.wait(900).then(() => k.to(baron, 0.5, { y: '+=14', yoyo: true, repeat: 1, ease: 'sine.inOut' })));
         k.fx.twinkle();
@@ -478,16 +468,17 @@ export default defineCartoon({
         void k.float(room.nick, 8, 2.6);
         fireCrackle(4);
         await k.all(k.say('evenPeeves', room.ron), k.wait(300).then(() => k.hop(room.ron, 24)));
-        await k.say(ranBell ? 'thanksBell' : 'goodBell', room.harry);
+        await k.say('goodBell', room.harry);
         croak();
         await k.say('nightTrevor', room.neville);
         await k.say('nightBoys', room.nick);
         k.fx.twinkle();
         await k.fade(room.nick, 0, 1);
 
-        // His fifth turn, a drag: the teddy goes to Neville, for bed.
-        const cuddled = await k.dragToHelp(room.teddy, { to: [760, 640], ask: 'askTeddy', nudge: 'nudgeTeddy', helped: 'helpedTeddy', by: room.harry, helper: room.ron, dropSize: 160 });
-        if (cuddled === 'dragged') await k.say('cuddle', room.neville);
+        // Ron takes the teddy over to Neville, for bed.
+        await k.say('helpedTeddy', room.ron);
+        await k.carry(room.teddy, [760, 640]);
+        await k.say('cuddle', room.neville);
         await k.wait(300);
 
         // At the window: one last, very small raspberry.

@@ -7,7 +7,7 @@
  *
  *   import { chairRide } from '../../worlds/wishing/pieces';
  *
- * Lines are keys, never text; his turn (k.tapToHelp) stays in the script,
+ * Lines are keys, never text; a scene's own deeds stay in the script,
  * between a piece's parts.
  */
 import type { Kit } from '../../kit';

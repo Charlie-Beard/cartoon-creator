@@ -7,12 +7,12 @@
  *   1. Getting ready. The party garden, bunting and balloons, a table of
  *      cakes and jellies, pies and banana boats. It's Aunt Bertha Bear's
  *      birthday. Jolly games first, then Grandpa's Punch and Judy show!
- *      Teddy can hardly wait. His first turn: he taps the balloons and
- *      Mummy's bounce sets them dancing. The games begin.
+ *      Teddy can hardly wait. Mummy gives the balloons a bounce and
+ *      sets them dancing. The games begin.
  *   2. Poor Mr Punch. Musical Chairs: the tune plays, Teddy and Barney
  *      hop round, the tune stops. Grandpa arrives, not in a party mood:
  *      Mr Punch's nose got squashed in the travelling case, and he can't
- *      mend him in time. His second turn: he drags poor Mr Punch down
+ *      mend him in time. He tucks poor Mr Punch down
  *      into his travelling case. Oh dear! Is Marmaduke still at Great Uncle
  *      Bertram's? "Who's Marmaduke?" asks Teddy. Nobody answers. He asks
  *      again, louder. Grandpa and Mummy look at each other, then at Teddy:
@@ -20,13 +20,13 @@
  *      takes Teddy off to tell him a secret.
  *   3. Who's Marmaduke? Barney: where's Teddy? He's missing the games!
  *      Mummy claps: take your seats for the birthday show, by Grandpa Bear
- *      and Marmaduke! "Who's Marmaduke?" He taps the
- *      starry curtains open (third turn), and there is Teddy, on Grandpa's knee,
+ *      and Marmaduke! "Who's Marmaduke?" Aunt Bertha
+ *      opens the starry curtains, and there is Teddy, on Grandpa's knee,
  *      pretending to be Marmaduke the dummy. Marmaduke tells jokes in a
  *      squeaky voice (it's really Grandpa's), and the bears laugh and laugh.
  *   4. Happy birthday. Teddy was the best Marmaduke ever. Teddy has made
- *      Aunt Bertha a present: his fourth turn, he drags the parcel to her.
- *      Cake time: his fifth, he blows out her candles. Happy birthday,
+ *      Aunt Bertha a present: he carries the parcel to her.
+ *      Cake time: he helps blow out her candles. Happy birthday,
  *      Aunt Bertha! Can Marmaduke come to the next party? Only if Teddy is
  *      him again. The End.
  *
@@ -60,12 +60,10 @@ export default defineCartoon({
   lines: {
     // 1. Getting ready
     birthday: { who: 'narrator', text: 'It was Aunt Bertha Bear’s birthday, and everyone was busy getting ready for a party.' },
-    hardlyWait: { who: 'teddy', text: 'Cakes and jellies, pies and banana boats! Hello, {name}! I can hardly wait!' },
+    hardlyWait: { who: 'teddy', text: 'Cakes and jellies, pies and banana boats! I can hardly wait!' },
     jollyGames: { who: 'aunt-bertha', text: 'We’ll play lots of jolly games. Then Grandpa Bear is bringing his puppet show!' },
     puppetShow: { who: 'teddy', text: 'A puppet show! That’s the best thing at a party!' },
-    askBalloons: { who: 'mummy-bear', text: 'Let’s make the balloons bounce first! Tap them, {name}!' },
-    nudgeBalloons: { who: 'mummy-bear', text: 'Tap the balloons, and up they go!' },
-    helpedBalloons: { who: 'mummy-bear', text: 'Never mind, I’ll give them a bounce myself!' },
+    askBalloons: { who: 'mummy-bear', text: 'Let’s make the balloons bounce first!' },
     gamesBegin: { who: 'mummy-bear', text: 'Here come the guests. Let the games begin!' },
     // 2. Poor Mr Punch
     roundWeGo: { who: 'barney', text: 'Musical Chairs! Round and round we go!' },
@@ -73,9 +71,7 @@ export default defineCartoon({
     poorPunch: { who: 'grandpa-bear', text: 'Oh dear, oh dear. Just look what’s happened to my poor old puppet!' },
     squashed: { who: 'teddy', text: 'His nose is all squashed!' },
     cantMend: { who: 'grandpa-bear', text: 'I caught it in my travelling case. I can’t possibly mend him in time.' },
-    askCase: { who: 'grandpa-bear', text: 'Will you pop him in his case, {name}? Drag him across.' },
-    nudgeCase: { who: 'grandpa-bear', text: 'Drag the puppet into the case, there’s a good bear.' },
-    helpedCase: { who: 'grandpa-bear', text: 'Never mind. I’ll tuck him in myself.' },
+    helpedCase: { who: 'grandpa-bear', text: 'I’ll tuck the poor old fellow in his case.' },
     stillAway: { who: 'mummy-bear', text: 'Oh dear! And I suppose Marmaduke is still with Great Uncle Bertram?' },
     ifOnly: { who: 'grandpa-bear', text: 'Yes, indeed. Ah, my good friend Marmaduke! If only he were here now…' },
     whosMarmaduke: { who: 'teddy', text: 'Marmaduke? Who’s Marmaduke?' },
@@ -84,14 +80,12 @@ export default defineCartoon({
     looked: { who: 'narrator', text: 'Grandpa looked at Mummy. Mummy looked at Grandpa. Then they both looked at Teddy.' },
     everyoneLikes: { who: 'mummy-bear', text: 'Marmaduke! Everyone likes Marmaduke!' },
     youToo: { who: 'grandpa-bear', text: 'And I’m sure, Teddy Bear, that you will like him too. Come with me!' },
-    puzzled: { who: 'teddy', text: 'But isn’t Marmaduke at Great Uncle Bertram’s? {name}, what’s going on?' },
+    puzzled: { who: 'teddy', text: 'But isn’t Marmaduke at Great Uncle Bertram’s? What’s going on?' },
     // 3. Who's Marmaduke?
     wheresTeddy: { who: 'barney', text: 'Where’s Teddy? He’s missing all the party games!' },
     takeSeats: { who: 'mummy-bear', text: 'Please take your seats for the birthday show, by Grandpa Bear… and Marmaduke!' },
     whisper: { who: 'barney', text: 'Marmaduke? Who’s Marmaduke?' },
-    askCurtains: { who: 'aunt-bertha', text: 'Let’s find out! {name}, will you open the curtains? Tap them!' },
-    nudgeCurtains: { who: 'aunt-bertha', text: 'Tap the starry curtains, {name}!' },
-    helpedCurtains: { who: 'aunt-bertha', text: 'Never mind, dear. I’ll open them myself!' },
+    helpedCurtains: { who: 'aunt-bertha', text: 'Let’s find out! I’ll open the curtains!' },
     whoWasIt: { who: 'narrator', text: 'And who do you think it was?' },
     itsTeddy: { who: 'barney', text: 'It’s Teddy! Sitting on Grandpa’s knee!' },
     helloAll: { who: 'marmaduke', text: 'Hello, everybody! I’m Marmaduke! Happy birthday, Aunt Bertha!' },
@@ -103,16 +97,11 @@ export default defineCartoon({
     bestShow: { who: 'aunt-bertha', text: 'What a wonderful show! Thank you, Grandpa. And thank you, Marmaduke!' },
     bestMarmaduke: { who: 'grandpa-bear', text: 'Teddy is the best Marmaduke I ever had.' },
     cakeTime: { who: 'mummy-bear', text: 'And now, it’s time for the birthday cake!' },
-    askPresent: { who: 'teddy', text: 'Can you drag my present to Aunt Bertha?' },
-    nudgePresent: { who: 'teddy', text: 'Drag the parcel to Aunt Bertha!' },
-    helpedPresent: { who: 'teddy', text: 'I’ll take it to her myself!' },
-    thanksPresentDragged: { who: 'aunt-bertha', text: 'A parcel! Thank you!' },
+    helpedPresent: { who: 'teddy', text: 'I made you a present, Aunt Bertha!' },
     thanksPresentHelped: { who: 'aunt-bertha', text: 'A parcel! Thank you, Teddy!' },
-    askCandles: { who: 'aunt-bertha', text: 'Will you help me blow out my candles, {name}? Tap my cake!' },
-    nudgeCandles: { who: 'aunt-bertha', text: 'Just tap the cake, dear, and blow!' },
+    askCandles: { who: 'aunt-bertha', text: 'Will you help me blow out my candles, Teddy?' },
     helpedCandles: { who: 'teddy', text: 'I’ll help! One, two, three… whoosh!' },
     happyBirthday: { who: 'mummy-bear', text: 'Happy birthday, Aunt Bertha!' },
-    thanksName: { who: 'aunt-bertha', text: 'Thank you, {name}! What a lovely birthday.' },
     thanksTeddy: { who: 'aunt-bertha', text: 'Thank you, Teddy! What a lovely birthday.' },
     nextParty: { who: 'teddy', text: 'Grandpa, can Marmaduke come to the next party too?' },
     onlyIf: { who: 'grandpa-bear', text: 'Only if you’ll be him again, Teddy Bear!' },
@@ -142,12 +131,8 @@ export default defineCartoon({
         await k.all(k.say('puppetShow', teddy), k.wait(200).then(() => k.hop(teddy, 40, 2)));
         await k.wait(300);
         await k.wait(200);
-        await k.tapToHelp(balloons, {
-          ask: 'askBalloons',
-          nudge: 'nudgeBalloons',
-          helped: 'helpedBalloons',
-          by: mummy,
-        });
+        await k.say('askBalloons', mummy);
+        k.flourish(balloons);
         k.sfx.whoosh();
         k.sparkle(1025, 250, 12, 140);
         await k.hop(balloons, 50, 2);
@@ -192,13 +177,8 @@ export default defineCartoon({
         await k.say('squashed', teddy);
         await k.say('cantMend', grandpa);
         await k.wait(200);
-        await k.dragToHelp(punch, {
-          to: cast.case,
-          ask: 'askCase',
-          nudge: 'nudgeCase',
-          helped: 'helpedCase',
-          by: grandpa,
-        });
+        await k.say('helpedCase', grandpa);
+        await k.carry(punch, cast.case);
         await k.vanish(punch);
         k.sfx.page();
         await k.pop(cast.case);
@@ -250,13 +230,8 @@ export default defineCartoon({
         k.fx.drumroll(1.5);
         await k.wait(800);
 
-        const how = await k.tapToHelp(curtains, {
-          ask: 'askCurtains',
-          nudge: 'nudgeCurtains',
-          helped: 'helpedCurtains',
-          by: bertha,
-          size: 300,
-        });
+        await k.say('helpedCurtains', bertha);
+        k.flourish(curtains);
         // The curtains swish open.
         k.sfx.whoosh();
         const [l] = k.pivot(k.part(curtains, 'curtainL'));
@@ -264,7 +239,6 @@ export default defineCartoon({
         await k.all(k.to(l, 1, { x: -180, scaleX: 0.5, ease: 'power2.inOut' }), k.to(r, 1, { x: 180, scaleX: 0.5, ease: 'power2.inOut' }));
         k.fx.twinkle();
         k.sparkle(600, 380, 14, 200);
-        if (how === 'tapped') await k.wait(200);
         await k.say('whoWasIt');
         await k.all(k.say('itsTeddy', barney), k.hop(barney, 30));
         await k.all(k.say('helloAll', show), k.camera({ zoom: 1.2, x: 600, y: 420 }, 0.8));
@@ -297,28 +271,19 @@ export default defineCartoon({
         await k.say('bestShow', bertha);
         await k.say('bestMarmaduke', grandpa);
         await k.wait(200);
-        const gift = await k.dragToHelp(cast.parcel, {
-          to: bertha,
-          ask: 'askPresent',
-          nudge: 'nudgePresent',
-          helped: 'helpedPresent',
-          by: teddy,
-        });
+        await k.say('helpedPresent', teddy);
+        await k.carry(cast.parcel, bertha);
         await k.vanish(cast.parcel);
-        await k.say(gift === 'dragged' ? 'thanksPresentDragged' : 'thanksPresentHelped', bertha);
+        await k.say('thanksPresentHelped', bertha);
         await k.say('cakeTime', mummy);
         k.face(teddy, false);
         await k.wait(300);
 
-        const how = await k.tapToHelp(cake, {
-          ask: 'askCandles',
-          nudge: 'nudgeCandles',
-          helped: 'helpedCandles',
-          by: bertha,
-          helper: teddy,
-        });
+        await k.say('askCandles', bertha);
+        await k.say('helpedCandles', teddy);
+        k.flourish(cake);
         await candles(k, { cake, line: 'happyBirthday', by: mummy });
-        await k.say(how === 'tapped' ? 'thanksName' : 'thanksTeddy', bertha);
+        await k.say('thanksTeddy', bertha);
         await k.say('nextParty', teddy);
         k.face(teddy, true);
         await k.say('onlyIf', grandpa);

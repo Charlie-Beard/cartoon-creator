@@ -10,7 +10,7 @@ import { C, defineCartoon, piece, circle, svg, type Kit } from '../kit';
 
 All coordinates are stage points on the **1180 × 820** stage, top-left
 origin. Option names in code are CSS spelling (`color`), unlike
-everything he hears or reads, which is UK English. Every `await` is safe to skip: if the player skips the scene, the
+everything the child hears or reads, which is UK English. Every `await` is safe to skip: if the player skips the scene, the
 script simply stops where it was.
 
 ## Building a set
@@ -25,12 +25,12 @@ script simply stops where it was.
 | `k.face(el, flip)` | Turns an actor to face the other way. |
 | `k.remove(el)` | Takes an actor off for good. |
 | `k.box(el)` | Where an actor is now: `{ x, y, w, h, top, feet, face }`, its placed box moved by any `k.to` x/y. `face` is a portrait's face box with its middle (`cx`, `cy`): put a hat on a head, a sparkle on a nose, the camera on a face, without guessing. |
-| `k.lettering(text, { x, y, size?, color?, w?, z? })` | Andika lettering as an actor, centred on `x`, `y` (a name on a cake, a sign). Drawn fresh, so it can say `k.name` (give a fallback: it can be empty). `w` squeezes long text to fit. |
+| `k.lettering(text, { x, y, size?, color?, w?, z? })` | Andika lettering as an actor, centred on `x`, `y` (a word on a cake, a sign). `w` squeezes long text to fit. |
 | `k.set(el, vars)` | Sets GSAP properties at once: `{ opacity: 0 }` to hide someone who enters later, `{ rotation: -10 }`, `{ scale: 0.8 }`. |
 
 **Stacking (`z`):** backdrop 0 · actors 10–29 (default 10; nearer is
 higher) · ambient 30 · `dim` 33 · lights 35 · puffs 40 · beams 45 ·
-sparkles 50 · confetti 55 · his-turn ring 60 · captions 70.
+sparkles 50 · confetti 55 · captions 70.
 
 ## Speech
 
@@ -46,49 +46,34 @@ Say lines while something happens:
 await k.all(k.say('wheee', mf), k.to(mf, 1.5, { x: 400, y: 200 }));
 ```
 
-## His turn
+## Deeds
+
+Nothing waits for the viewer. A hero does the deed, and the kit marks it.
 
 ```ts
-const how = await k.tapToHelp(target, { ask, nudge, helped, by, helper?, size? });
-// how: 'tapped' | 'helped'
+k.flourish(el);                          // chime + sparkle burst on the actor's middle
+await k.carry(item, to, seconds = 0.9);  // glide, then flourish
 ```
 
-`by` says `ask`; a gold ring breathes round `target` (tap area at least
-120 px, or `size`); all idle loops hold still. A tap: sparkle, and
-`'tapped'`. No tap after ~9 s: `nudge` once. ~12 s more: `helped` (said by
-`helper ?? by`), and `'helped'`. See docs/WRITING.md for good turns.
+`k.flourish(el)` is the moment a deed is done: a chime and a burst of
+sparkles on the middle of `el` (the door that has just opened, the
+lantern that has just lit). It doesn't wait.
 
-The target must be on stage and still. Don't start other movement until
-it resolves. The ring is the target's size, capped at 260 px; pass
-`size` to choose (a big cloud: `size: 300`). Either way it ends with a
-sparkle on the target, tapped or helped.
-
-### Drag to help
-
-```ts
-const how = await k.dragToHelp(item, { to, ask, nudge, helped, by, helper?, dropSize? });
-// how: 'dragged' | 'helped'
-```
-
-He drags `item` (any actor) to `to`: another actor (its middle) or a
-world point `[x, y]`. A gold ring breathes round the item and a dashed
-one (`dropSize`, default 180) where it goes. Let go within the dashed
-ring (with 40 px to spare) and the item settles there, its middle on
-`to`; anywhere else, it glides back to try again. A tap without a drag
-leans it towards the drop ring. Waited out, as `tapToHelp`: `nudge`,
-then `helped`, then the item glides there by itself (never while his
-finger is on it). Either way it ends in place, with a sparkle there.
+`k.carry(item, to)` glides `item` (any actor) until its middle is on
+`to`, then flourishes there. `to` is another actor (its middle) or a
+world point `[x, y]`. The item moves by its x/y, so it stays where it
+lands: move it on from there, or `k.vanish` it (into the basket, into
+the lock). Keep both the item and `to` well inside the stage and above
+the bottom band, and 200–600 px apart so the glide reads.
 
 ```ts
 const key = k.prop('key', { x: 200, y: 520, w: 110 });
-const how = await k.dragToHelp(key, { to: lock, ask: 'askKey', nudge: 'nudgeKey', helped: 'silkyKey', by: silky });
-await k.say(how === 'dragged' ? 'thanksKey' : 'thanksSilky', mf);
+await k.say('hereGoes', silky);
+await k.carry(key, lock);
+await k.say('itFits', mf);
 ```
 
-The item moves by its x/y, so it stays where it was dropped: move it on
-from there, or `k.vanish` it (into the basket, into the lock). Keep both
-the item and `to` well inside the stage and above the caption band, and
-200–600 px apart.
+See docs/WRITING.md, "Deeds", for what makes a good one.
 
 ## Movement
 
@@ -106,7 +91,7 @@ All return promises; `await` to wait, `void` to let it run alongside.
 | `k.pop(el, amount=1.15)` | Squash-and-stretch (something lands). |
 | `k.appear(el)` / `k.vanish(el)` | Grow in from nothing / shrink away and remove. |
 | `k.fade(el, to, s=0.5)` | Opacity. Works on parts too: `k.fade(k.part(cake, 'flames'), 1)`. |
-| `k.float(el, amount=8, period=2)` | Idle bobbing until the scene ends (holds still during his turn). |
+| `k.float(el, amount=8, period=2)` | Idle bobbing until the scene ends (holds still while a deed is done). |
 | `k.quake(amount=8)` | Gentle shake of the whole stage (a stomp, a crash). |
 | `k.wait(ms)` | A pause. |
 | `k.all(...promises)` | Waits for all of them. |
@@ -166,7 +151,7 @@ for a quick change of place. `k.clear()` empties the world without a wipe.
 `k.sfx` (UI and magic): `tap`, `sparkle`, `success`, `fanfare`, `hoot`,
 `whoosh`, `page`, `gem`, `reveal`, `ominous`, `shield`, `thunder`, `zap`,
 `darkZap`, `block`, `boom`, `crackle(s)`, `triumph`, `rustle`, `wrong`
-(never for him: a villain's spell fizzling at most).
+(a villain's spell fizzling at most).
 
 `k.fx` (story sounds): `boing`, `thud`, `pop`, `whizz`, `splash`,
 `bubbles(n)`, `creak`, `knock(n)`, `patter(steps)`, `stomp(steps)`,
@@ -256,7 +241,7 @@ origin }, children)`; `raw(svgMarkup)`.
 
 - `set` must not await anything; it runs hidden behind the curtain or
   wipe.
-- `k.world` is the cartoon's world; `k.name` is the child's name.
+- `k.world` is the cartoon's world.
 - Characters from another world can visit: `k.character('hedwig', …)` works
   in a Faraway cartoon.
 - Tweens started with `void` keep going after the line; kill or finish
@@ -272,9 +257,9 @@ origin }, children)`; `raw(svgMarkup)`.
   size (`npm run lab -- <world> --backdrop <id>`) and list what is drawn
   in: lit candles, a sleeping Mr Watzisname, Washalot's tub, fir trees
   along one side. If the story changes one (the candles start unlit), lay
-  a one-off patch over it and fade the patch; if he'll tap it, make it a
+  a one-off patch over it and fade the patch; if a hero uses it, make it a
   prop. Two of the same thing (a cake in the backdrop and a cake prop)
-  muddle a 6-year-old about which one to tap.
+  muddle a 6-year-old about which one is meant.
 - **Things on heads:** place them from `k.box(el).face`, not by eye.
 - **Start entrances fully off stage.** An actor in `set` waiting to drop
   in from above at `y: -620` still peeps in and is flagged; use the stage

@@ -4,7 +4,7 @@
  *
  *   stool       the green kitchen stool Teddy stands on to see out of the window (as in the book)
  *   kiteString  Barney's kite string, a thin pen line from its bottom-left corner to its top-right
- *   ropeCoil    the coil of rope at the helicopter's door, for him to tap
+ *   ropeCoil    the coil of rope at the helicopter's door, which Uncle Bill lets down
  *   longRope    a long rope that unrolls from the helicopter down to Teddy in the mud
  *   mud         blobs of mud to lay over Teddy after the SPLAT (on the 300 × 340 portrait grid)
  */

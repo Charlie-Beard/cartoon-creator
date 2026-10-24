@@ -1,6 +1,6 @@
 ---
 name: review-cartoon
-description: Review a cartoon episode against the house rules (safety, story, lines, his turns, pacing, art, code) using its script, the checker and its screenshots, then list or fix what's wrong. Use after writing a cartoon, before a PR, or when asked to review or check one.
+description: Review a cartoon episode against the house rules (safety, story, lines, no interaction, pacing, art, code) using its script, the checker and its screenshots, then list or fix what's wrong. Use after writing a cartoon, before a PR, or when asked to review or check one.
 ---
 
 # Review a cartoon
@@ -14,7 +14,6 @@ what to change. Fix what's clearly wrong; ask about matters of taste.
 ```bash
 npm run check -- <id>
 npm run shots -- <id> --strict # frames, contact sheet, layout flags, measured pacing (real time)
-npm run shots -- <id> --fast --no-tap   # his turns done for him: the nudge and helped lines
 ```
 
 Read the script top to bottom, then the contact sheet, each scene's
@@ -36,43 +35,40 @@ which frames you could not check.
 - [ ] The scary beat is built, lands, and cuts back to the heroes within
       a couple of lines. The episode ends warm and safe.
 - [ ] Nothing flashes: no rapid opacity changes, `k.glow` used gently.
-- [ ] Nothing new starts moving during his turns.
+- [ ] Nothing new starts moving while a deed is done.
 - [ ] Original art: no logos, film fonts or likenesses.
 
 **Story (docs/WRITING.md)**
 - [ ] One clear problem, said out loud in scene 1, solved by the end.
 - [ ] 3–5 scenes, each ending on a hook; a warm ending.
 - [ ] Characters behave as their world notes say.
-- [ ] He is the hero of the turning points; `{name}` 3–6 times.
+- [ ] The heroes do every turning point themselves, on screen.
 
 **Lines**
 - [ ] `npm run check` is clean (UK English, length, speakers, unused lines).
 - [ ] Every line read aloud sounds natural for its character and is
       easy for a 6-year-old to follow. No line depends on reading the
       caption.
-- [ ] `{name}` lines still make sense without a name (`generic`).
+- [ ] Nobody names the child or speaks to the viewer; no `{placeholder}` in any line.
 - [ ] Taken literally, every line says what it means. A back-to-front or
       ironic line ("I mean, hooray!") is followed by someone saying the
-      plain meaning; the plot never rests on a joke he has to decode.
+      plain meaning; the plot never rests on a joke the child has to decode.
 - [ ] No running joke repeats one from each of the world's last two
       episodes (`npm run check` warns) unless it is deliberate.
 
-**His turns**
-- [ ] At least 5 (taps and drags, mixed), spread through the scenes,
-      never back to back; each target is big, still, obvious and on
-      stage, and the tap or drag makes something happen at once. A
-      drag's item and its drop ring are both on stage, clear of the
-      caption band, 200–600 px apart.
-- [ ] `ask`, `nudge` and `helped` all present and kind; the thank-you
-      works either way, and after a `'helped'` turn it thanks the helper,
-      not him.
-- [ ] The target is the only thing of its kind on screen: nothing in the
-      backdrop looks like it (two cakes, two doors), so he knows what to
-      tap.
+**Deeds and no interaction**
+- [ ] No tap or drag helpers, `onTap` or `addEventListener`: the
+      episode plays start to end with nothing to touch.
+- [ ] Each deed is said first, shown on stage with a sound, and marked
+      with `k.flourish` / `k.carry`; it makes something happen at once.
+- [ ] Deeds are spread through the scenes and varied, not five of the
+      same kind; a carried item and its destination are both on stage,
+      clear of the caption band, 200–600 px apart.
+- [ ] Nobody asks the viewer anything, waits for a reply or uses the
+      child's name.
 
 **Pacing**
-- [ ] Measured: each scene 25–90 s, total 2–6 minutes (with taps); the
-      `--no-tap` run not far over (a turn waited out adds about 25 s).
+- [ ] Measured: each scene 25–90 s, total 2–6 minutes.
 - [ ] No silent stretch over ~4 s; a quiet beat after big moments.
 
 **Frames**

@@ -5,26 +5,26 @@
  * Book of Monsters, which snaps, scuttles and fights.
  *
  *   1. Summer in Diagon Alley. No Dursleys for three whole weeks! Mr
- *      Fortescue builds Harry an enormous free ice cream. His first turn: he
- *      puts the cherry on top. In the sports shop window: a Firebolt, the
+ *      Fortescue builds Harry an enormous free ice cream and puts the cherry
+ *      on top. In the sports shop window: a Firebolt, the
  *      fastest broom ever made. One more thing on Harry's school list: the
  *      Monster Book of Monsters. "Oh dear. Good luck, Harry!"
  *   2. The cage of books. In the bookshop, something is growling. In a big
  *      iron cage the Monster Books are snapping and fighting like grumpy
  *      puppies. The poor shop manager, in enormous gloves, reaches in for
- *      one. His second turn, a drag: he drags the manager's thick spare glove
- *      from a pile of books to the manager. Then out jumps a book. It's loose!
+ *      one. The manager fetches his thick spare glove
+ *      from a pile of books. Then out jumps a book. It's loose!
  *   3. The book on the loose. It scuttles round the shop, snapping at
  *      Harry's shoelaces. Hedwig flies in with a note from Hagrid: "P.S.
- *      Stroke the spine." His third turn: he strokes the book's back. It
+ *      Stroke the spine." Harry strokes the book's back. It
  *      purrs and falls open like a sleepy cat. The manager strokes the books
  *      in the cage, and they all purr too.
  *   4. Old friends. On the last day of the summer, Ron and Hermione arrive.
  *      Hermione has a new cat, Crookshanks, who leaps straight onto Ron's
- *      head. His fourth turn: he taps Crookshanks, who jumps down.
+ *      head. Hermione calls Crookshanks, who jumps down.
  *   5. Ice creams for everyone. Three enormous ice creams in the sunshine.
- *      His fifth turn, a drag: he drags Ron's ice cream across from Mr
- *      Fortescue to Ron. The Monster Book is purring on the table. You just have to know the
+ *      Mr Fortescue carries Ron's ice cream across
+ *      to Ron. The Monster Book is purring on the table. You just have to know the
  *      trick.
  *
  * There's no villain: the trouble is a book with teeth. It snaps at air and
@@ -103,8 +103,6 @@ function glove(): string {
 
 type Actor = 'glove' | 'pile' | 'harry' | 'ron' | 'hermione' | 'fortescue' | 'manager' | 'book' | 'bookA' | 'bookB' | 'cat' | 'cage' | 'sundae' | 'broom' | 'list';
 const cast = {} as Record<Actor, HTMLElement>;
-/** Whether he stroked the spine himself in scene 3, for Harry's last word on it. */
-let strokedBy: 'tapped' | 'helped' = 'tapped';
 let post: ReturnType<typeof owlPost.set>;
 
 /** The big cage at the right of the shop (320 × 360) at x 840, y 310: inside x 880 to 1120, y 402 to 632. */
@@ -136,9 +134,7 @@ export default defineCartoon({
     morning: { who: 'fortescue', text: 'Good morning, Harry! Your free ice cream, as always?' },
     yesPlease: { who: 'harry', text: 'Yes please, Mr Fortescue!' },
     scoops: { who: 'fortescue', text: 'Strawberry, chocolate, vanilla… and sprinkles!' },
-    askCherry: { who: 'fortescue', text: 'And a cherry on top! Will you put it on, {name}? Tap the cherry!' },
-    nudgeCherry: { who: 'fortescue', text: 'Tap the red cherry above the ice cream.' },
-    helpedCherry: { who: 'fortescue', text: 'Plop! There we go.' },
+    helpedCherry: { who: 'fortescue', text: 'And a cherry on top! Plop! There we go.' },
     biggest: { who: 'harry', text: 'It’s the biggest ice cream in the world!' },
     firebolt: { who: 'harry', text: 'And look! A Firebolt. The fastest broom ever made.' },
     list: { who: 'fortescue', text: 'What’s left on your school list, Harry?' },
@@ -151,11 +147,8 @@ export default defineCartoon({
     puppies: { who: 'narrator', text: 'In a big iron cage, the books were snapping and fighting like grumpy puppies.' },
     nipped: { who: 'bookManager', text: 'They’ve chewed my gloves fourteen times this week.' },
     gloves: { who: 'harry', text: 'Is that why you’re wearing those enormous gloves?' },
-    askGlove: { who: 'bookManager', text: 'Yes, that’s why! My thickest glove is on the books. Drag it to me, {name}!' },
-    nudgeGlove: { who: 'bookManager', text: 'Drag the big brown glove over to me.' },
-    helpedGlove: { who: 'bookManager', text: 'Never mind, I’ll fetch it myself.' },
-    thanksGlove: { who: 'bookManager', text: 'Thank you! Now stand back, Harry!' },
-    gloveOn: { who: 'bookManager', text: 'Got it. Now stand back, Harry!' },
+    helpedGlove: { who: 'bookManager', text: 'Yes, that’s why! I’ll fetch my thickest glove.' },
+    thanksGlove: { who: 'bookManager', text: 'Got it. Now stand back, Harry!' },
     loose: { who: 'bookManager', text: 'Oh no! It’s loose! Catch it!' },
     // 3. The book on the loose
     shoelaces: { who: 'harry', text: 'It’s chasing my shoelaces!' },
@@ -163,14 +156,11 @@ export default defineCartoon({
     hedwig: { who: 'harry', text: 'Hedwig! You’ve brought me a note from Hagrid.' },
     note: { who: 'harry', text: 'Happy summer, Harry. P.S. Stroke the spine.' },
     stroke: { who: 'harry', text: 'Stroke its spine? All right. Here goes.' },
-    askSpine: { who: 'harry', text: '{name}, help me stroke its back. Tap the book’s spine!' },
-    nudgeSpine: { who: 'harry', text: 'Tap the furry back of the book.' },
     helpedSpine: { who: 'harry', text: 'Gently… gently…' },
     purring: { who: 'narrator', text: 'The book gave a big happy purr, and fell open like a sleepy cat.' },
     itPurrs: { who: 'harry', text: 'It’s purring!' },
     whyDidnt: { who: 'bookManager', text: 'Stroke the spine! Why didn’t I think of that?' },
     allPurring: { who: 'bookManager', text: 'Listen! They’re purring too!' },
-    thanksBoth: { who: 'bookManager', text: 'Thank you, Harry. And thank you, {name}! That book is free!' },
     thanksHarry: { who: 'bookManager', text: 'Thank you, Harry! That book is free!' },
     // 4. Old friends
     lastDay: { who: 'narrator', text: 'On the last day of summer, Harry’s best friends came to Diagon Alley.' },
@@ -179,22 +169,17 @@ export default defineCartoon({
     wall: { who: 'ron', text: 'His face is all squashed. Did he run into a wall?' },
     offMyHead: { who: 'ron', text: 'Argh! Get him off my head!' },
     likesYou: { who: 'hermione', text: 'Crookshanks, no! He just likes you, Ron.' },
-    askCat: { who: 'hermione', text: '{name}, can you tap Crookshanks? Then he’ll jump down.' },
-    nudgeCat: { who: 'hermione', text: 'Tap the big ginger cat.' },
     helpedCat: { who: 'hermione', text: 'Down you come, you silly cat.' },
     myHair: { who: 'ron', text: 'My hair! Is it all still there?' },
     allThere: { who: 'harry', text: 'All there, Ron. Come on. I know where to get ice cream.' },
     // 5. Ice creams for everyone
     three: { who: 'narrator', text: 'Mr Fortescue brought three enormous ice creams to the table.' },
-    askIce: { who: 'fortescue', text: 'And this one is for Ron. Will you drag it over to him, {name}?' },
-    nudgeIce: { who: 'fortescue', text: 'Drag the ice cream across to Ron.' },
-    helpedIce: { who: 'fortescue', text: 'Here you go, Ron. I’ll bring it myself.' },
+    helpedIce: { who: 'fortescue', text: 'And this one is for Ron. Here you go.' },
     onTheHouse: { who: 'fortescue', text: 'For Harry and his friends. Enjoy!' },
     brilliant: { who: 'ron', text: 'Brilliant!' },
     isItPurring: { who: 'hermione', text: 'Harry, is your book purring?' },
     trick: { who: 'harry', text: 'That’s my Monster Book. You just have to know the trick.' },
-    stroked: { who: 'harry', text: '{name} and I found it out. Stroke the spine!' },
-    hagridTrick: { who: 'harry', text: 'Hagrid told us the trick. Stroke the spine!' },
+    hagridTrick: { who: 'harry', text: 'Hagrid told me the trick. Stroke the spine!' },
     end: { who: 'narrator', text: 'And they ate their ice creams in the sunshine, while the Monster Book purred.' },
   },
   scenes: [
@@ -227,13 +212,11 @@ export default defineCartoon({
         plop();
         await k.pop(sundae, 1.08);
 
-        // His first turn: the cherry on top. It waits, still, just above the ice cream.
+        // Mr Fortescue puts the cherry on top. It waits, still, just above the ice cream.
         const cherry = k.part(sundae, 'cherry');
         k.set(cherry, { opacity: 1, y: -60 });
         const sb = k.box(sundae);
-        const spot = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', { x: sb.x + sb.w / 2 - 60, y: sb.y - 70, w: 120, h: 120, z: 20 });
-        await k.tapToHelp(spot, { ask: 'askCherry', nudge: 'nudgeCherry', helped: 'helpedCherry', by: fortescue, size: 120 });
-        k.remove(spot);
+        await k.say('helpedCherry', fortescue);
         await k.to(cherry, 0.4, { y: 0, ease: 'bounce.out' });
         plop();
         k.sparkle(sb.x + sb.w / 2, sb.y + 20, 10, 80);
@@ -282,11 +265,12 @@ export default defineCartoon({
         await k.say('nipped', manager);
         await k.say('gloves', harry);
 
-        // His second turn, a drag: the thick spare glove from the books to the manager.
+        // The manager fetches the thick spare glove from the pile of books.
         const gb = k.box(manager);
-        const gHow = await k.dragToHelp(spare, { to: [gb.x + gb.w / 2, gb.y + gb.h * 0.62], ask: 'askGlove', nudge: 'nudgeGlove', helped: 'helpedGlove', by: manager, dropSize: 200 });
+        await k.say('helpedGlove', manager);
+        await k.carry(spare, [gb.x + gb.w / 2, gb.y + gb.h * 0.62]);
         await k.vanish(spare);
-        await k.say(gHow === 'dragged' ? 'thanksGlove' : 'gloveOn', manager);
+        await k.say('thanksGlove', manager);
 
         // He opens the cage and reaches in… and out jumps a book!
         commonSounds.click();
@@ -337,11 +321,9 @@ export default defineCartoon({
         void k.fade(bookB, 1, 0.5);
         await k.say('stroke', harry);
 
-        // His third turn: stroke the book's spine (its furry back, on the left).
+        // Harry strokes the book's spine (its furry back, on the left).
         const bb = k.box(book);
-        const spine = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', { x: bb.x + bb.w * 0.2 - 60, y: bb.y + bb.h * 0.5 - 60, w: 120, h: 120, z: 20 });
-        const how = (strokedBy = await k.tapToHelp(spine, { ask: 'askSpine', nudge: 'nudgeSpine', helped: 'helpedSpine', by: harry, size: 140 }));
-        k.remove(spine);
+        await k.say('helpedSpine', harry);
         purr();
         k.pose(book, 'purring');
         k.sparkle(bb.x + bb.w / 2, bb.y + bb.h / 2, 10, 120);
@@ -357,7 +339,7 @@ export default defineCartoon({
         k.sparkle(1055, 540, 10, 120);
         await k.shake(cage, 1, 1);
         await k.say('allPurring', manager);
-        await k.say(how === 'tapped' ? 'thanksBoth' : 'thanksHarry', manager);
+        await k.say('thanksHarry', manager);
         await k.wait(400);
       },
     },
@@ -398,8 +380,9 @@ export default defineCartoon({
         await k.all(k.say('offMyHead', ron), k.shake(ron, 6, 4));
         await k.say('likesYou', hermione);
 
-        // His fourth turn: tap Crookshanks, and down he jumps.
-        await k.tapToHelp(cat, { ask: 'askCat', nudge: 'nudgeCat', helped: 'helpedCat', by: hermione, size: 160 });
+        // Hermione calls Crookshanks, and down he jumps.
+        await k.say('helpedCat', hermione);
+        k.flourish(cat);
         mrrow();
         await k.to(cat, 0.7, { x: 0, y: 0, scale: 1, ease: 'power1.inOut' });
         purr();
@@ -439,13 +422,14 @@ export default defineCartoon({
           await k.to(s, 0.35, { opacity: 1, y: 0, ease: 'back.out(1.6)' });
         }
 
-        // His fifth turn, a drag: the last ice cream, held out by Mr Fortescue, to Ron.
+        // Mr Fortescue carries the last ice cream across to Ron.
         const ronBox = k.box(ron);
         const last = k.prop('sundae', { x: 255, y: 540, w: 100, z: 15 });
         k.set(last, { opacity: 0 });
         plop();
         await k.fade(last, 1, 0.35);
-        await k.dragToHelp(last, { to: [ronBox.x + ronBox.w * 0.68 + 50, 540 + 70], ask: 'askIce', nudge: 'nudgeIce', helped: 'helpedIce', by: fortescue, dropSize: 180 });
+        await k.say('helpedIce', fortescue);
+        await k.carry(last, [ronBox.x + ronBox.w * 0.68 + 50, 540 + 70]);
         await k.say('onTheHouse', fortescue);
         await k.all(k.say('brilliant', ron), k.hop(ron, 24));
 
@@ -456,7 +440,7 @@ export default defineCartoon({
         await k.say('isItPurring', hermione);
         giggle();
         await k.say('trick', harry);
-        await k.say(strokedBy === 'tapped' ? 'stroked' : 'hagridTrick', harry);
+        await k.say('hagridTrick', harry);
         purr();
         await warmEnding(k, { cast: [harry, ron, hermione], end: 'end' });
       },

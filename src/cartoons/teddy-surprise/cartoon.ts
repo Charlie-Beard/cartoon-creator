@@ -8,30 +8,30 @@
  *   1. Bored. Bear Cottage's garden. Teddy is so bored: he's done all his
  *      jigsaws and tidied the toy cupboard, and there's nothing to do. A
  *      butterfly flutters past and away. Mummy comes out: what about digging in
- *      the garden? His turn: Mummy has a spade, and he drags it across to
- *      Teddy (or she passes it herself). All right… he'll ask Barney to
+ *      the garden? Mummy has a spade, and she passes it across to
+ *      Teddy. All right… he'll ask Barney to
  *      help. "Cheer up, Teddy! You
  *      might have a nice surprise before long!" He doesn't think so, and off
- *      he goes. Mummy, to him: shh, she knows a secret.
- *   2. Nobody home. Barney's green front door. His turn: he taps the brass
- *      knocker (or Teddy knocks himself). Knock, knock… nobody comes. "It's
+ *      he goes. Mummy chuckles: she knows a secret.
+ *   2. Nobody home. Barney's green front door. Teddy taps the brass
+ *      knocker. Knock, knock… nobody comes. "It's
  *      not fair!" Teddy should have gone straight home; instead he marches
  *      away, not looking where he's going. In the wood, where all the trees
  *      look the same, he sits on a stone, sad and lonely, nearly crying…
  *      except he hears somebody laughing.
  *   3. Ahoy, ship-mates! The wood. It's Uncle Sailor Bill: "Well, scupper me
  *      scallywags!" Posy and Bella are going on a treasure hunt, with a picnic
- *      first. His turn: he drags the picnic basket over to the big stone (or
- *      Bella carries it). Will Mummy mind? "I think she'll find out soon enough!" The first
- *      clue is in the hollow tree. His turn: he taps the hidey-hole (or Uncle
- *      Bill fishes it out), and out pops a map: the treasure is where the
+ *      first. Bella carries the picnic basket over to the big stone.
+ *      Will Mummy mind? "I think she'll find out soon enough!" The first
+ *      clue is in the hollow tree. Uncle Bill fishes it out of the
+ *      hidey-hole, and out pops a map: the treasure is where the
  *      ducks swim. Where's that? "You'll find out soon enough, Teddy!" Bobby
  *      pops up from behind Teddy's stone: race you through the trees!
  *   4. The best surprise. Out they burst onto the green: a duck pond, a
  *      swing, a wishing well… and Teddy's own house across the path. Mummy
  *      comes with cherry buns: didn't she say he'd get a nice surprise? The
- *      treasure is by the duck pond. His turn: he taps the chest (or Uncle
- *      Bill heaves the lid up): golden honey sweets for every bear. "But
+ *      treasure is by the duck pond. Uncle
+ *      Bill heaves the lid up: golden honey sweets for every bear. "But
  *      coming home was the best surprise of all!"
  *
  * The tricky bit is gentle and short: Teddy alone in the wood is sad, not in
@@ -73,7 +73,7 @@ function sniffle(): void {
   [0, 0.3].forEach((dt) => noiseBurst(t + dt, { freq: 2200, q: 1.5, peak: 0.04, attack: 0.04, decay: 0.12, sweepTo: 3000 }));
 }
 
-/** A hole in a tree to tap: nothing to see, just a place for the ring (the hole is painted in the backdrop). */
+/** A hole in a tree: nothing to see, just a place for the sparkle (the hole is painted in the backdrop). */
 const holeArt = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"></svg>';
 
 // ------------------------------------------------------------------ cast
@@ -100,22 +100,17 @@ export default defineCartoon({
     // 1. Bored
     bored: { who: 'narrator', text: 'Teddy Bear was feeling so bored! Mummy was busy, and Daddy was at the market.' },
     jigsaws: { who: 'teddy', text: 'I’ve done all my jigsaws. And I’ve tidied the toy cupboard!' },
-    nothingToDo: { who: 'teddy', text: 'There’s nothing to do, {name}. Nothing at all!' },
+    nothingToDo: { who: 'teddy', text: 'There’s nothing to do. Nothing at all!' },
     digging: { who: 'mummy-bear', text: 'What about digging in the garden, Teddy?' },
-    askSpade: { who: 'mummy-bear', text: 'Here’s a spade. Can you drag it over to Teddy, {name}?' },
-    nudgeSpade: { who: 'mummy-bear', text: 'Drag the spade across to Teddy.' },
-    passSpade: { who: 'mummy-bear', text: 'Never mind, I’ll pass it to him myself.' },
-    thanksSpade: { who: 'teddy', text: 'Ooh, a spade! Thank you!' },
+    passSpade: { who: 'mummy-bear', text: 'Here’s a spade for you, Teddy.' },
     thanksMummy: { who: 'teddy', text: 'Ooh, a spade! Thank you, Mummy!' },
     allRight: { who: 'teddy', text: 'All right… I’ll go and ask Barney to help.' },
     cheerUp: { who: 'mummy-bear', text: 'Cheer up, Teddy! You might have a nice surprise before long!' },
     dontThink: { who: 'teddy', text: 'A surprise? I don’t think so.' },
-    secret: { who: 'mummy-bear', text: 'Shh, {name}! I know a secret!' },
+    secret: { who: 'mummy-bear', text: 'Hee, hee! I know a secret!' },
     // 2. Nobody home
     bestFriend: { who: 'teddy', text: 'Here’s Barney’s house. He’s my best friend!' },
-    askKnock: { who: 'teddy', text: 'Will you knock for me, {name}? Tap the shiny knocker!' },
-    nudgeKnock: { who: 'teddy', text: 'Tap the knocker on the green door.' },
-    knockMyself: { who: 'teddy', text: 'I’ll knock myself, then. Knock, knock!' },
+    knockMyself: { who: 'teddy', text: 'I’ll knock on the green door. Knock, knock!' },
     anyoneHome: { who: 'teddy', text: 'Barney? It’s me, Teddy! Are you there?' },
     notFair: { who: 'teddy', text: 'Barney’s not at home! It’s not fair! There’s nobody to play with!' },
     shouldHave: { who: 'narrator', text: 'Teddy should have gone straight back home.' },
@@ -130,13 +125,8 @@ export default defineCartoon({
     picnicFirst: { who: 'bella', text: 'I’m Bella. And there’s a picnic first!' },
     mummyMind: { who: 'teddy', text: 'Can I come too? Do you think Mummy will mind?' },
     findOut: { who: 'uncle-bill', text: 'Ha! I think she’ll find out soon enough!' },
-    askBasket: { who: 'bella', text: 'Can you drag the picnic basket to the big stone, {name}?' },
-    nudgeBasket: { who: 'bella', text: 'Drag the basket over to the stone.' },
-    carryBasket: { who: 'bella', text: 'I’ll carry it over myself. There!' },
-    thanksBasket: { who: 'bella', text: 'Thank you, {name}! Lovely!' },
-    askHole: { who: 'uncle-bill', text: 'The first clue is in the hollow tree. Tap the hidey-hole, {name}!' },
-    nudgeHole: { who: 'uncle-bill', text: 'Tap the dark hole in the big tree.' },
-    fishItOut: { who: 'uncle-bill', text: 'I’ll fish it out. Got it!' },
+    carryBasket: { who: 'bella', text: 'I’ll carry the basket over to the big stone. There!' },
+    fishItOut: { who: 'uncle-bill', text: 'The first clue is in the hollow tree. I’ll fish it out. Got it!' },
     readMap: { who: 'uncle-bill', text: 'It says the treasure is where the ducks swim!' },
     whereDucks: { who: 'teddy', text: 'Where do the ducks swim, Uncle Bill?' },
     soonEnough: { who: 'uncle-bill', text: 'You’ll find out soon enough, Teddy!' },
@@ -149,11 +139,8 @@ export default defineCartoon({
     newFriends: { who: 'mummy-bear', text: 'I see you’ve met your new friends, Teddy! Didn’t I say you’d get a nice surprise?' },
     youDid: { who: 'teddy', text: 'Yes, Mummy. You did!' },
     duckPond: { who: 'teddy', text: 'Where the ducks swim… the duck pond! There’s the treasure!' },
-    askChest: { who: 'teddy', text: 'Open it, {name}! Tap the treasure chest!' },
-    nudgeChest: { who: 'teddy', text: 'Tap the chest by the duck pond.' },
     heaveHo: { who: 'uncle-bill', text: 'Heave-ho! Up comes the lid!' },
     honeySweets: { who: 'uncle-bill', text: 'Golden honey sweets! Enough for every bear!' },
-    thanksName: { who: 'teddy', text: 'Thank you, {name}! Mmm!' },
     thanksBill: { who: 'teddy', text: 'Thank you, Uncle Bill! Mmm!' },
     bestOfAll: { who: 'teddy', text: 'But coming home was the best surprise of all!' },
     end: { who: 'narrator', text: 'And they all had a picnic, right by Teddy’s home.' },
@@ -200,10 +187,11 @@ export default defineCartoon({
         k.face(teddy, true);
         await k.say('digging', mummy);
 
-        // His turn: drag the spade across to Teddy.
+        // Mummy passes the spade across to Teddy.
         await k.to(spade, 0.4, { opacity: 1 });
-        const gift = await k.dragToHelp(spade, { to: teddy, ask: 'askSpade', nudge: 'nudgeSpade', helped: 'passSpade', by: mummy });
-        await k.say(gift === 'dragged' ? 'thanksSpade' : 'thanksMummy', teddy);
+        await k.say('passSpade', mummy);
+        await k.carry(spade, teddy);
+        await k.say('thanksMummy', teddy);
         void k.vanish(spade, 0.4);
         sigh();
         await k.say('allRight', teddy);
@@ -239,8 +227,9 @@ export default defineCartoon({
         await k.walk(teddy, -820, 2.2, 6);
         await k.say('bestFriend', teddy);
 
-        // His turn: knock on Barney's door.
-        await k.tapToHelp(knock, { ask: 'askKnock', nudge: 'nudgeKnock', helped: 'knockMyself', by: teddy, size: 150 });
+        // Teddy knocks on Barney's door.
+        await k.say('knockMyself', teddy);
+        k.flourish(knock);
         for (let i = 0; i < 3; i++) {
           k.fx.knock(1);
           await k.to(knock, 0.12, { rotation: -14, transformOrigin: '50% 10%', yoyo: true, repeat: 1 });
@@ -343,16 +332,17 @@ export default defineCartoon({
         await k.say('picnicFirst', bella);
         k.pose(bella, 'default');
 
-        // His turn: drag the picnic basket over to the stone.
-        const set = await k.dragToHelp(basket, { to: [850, 590], ask: 'askBasket', nudge: 'nudgeBasket', helped: 'carryBasket', by: bella, dropSize: 170 });
-        if (set === 'dragged') await k.say('thanksBasket', bella);
+        // Bella carries the picnic basket over to the stone.
+        await k.say('carryBasket', bella);
+        await k.carry(basket, [850, 590]);
         await k.say('mummyMind', teddy);
         await k.blink(bill);
         await k.say('findOut', bill);
 
         // The first clue, in the hollow tree.
         k.face(teddy, false);
-        await k.tapToHelp(hole, { ask: 'askHole', nudge: 'nudgeHole', helped: 'fishItOut', by: bill, size: 140 });
+        await k.say('fishItOut', bill);
+        k.flourish(hole);
         // Out pops a rolled-up map, into Teddy's paws.
         const roll = k.add(mapRoll(), { x: 950, y: 445, w: 70, z: 20 });
         k.set(roll, { scale: 0.2, opacity: 0 });
@@ -458,8 +448,9 @@ export default defineCartoon({
         quack();
         await k.say('duckPond', teddy);
 
-        // His turn: open the treasure chest.
-        const how = await k.tapToHelp(chest, { ask: 'askChest', nudge: 'nudgeChest', helped: 'heaveHo', by: teddy, helper: bill, size: 170 });
+        // Uncle Bill opens the treasure chest.
+        await k.say('heaveHo', bill);
+        k.flourish(chest);
         const lid = k.pivot(k.part(chest, 'lid'));
         k.fx.creak();
         await k.to(lid, 0.6, { rotation: -70, ease: 'back.out(1.4)' });
@@ -470,7 +461,7 @@ export default defineCartoon({
         await k.say('honeySweets', bill);
         yum();
         k.pose(teddy, 'happy');
-        await k.say(how === 'tapped' ? 'thanksName' : 'thanksBill', teddy);
+        await k.say('thanksBill', teddy);
         k.pose(teddy, 'default');
 
         // All the places he loves.

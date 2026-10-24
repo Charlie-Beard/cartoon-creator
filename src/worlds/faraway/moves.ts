@@ -149,7 +149,7 @@ export const sounds = {
     noiseBurst(t, { freq: 3400, q: 6, peak: 0.035 * loud, attack: 0.25, decay: seconds });
   },
 
-  /** The kettle whistling its jolly tune (about 2.6 s): each note a breathy whistle that slides into place. Use for the payoff when he taps its lid. */
+  /** The kettle whistling its jolly tune (about 2.6 s): each note a breathy whistle that slides into place. Use for the payoff when a hero taps its lid. */
   whistleTune(loud = 1): void {
     const t = now();
     const notes: [number, number, number][] = [
@@ -162,7 +162,7 @@ export const sounds = {
     }
   },
 
-  /** A thick grey cloud blown away: a big soft whoosh with a sprinkle of bells. Use when he taps a cloud that hides a land, with a few k.puff. */
+  /** A thick grey cloud blown away: a big soft whoosh with a sprinkle of bells. Use when a hero blows away a cloud that hides a land, with a few k.puff. */
   blowAway(): void {
     const t = now();
     noiseBurst(t, { freq: 400, q: 0.7, peak: 0.1, attack: 0.15, decay: 1.2, sweepTo: 2600 });

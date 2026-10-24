@@ -12,13 +12,6 @@ export default defineMeta({
     villain: 'sirPatrick and the Headless Hunt, who tease Nick (and cheer him in the end)',
     places: ['ghost-party', 'castle-corridor', 'great-hall'],
     cast: ['harry', 'ron', 'hermione', 'nick', 'myrtle', 'sirPatrick'],
-    turns: [
-      'drag Nick’s gold invitation across to Hermione',
-      'bang the gong to start the ghost band',
-      'tap Moaning Myrtle to wave hello',
-      'tap Nick’s ruff so his head flops right over',
-      'drag a pumpkin pie to Nick so he can smell it',
-    ],
     jokes: ['Ron is starving', 'mouldy ghost food', 'Sir Patrick tosses his own head'],
     ending: 'pumpkin pie at the Hallowe’en feast',
   },

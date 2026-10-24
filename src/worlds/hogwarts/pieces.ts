@@ -23,10 +23,8 @@
  *   - Lines are never written here. The cartoon passes line keys
  *     (`welcome: 'welcome'`) that are in its own `lines`, so the voice export
  *     finds them, and `npm run check` counts a key handed to a piece as used.
- *   - A piece never calls `k.tapToHelp` for you (the checker looks for one in
- *     the cartoon, and his turns are yours to write). Where a turn belongs in
- *     the middle (catch the letter), the piece comes in two parts and you put
- *     the turn between.
+ *   - Where a beat of your own belongs in the middle (catch the letter), the
+ *     piece comes in two parts and you put it between.
  *   - Everything waits through the kit, so a skipped scene stops where it was.
  *   - A piece that is a whole place (the top of the ladder, Moon-Face's room, the
  *     Great Hall) puts up its backdrop unless the scene already has one. Call
@@ -96,8 +94,8 @@ export interface OwlPostActors {
 
 /**
  * The owl post: Hedwig swoops in with a flutter of wings, hoots, and lets
- * a letter drop and sway down to land in front of the person it is for. He
- * can catch it (his turn goes between the parts), then the seal pops, the
+ * a letter drop and sway down to land in front of the person it is for. They
+ * can catch it (a deed in the script goes between the parts), then the seal pops, the
  * letter lifts, and the person reads it. Hedwig flies off.
  *
  *   owlPost.set(k, { to, owl?, from? })               in `set`: Hedwig and the letter, hidden
@@ -110,14 +108,15 @@ export interface OwlPostActors {
  * 170 points of room above their head, and the letter lands at their shoulder, clear of their face.
  *
  * `play` options: `stay` true keeps her on stage, hovering, rather than flying off. The
- * letter ends lying in front of the person, small and still: the place for his tap.
+ * letter ends lying in front of the person, small and still: the place for a hero to catch it.
  *
  * `open` options: `line` is a key `by` says (default the person) once the letter is open
  * ("It's from Hagrid! He's invited us to tea!").
  *
  *   const a = owlPost.set(k, { to: harry });                                          // in set
  *   await owlPost.play(k, a);
- *   await k.tapToHelp(a.letter, { ask: 'askLetter', nudge: 'nudgeLetter', helped: 'catchLetter', by: harry });
+ *   await k.say('catchLetter', harry);
+ *   k.flourish(a.letter);                                                             // the catch
  *   await owlPost.open(k, a, { line: 'readLetter' });
  */
 export const owlPost = {
@@ -206,7 +205,7 @@ const FEAST: Record<string, [number, number]> = { pie: [120, 72], pumpkin: [92, 
  *   await greatHall.play(k, a, { welcome: 'welcome', cheer: 'hooray' });
  */
 export const greatHall = {
-  /** The hall laid for a feast. Nothing waits: legal in `set` (the candles bob gently from the start, and hold still on his turns). */
+  /** The hall laid for a feast. Nothing waits: legal in `set` (the candles bob gently from the start, and hold still while a deed is done). */
   set<K extends string>(k: Kit<K>, o: { guests: Placed[]; host?: Placed; music?: Mood }): HallActors {
     ensureBackdrop(k, 'great-hall');
     k.music(o.music ?? 'magic');

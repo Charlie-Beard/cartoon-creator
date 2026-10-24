@@ -7,18 +7,18 @@
  *
  * For each cartoon:
  *   - its lines pass checkLines (known speakers, short sentences, UK
- *     English, nothing cruel, only {name} filled in)
+ *     English, nothing cruel, no {placeholders})
  *   - every line is used by the script (an unused line would be recorded
  *     for nothing) and every line the script says exists
  *   - every character, pose, backdrop and prop it asks for exists in a world
- *   - there are at least 5 of his turns (k.tapToHelp or k.dragToHelp)
+ *   - nothing is interactive (no k.tapToHelp, k.dragToHelp, onTap …): it just plays
  *   - the folder, its meta.ts and the script agree, and the id is kebab-case
  *   - how long the speech alone runs, and roughly how long the episode runs on
- *     screen (speech × 1.15, plus about 25 s for each turn he waits out)
+ *     screen (speech × 1.15)
  *   - its meta.ts has an episode ledger (what the episode is about), whose
  *     characters and places exist and match the script (an error), and
  *     which is compared with the episodes already on the shelf: a repeated
- *     villain, main place, turn, problem or running joke is a warning
+ *     villain, main place, problem or running joke is a warning
  *
  *   npm run check -- --ledger    prints every episode's ledger, newest first
  *                                and grouped by world, to read before planning
@@ -88,22 +88,20 @@ for (const entry of chosen) {
       const result = lintCartoon({ id: entry.id, source: sourceOf(entry.id), lines: cartoon.lines, catalogue: cat });
       errors.push(...result.errors);
       warnings.push(...result.warnings);
-      const ledger = lintLedger({ ledger: entry.ledger, source: sourceOf(entry.id), lines: cartoon.lines, taps: result.taps, catalogue: cat });
+      const ledger = lintLedger({ ledger: entry.ledger, source: sourceOf(entry.id), lines: cartoon.lines, catalogue: cat });
       errors.push(...ledger.errors);
       warnings.push(...ledger.warnings);
       warnings.push(...compareLedgers(entry, SHELF, nameOf));
       const n = Object.keys(cartoon.lines).length;
       // On screen it runs about 1.1–1.2 × the speech (measured on the episodes so far: the
-      // action between lines, less the nudge and helped lines that a tapping child never hears),
-      // and each turn he waits out adds about 25 s.
+      // action between lines).
       const onScreen = result.spokenSeconds * 1.15;
       const mmss = (s: number): string => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
       if (onScreen < 120) warnings.push(`about ${mmss(onScreen)} on screen: under the 2 minute floor (add a beat or a few lines)`);
       if (onScreen > 360) warnings.push(`about ${mmss(onScreen)} on screen: over the 6 minute ceiling (trim lines)`);
-      else if (onScreen + result.taps * 25 > 480) warnings.push(`up to ${mmss(onScreen + result.taps * 25)} on screen if he waits out every turn: long (fine if a real run with --no-tap says otherwise)`);
       info.push(
-        `${cartoon.scenes.length} scenes, ${n} lines, about ${Math.round(result.spokenSeconds)} s of speech, ${result.taps} turns for him`,
-        `on screen: about ${mmss(onScreen)} if he taps, up to ${mmss(onScreen + result.taps * 25)} if he waits out every turn (shots measures it)`,
+        `${cartoon.scenes.length} scenes, ${n} lines, about ${Math.round(result.spokenSeconds)} s of speech`,
+        `on screen: about ${mmss(onScreen)} (shots measures it)`,
         `scenes: ${cartoon.scenes.map((s, i) => `${i + 1} ${s.name}`).join(' · ')}`,
       );
     }

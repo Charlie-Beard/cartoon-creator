@@ -13,8 +13,8 @@
  *      window. Teddy: Uncle Bill has sailed half-way round the world, a
  *      storm won't stop him. In he comes, shaking off the rain: "Ahoy there,
  *      me hearties! Just the weather for a shipwreck!" Collect up all the
- *      things to keep afloat! Teddy, roll up that mat. His first turn: he
- *      taps the stripy mat and it rolls up (or Barney rolls it). Bump,
+ *      things to keep afloat! Teddy, roll up that mat. Barney
+ *      rolls up the stripy mat. Bump,
  *      thump, puff: chairs upside-down, a plank, a barrel, sacks, a chest.
  *      Mummy: what a mess! Nobody knows what's happening, but it's fun.
  *   3. The pirate king. Get all round the wreck without falling in the sea
@@ -22,20 +22,18 @@
  *      barrel. "Don't get caught by the pirate king!" "A pirate king? First
  *      time I've ever been called that!" Uncle Bill goes out of the door…
  *      quiet… and creeps in from the other side, growling "Arrr!" Barney's
- *      barrel wobbles. His big turn: he taps the plank so Barney jumps to
- *      it (or Teddy calls him across). "Blow me down! Missed you!" Round
+ *      barrel wobbles. Teddy calls Barney across to the plank
+ *      and he jumps to it. "Blow me down! Missed you!" Round
  *      the wreck twice, then: time for ship's rations!
  *   4. Ship's rations. The picnic hamper. Where's Uncle Bill's concertina?
- *      It pops up on the hamper, and his turn (a drag) is to drag it
- *      across to Uncle Bill (or Barney brings it). Then the sing-song,
+ *      It pops up on the hamper, and Barney brings it
+ *      across to Uncle Bill. Then the sing-song,
  *      everyone bobbing. The rain stops and the sun comes in at the
  *      window. A voyage to Plumtree Island after all! Get the boat-house
  *      shipshape. Mummy: thank goodness!
  *   5. Plumtree Island. The motor boat on the river; the engine goes phut
- *      and stops. His turn: he taps the engine and it starts again
- *      (or Uncle Bill pulls the cord). To the island: a duck and her
- *      ducklings (his turn: he taps the mummy duck to say hello, or Barney
- *      quacks for him), but it's far too wet to land. Maybe next time. Barney:
+ *      and stops. Uncle Bill pulls the cord and it starts again.
+ *      To the island: a duck and her ducklings (Barney quacks hello), but it's far too wet to land. Maybe next time. Barney:
  *      the shipwreck was the best bit! Can we have another one next time?
  *      A rainbow, and the end.
  *
@@ -169,7 +167,7 @@ export default defineCartoon({
   lines: {
     // 1. Storm clouds
     excited: { who: 'narrator', text: 'Teddy Bear was so excited today!' },
-    plumtree: { who: 'teddy', text: 'Uncle Sailor Bill is taking us to Plumtree Island, {name}! In his boat!' },
+    plumtree: { who: 'teddy', text: 'Uncle Sailor Bill is taking us to Plumtree Island! In his boat!' },
     picnic: { who: 'barney', text: 'With a picnic! And a sing-song round a camp-fire!' },
     clouds: { who: 'mummy-bear', text: 'Hmm. I don’t like the look of those clouds.' },
     bigClouds: { who: 'barney', text: 'Big grey clouds, Teddy! Are they rain clouds?' },
@@ -185,10 +183,7 @@ export default defineCartoon({
     aShipwreck: { who: 'teddy', text: 'A shipwreck?' },
     keepAfloat: { who: 'uncle-bill', text: 'That’s right! Let’s find all the things that will keep us afloat!' },
     askMat: { who: 'uncle-bill', text: 'Teddy, see if you can roll up that mat, will you?' },
-    helpMat: { who: 'teddy', text: 'Help me, {name}! Tap the stripy mat to roll it up!' },
-    nudgeMat: { who: 'teddy', text: 'Tap the stripy mat on the floor.' },
     rollIt: { who: 'barney', text: 'I’ll help, Teddy! Roll, roll, roll!' },
-    thanksMatName: { who: 'teddy', text: 'All rolled up! Thank you, {name}!' },
     thanksMatBarney: { who: 'teddy', text: 'All rolled up! Thanks, Barney!' },
     bestEver: { who: 'uncle-bill', text: 'This is going to be the best shipwreck ever!' },
     whatAMess: { who: 'mummy-bear', text: 'Oh, my goodness! Look at all this mess!' },
@@ -202,20 +197,14 @@ export default defineCartoon({
     whereGone: { who: 'barney', text: 'Where’s he gone, Teddy?' },
     whoseShip: { who: 'uncle-bill', text: 'Arrr! Who’s that standing on my ship?' },
     wobbling: { who: 'barney', text: 'Teddy! My barrel’s wobbling!' },
-    askPlank: { who: 'teddy', text: 'Jump to the long plank, Barney! Tap it, {name}, quick!' },
-    nudgePlank: { who: 'teddy', text: 'Tap the long plank in the middle.' },
-    jumpNow: { who: 'teddy', text: 'Jump, Barney! Now!' },
-    madeItName: { who: 'barney', text: 'I made it! Thank you, {name}!' },
+    jumpNow: { who: 'teddy', text: 'Jump to the long plank, Barney! Now!' },
     madeItTeddy: { who: 'barney', text: 'I made it! Thanks, Teddy!' },
     missed: { who: 'uncle-bill', text: 'Blow me down! Missed you!' },
     rations: { who: 'uncle-bill', text: 'Time for ship’s rations!' },
     // 4. Ship's rations
     goodThings: { who: 'barney', text: 'Sandwiches! Buns! And lemonade!' },
     singSong: { who: 'uncle-bill', text: 'And now for a sing-song! Where’s my old concertina?' },
-    askConcertina: { who: 'uncle-bill', text: 'There it is, in the hamper! Can you drag it over to me, {name}?' },
-    nudgeConcertina: { who: 'uncle-bill', text: 'Drag the concertina over to me, shipmate.' },
     fetchConcertina: { who: 'barney', text: 'I’ll bring it, Uncle Bill!' },
-    thanksConcertinaName: { who: 'uncle-bill', text: 'Thank you, {name}! Now, a tune!' },
     thanksConcertinaBarney: { who: 'uncle-bill', text: 'Thank you, Barney! Now, a tune!' },
     joinedIn: { who: 'narrator', text: 'And everyone joined in with all the jolly songs they knew.' },
     stopped: { who: 'barney', text: 'Look, everyone! It’s stopped raining!' },
@@ -226,16 +215,10 @@ export default defineCartoon({
     // 5. Plumtree Island
     offTheySailed: { who: 'narrator', text: 'Off they sailed, down the river to Plumtree Island.' },
     engineStopped: { who: 'teddy', text: 'Oh! The engine’s stopped!' },
-    askEngine: { who: 'uncle-bill', text: 'She needs a helping paw. Tap the engine, {name}!' },
-    nudgeEngine: { who: 'uncle-bill', text: 'Tap the little engine at the back of the boat.' },
-    pullCord: { who: 'uncle-bill', text: 'I’ll give the cord a pull, then. Heave!' },
-    offWeGoName: { who: 'uncle-bill', text: 'Well done, {name}! Putt-putt-putt! Off we go again!' },
+    pullCord: { who: 'uncle-bill', text: 'She needs a helping paw. I’ll give the cord a pull. Heave!' },
     offWeGo: { who: 'uncle-bill', text: 'There she goes! Putt-putt-putt! Off we go again!' },
     ducklings: { who: 'teddy', text: 'Look! A mummy duck and her ducklings!' },
-    askDuck: { who: 'teddy', text: 'Let’s say hello! Tap the mummy duck, {name}!' },
-    nudgeDuck: { who: 'teddy', text: 'Tap the white duck on the water.' },
     quackHello: { who: 'barney', text: 'Hello, ducks! Quack, quack!' },
-    duckName: { who: 'teddy', text: 'Quack! She says hello, {name}!' },
     duckBarney: { who: 'teddy', text: 'Quack! She says hello, Barney!' },
     tooWet: { who: 'uncle-bill', text: 'Sorry, shipmates. The island’s too wet to land on today.' },
     nextTime: { who: 'uncle-bill', text: 'Maybe next time, eh? When it’s fair weather for sailing.' },
@@ -366,12 +349,13 @@ export default defineCartoon({
         k.pose(bill, 'default');
         await k.say('askMat', bill);
 
-        // His turn: roll up the mat.
-        const how = await k.tapToHelp(mat, { ask: 'helpMat', nudge: 'nudgeMat', helped: 'rollIt', by: teddy, helper: barney, size: 220 });
+        // Barney rolls up the mat.
+        await k.say('rollIt', barney);
+        k.flourish(mat);
         k.sfx.rustle();
         await k.all(k.fade(k.part(mat, 'flat'), 0, 0.6), k.wait(250).then(() => k.fade(k.part(mat, 'rolled'), 1, 0.4)));
         k.fx.thud();
-        await k.say(how === 'tapped' ? 'thanksMatName' : 'thanksMatBarney', teddy);
+        await k.say('thanksMatBarney', teddy);
 
         // Bump, thump: Uncle Bill builds the wreck in a cloud of dust.
         const spots: [number, number][] = [[ON.barrel[0], 560], [ON.plank[0], 520], [ON.chest[0], 570]];
@@ -463,12 +447,13 @@ export default defineCartoon({
         await k.say('wobbling', barney);
         k.set(barney, { rotation: 0 });
 
-        // His big turn: the plank, so Barney can jump away.
-        const how = await k.tapToHelp(plank, { ask: 'askPlank', nudge: 'nudgePlank', helped: 'jumpNow', by: teddy, size: 160 });
+        // Teddy calls out: the plank, so Barney can jump away.
+        await k.say('jumpNow', teddy);
+        k.flourish(plank);
         await jumpTo(k, barney, ON.plank, 0.7);
         k.pose(barney, 'happy');
         k.fx.twinkle();
-        await k.say(how === 'tapped' ? 'madeItName' : 'madeItTeddy', barney);
+        await k.say('madeItTeddy', barney);
         k.pose(barney, 'default');
         k.set(bill, { rotation: 0 });
         k.pose(bill, 'laugh');
@@ -519,9 +504,10 @@ export default defineCartoon({
         k.fx.pop();
         await k.to(concertina, 0.5, { opacity: 1, scale: 1, ease: 'back.out(1.6)' });
 
-        // His turn: drag it from the hamper to Uncle Bill.
-        const got = await k.dragToHelp(concertina, { to: [905, 570], ask: 'askConcertina', nudge: 'nudgeConcertina', helped: 'fetchConcertina', by: bill, helper: barney, dropSize: 200 });
-        await k.say(got === 'dragged' ? 'thanksConcertinaName' : 'thanksConcertinaBarney', bill);
+        // Barney brings it from the hamper to Uncle Bill.
+        await k.say('fetchConcertina', barney);
+        await k.carry(concertina, [905, 570]);
+        await k.say('thanksConcertinaBarney', bill);
         shanty(3);
         await k.all(
           squeeze(k, concertina, 12),
@@ -578,11 +564,12 @@ export default defineCartoon({
         await k.wait(1300);
         await k.all(k.say('engineStopped', teddy), k.shake(teddy, 5, 2));
 
-        // His turn: start the engine again.
-        const how = await k.tapToHelp(engine, { ask: 'askEngine', nudge: 'nudgeEngine', helped: 'pullCord', by: bill, size: 140 });
+        // Uncle Bill starts the engine again.
+        await k.say('pullCord', bill);
+        k.flourish(engine);
         putt(4);
         void k.shake(boat, 3, 4);
-        await k.say(how === 'tapped' ? 'offWeGoName' : 'offWeGo', bill);
+        await k.say('offWeGo', bill);
         // Round to the island's side.
         putt(3);
         await together(k, all, 3, { x: -140, ease: 'sine.inOut' });
@@ -591,11 +578,12 @@ export default defineCartoon({
         await k.say('ducklings', teddy);
         k.pose(teddy, 'default');
 
-        // His turn: say hello to the mummy duck.
-        const hello = await k.tapToHelp(duck, { ask: 'askDuck', nudge: 'nudgeDuck', helped: 'quackHello', by: teddy, helper: barney, size: 170 });
+        // Barney says hello to the mummy duck.
+        await k.say('quackHello', barney);
+        k.flourish(duck);
         k.fx.boing();
         await k.hop(duck, 30, 2);
-        await k.say(hello === 'tapped' ? 'duckName' : 'duckBarney', teddy);
+        await k.say('duckBarney', teddy);
         k.face(teddy, false);
         await k.say('tooWet', bill);
         await k.say('nextTime', bill);

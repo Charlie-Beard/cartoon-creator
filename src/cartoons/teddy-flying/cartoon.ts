@@ -7,14 +7,13 @@
  *      window, watches a blackbird fly off. "It must be lovely to fly!"
  *      Mummy: birds have feathery wings; bears can do lots of other things.
  *      But bears haven't got wings: it's not fair. A ladybird walks along
- *      the sill. "Ladybird, ladybird… let's blow, very gently." His turn:
- *      he taps the ladybird and she opens her wings and flies out of the
- *      window (or Teddy blows). Mummy never said beetles could fly! If a
+ *      the sill. "Ladybird, ladybird… let's blow, very gently." Teddy
+ *      blows and she opens her wings and flies out of the
+ *      window. Mummy never said beetles could fly! If a
  *      ladybird can fly, so can he. Off he goes outside.
  *   2. The garden. Butterflies flit past: more things that can fly. Barney's
- *      new kite won't go up; it needs a puff of wind. His turn: he drags
- *      the kite up into the sky and it sails away on the wind (or Teddy's
- *      puff does it). Kites
+ *      new kite won't go up; it needs a puff of wind. Teddy's puff lifts the
+ *      kite up into the sky and it sails away on the wind. Kites
  *      haven't got wings either! An aeroplane streaks over: its wings don't
  *      flap, so how does it fly? Teddy tries: jumping and flapping, hopping
  *      on one leg, then the other, until he's hot and out of breath (Barney
@@ -24,20 +23,19 @@
  *      a little run, holds his breath (a drumroll) and jumps… and forgets to
  *      flap. SPLAT! Into the muddy stream: sticky, squelchy and gooey, but
  *      fine. A whirr in the sky: Uncle Bill in the navy helicopter. "What
- *      are you doing down there?" His turn: he taps the coil of rope and it
- *      unrolls down to Teddy (or Uncle Bill lets it down). Heave-ho, up he
+ *      are you doing down there?" Uncle Bill lets the coil of rope down to
+ *      Teddy. Heave-ho, up he
  *      comes, higher and higher: "I'm flying!"
  *   4. Flying home. Up in the sky, swinging on the rope over the fields.
  *      "I only wanted to fly!" "Well, you got your wish!" A little bird flies
- *      in beside the rope. His turn: he taps her to say hello and she sings
- *      (or Teddy says it). Then down into Bear Cottage's garden: Mummy runs
- *      out. All muddy! His turn: he drags the honey pot across to Teddy (or
- *      Mummy takes it over herself). A bath, then honey on hot toast. Flying home in a helicopter was exciting enough. Wave
+ *      in beside the rope. Teddy says hello and she sings. Then down into
+ *      Bear Cottage's garden: Mummy runs out. All muddy! Mummy takes the
+ *      honey pot across to Teddy. A bath, then honey on hot toast. Flying home in a helicopter was exciting enough. Wave
  *      goodbye to Uncle Bill. That night a clean Teddy dreams of flying.
  *
  * The scary beat is gentle: the jump off the hilltop, built with a drumroll
  * and the music stopping, and the landing is funny, not hurt (mud, a SPLAT,
- * "I forgot to flap!"). Teddy jumps by himself; his turns only ever help.
+ * "I forgot to flap!"). Teddy jumps by himself.
  * The helicopter's arrival and rope are staged here rather than with the
  * world's helicopterVisit piece, because the coil, the long rope and Teddy
  * have to move with it exactly (the piece floats the helicopter alone);
@@ -88,7 +86,7 @@ function muddy(el: HTMLElement): HTMLElement {
   return m;
 }
 
-/** Spins the helicopter's rotor for about `seconds` (it ends, so nothing moves during his turn). */
+/** Spins the helicopter's rotor for about `seconds`. */
 function rotor(k: Kit, heli: HTMLElement, seconds: number): void {
   void k.to(k.part(heli, 'rotor'), 0.12, { scaleX: 0.2, yoyo: true, repeat: Math.round(seconds / 0.12), transformOrigin: '50% 50%' });
 }
@@ -102,7 +100,7 @@ function flapWings(k: Kit, fly: HTMLElement, times: number): Promise<void> {
 // Barney's kite: the string runs from his raised paw (P) up to the kite's corner in the sky (E).
 const PAW: [number, number] = [452, 478];
 const SKY: [number, number] = [566, 150];
-/** Where he drags the kite to: well up the sky, above the grass, away from both bears. */
+/** Where the kite is carried to: well up the sky, above the grass, away from both bears. */
 const KITE_LIFT: [number, number] = [580, 300];
 const KITE_W = 120;
 /** Where the kite's bottom corner (the string's knot) is in the prop's own picture, scaled to KITE_W. */
@@ -116,12 +114,9 @@ export default defineCartoon({
     birds: { who: 'teddy', text: 'The birds, Mummy! It must be lovely to fly!' },
     wings: { who: 'mummy-bear', text: 'Birds have feathery wings. Bears can do other things!' },
     noWings: { who: 'teddy', text: 'But bears haven’t got wings. It’s not fair!' },
-    ladybird: { who: 'teddy', text: 'Oh, look, {name}! A ladybird, on the window sill!' },
+    ladybird: { who: 'teddy', text: 'Oh, look! A ladybird, on the window sill!' },
     rhyme: { who: 'teddy', text: 'Ladybird, ladybird… I know! Let’s blow, very gently.' },
-    askBlow: { who: 'teddy', text: 'Can you help? Tap the ladybird, very gently!' },
-    nudgeBlow: { who: 'teddy', text: 'Just tap the ladybird.' },
-    iBlow: { who: 'teddy', text: 'I’ll blow, then. Whoo…' },
-    thanksBlow: { who: 'teddy', text: 'She spread her wings! Thank you, {name}!' },
+    iBlow: { who: 'teddy', text: 'Whoo… very gently.' },
     offSheGoes: { who: 'teddy', text: 'She spread her wings and flew away!' },
     beetles: { who: 'teddy', text: 'Mummy! You never said beetles could fly!' },
     soCanI: { who: 'teddy', text: 'If a ladybird can fly, so can I! I’m going outside!' },
@@ -129,10 +124,7 @@ export default defineCartoon({
     butterflies: { who: 'teddy', text: 'Butterflies! More things that can fly!' },
     newKite: { who: 'barney', text: 'Teddy! Come and see my new kite!' },
     wontGo: { who: 'barney', text: 'But it won’t go up!' },
-    askKite: { who: 'barney', text: 'It needs a puff of wind! {name}, can you drag the kite up into the sky?' },
-    nudgeKite: { who: 'barney', text: 'Drag the kite up, up, up!' },
-    gust: { who: 'teddy', text: 'I’ll help! Here comes a puff of wind! Whoosh!' },
-    kiteThanks: { who: 'barney', text: 'Up it goes! It’s flying! You did it!' },
+    gust: { who: 'teddy', text: 'It needs a puff of wind! I’ll help! Whoosh!' },
     kiteUp: { who: 'barney', text: 'Look, up it goes! It’s flying!' },
     howFly: { who: 'teddy', text: 'An aeroplane! Its wings don’t flap. So how does it fly? I’ll try!' },
     outOfBreath: { who: 'teddy', text: 'Phew! I’m all hot and out of breath.' },
@@ -146,29 +138,20 @@ export default defineCartoon({
     gooey: { who: 'teddy', text: 'Oops! I forgot to flap! I’m all squelchy and gooey!' },
     whatDoing: { who: 'uncle-bill', text: 'Teddy! What are you doing down there?' },
     scupper: { who: 'uncle-bill', text: 'Well, scupper me scallywags! Hold tight!' },
-    askRope: { who: 'uncle-bill', text: '{name}, can you let the rope down for him? Tap the rope!' },
-    nudgeRope: { who: 'uncle-bill', text: 'Tap the rope, and down it goes!' },
-    downSheGoes: { who: 'uncle-bill', text: 'I’ll let it down myself. Down she goes!' },
-    ropeThanks: { who: 'uncle-bill', text: 'Good work, ship-mate! Grab the rope, Teddy!' },
+    downSheGoes: { who: 'uncle-bill', text: 'I’ll let the rope down. Down she goes!' },
     grabRope: { who: 'uncle-bill', text: 'Grab the rope, Teddy! Hold on tight!' },
-    imFlying: { who: 'teddy', text: 'Look, {name}! I’m flying!' },
+    imFlying: { who: 'teddy', text: 'I’m flying! I’m really flying!' },
     // 4. Flying home
     onlyWanted: { who: 'teddy', text: 'I only wanted to fly!' },
     gotWish: { who: 'uncle-bill', text: 'Ha-ha! Well, you got your wish!' },
-    askBird: { who: 'teddy', text: 'A little bird! Can you say hello? Tap her!' },
-    nudgeBird: { who: 'teddy', text: 'Just tap the little bird.' },
-    helloBird: { who: 'teddy', text: 'I’ll say it, then. Hello, little bird!' },
-    birdThanks: { who: 'teddy', text: 'She’s singing to you!' },
+    helloBird: { who: 'teddy', text: 'A little bird! Hello, little bird!' },
     birdSings: { who: 'teddy', text: 'She’s singing! Tweet, tweet!' },
     downWeGo: { who: 'uncle-bill', text: 'Hold tight! Down we go, to Bear Cottage!' },
     whatever: { who: 'mummy-bear', text: 'Teddy! Whatever happened? You’re all muddy!' },
     bath: { who: 'mummy-bear', text: 'Thank you, Bill! Now, a bath, Teddy. Then honey!' },
-    askHoney: { who: 'mummy-bear', text: '{name}, can you drag the honey pot over to Teddy?' },
-    nudgeHoney: { who: 'mummy-bear', text: 'Drag the honey pot to Teddy.' },
-    honeyMyself: { who: 'mummy-bear', text: 'Never mind, I’ll take it over to him myself.' },
-    honeyThanks: { who: 'teddy', text: 'Mmm! Thank you for my honey!' },
+    honeyMyself: { who: 'mummy-bear', text: 'Here’s some honey for you, Teddy.' },
     honeyThanksMum: { who: 'teddy', text: 'Mmm! Thank you, Mummy!' },
-    excitingEnough: { who: 'teddy', text: 'You know, {name}? Flying home in a helicopter was exciting enough!' },
+    excitingEnough: { who: 'teddy', text: 'You know, Mummy? Flying home in a helicopter was exciting enough!' },
     cheerio: { who: 'uncle-bill', text: 'Ahoy, ship-mates! Cheerio!' },
     byeBill: { who: 'teddy', text: 'Bye, Uncle Bill! Thank you!' },
     end: { who: 'narrator', text: 'That night, a clean Teddy dreamed of flying.' },
@@ -213,8 +196,9 @@ export default defineCartoon({
         await k.wait(400);
         await k.say('rhyme', teddy);
 
-        // His turn: the ladybird flies.
-        const how = await k.tapToHelp(lady, { ask: 'askBlow', nudge: 'nudgeBlow', helped: 'iBlow', by: teddy, size: 150 });
+        // Teddy blows, and the ladybird flies.
+        await k.say('iBlow', teddy);
+        k.flourish(lady);
         k.puff(582, 346, 50, '#ffffff');
         await k.wait(300);
         const wings = k.pivot([...k.part(lady, 'wingL'), ...k.part(lady, 'wingR')]);
@@ -223,7 +207,7 @@ export default defineCartoon({
         flutter();
         await k.to(lady, 2, { x: -230, y: -180, scale: 0.6, opacity: 0, ease: 'sine.in' });
         k.pose(teddy, 'default');
-        await k.say(how === 'tapped' ? 'thanksBlow' : 'offSheGoes', teddy);
+        await k.say('offSheGoes', teddy);
         await k.say('beetles', teddy);
         common.giggle();
         await k.shake(mummy, 3, 2);
@@ -280,8 +264,9 @@ export default defineCartoon({
         k.fx.thud();
         await k.say('wontGo', barney);
 
-        // His turn: he drags the kite up into the wind, and it takes off.
-        const how = await k.dragToHelp(kite, { to: KITE_LIFT, ask: 'askKite', nudge: 'nudgeKite', helped: 'gust', by: barney, helper: teddy });
+        // Teddy's puff of wind lifts the kite, and it takes off.
+        await k.say('gust', teddy);
+        await k.carry(kite, KITE_LIFT);
         sounds.swoosh();
         k.fx.wind(2);
         await k.to(kite, 0.4, { rotation: -10, ease: 'power2.out' });
@@ -293,7 +278,7 @@ export default defineCartoon({
           k.to(string, 1.4, { scale: 1, ease: 'power1.out' }),
         );
         k.fx.twinkle();
-        await k.say(how === 'dragged' ? 'kiteThanks' : 'kiteUp', barney);
+        await k.say('kiteUp', barney);
         await k.hop(teddy, 24);
 
         // An aeroplane streaks across the sky.
@@ -397,12 +382,13 @@ export default defineCartoon({
         await k.say('whatDoing', heli);
         await k.say('scupper', heli);
 
-        // His big turn: let the rope down.
-        const how = await k.tapToHelp(coil, { ask: 'askRope', nudge: 'nudgeRope', helped: 'downSheGoes', by: heli, size: 150 });
+        // Uncle Bill lets the rope down.
+        await k.say('downSheGoes', heli);
+        k.flourish(coil);
         k.fx.whizz();
         void k.fade(coil, 0, 0.3);
         await k.to(rope, 0.9, { scaleY: 0.9, ease: 'bounce.out' });
-        await k.say(how === 'tapped' ? 'ropeThanks' : 'grabRope', heli);
+        await k.say('grabRope', heli);
         // He stands up and grabs on.
         sounds.squelch(2);
         k.pose(teddy, 'happy');
@@ -444,7 +430,7 @@ export default defineCartoon({
         common.laugh();
         await k.say('gotWish', heli);
 
-        // A little bird flies in beside the rope. His turn: say hello.
+        // A little bird flies in beside the rope. Teddy says hello.
         const bird = cast.bird = k.prop('songbird', { x: 880, y: 250, w: 130, z: 14 });
         k.set(bird, { x: 400, opacity: 0 });
         const wings = k.pivot([...k.part(bird, 'wingL'), ...k.part(bird, 'wingR')]);
@@ -452,10 +438,11 @@ export default defineCartoon({
         void k.fade(bird, 1, 0.4);
         void k.to(wings, 0.12, { scaleY: 0.4, yoyo: true, repeat: 9 });
         await k.to(bird, 1.2, { x: 0, ease: 'power2.out' });
-        const hi = await k.tapToHelp(bird, { ask: 'askBird', nudge: 'nudgeBird', helped: 'helloBird', by: teddy, size: 150 });
+        await k.say('helloBird', teddy);
+        k.flourish(bird);
         tweet();
         await k.hop(bird, 30, 2);
-        await k.say(hi === 'tapped' ? 'birdThanks' : 'birdSings', teddy);
+        await k.say('birdSings', teddy);
         flutter();
         await k.to(bird, 1.2, { x: 330, y: -140, opacity: 0, ease: 'sine.in' });
         k.remove(bird);
@@ -474,7 +461,7 @@ export default defineCartoon({
           muddy(cast.teddy);
           cast.mummy = k.character('mummy-bear', { x: 170, y: 333, w: 280, z: 13 });
           k.set(cast.mummy, { x: -480 });
-          // The honey pot is held out in Mummy's paws, as its own actor so he can drag it.
+          // The honey pot is held out in Mummy's paws, as its own actor so it can be carried across.
           cast.honey = k.prop('honey-pot', { x: 268, y: 526, w: 90, z: 14 });
           k.set(cast.honey, { opacity: 0 });
         });
@@ -496,9 +483,10 @@ export default defineCartoon({
         k.pose(mummy, 'hold');
         k.fx.twinkle();
         await k.appear(honey, 0.5);
-        // His turn: the honey pot goes across to Teddy.
-        const gave = await k.dragToHelp(honey, { to: teddy, ask: 'askHoney', nudge: 'nudgeHoney', helped: 'honeyMyself', by: mummy });
-        await k.say(gave === 'dragged' ? 'honeyThanks' : 'honeyThanksMum', teddy);
+        // Mummy takes the honey pot across to Teddy.
+        await k.say('honeyMyself', mummy);
+        await k.carry(honey, teddy);
+        await k.say('honeyThanksMum', teddy);
         void k.vanish(honey);
         sounds.yum();
         await k.hop(teddy, 26);

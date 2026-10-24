@@ -187,10 +187,6 @@
 .p-row strong {
   font-size: 26px;
 }
-.parent .p-name {
-  width: 340px;
-  font-size: 30px;
-}
 .p-step {
   width: 72px;
   padding: 0;
@@ -230,36 +226,3 @@
 
 /* ---------- The player (scenes/player.ts) ---------- */
 
-/* His turn (Kit.tapToHelp): a soft gold ring that breathes slowly. Never flashes. */
-.story-tap-ring {
-  position: absolute;
-  z-index: 60;
-  border-radius: 50%;
-  border: 8px solid rgba(247, 210, 131, 0.95);
-  box-shadow:
-    0 0 24px rgba(247, 210, 131, 0.8),
-    inset 0 0 18px rgba(247, 210, 131, 0.5);
-  pointer-events: none;
-}
-.story-tap {
-  position: absolute;
-  z-index: 61;
-  border: none;
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-}
-/* His turn by dragging (Kit.dragToHelp): the item follows his finger, so the
-   browser must not scroll or zoom; a dashed ring breathes where it goes. */
-.story-drag {
-  touch-action: none;
-}
-.story-drop-ring {
-  position: absolute;
-  z-index: 59;
-  border-radius: 50%;
-  border: 8px dashed rgba(247, 210, 131, 0.95);
-  background: rgba(247, 210, 131, 0.12);
-  box-shadow: 0 0 24px rgba(247, 210, 131, 0.6);
-  pointer-events: none;
-}

@@ -1,20 +1,24 @@
 # The house style
 
 Every cartoon should feel like it came from the same little paper theatre
-as his two games. This is what that means.
+as the two games. This is what that means.
 
 ## Who is watching
 
-**Jasper, 6.** Autistic, possibly ADHD. He watches on an iPad (11th gen)
-held in landscape, usually on his own. He is only just reading, so there
-are **no captions**: **the voices carry the story**.
+**A 6-year-old.** Autistic, possibly ADHD. The child watches on an iPad
+(11th gen) held in landscape, usually on their own. They are only just
+reading, so there are **no captions**: **the voices carry the story**.
 
-He loves **the scary bits**: Dame Snap, Voldemort, being nearly caught.
-Villains get real screen time and real menace, as cartoon paper
-cut-outs. He also loves being the hero: characters talk to him by name
-("{name}, can you help?") and his taps make things happen.
+The child loves **the scary bits**: Dame Snap, Voldemort, being nearly
+caught. Villains get real screen time and real menace, as cartoon paper
+cut-outs. They also love a good rescue, so the heroes do every deed
+themselves, on screen, where it can be seen and enjoyed.
 
-He likes knowing what's coming. Every episode has the same shape
+Nothing in a cartoon is aimed at the child. It plays start to end like a
+TV episode: nobody asks the viewer to do anything, nobody speaks to them
+or names them, and nothing on screen waits to be tapped.
+
+The child likes knowing what's coming. Every episode has the same shape
 (docs/WRITING.md), and the same friends behave the same way every time.
 
 ## Scary is fine, cruel isn't
@@ -121,9 +125,9 @@ way:
   hop, surprised things shake, magic things sparkle and puff.
 - **Nothing flashes.** `k.glow` is a soft wash (capped at 60 %), lights
   breathe (`flicker`), they never blink.
-- **During his turn** (`k.tapToHelp`), nothing in the background moves:
-  the kit holds every idle loop still, and you must not start new
-  motion until it resolves.
+- **When a deed is done**, give it a clear, calm moment: the hero does
+  it on screen, `k.flourish` (chime and sparkle) marks it, and the
+  background stays still while it happens.
 - Keep a calm beat between big moments: not everything bounces all the
   time.
 
@@ -138,7 +142,7 @@ way:
   cartoon can make its own with `tone`, `noiseBurst` and `NOTE`, as the
   games' stories do. Soft and capped: no harsh buzzes.
 - Every action that matters has a sound: a door creaks, a hop boings, a
-  spell twinkles. It helps him follow without reading.
+  spell twinkles. It helps the child follow without reading.
 
 ## Voice
 
@@ -158,9 +162,9 @@ way:
   shelf. The same every time.
 - **One thing at a time** on screen to look at. Actors who aren't in the
   beat stay still.
-- **His turns are clear:** one glowing target, one spoken ask, big
-  enough to hit (120 px or more). Never two targets at once (a drag's
-  dashed drop ring is where the one target goes, not a second one).
+- **Deeds are clear:** one hero does one thing at a time, in plain view,
+  with a sound, and a flourish when it's done. Say what is about to
+  happen before it does. Never two deeds at once.
 - **No dead air and no rushing.** A beat of quiet after a big moment is
   good; ten seconds of nothing is not.
 - Endings are warm and settled: everyone safe, a joke or a hug, a

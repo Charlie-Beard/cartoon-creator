@@ -4,7 +4,6 @@
  *
  *   npm run shots -- lost-kettle
  *   npm run shots -- lost-kettle --scene 2          # one scene only
- *   npm run shots -- lost-kettle --no-tap           # wait out every tap-to-help
  *   npm run shots -- lost-kettle --url http://localhost:5173   # use a dev server already running
  *   npm run shots -- lost-kettle --fast             # iterating on frames: seconds, not minutes (see below)
  *   npm run shots -- lost-kettle --openings         # only each scene's opening set, in seconds (see below)
@@ -17,8 +16,7 @@
  *
  *   screenshots/<id>/scene<n>-0.png    the scene's opening set
  *   screenshots/<id>/scene<n>-<k>.png  frames while it plays: one every 3 s until
- *                                      the scene ends, and one the moment a
- *                                      tap-to-help appears
+ *                                      the scene ends
  *   screenshots/<id>/sheet.png         a contact sheet of them all (look at this first)
  *
  * and prints a pacing report. The time is measured, not guessed: each
@@ -28,17 +26,9 @@
  * "spoken" by a stand-in for the iPad's voice that takes as long as
  * estimateSeconds says; recorded lines (public/audio) play for real.
  *
- * Two ways to meet his turns (tap-to-help):
- *   default   each is tapped at once, so a child who waits takes up to ~21 s
- *             longer for each (the report says how much)
- *   --no-tap  none is tapped: the nudge and helped lines play, and the story
- *             carries on by itself after ~21 s. The times are then what a
- *             child who never taps would see.
- * The report says which mode was used.
- *
  * The report also lists every caption of every scene (when it came on and
  * for how long), and flags silent stretches: more than 4 s with no caption
- * showing and no tap waiting.
+ * showing.
  *
  * Flags: a scene over 90 s, an episode outside 2–6 minutes, a silent
  * stretch, and the layout problems below. Exits 1 on an error (the script
@@ -49,10 +39,8 @@
  * on a quarter of a second at a time, so a 3-minute episode takes under a
  * minute of wall-clock time instead of 3-4 (and the scenes run 4 at a time,
  * since the story clock doesn't care how busy the machine is). The frames
- * are the same: one every --every seconds of STORY time, one when a
- * tap-to-help appears, the same contact sheet. The times in the report are
- * story-clock times: GSAP, the captions, the tap-to-help patience and the
- * stand-in voice (estimateSeconds per line) all run on that clock, so they
+ * are the same: one every --every seconds of STORY time, the same contact sheet. The times in the report are
+ * story-clock times: GSAP, the captions, and the stand-in voice (estimateSeconds per line) all run on that clock, so they
  * match a real run closely, and the report says so. One difference: with
  * --fast, recordings in public/audio are not played, and every line is
  * "spoken" by the stand-in, so the times are the estimates, not the
@@ -60,12 +48,11 @@
  * time, recordings playing for real); --fast is for fixing frames.
  *
  * LAYOUT CHECKS: at every frame (the page is asked, just before the screenshot,
- * where every character and prop is, who is speaking, where the caption and
- * the tap-to-help are), scripts/lib/frame-check.mjs looks for: an actor 25%+
+ * where every character and prop is, who is speaking, where the caption
+ * is), scripts/lib/frame-check.mjs looks for: an actor 25%+
  * off the stage (and still so a frame later); a face reaching into the
  * caption band (y 690+) under a caption; two characters overlapping by more
- * than 35% of the smaller; more than 4 characters at once; a tap-to-help
- * target under 120 px or partly off stage; the speaker off stage or
+ * than 35% of the smaller; more than 4 characters at once; the speaker off stage or
  * invisible while their line is captioned. After the pacing report it prints
  * "Frames to look at": each flagged frame's file and why. The same goes in
  * screenshots/<id>/flags.json, and flagged frames get a red outline on the
@@ -90,7 +77,7 @@
  * frames per scene after the opening set; default no cap but a safety cap of
  * 60), --parallel N (scenes at once, default 1, or 4 with --fast or
  * --openings: in real time more are quicker but a busy machine makes GSAP
- * lag-smooth and the times read high), --no-tap, --fast, --openings,
+ * lag-smooth and the times read high), --fast, --openings,
  * --strict, --out DIR, --help.
  *
  * Chromium comes from PW_CHROMIUM (or /opt/pw-browsers/chromium if that
@@ -104,7 +91,6 @@ import { chromiumPath, createDevServer } from './lib/dev-server.mjs';
 import { checkScene } from './lib/frame-check.mjs';
 import { SHELF } from './lib/shelf.ts';
 import { spokenSeconds } from '../src/core/cartoon.ts';
-import { DEFAULT_NAME, personalise } from '../src/core/phrases.ts';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -127,7 +113,6 @@ const USAGE = `Usage: npm run shots -- <cartoonId> [options]
   --openings     only each scene's opening set, in seconds: for a quick layout check after
                  moving people around. Frames and a small sheet go in <out>/openings/. No pacing.
   --scene N      one scene only (numbered from 1)
-  --no-tap       don't tap the tap-to-help: wait out each one (~21 s) as a child who never taps
   --every S      seconds between frames (default 3)
   --frames N     most frames per scene after the opening set (default and cap 60)
   --parallel N   scenes at once (default 1; 4 with --fast or --openings)
@@ -137,8 +122,7 @@ const USAGE = `Usage: npm run shots -- <cartoonId> [options]
   --help         this
 
 Layout checks run on every frame (scripts/lib/frame-check.mjs): an actor 25%+ off stage, a face in
-the caption band (y 690+), characters overlapping 35%+, more than 4 characters, a tap-to-help under
-120 px or off stage, the speaker off stage. See "Frames to look at" in the report, flags.json, and the
+the caption band (y 690+), characters overlapping 35%+, more than 4 characters, the speaker off stage. See "Frames to look at" in the report, flags.json, and the
 red outlines on sheet.png: read those and each scene's opening frame, not every frame.`;
 if (flag('help') || flag('h')) {
   console.log(USAGE);
@@ -163,7 +147,6 @@ const FRAMES = Math.min(MAX_FRAMES, option('frames') === undefined ? MAX_FRAMES 
 const OPENINGS = flag('openings');
 const FAST = flag('fast') || OPENINGS; // the openings are shot on the fake clock too
 const PARALLEL = Math.max(1, Number(option('parallel', FAST ? 4 : 1)));
-const NO_TAP = flag('no-tap');
 const OUT = resolve(ROOT, option('out', join('screenshots', id)), OPENINGS ? 'openings' : '.');
 const only = option('scene') === undefined ? null : Number(option('scene')) - 1;
 /** Scenes are numbered from 1 for people (scene 1 is `?scene=0`). */
@@ -175,10 +158,9 @@ if (sceneIndexes.some((i) => !cartoon.scenes[i])) {
 
 // Longest a scene may take (the player gives up on one after 180 s, plus the curtains).
 const STUCK_SECONDS = 200;
-const TAP_WAIT_SECONDS = 21; // the kit's patience: 9 s, a nudge, 12 s, then it helps him
-const SILENT_SECONDS = 4; // a stretch with no caption and no tap waiting longer than this is flagged
+const SILENT_SECONDS = 4; // a stretch with no caption longer than this is flagged
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-// --fast: the fake clock is pushed on STEP_MS of story time at a time (frames and taps are noticed
+// --fast: the fake clock is pushed on STEP_MS of story time at a time (frames are noticed
 // to within that), with REAL_PAUSE_MS of real time after each push for the page's fetches and decodes.
 const STEP_MS = 250;
 const REAL_PAUSE_MS = 15;
@@ -238,7 +220,7 @@ function installProbe() {
   };
   Object.defineProperty(window, 'speechSynthesis', { value: synth, configurable: true, writable: true });
 
-  const log = (window.__probe = { events: [], scene: null, sceneT: 0, end: false, taps: 0, tapping: false });
+  const log = (window.__probe = { events: [], scene: null, sceneT: 0, end: false });
   const note = (type, extra = {}) => log.events.push({ t: performance.now(), type, ...extra });
   let capOn = false;
   let capText = '';
@@ -252,13 +234,6 @@ function installProbe() {
     const end = !!document.querySelector('[data-end]');
     if (end && !log.end) note('end');
     log.end = end;
-    const tapping = !!document.querySelector('[data-tap-to-help]');
-    if (tapping && !log.tapping) {
-      log.taps++;
-      note('tap');
-    }
-    if (!tapping && log.tapping) note('tap-end');
-    log.tapping = tapping;
     // The caption box fades in and out with the class "on"; a new line may replace the text while it stays on.
     const box = document.querySelector('.story-caption');
     const on = !!box?.classList.contains('on');
@@ -320,7 +295,6 @@ function collectFrame() {
   const cap = stage.querySelector('.story-caption');
   const bubble = cap?.querySelector('.story-caption-text');
   const on = !!cap?.classList.contains('on');
-  const tap = stage.querySelector('[data-tap-to-help]');
   return {
     stage: { w: 1180, h: 820 },
     zoom,
@@ -328,10 +302,9 @@ function collectFrame() {
     // The bubble is hidden for good (no captions on screen), so it measures 0 × 0: leave the box
     // out and the band check falls back to the whole caption band.
     caption: { on, box: bubble && bubble.getBoundingClientRect().width ? box(bubble) : null },
-    tap: tap ? { box: box(tap) } : null,
   };
 }
-const NO_FRAME = { stage: { w: 1180, h: 820 }, zoom: 1, actors: [], caption: null, tap: null };
+const NO_FRAME = { stage: { w: 1180, h: 820 }, zoom: 1, actors: [], caption: null };
 
 /** Runs the layout checks over a scene's frames and writes each one's reasons on it. */
 function checkFrames(frames, opts) {
@@ -348,18 +321,15 @@ function checkFrames(frames, opts) {
  * From the probe's events (from = the scene's start, to = the next scene's
  * start or the end, -1 if it never came): every caption with when it came
  * on (seconds from the scene's start) and how long it stayed, and the
- * silent stretches: no caption showing and no tap waiting for longer than
- * SILENT_SECONDS. A tap that waits is not silence, even though the
- * captions are off: the ring is breathing and he has something to do.
+ * silent stretches: no caption showing for longer than SILENT_SECONDS.
  */
 function timeline(events, from, to) {
   const t0 = events[from].t;
   const tEnd = to >= 0 ? events[to].t : events.at(-1).t;
   const sec = (t) => (t - t0) / 1000;
   const captions = [];
-  const busy = []; // [start, end] in seconds: a caption showing, or a tap waiting
+  const busy = []; // [start, end] in seconds: a caption showing
   let cur = null;
-  let tapAt = null;
   const close = (t) => {
     if (!cur) return;
     captions.push({ text: cur.text, start: sec(cur.t), dur: (t - cur.t) / 1000 });
@@ -372,15 +342,9 @@ function timeline(events, from, to) {
       cur = { text: e.text, t: e.t };
     } else if (e.type === 'cap-off') {
       close(e.t);
-    } else if (e.type === 'tap') {
-      tapAt = e.t;
-    } else if (e.type === 'tap-end' && tapAt !== null) {
-      busy.push([sec(tapAt), sec(e.t)]);
-      tapAt = null;
     }
   }
   close(tEnd);
-  if (tapAt !== null) busy.push([sec(tapAt), sec(tEnd)]);
 
   const silences = [];
   let at = 0;
@@ -394,23 +358,8 @@ function timeline(events, from, to) {
 
 // ----------------------------------------------------------- one scene's run
 
-/**
- * His turn by dragging (k.dragToHelp): the button carries `data-drag-to`,
- * the drop point in stage coordinates. Press on the item, move there in a
- * few steps (as a finger does) and let go.
- */
-async function dragTo(page, box, to) {
-  const stage = await page.locator('.story-stage').boundingBox();
-  const k = stage ? stage.width / 1180 : 1;
-  const [x, y] = to.split(' ').map(Number);
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-  await page.mouse.down();
-  await page.mouse.move((stage?.x ?? 0) + x * k, (stage?.y ?? 0) + y * k, { steps: 8 });
-  await page.mouse.up();
-}
-
 async function shootScene(browser, context, base, index) {
-  const result = { index, name: cartoon.scenes[index].name, frames: [], errors: [], seconds: null, captions: [], silences: [], lines: [], taps: 0, capped: null };
+  const result = { index, name: cartoon.scenes[index].name, frames: [], errors: [], seconds: null, captions: [], silences: [], lines: [], capped: null };
   // A fake clock belongs to a whole browser context, not a page: scenes running at once need a context each.
   const own = FAST ? await browser.newContext(CONTEXT) : null;
   const page = await (own ?? context).newPage();
@@ -440,15 +389,15 @@ async function shootScene(browser, context, base, index) {
   /** A clock for the loop below, in ms: story time in --fast, wall-clock time otherwise. */
   const now = () => (FAST ? storyMs : Date.now());
 
-  const shoot = async (tap = false) => {
+  const shoot = async () => {
     const k = result.frames.length;
     const file = join(OUT, `scene${index + 1}-${k}.png`);
     const t = await page.evaluate(() => (performance.now() - window.__probe.sceneT) / 1000).catch(() => 0);
     const data = await page.evaluate(collectFrame).catch(() => null);
     await page.screenshot({ path: file });
-    result.frames.push({ k, file, t, tap, data, reasons: [] });
+    result.frames.push({ k, file, t, data, reasons: [] });
   };
-  const state = () => page.evaluate(() => ({ scene: window.__probe.scene, end: window.__probe.end, tapping: window.__probe.tapping, taps: window.__probe.taps }));
+  const state = () => page.evaluate(() => ({ scene: window.__probe.scene, end: window.__probe.end }));
 
   try {
     await page.goto(`${base}/?cartoon=${id}&scene=${index}`);
@@ -467,7 +416,6 @@ async function shootScene(browser, context, base, index) {
     await shoot();
 
     let nextFrame = now() + EVERY * 1000;
-    let tapped = 0;
     const began = now();
     for (;;) {
       const s = await state();
@@ -479,20 +427,7 @@ async function shootScene(browser, context, base, index) {
       }
       const room = result.frames.length - 1 < FRAMES; // frames after the opening set
       if (!room && result.capped === null) result.capped = result.frames.at(-1).t;
-      if (s.tapping && s.taps > tapped) {
-        // His turn: show it, then (unless --no-tap) do it.
-        await advance(350); // let the ring fade in
-        if (room) await shoot(true);
-        if (!NO_TAP) {
-          const target = page.locator('[data-tap-to-help]').first();
-          const box = await target.boundingBox();
-          const to = await target.getAttribute('data-drag-to').catch(() => null);
-          if (box && to) await dragTo(page, box, to);
-          else if (box) await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
-        }
-        tapped = s.taps;
-        nextFrame = now() + EVERY * 1000;
-      } else if (now() >= nextFrame && room) {
+      if (now() >= nextFrame && room) {
         await shoot();
         nextFrame = now() + EVERY * 1000;
       }
@@ -505,7 +440,6 @@ async function shootScene(browser, context, base, index) {
     const to = events.findIndex((e, i) => i > from && (e.type === 'end' || (e.type === 'scene' && e.scene !== String(index) && e.scene !== null)));
     const mine = events.slice(from + 1, to < 0 ? undefined : to);
     if (to >= 0) result.seconds = (events[to].t - events[from].t) / 1000;
-    result.taps = mine.filter((e) => e.type === 'tap').length;
     if (from >= 0) Object.assign(result, timeline(events, from, to));
     result.lines = result.captions.map((c) => c.text);
     checkFrames(result.frames);
@@ -555,7 +489,7 @@ async function shootOpening(browser, base, index) {
     const file = join(OUT, `scene${index + 1}.png`);
     const data = await page.evaluate(collectFrame).catch(() => null);
     await page.screenshot({ path: file });
-    result.frames.push({ k: 0, file, t: 0, tap: false, data, reasons: [] });
+    result.frames.push({ k: 0, file, t: 0, data, reasons: [] });
     checkFrames(result.frames);
   } catch (e) {
     result.errors.push(e.message);
@@ -583,7 +517,7 @@ async function contactSheet(context, results) {
     : results
         .map((r) => {
           const label = `Scene ${r.index + 1}: ${esc(r.name)}${r.seconds === null ? '' : ` (${r.seconds.toFixed(0)} s)`}`;
-          const thumbs = r.frames.map((f, i) => thumb(f, i === 0 ? 'opening set' : `${f.t.toFixed(0)} s${f.tap ? ' (tap waiting)' : ''}`)).join('');
+          const thumbs = r.frames.map((f, i) => thumb(f, i === 0 ? 'opening set' : `${f.t.toFixed(0)} s`)).join('');
           return `<section><h2>${label}</h2><div class="row">${thumbs}</div></section>`;
         })
         .join('');
@@ -615,7 +549,7 @@ async function contactSheet(context, results) {
 /** The flagged frames of every scene, in order: what to print and what goes in flags.json. */
 function flaggedFrames(results) {
   const out = [];
-  for (const r of results) for (const f of r.frames) if (f.reasons.length) out.push({ scene: r.index + 1, frame: f.k, t: Math.round(f.t * 10) / 10, tap: f.tap, file: relative(ROOT, f.file), reasons: f.reasons.map((x) => `${x.kind}: ${x.message}`) });
+  for (const r of results) for (const f of r.frames) if (f.reasons.length) out.push({ scene: r.index + 1, frame: f.k, t: Math.round(f.t * 10) / 10, file: relative(ROOT, f.file), reasons: f.reasons.map((x) => `${x.kind}: ${x.message}`) });
   return out;
 }
 
@@ -624,9 +558,9 @@ function reportFrames(results) {
   const flagged = flaggedFrames(results);
   const checked = results.reduce((n, r) => n + r.frames.length, 0);
   console.log(`\nFrames to look at (layout checks on ${checked} frame${checked === 1 ? '' : 's'}: ${flagged.length} flagged)`);
-  if (!flagged.length) console.log('  none: no actor off stage, no face under a caption, no pile-ups, no tap-to-help problems, no missing speaker.');
+  if (!flagged.length) console.log('  none: no actor off stage, no face under a caption, no pile-ups, no missing speaker.');
   for (const f of flagged) {
-    console.log(`  ${f.file}   (scene ${f.scene}, ${f.frame === 0 ? 'opening set' : `${f.t} s${f.tap ? ', tap waiting' : ''}`})`);
+    console.log(`  ${f.file}   (scene ${f.scene}, ${f.frame === 0 ? 'opening set' : `${f.t} s`})`);
     for (const r of f.reasons) console.log(`      - ${r}`);
   }
   writeFileSync(join(OUT, 'flags.json'), JSON.stringify({ id, mode: OPENINGS ? 'openings' : FAST ? 'fast' : 'real-time', checked, flagged }, null, 2) + '\n');
@@ -678,7 +612,7 @@ try {
     stopServer();
     process.exit(exitCode);
   }
-  console.log(`${cartoon.title} (${id}): ${sceneIndexes.length} scene${sceneIndexes.length === 1 ? '' : 's'}, ${FAST ? 'on a fake clock (--fast)' : 'in real time'}, ${parallel} at a time, ${NO_TAP ? 'waiting out every tap-to-help (--no-tap)' : 'tapping every tap-to-help at once'}...`);
+  console.log(`${cartoon.title} (${id}): ${sceneIndexes.length} scene${sceneIndexes.length === 1 ? '' : 's'}, ${FAST ? 'on a fake clock (--fast)' : 'in real time'}, ${parallel} at a time...`);
   const results = new Array(sceneIndexes.length);
   let next = 0;
   await Promise.all(
@@ -698,29 +632,25 @@ try {
   // ---------------------------------------------------------- the report
   const flags = [];
   const errors = [];
-  const mode = NO_TAP
-    ? 'MODE: --no-tap (no tap-to-help was tapped: the nudge and helped lines played, and each wait ran its full ~21 s)'
-    : 'MODE: tapping (every tap-to-help was tapped at once; a child who waits takes up to ~21 s longer for each)';
   console.log(`\nPacing for ${id} (${FAST ? 'STORY-CLOCK times from a --fast run' : 'measured in real time'}, ${parallel} scene${parallel === 1 ? '' : 's'} at a time)`);
   if (FAST) {
     console.log('  FAST: every time below is STORY-CLOCK time, read off the page\'s fake clock, not wall-clock time. Lines are said by the stand-in voice');
     console.log('        (estimateSeconds each), never the recordings, so a recorded cartoon will differ a little. Good for fixing frames; run without --fast');
     console.log('        for the final pacing check.');
   }
-  console.log(`  ${mode}`);
   if (parallel > 1 && !FAST) console.log(`  WARNING: ${parallel} scenes ran at once, so a busy machine makes the times read high (GSAP lag smoothing). Run with --parallel 1 for true times.`);
-  console.log('  scene  seconds  lines  taps  name');
+  console.log('  scene  seconds  lines  name');
   for (const r of results) {
     const secs = r.seconds === null ? '   ?' : r.seconds.toFixed(0).padStart(4);
-    console.log(`  ${String(r.index + 1).padStart(5)}  ${secs} s  ${String(r.lines.length).padStart(5)}  ${String(r.taps).padStart(4)}  ${r.name}`);
+    console.log(`  ${String(r.index + 1).padStart(5)}  ${secs} s  ${String(r.lines.length).padStart(5)}  ${r.name}`);
     if (r.seconds !== null && r.seconds > 90) flags.push(`scene ${r.index + 1} runs ${r.seconds.toFixed(0)} s: over 90 s. Split it, or cut something.`);
     if (r.lines.length === 0 && r.seconds !== null) flags.push(`scene ${r.index + 1} says nothing (no captions shown): is that on purpose?`);
-    for (const s of r.silences) flags.push(`scene ${r.index + 1} is silent from ${s.from.toFixed(1)} s to ${s.to.toFixed(1)} s (${(s.to - s.from).toFixed(1)} s with no caption and no tap waiting).`);
+    for (const s of r.silences) flags.push(`scene ${r.index + 1} is silent from ${s.from.toFixed(1)} s to ${s.to.toFixed(1)} s (${(s.to - s.from).toFixed(1)} s with no caption).`);
     for (const e of r.errors) errors.push(`scene ${r.index + 1}: ${e}`);
   }
 
   // Each scene's captions, in order: when each came on (from the scene's start) and how long it stayed.
-  console.log(`\nCaption timeline (seconds from each scene's start; silent = no caption and no tap waiting, over ${SILENT_SECONDS} s)`);
+  console.log(`\nCaption timeline (seconds from each scene's start; silent = no caption, over ${SILENT_SECONDS} s)`);
   for (const r of results) {
     console.log(`  scene ${r.index + 1}: ${r.name}${r.seconds === null ? '' : ` (${r.seconds.toFixed(1)} s)`}`);
     if (!r.captions.length) console.log('    (no captions)');
@@ -735,18 +665,16 @@ try {
   console.log('');
   const timed = results.filter((r) => r.seconds !== null);
   const total = timed.reduce((t, r) => t + r.seconds, 0);
-  const taps = results.reduce((t, r) => t + r.taps, 0);
   if (only === null) {
-    console.log(`  total  ${fmt(total)} (${total.toFixed(0)} s), ${results.reduce((t, r) => t + r.lines.length, 0)} lines said, ${taps} turns for him (tap or drag)`);
-    if (taps && !NO_TAP) console.log(`         if he waits out every tap: up to ${fmt(total + taps * TAP_WAIT_SECONDS)} (run with --no-tap to measure it)`);
+    console.log(`  total  ${fmt(total)} (${total.toFixed(0)} s), ${results.reduce((t, r) => t + r.lines.length, 0)} lines said`);
     console.log(`  the script has ${Object.keys(cartoon.lines).length} lines: ${spokenSeconds(cartoon.lines).toFixed(0)} s of speech if each is said once`);
     if (timed.length === results.length) {
       if (total < 120) flags.push(`the episode runs ${fmt(total)}: under 2 minutes. Add a beat, or a scene.`);
       if (total > 360) flags.push(`the episode runs ${fmt(total)}: over 6 minutes. Cut something.`);
     }
     const said = new Set(results.flatMap((r) => r.lines));
-    const unseen = Object.entries(cartoon.lines).filter(([, l]) => !said.has(personalise(l.text, DEFAULT_NAME)));
-    if (unseen.length) console.log(`  not said in this run: ${unseen.map(([k]) => k).join(', ')} ${NO_TAP ? '' : '(nudge and helped lines only come if he waits: try --no-tap)'}`);
+    const unseen = Object.entries(cartoon.lines).filter(([, l]) => !said.has(l.text));
+    if (unseen.length) console.log(`  not said in this run: ${unseen.map(([k]) => k).join(', ')}`);
   }
   for (const f of flags) console.log(`FLAG   ${f}`);
   for (const e of errors) console.log(`ERROR  ${e}`);

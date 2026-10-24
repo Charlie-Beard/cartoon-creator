@@ -23,7 +23,6 @@ interface Frame {
   zoom: number;
   actors: Actor[];
   caption: { on: boolean; box: Box | null } | null;
-  tap: { box: Box } | null;
 }
 
 const char = (name: string, x: number, y: number, w = 240, extra: Partial<Actor> = {}): Actor => ({
@@ -42,7 +41,6 @@ const frame = (actors: Actor[], extra: Partial<Frame> = {}): Frame => ({
   zoom: 1,
   actors,
   caption: { on: false, box: null },
-  tap: null,
   ...extra,
 });
 const caption = (box: Box = { x: 240, y: 712, w: 700, h: 68 }) => ({ on: true, box });
@@ -176,26 +174,6 @@ describe('a crowd', () => {
   });
 });
 
-describe('his turn', () => {
-  const withTap = (box: Box) => frame([], { tap: { box } });
-
-  it('is fine at 120 px or more and on stage', () => {
-    expect(checkFrame(withTap({ x: 500, y: 300, w: 120, h: 120 }))).toEqual([]);
-    expect(checkFrame(withTap({ x: 0, y: 700, w: 300, h: 120 }))).toEqual([]);
-  });
-
-  it('flags a target that is too small', () => {
-    const out = checkFrame(withTap({ x: 500, y: 300, w: 100, h: 100 }));
-    expect(out).toHaveLength(1);
-    expect(out[0].message).toMatch(/100 × 100/);
-  });
-
-  it('flags a target partly off stage', () => {
-    expect(kinds(withTap({ x: 1100, y: 300, w: 140, h: 140 }))).toEqual(['tap']);
-    expect(kinds(withTap({ x: 500, y: -40, w: 140, h: 140 }))).toEqual(['tap']);
-  });
-});
-
 describe('the speaker', () => {
   it('is fine on stage, and flagged off stage or invisible while the line is captioned', () => {
     const on = frame([char('silky', 480, 300, 210, { speaking: true })], { caption: caption() });
@@ -226,6 +204,6 @@ describe('a problem that lasts', () => {
 
 describe('thresholds', () => {
   it('are the ones in the brief', () => {
-    expect(THRESHOLDS).toMatchObject({ offstage: 0.25, face: 0.4, bandTop: 690, overlap: 0.35, maxCharacters: 4, tapMin: 120, invisible: 0.05 });
+    expect(THRESHOLDS).toMatchObject({ offstage: 0.25, face: 0.4, bandTop: 690, overlap: 0.35, maxCharacters: 4, invisible: 0.05 });
   });
 });

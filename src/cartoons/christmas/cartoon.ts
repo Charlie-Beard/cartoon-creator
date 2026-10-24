@@ -13,24 +13,24 @@
  *      jams in the doorway. Hagrid pushes again, the tree springs back, and
  *      he sits down in the snow. There'll be no tree for Christmas now…
  *      Ron sees why: the branches are full of snow, that's what makes it so
- *      fat. His first turn: he drags Harry's snowball to the tree, the snow
+ *      fat. Ron pops Harry's snowball on the tree, the snow
  *      tumbles off, the branches spring in, and with one more heave the
  *      tree slides inside. Dumbledore: a splendid tree. Off to bed, and who
  *      knows what you'll find in the morning?
  *   3. Presents! Christmas morning in the dormitory, and there's a pile of
- *      presents at the end of Harry's bed. For me? His second turn: he taps
- *      the presents, and out comes a green jumper with an H on it, knitted
+ *      presents at the end of Harry's bed. For me? Harry rips
+ *      the paper off the pile, and out comes a green jumper with an H on it, knitted
  *      by Ron's mum (Ron's is always maroon). Harry holds it up: his first
  *      real Christmas present.
  *   4. Crackers. Christmas dinner in the Great Hall, with Hagrid's tree all
- *      decorated but for its star. His third turn: he drags the star from
- *      Hagrid's paws up to the top of the tree. Wizard crackers go off like
- *      a cannon! His fourth turn: he taps the cracker, BANG, a puff of smoke, an admiral's hat for Harry
+ *      decorated but for its star. Hagrid pops the star
+ *      up to the top of the tree. Wizard crackers go off like
+ *      a cannon! Harry and Ron pull one: BANG, a puff of smoke, an admiral's hat for Harry
  *      and live white mice. Dumbledore's cracker gives him a flowery bonnet,
  *      just what he always wanted. Everyone laughs.
  *   5. The best Christmas. That night by the common room fire, one white
- *      mouse has followed them home, shivering. His fifth turn: he drags
- *      it onto Harry's warm lap. The best Christmas Harry has ever had.
+ *      mouse has followed them home, shivering. Harry
+ *      lifts it onto his warm lap. The best Christmas Harry has ever had.
  *      Happy Christmas, and the snow falls all night long.
  *
  * The trouble is gentle this time, as asked: no villain, just a tree too
@@ -90,7 +90,7 @@ export default defineCartoon({
   lines: {
     // 1. Snow!
     christmasEve: { who: 'narrator', text: 'It was Christmas Eve at Hogwarts. Snow lay thick and white all over the grounds.' },
-    happyEve: { who: 'ron', text: 'Happy Christmas Eve, Harry! And happy Christmas Eve, {name}!' },
+    happyEve: { who: 'ron', text: 'Happy Christmas Eve, Harry! Look at all this snow!' },
     neverHad: { who: 'harry', text: 'I’ve never had a proper Christmas, Ron.' },
     socks: { who: 'harry', text: 'The Dursleys gave me a coat hanger once. And a pair of Uncle Vernon’s old socks.' },
     yuck: { who: 'ron', text: 'Yuck! Well, Christmas at Hogwarts is the best. You’ll see.' },
@@ -110,12 +110,9 @@ export default defineCartoon({
     noTree: { who: 'hagrid', text: 'I’m fine. But there won’t be a tree for Christmas now.' },
     fullOfSnow: { who: 'ron', text: 'Look at the branches! They’re all full of snow.' },
     knockOff: { who: 'harry', text: 'That’s why it’s too fat! Let’s knock the snow off.' },
-    askSnowball: { who: 'harry', text: 'Put a snowball on the tree, {name}! Drag it over!' },
-    nudgeSnowball: { who: 'harry', text: 'Drag the snowball to the big snowy tree!' },
-    helpedSnowball: { who: 'ron', text: 'Never mind, I’ll pop it on myself!' },
+    helpedSnowball: { who: 'ron', text: 'Leave it to me! I’ll pop a snowball on the tree!' },
     blimey: { who: 'hagrid', text: 'Blimey! Look at that!' },
     itsIn: { who: 'ron', text: 'It’s in! It’s in!' },
-    bestSnowball: { who: 'hagrid', text: 'Well done, {name}! Best snowball I ever saw!' },
     ronsSnowball: { who: 'hagrid', text: 'Well done, Ron! Best snowball I ever saw!' },
     splendid: { who: 'dumbledore', text: 'What a splendid tree, Hagrid. Thank you, all of you.' },
     bedtime: { who: 'dumbledore', text: 'Now, off to bed. Who knows what you’ll find in the morning?' },
@@ -125,8 +122,6 @@ export default defineCartoon({
     sleepy: { who: 'harry', text: 'Mmm… Happy Christmas, Ron.' },
     lookPresents: { who: 'ron', text: 'Look! You’ve got presents!' },
     forMe: { who: 'harry', text: 'Presents? For me?' },
-    askPresents: { who: 'harry', text: 'Will you help me open them, {name}? Tap the presents!' },
-    nudgePresents: { who: 'harry', text: 'Tap the pile of presents!' },
     helpedPresents: { who: 'ron', text: 'Go on, Harry! Rip the paper off!' },
     aJumper: { who: 'harry', text: 'A jumper! A green one, with an H on it!' },
     mumKnits: { who: 'ron', text: 'Mum knits us one every Christmas. Mine’s always maroon.' },
@@ -138,13 +133,9 @@ export default defineCartoon({
     feast: { who: 'narrator', text: 'Christmas dinner was the biggest feast Harry had ever seen.' },
     tuckIn: { who: 'dumbledore', text: 'Happy Christmas, everyone! Tuck in!' },
     myTree: { who: 'hagrid', text: 'An’ look at my tree now! It just needs its star.' },
-    askStar: { who: 'hagrid', text: 'Can you drag the star to the top of the tree, {name}?' },
-    nudgeStar: { who: 'hagrid', text: 'Drag the star up to the tree!' },
-    helpedStar: { who: 'hagrid', text: 'I’ll pop it up meself, then.' },
+    helpedStar: { who: 'hagrid', text: 'I’ll pop it up on top meself.' },
     starOn: { who: 'dumbledore', text: 'Beautiful. Now the tree is finished.' },
     crackers: { who: 'ron', text: 'Crackers! Wizard crackers go off like a cannon.' },
-    askCracker: { who: 'ron', text: 'Pull it with us, {name}! Tap the cracker!' },
-    nudgeCracker: { who: 'ron', text: 'Tap the cracker. Ready?' },
     helpedCracker: { who: 'harry', text: 'One, two, three… pull!' },
     aHat: { who: 'harry', text: 'A hat! And… mice?' },
     mice: { who: 'ron', text: 'Real white mice!' },
@@ -154,12 +145,10 @@ export default defineCartoon({
     night: { who: 'narrator', text: 'That night, the friends sat by the fire, warm and full and happy.' },
     bestEver: { who: 'harry', text: 'That was the best Christmas I’ve ever had.' },
     toldYou: { who: 'ron', text: 'Told you. Christmas at Hogwarts is the best!' },
-    followedUs: { who: 'ron', text: 'Look! One of the mice came home with us!' },
-    askMouse: { who: 'ron', text: 'He’s shivering. Drag him onto Harry’s lap!' },
-    nudgeMouse: { who: 'ron', text: 'Drag the mouse to Harry’s lap!' },
+    followedUs: { who: 'ron', text: 'Look! One of the mice came home with us! He’s shivering.' },
     helpedMouse: { who: 'harry', text: 'Come here, little mouse. In you pop.' },
     mouseCosy: { who: 'harry', text: 'Aww. He likes it.' },
-    thankYou: { who: 'harry', text: 'Thank you for helping, {name}. Happy Christmas!' },
+    thankYou: { who: 'harry', text: 'Thank you for the best Christmas, Ron. Happy Christmas!' },
     end: { who: 'narrator', text: 'And outside, the snow fell softly on Hogwarts, all night long.' },
   },
   scenes: [
@@ -270,9 +259,10 @@ export default defineCartoon({
         await k.say('fullOfSnow', ron);
         await k.say('knockOff', harry);
 
-        // His first turn: drag Harry's snowball to the tree.
+        // Ron pops Harry's snowball on the tree.
         await k.fade(ball, 1, 0.3);
-        const how = await k.dragToHelp(ball, { to: tree, ask: 'askSnowball', nudge: 'nudgeSnowball', helped: 'helpedSnowball', by: harry, helper: ron, dropSize: 220 });
+        await k.all(k.say('helpedSnowball', ron), k.hop(ron, 24));
+        await k.carry(ball, tree);
         await k.vanish(ball);
         k.puff(590, 400, 150, '#ffffff');
         whumph();
@@ -294,7 +284,7 @@ export default defineCartoon({
         k.sparkle(590, 400, 14, 200);
         laugh();
         await k.all(k.say('itsIn', ron), k.hop(ron, 28, 2), k.wait(200).then(() => k.hop(harry, 28, 2)));
-        await k.say(how === 'dragged' ? 'bestSnowball' : 'ronsSnowball', hagrid);
+        await k.say('ronsSnowball', hagrid);
 
         // Dumbledore in the doorway.
         k.fx.twinkle();
@@ -331,8 +321,9 @@ export default defineCartoon({
         k.fx.twinkle();
         await k.all(k.say('forMe', harry), k.shake(harry, 4, 2));
 
-        // His second turn: open the presents.
-        await k.tapToHelp(pile, { ask: 'askPresents', nudge: 'nudgePresents', helped: 'helpedPresents', by: harry, helper: ron, size: 240 });
+        // Ron says go on, and Harry rips the paper off the pile.
+        await k.say('helpedPresents', ron);
+        k.flourish(pile);
         rip();
         k.confetti(24);
         await k.all(k.vanish(pile), k.vanish(gift2), k.vanish(gift3));
@@ -388,8 +379,9 @@ export default defineCartoon({
         await greatHall.play(k, hall, { welcome: 'tuckIn', food: ['pie', 'birthdayCake', 'pumpkin', 'pie'] });
         await k.all(k.say('myTree', hagrid), k.shake(tree, 3, 2));
 
-        // His third turn: drag the star up to the top of the tree.
-        await k.dragToHelp(star, { to: [1045, 215], ask: 'askStar', nudge: 'nudgeStar', helped: 'helpedStar', by: hagrid, dropSize: 200 });
+        // Hagrid pops the star up to the top of the tree.
+        await k.say('helpedStar', hagrid);
+        await k.carry(star, [1045, 215]);
         k.remove(star);
         k.set(k.part(tree, 'star'), { opacity: 1 });
         k.sfx.sparkle();
@@ -397,9 +389,10 @@ export default defineCartoon({
         await k.say('starOn', dumbledore);
         await k.wait(300);
 
-        // His fourth turn: the wizard cracker.
+        // The wizard cracker: Harry and Ron pull it.
         await k.say('crackers', ron);
-        await k.tapToHelp(cracker, { ask: 'askCracker', nudge: 'nudgeCracker', helped: 'helpedCracker', by: ron, helper: harry, size: 220 });
+        await k.say('helpedCracker', harry);
+        k.flourish(cracker);
         const left = k.part(cracker, 'left');
         const right = k.part(cracker, 'right');
         k.fx.drumroll(0.6);
@@ -465,8 +458,9 @@ export default defineCartoon({
         await k.all(k.fade(mouse, 1, 0.3), k.to(mouse, 0.4, { y: 0, ease: 'back.out(2)' }));
         await k.all(k.say('followedUs', ron), k.shake(ron, 4, 2));
 
-        // His fifth turn: drag the mouse onto Harry's warm lap.
-        await k.dragToHelp(mouse, { to: [290, 630], ask: 'askMouse', nudge: 'nudgeMouse', helped: 'helpedMouse', by: ron, helper: harry, dropSize: 200 });
+        // Harry lifts the mouse onto his warm lap.
+        await k.say('helpedMouse', harry);
+        await k.carry(mouse, [290, 630]);
         sounds.squeak(1);
         await k.all(k.say('mouseCosy', harry), k.hop(mouse, 12));
         giggle();

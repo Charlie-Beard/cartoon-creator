@@ -16,7 +16,6 @@ export default defineMeta({
     villain: '<a character id such as dameSnap, or a gentler danger in words such as a storm>',
     places: ['<backdrop id of the MAIN place, then any others in order>'],
     cast: ['<character ids of everyone who appears>'],
-    turns: ['<one short phrase per tapToHelp or dragToHelp, as in: blow the cloud away>'],
     jokes: ['<running jokes used, always worded the same, as in: Saucepan Man mishears>'],
     ending: '<a word or two: tea party, cosy, funny>',
   },

@@ -3,11 +3,11 @@
 Torn-paper puppet cartoons for one 6-year-old (autistic, possibly ADHD) on
 an iPad in landscape. Each cartoon is an episode of 2–6 minutes in a few
 scenes, set in the Faraway Tree, at Hogwarts, at Bear Cottage (the
-teddy bear stories) or with the Wishing-Chair, and now and then it's his
-turn to tap and help. Claude writes every cartoon from the skills in
+teddy bear stories) or with the Wishing-Chair, and the heroes do every deed
+themselves. Claude writes every cartoon from the skills in
 `.claude/skills/`. To make one, follow **`new-cartoon`**.
 
-The engine is shared with his two games, which are the reference for
+The engine is shared with two games made for the same child, which are the reference for
 anything not written down here:
 [Up the Faraway Tree](https://github.com/charlie-beard/maths-game) (maths)
 and [Wizard Words](https://github.com/charlie-beard/spelling-game)
@@ -18,7 +18,7 @@ Read before changing anything:
 | Doc | For |
 |---|---|
 | [docs/STYLE.md](docs/STYLE.md) | The house style: look, motion, sound, voice, what's scary and what's cruel |
-| [docs/WRITING.md](docs/WRITING.md) | How an episode is shaped: beats, scenes, lines, pacing, his turns |
+| [docs/WRITING.md](docs/WRITING.md) | How an episode is shaped: beats, scenes, lines, pacing, deeds |
 | [docs/KIT.md](docs/KIT.md) | The kit's whole API, with examples |
 | [docs/WORLDS.md](docs/WORLDS.md) | How a world is set out, and how to add characters, places and props |
 | [scripts/voice/README.md](scripts/voice/README.md) | Recording the voices (ElevenLabs) |
@@ -33,7 +33,7 @@ npm run dev            # http://localhost:5173   ?cartoon=<id>&scene=<n>   ?scen
 npm run typecheck
 npm test               # Vitest: src/core, worlds, every cartoon's lines and ids
 npm run new -- <id> <world>   # start a cartoon: src/cartoons/<id>/ from the templates
-npm run check -- <id>  # one cartoon against the house rules (lines, ids, length, his turns, ledger)
+npm run check -- <id>  # one cartoon against the house rules (lines, ids, length, no interaction, ledger)
 npm run check -- --ledger   # what every episode so far was about: read before planning
 npm run shots -- <id> --fast [--scene n]   # frames + contact sheet on a fake clock, ~1 min: for iterating
 npm run shots -- <id> --openings   # only each scene's opening picture + sheet, ~5 s: after moving people
@@ -62,13 +62,16 @@ the checks above pass and CI is green); don't stop at a pushed branch.
   stage coordinates (`k.character(id, { x, y, w })`, `place(el, x, y, w, h)`).
   No responsive layouts. **No captions or subtitles**: the voices carry
   the story. Keep the bottom band (y 690–800) calm all the same.
-- **Touch only:** tap targets of 72 px or more (his turns are 120 px or
-  more), no hover. His turns are taps and drags (`k.tapToHelp`,
-  `k.dragToHelp`): at least 5 an episode.
-- **No failing:** a turn he doesn't take is taken for him, kindly. No
-  timers on screen, no buzzers, no "wrong".
+- **No interaction.** A cartoon plays start to end like a TV episode:
+  nothing to tap or drag, no listeners (`onTap`, `addEventListener`), so
+  `npm run check` fails them. The heroes do every deed themselves, with
+  `k.flourish` / `k.carry` marking it. No timers on screen, no buzzers,
+  no "wrong".
+- **Never refer to the child.** No name, no `{placeholder}` in a line, no
+  lines spoken to the viewer. Describe the audience generically ("the
+  child", "a 6-year-old"), here and in code comments.
 - **No flashing.** Washes of light fade in and out (`k.glow`), never
-  strobe. Nothing in the background moves while it's his turn (the kit
+  strobe. Keep the background calm while a deed is done (the kit
   holds idle loops still for you).
 - **Scary is fine, cruel isn't.** Villains (Dame Snap, Voldemort) loom,
   shriek, stomp, hiss and snap rulers. Nobody is hit, slapped or hurt.
@@ -80,7 +83,7 @@ the checks above pass and CI is green); don't stop at a pushed branch.
   exception is the `bears` world, drawn in the watercolour-and-ink look
   of the book it comes from (`src/art/watercolour.ts`; docs/STYLE.md,
   "The bears"): still our own drawings, never traced or scanned.
-- **UK English** in everything he hears or reads ("Mum", "colour",
+- **UK English** in everything the child hears or reads ("Mum", "colour",
   "biscuit"). Short sentences: a 6-year-old is listening. `npm run check`
   catches the common slips.
 - **Andika** for all text.
@@ -96,8 +99,7 @@ the checks above pass and CI is green); don't stop at a pushed branch.
   thumb, the day it was added, and the `ledger` of what it's about) and `cartoon.ts` (`defineCartoon`, which
   spreads the meta), plus any files of its own art or sounds. Nothing
   else lists cartoons: a new folder is on the shelf. Every line is listed
-  up front in `lines`, so the voice export can find it. `{name}` is the
-  child's name.
+  up front in `lines`, so the voice export can find it.
 - Characters, backdrops and props live in **worlds** (`src/worlds/<id>/`)
   and are used by id. Art used by one cartoon only can be drawn in the
   cartoon's own file; anything a second cartoon could use goes into the
@@ -117,7 +119,7 @@ the checks above pass and CI is green); don't stop at a pushed branch.
 | `src/cartoons/` | One folder per cartoon (`meta.ts`, `cartoon.ts`); `index.ts` finds them for the shelf |
 | `src/kit/` | `kit.ts` (the stage and its tools), `cartoon.ts` (`defineCartoon`, scenes) |
 | `src/worlds/` | `types.ts`, `index.ts` (lookups), and one folder per world: `common`, `faraway`, `hogwarts`, `bears`, `wishing` |
-| `src/core/` | Pure: lines and their checks (`cartoon.ts`), `{name}` and voice ids (`phrases.ts`) |
+| `src/core/` | Pure: lines and their checks (`cartoon.ts`) and voice ids (`phrases.ts`) |
 | `src/scenes/` | The library (shelf), the player, the grown-ups' corner |
 | `src/art/` | The paper engine, the watercolour engine (bears), palette, grain, UI pieces (seals, parchment, stars) |
 | `src/audio/` | Web Audio engine, UI sounds (`sfx`), story sounds and music beds (`synth`), voice |

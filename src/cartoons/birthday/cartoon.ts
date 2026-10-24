@@ -1,34 +1,31 @@
 /**
  * A Party in the Clouds: the Land of Birthdays is at the top of the Tree,
- * and in the Land of Birthdays every visitor gets a party. Today, it's his.
+ * and in the Land of Birthdays every visitor gets a party. Today, it's the Saucepan Man's.
  *
- *   1. A secret. In Moon-Face's room, Moon-Face and Silky whisper the news to
- *      him: the Land of Birthdays has come, and the party is for him. The
- *      Saucepan Man hears "a PARROT", then puts on his best hat (the same
- *      saucepan). His turn: Silky says tap his hat and see if it clangs (it
- *      does; or she taps it). Far above: oom, boom, BOOM. Mr Oom Boom Boom is up there
- *      already.
+ *   1. A secret. In Moon-Face's room, Moon-Face and Silky whisper the news:
+ *      the Land of Birthdays has come, and today the party is for the Saucepan
+ *      Man. He hears "a PARROT", then puts on his best hat (the same
+ *      saucepan). Silky taps his hat to see if it clangs (it does). Far above:
+ *      oom, boom, BOOM. Mr Oom Boom Boom is up there already.
  *   2. The Land of Birthdays. Bunting, balloons, presents and the biggest cake
- *      in the world. Mr Oom Boom Boom: a party can't start without a BOOM. His
- *      turn: he drags the drumstick to the drum (or the Saucepan Man brings it). BOOM, confetti,
- *      and the party starts. Silky brings his own cake, with his name on it,
- *      but the candles aren't lit.
+ *      in the world. Mr Oom Boom Boom: a party can't start without a BOOM. The
+ *      Saucepan Man brings the drumstick to the drum. BOOM, confetti, and the
+ *      party starts. Silky brings the Saucepan Man's own cake, but the candles
+ *      aren't lit.
  *   3. The candles. Every candle in the land is out, even the giant cake's.
  *      Silky's spell is blown away by the wind at the top of the world, so the
- *      Saucepan Man stands by the cake as a clanky wall. His turn: he taps the
- *      candles and they light, and so does every candle on the giant cake
- *      (Silky counts his: six). Hip, hip, hooray! He makes a secret wish, and
- *      his next turn blows them out (or the Saucepan Man helps him blow). The
- *      wish flies up to the stars. Then the ground rumbles: the land is moving
- *      on, and the ladder is far away.
- *   4. Home by balloon. "Take a balloon each!" His turn: he drags a balloon to the Saucepan Man
- *      (or Silky flies it over). Up they go, and down they
- *      float out of the sky to the foot of the Tree and land safe. One last
- *      present: a balloon for him, floating out of the picture to him.
+ *      Saucepan Man stands by the cake as a clanky wall. Silky tries again and
+ *      the candles light, and so does every candle on the giant cake (Silky
+ *      counts six). Hip, hip, hooray! The Saucepan Man makes a secret wish and
+ *      blows the candles out. The wish flies up to the stars. Then the ground
+ *      rumbles: the land is moving on, and the ladder is far away.
+ *   4. Home by balloon. "Take a balloon each!" Silky flies a balloon over to the
+ *      Saucepan Man. Up they go, and down they float out of the sky to the foot
+ *      of the Tree and land safe.
  *
  * The danger is only the wind and the land moving on; the balloons get them
  * home in time. The cake is the world's (`birthday-cake`, its flames a part);
- * his name is written on its plaque here, so it is drawn fresh each time.
+ * the party's cake is placed afresh in each scene.
  */
 import { C, cached, defineCartoon, ellipse, ink, piece, rect, svg, type Kit } from '../../kit';
 import { moves as commonMoves, sounds as commonSounds } from '../../worlds/common/moves';
@@ -68,22 +65,20 @@ function drum(k: Kit, times = 3): void {
 
 // ------------------------------------------------------------------ cast
 
-const cast = {} as Record<'mf' | 'silky' | 'pan' | 'oom' | 'cake' | 'name' | 'unlit', HTMLElement>;
+const cast = {} as Record<'mf' | 'silky' | 'pan' | 'oom' | 'cake' | 'unlit', HTMLElement>;
 let balloons: HTMLElement[] = [];
 
 /** Where the cake stands in scenes 2 and 3. */
 const CAKE = { x: 450, y: 432, w: 280 };
 
 /**
- * The cake on the table, candles unlit, with his name on it. The giant cake
+ * The cake on the table, candles unlit. The giant cake
  * in the backdrop has its candles drawn lit; a strip of the sky's own paper
- * over its flames (`unlit`) puts them out until his candles light them all.
+ * over its flames (`unlit`) puts them out until the candles light them all.
  */
 function placeCake(k: Kit): void {
   cast.unlit = k.add(unlitFlames(), { x: 486, y: 194, w: 210, z: 1 });
   cast.cake = k.prop('birthday-cake', { ...CAKE, z: 14 });
-  // His name in icing on the plaque (its middle is at 140, 186 in the cake's 280 × 240 box).
-  cast.name = k.lettering(k.name || 'You!', { x: CAKE.x + 140, y: CAKE.y + 186, size: 24, w: 110, color: '#b5476b', z: 15 });
   k.set(k.part(cast.cake, 'flames'), { opacity: 0 });
 }
 
@@ -91,58 +86,45 @@ export default defineCartoon({
   ...meta,
   lines: {
     // 1. A secret
-    hello: { who: 'moonface', text: 'Hello, {name}! Shh! Come closer. We’ve got a secret.' },
+    hello: { who: 'moonface', text: 'Shh! Come closer, Silky. We’ve got a secret.' },
     secret: { who: 'silky', text: 'The Land of Birthdays is at the top of the Tree today!' },
     everyVisitor: { who: 'moonface', text: 'And in the Land of Birthdays, every visitor gets a party.' },
-    forYou: { who: 'silky', text: 'So today, the party is for YOU!' },
+    forYou: { who: 'silky', text: 'So today, the party is for the Saucepan Man!' },
     parrot: { who: 'saucepan', text: 'Eh? A PARROT? Where’s the parrot?' },
     notParrot: { who: 'moonface', text: 'Not a parrot! A PARTY! A birthday party!' },
     bestHat: { who: 'saucepan', text: 'Oh! A party! Then I’ll wear my best hat!' },
     sameHat: { who: 'silky', text: 'But that’s the same hat. It’s a saucepan!' },
-    askHat: { who: 'silky', text: 'Tap his hat. Does it go clang?' },
-    nudgeHat: { who: 'silky', text: 'Give his hat a little tap.' },
-    silkyHat: { who: 'silky', text: 'I’ll tap it for you. Ting!' },
+    silkyHat: { who: 'silky', text: 'Let me tap it and see. Ting!' },
     clangHat: { who: 'saucepan', text: 'Clang! See? It IS a saucepan!' },
     upWeGo: { who: 'moonface', text: 'Listen! That’s Mr Oom Boom Boom’s drum. Up we go!' },
     // 2. The Land of Birthdays
     welcome: { who: 'oomBoomBoom', text: 'Oom boom boom! Welcome to the Land of Birthdays!' },
     wow: { who: 'moonface', text: 'Look! Balloons, presents, and the biggest cake in the world!' },
     noBoom: { who: 'oomBoomBoom', text: 'But a party can’t start without a BOOM!' },
-    askDrum: { who: 'oomBoomBoom', text: 'Drag my drumstick to my drum, {name}! One big BOOM!' },
-    nudgeDrum: { who: 'oomBoomBoom', text: 'Bring the stick to the big blue drum.' },
     panDrum: { who: 'saucepan', text: 'I’ll bring it over! Clang! I mean, BOOM!' },
     bravo: { who: 'oomBoomBoom', text: 'Bravo! The party has started! Hip, hip, HOORAY!' },
-    myCake: { who: 'silky', text: 'And here’s your very own cake. I baked it!' },
-    yourName: { who: 'moonface', text: 'Look, it’s got your name on it!' },
+    myCake: { who: 'silky', text: 'And here’s the Saucepan Man’s very own cake. I baked it!' },
     notLit: { who: 'saucepan', text: 'But the candles aren’t lit! Who’s got a match?' },
     // 3. The candles
     wand: { who: 'silky', text: 'I’ll light them with my wand. Here goes!' },
     blownAway: { who: 'silky', text: 'Oh! The wind blew my spell away!' },
     windy: { who: 'moonface', text: 'It’s very windy at the top of the world.' },
     wall: { who: 'saucepan', text: 'Then I’ll be a wall! A big clanky wall!' },
-    askLight: { who: 'silky', text: 'Now, {name}, tap the candles to light them!' },
-    nudgeLight: { who: 'silky', text: 'Tap the candles on top of the cake.' },
     tryAgain: { who: 'silky', text: 'One more try with my wand. There!' },
     count: { who: 'silky', text: 'They’re lit! One, two, three, four, five, six!' },
     hooray: { who: 'oomBoomBoom', text: 'Hip, hip, HOORAY! Hip, hip, HOORAY!' },
     wish: { who: 'moonface', text: 'Now close your eyes and make a wish. Shh! Don’t tell!' },
-    askBlow: { who: 'moonface', text: 'Then tap the candles to blow them out!' },
-    nudgeBlow: { who: 'moonface', text: 'Tap the candles. Whoosh!' },
-    panBlow: { who: 'saucepan', text: 'I’ll help you blow! One, two, three… PHOO!' },
+    panBlow: { who: 'saucepan', text: 'Here goes! One, two, three… PHOO!' },
     stars: { who: 'silky', text: 'Your wish is flying up to the stars!' },
     rumble: { who: 'moonface', text: 'Uh-oh! The land is moving on, and the ladder’s far away!' },
     // 4. Home by balloon
     balloons: { who: 'oomBoomBoom', text: 'Never mind! Take a balloon each! Oom boom boom!' },
-    askBalloon: { who: 'oomBoomBoom', text: 'Give the Saucepan Man a balloon. Drag it to him!' },
-    nudgeBalloon: { who: 'oomBoomBoom', text: 'Bring the balloon to the Saucepan Man.' },
     silkyBalloon: { who: 'silky', text: 'I’ll fly it over to him. Whirr!' },
-    thanksBalloon: { who: 'saucepan', text: 'Thank you, {name}! Now I can float!' },
     thanksSilky: { who: 'saucepan', text: 'Thank you, Silky! Now I can float!' },
     holdOn: { who: 'oomBoomBoom', text: 'Hold on tight, everybody!' },
     wheee: { who: 'saucepan', text: 'Wheee! What a ride! My pots flew too!' },
     home: { who: 'moonface', text: 'Home, safe and sound. What a party!' },
-    lastPresent: { who: 'silky', text: 'And one last present. A balloon for {name}!' },
-    thankYou: { who: 'moonface', text: 'Thank you for coming to your party!' },
+    thankYou: { who: 'moonface', text: 'Thank you for a lovely party, Mr Oom Boom Boom!' },
     end: { who: 'narrator', text: 'And the birthday balloon floated all the way home.' },
   },
   scenes: [
@@ -185,9 +167,10 @@ export default defineCartoon({
         giggle();
         await k.say('sameHat', silky);
 
-        // His turn: tap the hat. A spot over it, since the hat is part of his art.
+        // Silky taps the hat. A spot over it, since the hat is part of his art.
         const spot = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', { x: 840, y: 380, w: 140, h: 140, z: 1 });
-        await k.tapToHelp(spot, { ask: 'askHat', nudge: 'nudgeHat', helped: 'silkyHat', by: silky });
+        await k.say('silkyHat', silky);
+        k.flourish(spot);
         k.remove(spot);
         k.fx.pop();
         await k.all(k.say('clangHat', pan), rattle(k, pan), k.pop(pan, 1.06));
@@ -210,11 +193,11 @@ export default defineCartoon({
         cast.silky = k.character('silky', { x: 700, y: 190, w: 180, z: 12, flip: true });
         cast.oom = k.character('oomBoomBoom', { x: 880, y: 380, w: 250, flip: true });
         placeCake(k);
-        k.set([cast.cake, cast.name], { opacity: 0 });
+        k.set(cast.cake, { opacity: 0 });
         k.set(cast.silky, { opacity: 0 });
       },
       async play(k) {
-        const { mf, pan, silky, oom, cake, name } = cast;
+        const { mf, pan, silky, oom, cake } = cast;
         await k.wait(400);
         drum(k, 2);
         await k.hop(oom, 26, 2);
@@ -226,9 +209,10 @@ export default defineCartoon({
         void beam(k, mf, false);
         await k.say('noBoom', oom);
 
-        // His turn: start the party.
+        // The Saucepan Man brings the drumstick to start the party.
         const stick = k.add(drumstick(), { x: 620, y: 600, w: 180, z: 16 });
-        await k.dragToHelp(stick, { to: oom, ask: 'askDrum', nudge: 'nudgeDrum', helped: 'panDrum', by: oom, helper: pan });
+        await k.all(k.say('panDrum', pan), rattle(k, pan));
+        await k.carry(stick, oom);
         void k.vanish(stick, 0.2);
         k.sfx.boom();
         void k.quake(5);
@@ -237,17 +221,14 @@ export default defineCartoon({
         k.confetti(40);
         await k.all(k.say('bravo', oom), k.hop(mf, 30, 2), k.hop(pan, 30, 2));
 
-        // Silky flutters in with his own cake.
+        // Silky flutters in with the Saucepan Man's own cake.
         whirr(8);
         void flutter(k, silky, 8);
         await k.all(k.enter(silky, 'top', 1.1), k.fade(silky, 1, 0.3));
         k.fx.pop();
         k.sparkle(CAKE.x + 140, CAKE.y + 110, 14, 200);
-        await k.all(k.appear(cake, 0.5), k.fade(name, 1, 0.5));
+        await k.appear(cake, 0.5);
         await k.say('myCake', silky);
-        k.sparkle(CAKE.x + 140, CAKE.y + 186, 10, 120);
-        await k.pop(cast.name, 1.1);
-        await k.say('yourName', mf);
         await k.all(k.say('notLit', pan), rattle(k, pan));
       },
     },
@@ -287,13 +268,12 @@ export default defineCartoon({
         await k.walk(pan, 120, 0.8, 3);
         await k.all(k.say('wall', pan), rattle(k, pan));
 
-        // His turn: light the candles.
-        const how = await k.tapToHelp(cake, { ask: 'askLight', nudge: 'nudgeLight', helped: 'tryAgain', by: silky, size: 240 });
-        if (how === 'helped') {
-          k.fx.spell();
-          await k.beam([760, 300], top);
-        }
-        // His candles light, and every candle on the giant cake behind lights with them.
+        // Silky tries again, and the candles light.
+        await k.say('tryAgain', silky);
+        k.fx.spell();
+        await k.beam([760, 300], top);
+        k.flourish(cake);
+        // The candles light, and every candle on the giant cake behind lights with them.
         k.fx.twinkle();
         await k.to(flames, 0.8, { opacity: 1 });
         k.sparkle(top[0], top[1], 10, 120);
@@ -311,8 +291,9 @@ export default defineCartoon({
         await k.say('wish', mf);
         await k.wait(1500);
 
-        // His big turn: blow them out.
-        const blow = await k.tapToHelp(cake, { ask: 'askBlow', nudge: 'nudgeBlow', helped: 'panBlow', by: mf, helper: pan, size: 240 });
+        // The Saucepan Man blows them out.
+        await k.all(k.say('panBlow', pan), rattle(k, pan));
+        k.flourish(cake);
         k.fx.wind(1);
         await k.all(k.to(flames, 0.5, { opacity: 0 }), k.fade(glow, 0, 0.5), k.fade(cast.unlit, 1, 0.5));
         k.puff(590, 205, 120, '#eeeae4');
@@ -325,7 +306,7 @@ export default defineCartoon({
         k.sparkle(top[0], 60, 14, 260);
         k.music('triumph');
         await k.all(k.say('stars', silky), flutter(k, silky, 6));
-        if (blow === 'helped') await k.hop(pan, 24);
+        await k.hop(pan, 24);
 
         // The ground rumbles: the hook into the last scene.
         await k.wait(500);
@@ -357,9 +338,11 @@ export default defineCartoon({
         drum(k, 3);
         await k.all(k.say('balloons', oom), ...balloons.map((b, i) => k.wait(i * 250).then(() => k.to(b, 0.6, { opacity: 1, y: 0, ease: 'back.out(1.5)' }))));
 
-        // His turn: a balloon for the Saucepan Man, who is holding nothing yet.
-        const how = await k.dragToHelp(balloons[1], { to: pan, ask: 'askBalloon', nudge: 'nudgeBalloon', helped: 'silkyBalloon', by: oom, helper: silky });
-        await k.say(how === 'dragged' ? 'thanksBalloon' : 'thanksSilky', pan);
+        // Silky flies a balloon over to the Saucepan Man, who is holding nothing yet.
+        void flutter(k, silky, 4);
+        await k.say('silkyBalloon', silky);
+        await k.carry(balloons[1], pan);
+        await k.say('thanksSilky', pan);
         await k.say('holdOn', oom);
         k.fx.whizz();
         await k.all(...[mf, pan, oom, ...balloons].map((el) => k.to(el, 1.4, { y: -820, ease: 'power1.in' })), k.to(silky, 1.4, { y: -700, ease: 'power1.in' }));
@@ -393,18 +376,6 @@ export default defineCartoon({
         void beam(k, mf, true);
         await k.say('home', mf);
         void beam(k, mf, false);
-
-        // One last present: a balloon for him.
-        whirr(4);
-        void flutter(k, silky, 6);
-        await k.say('lastPresent', silky);
-        const his = k.prop('balloon', { x: 560, y: 720, w: 110, z: 40 });
-        k.set(his, { opacity: 0 });
-        await k.appear(his, 0.4);
-        k.fx.whizz();
-        await k.to(his, 2.2, { y: -560, x: 40, scale: 2.2, ease: 'sine.inOut' });
-        k.sparkle(640, 200, 14, 220);
-        await k.vanish(his, 0.4);
 
         await k.all(k.say('thankYou', mf), wave(k, mf));
         await warmEnding(k, { cast: [mf, silky, pan, oom], end: 'end', confetti: true });

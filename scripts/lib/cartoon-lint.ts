@@ -42,8 +42,6 @@ export interface LintResult {
   warnings: string[];
   /** Estimated seconds of speech if every line is said once (the floor for the running time). */
   spokenSeconds: number;
-  /** How many tapToHelp calls the script makes. */
-  taps: number;
 }
 
 // ------------------------------------------------------------------ reading
@@ -156,12 +154,11 @@ export function unusedLines(source: string, lines: Record<string, Line>): string
   return Object.keys(lines).filter((key) => !new RegExp(`${QUOTE}${escapeRe(key)}${QUOTE}`).test(body));
 }
 
-/** Line keys the script says (k.say, ask:, nudge:, helped:) that aren't in the table. */
+/** Line keys the script says (k.say) that aren't in the table. */
 export function undefinedLines(source: string, lines: Record<string, Line>): string[] {
   const body = withoutLinesTable(stripComments(source));
   const used = [
     ...allMatches(body, new RegExp(`\\.say\\s*\\(\\s*${QUOTE}([^'"\`]+)${QUOTE}`, 'g')),
-    ...allMatches(body, new RegExp(`\\b(?:ask|nudge|helped)\\s*:\\s*${QUOTE}([^'"\`]+)${QUOTE}`, 'g')),
   ];
   return [...new Set(used)].filter((key) => !(key in lines));
 }
@@ -200,17 +197,8 @@ export function unknownIds(source: string, cat: Catalogue): string[] {
   return [...new Set(problems)];
 }
 
-/** The fewest turns an episode has (k.tapToHelp and k.dragToHelp together). */
-export const MIN_TURNS = 5;
-
-/** How many of his turns the script has (tapToHelp and dragToHelp), and how many of those have no `ask`. */
-export function tapCalls(source: string): { total: number; withoutAsk: number; drags: number } {
-  const code = stripComments(source);
-  const taps = callArguments(code, 'tapToHelp');
-  const drags = callArguments(code, 'dragToHelp');
-  const calls = [...taps, ...drags];
-  return { total: calls.length, withoutAsk: calls.filter((a) => !/\bask\s*:/.test(a)).length, drags: drags.length };
-}
+/** Calls a cartoon may not make: a cartoon only plays, nothing waits for a tap or a drag. */
+const INTERACTIVE = ['tapToHelp', 'dragToHelp', 'onTap', 'addEventListener'];
 
 /** All the checks together. */
 export function lintCartoon({ id, source, lines, catalogue }: LintInput): LintResult {
@@ -222,16 +210,15 @@ export function lintCartoon({ id, source, lines, catalogue }: LintInput): LintRe
   for (const key of undefinedLines(source, lines)) errors.push(`the script says "${key}" but there is no such line`);
   for (const p of unknownIds(source, catalogue)) errors.push(p);
 
-  const taps = tapCalls(source);
-  if (taps.total < MIN_TURNS) errors.push(`only ${taps.total} of his turns: every cartoon needs at least ${MIN_TURNS} (tapToHelp or dragToHelp)`);
-  if (taps.withoutAsk) warnings.push(`${taps.withoutAsk} of his turns without an \`ask\` line: he is never told what to do`);
+  const code = stripComments(source);
+  for (const call of INTERACTIVE) if (new RegExp(`\\b${call}\\s*\\(`).test(code)) errors.push(`\`${call}\`: nothing in a cartoon is interactive, it just plays`);
 
   const seconds = spokenSeconds(lines);
   if (seconds > 315) warnings.push(`${Math.round(seconds)} s of speech: with the pictures this runs past 6 minutes`);
   if (seconds < 45) warnings.push(`only ${Math.round(seconds)} s of speech: probably under the 2 minute minimum`);
   if (!new RegExp(`\\bid\\s*:\\s*${QUOTE}${escapeRe(id)}${QUOTE}`).test(source)) warnings.push(`the script's id does not look like "${id}"`);
 
-  return { errors, warnings, spokenSeconds: seconds, taps: taps.total };
+  return { errors, warnings, spokenSeconds: seconds };
 }
 
 // ------------------------------------------------------------------- ledger
@@ -255,7 +242,6 @@ export function placeholderFields(ledger: Ledger): string[] {
     ['villain', ledger.villain === undefined ? [] : [ledger.villain]],
     ['places', ledger.places ?? []],
     ['cast', ledger.cast ?? []],
-    ['turns', ledger.turns ?? []],
     ['jokes', ledger.jokes ?? []],
     ['ending', [ledger.ending]],
   ];
@@ -285,8 +271,6 @@ export interface LedgerLintInput {
   /** The cartoon's source (all its .ts files, as scripts/lib/shelf.ts sourceOf joins them). */
   source: string;
   lines: Record<string, Line>;
-  /** How many tapToHelp calls the script makes. */
-  taps: number;
   catalogue: Catalogue;
 }
 
@@ -294,13 +278,13 @@ export interface LedgerLintInput {
  * A ledger against its own script and the worlds. Errors: missing, blank,
  * still holding template placeholders, or naming a character or backdrop no
  * world has. Warnings: the ledger and the script disagree (a cast member or
- * place never used, or used but not listed, the turn count).
+ * place never used, or used but not listed).
  */
-export function lintLedger({ ledger, source, lines, taps, catalogue }: LedgerLintInput): { errors: string[]; warnings: string[] } {
+export function lintLedger({ ledger, source, lines, catalogue }: LedgerLintInput): { errors: string[]; warnings: string[] } {
   const errors: string[] = [];
   const warnings: string[] = [];
   if (!ledger) {
-    errors.push('meta.ts has no `ledger`: say what the episode is about (problem, villain, places, cast, turns, jokes, ending). See templates/cartoon/meta.ts, and `npm run check -- --ledger` for the others');
+    errors.push('meta.ts has no `ledger`: say what the episode is about (problem, villain, places, cast, jokes, ending). See templates/cartoon/meta.ts, and `npm run check -- --ledger` for the others');
     return { errors, warnings };
   }
 
@@ -311,7 +295,7 @@ export function lintLedger({ ledger, source, lines, taps, catalogue }: LedgerLin
   if (!stale.has('problem') && blank(ledger.problem)) errors.push('ledger.problem is empty: one line on what goes wrong');
   if (!stale.has('ending') && blank(ledger.ending)) errors.push('ledger.ending is empty: a word or two, like "tea party"');
   if (ledger.villain !== undefined && !stale.has('villain') && blank(ledger.villain)) errors.push('ledger.villain is empty: leave it out if there is no villain');
-  for (const f of ['places', 'cast', 'turns'] as const) {
+  for (const f of ['places', 'cast'] as const) {
     if (stale.has(f)) continue;
     const list = ledger[f];
     if (!Array.isArray(list) || !list.length) errors.push(`ledger.${f} is empty`);
@@ -344,9 +328,6 @@ export function lintLedger({ ledger, source, lines, taps, catalogue }: LedgerLin
     const used = usedBackdrops(source);
     for (const id of ledger.places) if (catalogue.backdrops.has(id) && !used.includes(id)) warnings.push(`ledger.places lists "${id}" but the script never shows it`);
     for (const id of used) if (catalogue.backdrops.has(id) && !ledger.places.includes(id)) warnings.push(`the script shows "${id}" but ledger.places does not list it`);
-  }
-  if (!stale.has('turns') && Array.isArray(ledger.turns) && ledger.turns.length && ledger.turns.length !== taps) {
-    warnings.push(`ledger.turns has ${ledger.turns.length} but the script has ${taps} turns (tapToHelp and dragToHelp): one phrase per turn`);
   }
   return { errors, warnings };
 }
@@ -441,16 +422,6 @@ export function compareLedgers(entry: LedgerEntry, shelf: readonly LedgerEntry[]
     }
   }
 
-  for (const turn of mine.turns) {
-    for (const o of before) {
-      const twin = o.ledger.turns.find((t) => similarity(turn, t) >= SAME_PHRASE);
-      if (twin) {
-        warnings.push(`turn "${turn}" is much like "${twin}" in ${where(o)}; fine if deliberate.`);
-        break;
-      }
-    }
-  }
-
   const same = before.find((o) => similarity(mine.problem, o.ledger.problem) >= SAME_PROBLEM);
   if (same) warnings.push(`the problem is worded like ${where(same)}: "${same.ledger.problem}"; fine if deliberate.`);
 
@@ -480,7 +451,6 @@ export function formatLedgers(shelf: readonly LedgerEntry[], nameOf: (id: string
         ['villain', l.villain ? (looksLikeId(l.villain) ? nameOf(l.villain) : l.villain) : '(none)'],
         ['places', l.places.join(', ')],
         ['cast', l.cast.join(', ')],
-        ['turns', l.turns.join(' | ')],
         ['jokes', (l.jokes ?? []).join(' | ') || '(none)'],
         ['ending', l.ending],
       ];

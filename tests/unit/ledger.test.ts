@@ -17,7 +17,6 @@ const ledger = (over: Partial<Ledger> = {}): Ledger => ({
   villain: 'dameSnap',
   places: ['snap-school', 'moon-room'],
   cast: ['moonface', 'dameSnap'],
-  turns: ['blow the cloud away'],
   jokes: ['Saucepan Man mishears'],
   ending: 'tea party',
   ...over,
@@ -35,9 +34,9 @@ const lines: Record<string, Line> = {
   hello: { who: 'moonface', text: 'Hello!' },
   boo: { who: 'dameSnap', text: 'Boo!' },
 };
-const source = `k.backdrop('snap-school'); k.backdrop('moon-room'); k.character('moonface', {}); k.tapToHelp(a, {});`;
-const lint = (l: Ledger | undefined, over: { source?: string; taps?: number } = {}) =>
-  lintLedger({ ledger: l, source: over.source ?? source, lines, taps: over.taps ?? 1, catalogue: cat });
+const source = `k.backdrop('snap-school'); k.backdrop('moon-room'); k.character('moonface', {});`;
+const lint = (l: Ledger | undefined, over: { source?: string } = {}) =>
+  lintLedger({ ledger: l, source: over.source ?? source, lines, catalogue: cat });
 
 describe('the ledger of one cartoon', () => {
   it('is an error to have none', () => {
@@ -73,9 +72,8 @@ describe('the ledger of one cartoon', () => {
   });
 
   it('is an error to leave a required field empty', () => {
-    const r = lint(ledger({ problem: ' ', turns: [], cast: ['moonface', ''] }));
+    const r = lint(ledger({ problem: ' ', cast: ['moonface', ''] }));
     expect(r.errors.join('\n')).toMatch(/problem is empty/);
-    expect(r.errors.join('\n')).toMatch(/turns is empty/);
     expect(r.errors.join('\n')).toMatch(/cast has an empty entry/);
   });
 
@@ -96,10 +94,6 @@ describe('the ledger of one cartoon', () => {
     const w = lint(ledger({ places: ['snap-school', 'cloud-top'] })).warnings.join('\n');
     expect(w).toMatch(/lists "cloud-top" but the script never shows it/);
     expect(w).toMatch(/shows "moon-room" but ledger.places does not list it/);
-  });
-
-  it('warns when the turns and the tapToHelp calls do not match', () => {
-    expect(lint(ledger(), { taps: 2 }).warnings.join('\n')).toMatch(/1 but the script has 2 turns/);
   });
 
   it('warns when the villain is a character who is not in the cast', () => {
@@ -124,7 +118,7 @@ describe('comparing phrases', () => {
 
 describe('comparing with the shelf', () => {
   const mk = (over: Partial<Ledger>, others: LedgerEntry[]) => compareLedgers(ep('new', '2026-11-01', over), [ep('new', '2026-11-01', over), ...others], (id) => (id === 'dameSnap' ? 'Dame Snap' : id));
-  const plain: Partial<Ledger> = { villain: 'a storm', places: ['cloud-top'], turns: ['pop the bubble'], jokes: [], problem: 'a lost hat' };
+  const plain: Partial<Ledger> = { villain: 'a storm', places: ['cloud-top'], jokes: [], problem: 'a lost hat' };
 
   it('warns about the same villain as the most recent episode in the world', () => {
     const w = mk({ ...plain, villain: 'dameSnap' }, [ep('old', '2026-10-15')]);
@@ -154,12 +148,6 @@ describe('comparing with the shelf', () => {
     const w = mk({ ...plain, places: ['snap-school'] }, [ep('old', '2026-10-15')]);
     expect(w).toEqual(["snap-school was also the main place in 'Title of old' (2026-10-15); fine if deliberate."]);
     expect(mk({ ...plain, places: ['cloud-top', 'snap-school'] }, [ep('old', '2026-10-15')])).toEqual([]);
-  });
-
-  it('warns about a turn very like one already used, in any world', () => {
-    const w = mk({ ...plain, turns: ['blow away a cloud'] }, [ep('hp', '2026-10-15', {}, 'hogwarts')]);
-    expect(w).toEqual([`turn "blow away a cloud" is much like "blow the cloud away" in 'Title of hp' (2026-10-15); fine if deliberate.`]);
-    expect(mk({ ...plain, turns: ['pop the bubble'] }, [ep('old', '2026-10-15')])).toEqual([]);
   });
 
   it('warns about the same problem wording', () => {
@@ -229,7 +217,6 @@ describe('the cartoons on the shelf', () => {
       expect(placeholderFields(l), 'placeholders left in').toEqual([]);
       for (const id of l.cast) expect(id in c.characters, `character ${id}`).toBe(true);
       for (const id of l.places) expect(c.backdrops.has(id), `backdrop ${id}`).toBe(true);
-      expect(l.turns.length).toBeGreaterThan(0);
     });
   }
 });
