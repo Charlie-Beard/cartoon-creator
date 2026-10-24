@@ -3,11 +3,11 @@
  * Grim's schoolroom, and he locks it in his cupboard.
  *
  *   1. The playroom. A wet, grey afternoon, and everyone is bored, even
- *      Jigs. Then the chair wriggles: it wants an adventure. His turn: he
- *      taps the chair to wake its wings. "Take us somewhere exciting!"
+ *      Jigs. Then the chair wriggles: it wants an adventure. Mollie
+ *      pats the chair to wake its wings. "Take us somewhere exciting!"
  *   2. Up in the sky. Out of the rain into the sunshine. But the wings are
- *      tired: they droop, and the chair sinks. His turn: he taps the wings
- *      for one more flap. There's a grey house on a hill with its window
+ *      tired: they droop, and the chair sinks. Jigs urges the wings
+ *      on for one more flap. There's a grey house on a hill with its window
  *      open, and a sign: Mr Grim's School for Bad Brownies. Jigs knows him:
  *      the crossest teacher in all of Fairyland. Too late: in they go!
  *   3. The schoolroom. Mr Grim is at his blackboard: "No wriggling! No
@@ -16,18 +16,18 @@
  *      flying chairs in HIS school: he marches it into his cupboard, locks
  *      it and hangs the key on a hook. Back to the heroes: how will they get
  *      home? Mollie: let's be brave, we'll get it back.
- *   4. The lesson. "How to be GOOD." While Mr Grim writes on the board, his
- *      turn: he drags the key from the hook to Jigs. Mr Grim spins round:
+ *   4. The lesson. "How to be GOOD." While Mr Grim writes on the board,
+ *      Mollie tiptoes the key from the hook over to Jigs. Mr Grim spins round:
  *      "Who is WHISPERING?" "Nobody, Mr Grim!" Jigs can't get past him to
- *      the cupboard, but the board rubber is full of chalk dust. His turn:
- *      he taps it. ATISHOO! Mr Grim's hat falls over his eyes, Jigs scurries
+ *      the cupboard, but the board rubber is full of chalk dust. Jigs
+ *      flicks it. ATISHOO! Mr Grim's hat falls over his eyes, Jigs scurries
  *      behind him and unlocks the cupboard, and out flies the chair.
  *   5. Loop-the-loop. Mr Grim jumps into the chair to stop it, and it flies
  *      him round and round the room. "Put me DOWN!" Then he laughs, for the
- *      first time in a hundred years. His turn: he taps the chair to bring
+ *      first time in a hundred years. Jigs coaxes the chair to bring
  *      him down gently. Dizzy and happy, Mr Grim says no more lessons today:
- *      go and play! Gold stars for everyone, even the chair. His turn: he
- *      drags the gold star onto the chair. Home to the playroom, where the
+ *      go and play! Gold stars for everyone, even the chair. Mr Grim
+ *      sticks the gold star on the chair himself. Home to the playroom, where the
  *      rain has stopped, and the chair keeps its star.
  *
  * Scary, never cruel (docs/STYLE.md): Mr Grim looms, barks and smacks his
@@ -186,21 +186,17 @@ export default defineCartoon({
     // 1. The playroom
     rainy: { who: 'narrator', text: 'It was a wet, grey afternoon. The rain went pitter-patter on the playroom roof.' },
     bored: { who: 'peter', text: 'Rain, rain, rain. There’s nothing to do!' },
-    hello: { who: 'mollie', text: 'Hello, {name}. We’re so bored, even Jigs is yawning.' },
+    hello: { who: 'mollie', text: 'I know. We’re so bored, even Jigs is yawning.' },
     yawn: { who: 'jigs', text: 'Yaaawn. Hmm? Wait! Something’s wriggling!' },
     wriggles: { who: 'jigs', text: 'It’s the chair! It wants to go on an adventure!' },
-    askWake: { who: 'jigs', text: '{name}, tap the chair to wake up its wings!' },
-    nudgeWake: { who: 'jigs', text: 'Tap the little red chair.' },
-    mollieWake: { who: 'mollie', text: 'I’ll give it a pat. Wake up, chair!' },
+    mollieWake: { who: 'mollie', text: 'Let’s wake up its wings. I’ll give it a pat. Wake up, chair!' },
     hooray: { who: 'peter', text: 'Its wings! Hooray!' },
     wish: { who: 'mollie', text: 'Take us somewhere exciting, chair. Off we go!' },
     // 2. Up in the sky
     wheee: { who: 'peter', text: 'Wheee! The fields look as small as stamps!' },
     droop: { who: 'jigs', text: 'Uh-oh. The wings are drooping. They’re tired!' },
     sinking: { who: 'mollie', text: 'We’re sinking! We need somewhere to land.' },
-    askFlap: { who: 'peter', text: 'Tap the wings! Give them one more flap!' },
-    nudgeFlap: { who: 'peter', text: 'Tap the droopy red wings.' },
-    jigsFlap: { who: 'jigs', text: 'Come on, wings! One more flap!' },
+    jigsFlap: { who: 'jigs', text: 'Tap, tap! Come on, wings! One more flap!' },
     house: { who: 'peter', text: 'Look! A big grey house on a hill. And its window’s open!' },
     sign: { who: 'mollie', text: 'There’s a sign. Mr Grim’s School for Bad Brownies!' },
     crossest: { who: 'jigs', text: 'Mr Grim? Oh no. He’s the crossest teacher in all of Fairyland!' },
@@ -220,18 +216,13 @@ export default defineCartoon({
     // 4. The lesson
     beGood: { who: 'grim', text: 'Today’s lesson is how to be GOOD. Watch the board!' },
     psst: { who: 'jigs', text: 'Psst! Look, the cupboard key. It’s on that hook!' },
-    askKey: { who: 'peter', text: 'Quick, {name}! Drag the key to Jigs while he isn’t looking!' },
-    nudgeKey: { who: 'peter', text: 'Drag the big key over to Jigs.' },
-    mollieKey: { who: 'mollie', text: 'I’ll tiptoe over and get it. Shh!' },
-    gotKey: { who: 'jigs', text: 'Got it! Thank you, {name}!' },
+    mollieKey: { who: 'mollie', text: 'I’ll tiptoe over and get it for you. Shh!' },
     gotKeyMollie: { who: 'jigs', text: 'Got it! Thank you, Mollie!' },
     whispering: { who: 'grim', text: 'Hmm? Who is WHISPERING?' },
     nobody: { who: 'mollie', text: 'Nobody, Mr Grim!' },
     hmph: { who: 'grim', text: 'Hmph. Eyes on the board!' },
     dusty: { who: 'peter', text: 'That board rubber’s full of chalk dust. It might make him sneeze!' },
-    askRubber: { who: 'peter', text: 'Tap the board rubber. Puff!' },
-    nudgeRubber: { who: 'peter', text: 'Tap the chalky board rubber.' },
-    jigsRubber: { who: 'jigs', text: 'I’ll give it a flick. Puff!' },
+    jigsRubber: { who: 'jigs', text: 'Watch this. I’ll give it a flick. Puff!' },
     atishoo: { who: 'grim', text: 'Ah… ah… ah… ATISHOO!' },
     cantSee: { who: 'grim', text: 'My hat! I can’t SEE!' },
     free: { who: 'jigs', text: 'Click! You’re free, chair!' },
@@ -241,19 +232,15 @@ export default defineCartoon({
     putMeDown: { who: 'grim', text: 'Whoa! Put me DOWN, you naughty chair!' },
     fun: { who: 'grim', text: 'Wheee! Oh! Oh, ha ha ha! This is FUN!' },
     hundred: { who: 'jigs', text: 'I don’t think he’s laughed for a hundred years!' },
-    askDown: { who: 'mollie', text: 'Tap the chair, and bring him down gently.' },
-    nudgeDown: { who: 'mollie', text: 'Tap the flying chair.' },
-    jigsDown: { who: 'jigs', text: 'Down you come, chair. Gently now!' },
+    jigsDown: { who: 'jigs', text: 'Let’s bring him down. Down you come, chair. Gently now!' },
     spinny: { who: 'grim', text: 'Oh, my head’s all spinny!' },
     bestFun: { who: 'grim', text: 'That was the most fun I’ve had in a hundred years!' },
     play: { who: 'grim', text: 'No more lessons today! Off you go, brownies, and PLAY!' },
     stars: { who: 'grim', text: 'And gold stars for everyone. Even the chair!' },
-    askStar: { who: 'mollie', text: 'Can you drag the gold star onto the chair?' },
-    nudgeStar: { who: 'mollie', text: 'Drag the star to the chair.' },
     grimStar: { who: 'grim', text: 'I’ll stick it on myself. There!' },
     homeTime: { who: 'jigs', text: 'Now home, chair, before your wings get tired again!' },
     sunny: { who: 'peter', text: 'Home again! And look, the rain’s stopped.' },
-    thanks: { who: 'mollie', text: 'Thank you for helping, {name}. What an adventure!' },
+    thanks: { who: 'mollie', text: 'Thank you, chair. What an adventure!' },
     end: { who: 'narrator', text: 'And the Wishing-Chair kept its gold star, and was very proud of it.' },
   },
   scenes: [
@@ -284,8 +271,9 @@ export default defineCartoon({
         hatBell();
         await k.all(k.say('wriggles', jigs), k.hop(jigs, 16, 1));
 
-        // His turn: wake the chair's wings.
-        await k.tapToHelp(ride.chair, { ask: 'askWake', nudge: 'nudgeWake', helped: 'mollieWake', by: jigs, helper: mollie, size: 300 });
+        // Mollie wakes the chair's wings.
+        await k.say('mollieWake', mollie);
+        k.flourish(ride.chair);
         k.music('magic');
         await chairRide.wings(k, ride);
         await chairRide.flap(k, ride, 2);
@@ -326,8 +314,9 @@ export default defineCartoon({
         await k.all(...ridePieces(ride).map((el) => k.to(el, 1.4, { y: 110, ease: 'sine.inOut' })));
         await k.all(k.say('sinking', mollie), k.shake(mollie, 4, 2));
 
-        // His turn: one more flap.
-        await k.tapToHelp(ride.chair, { ask: 'askFlap', nudge: 'nudgeFlap', helped: 'jigsFlap', by: peter, helper: jigs, size: 300 });
+        // Jigs urges the wings on for one more flap.
+        await k.say('jigsFlap', jigs);
+        k.flourish(ride.chair);
         await chairRide.fly(k, ride, { y: 0, s: 1.4, flaps: 4 });
 
         // A grey school on a hill.
@@ -448,12 +437,13 @@ export default defineCartoon({
         await k.fade(words, 1, 1.4);
         await k.all(k.say('psst', jigs), k.to(jigs, 0.4, { x: '-=10' }));
 
-        // His turn: drag the key off its hook to Jigs.
-        const how = await k.dragToHelp(hung, { to: jigs, ask: 'askKey', nudge: 'nudgeKey', helped: 'mollieKey', by: peter, helper: mollie, dropSize: 170 });
+        // Mollie tiptoes the key off its hook to Jigs.
+        await k.say('mollieKey', mollie);
+        await k.carry(hung, jigs);
         click();
         await k.vanish(hung, 0.3);
         hatBell();
-        await k.say(how === 'dragged' ? 'gotKey' : 'gotKeyMollie', jigs);
+        await k.say('gotKeyMollie', jigs);
 
         // He spins round.
         k.pose(grim, 'shout');
@@ -464,14 +454,15 @@ export default defineCartoon({
         k.pose(grim, 'default');
         await k.say('hmph', grim);
         k.pose(grim, 'back');
-        // A quiet beat of chalk squeaking between his two turns.
+        // A quiet beat of chalk squeaking between the key and the sneeze.
         chalk(1.4);
         await k.wait(1800);
         k.sparkle(717, 392, 6, 60);
         await k.say('dusty', peter);
 
-        // His turn: puff the chalk dust.
-        await k.tapToHelp(duster, { ask: 'askRubber', nudge: 'nudgeRubber', helped: 'jigsRubber', by: peter, helper: jigs, size: 140 });
+        // Jigs flicks the chalk dust.
+        await k.say('jigsRubber', jigs);
+        k.flourish(duster);
         k.fx.poof();
         k.puff(700, 380, 220, C.chalk);
         k.pose(grim, 'default');
@@ -515,7 +506,7 @@ export default defineCartoon({
         k.set(cast.star, { opacity: 0 });
       },
       async play(k) {
-        const { mollie, jigs, grim, brownies: row, star } = cast;
+        const { jigs, grim, brownies: row, star } = cast;
         await k.say('gotYou', grim);
         await wishing.wriggle(k, ride.chair, 2);
 
@@ -533,8 +524,9 @@ export default defineCartoon({
         await chairRide.fly(k, ride, { x: 0, y: -120, s: 1.2, tilt: 8 });
         await k.say('hundred', jigs);
 
-        // His turn: bring him down gently.
-        await k.tapToHelp(ride.chair, { ask: 'askDown', nudge: 'nudgeDown', helped: 'jigsDown', by: mollie, helper: jigs, size: 300 });
+        // Jigs coaxes the chair down gently.
+        await k.say('jigsDown', jigs);
+        k.flourish(ride.chair);
         k.music('cosy');
         await chairRide.land(k, ride);
         await chairRide.hopOff(k, ride, grim, { x: 770, y: 350, w: 240 });
@@ -551,10 +543,10 @@ export default defineCartoon({
         await k.appear(star, 0.5);
         await k.say('stars', grim);
         const back: [number, number] = [580, 300];
-        const how = await k.dragToHelp(star, { to: back, ask: 'askStar', nudge: 'nudgeStar', helped: 'grimStar', by: mollie, helper: grim, dropSize: 170 });
+        await k.say('grimStar', grim);
+        await k.carry(star, back);
         creak();
         k.sparkle(back[0], back[1], 12, 140);
-        if (how === 'dragged') await k.hop(grim, 16, 1);
         await k.all(k.say('homeTime', jigs), k.hop(jigs, 16, 1));
 
         // Home to the playroom, where the rain has stopped.

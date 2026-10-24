@@ -37,9 +37,8 @@ No separate export step: `generate.py` and `check.py` rebuild
 `scripts/voice/lines.json` (every line of every cartoon) themselves, and
 it is not committed. (`npm run voice:export` still does it by hand.)
 
-Lines with `{name}` are recorded with the default name (Jasper) and
-also without a name, so another child's name falls back to the generic
-recording.
+Every line is recorded once, as written: lines never contain a name or
+any `{placeholder}`.
 
 ## 3. Check
 

@@ -6,32 +6,32 @@
  *
  *   1. Atishoo! The woods in the rain, Daddy and Teddy under the striped
  *      umbrella. Too wet to go far… "Listen! I heard a voice!" Atishoo! A
- *      sneeze from the bushes. His first turn: he taps the bush that
- *      sneezed, and up pops a soaked bear: "The name's Bertie." Daddy:
+ *      sneeze from the bushes. Daddy looks under the bush that sneezed,
+ *      and up pops a soaked bear: "The name's Bertie." Daddy:
  *      you'd best come home with us.
  *   2. Daddy's chair. The cottage kitchen: Bertie in Daddy's chair, in
  *      Teddy's dressing gown. His second turn: Mummy's hot chocolate waits on
- *      the window sill, and he drags the mug over to Bertie. He belongs to a
+ *      the window sill, and Teddy carries the mug over to Bertie. He belongs to a
  *      girl called Lavinia, and her house is much bigger than this! (Mummy is
  *      polite.) She went picking flowers, got caught in the rain and ran
  *      home; she'd never leave him behind on purpose. Daddy: dry clothes,
  *      then back to the woods. Maybe Lavinia will be looking for him.
  *   3. Not my colour. Teddy brings trousers, a woolly jumper, even shoes
- *      and socks. His third turn: he drags the green jumper to Bertie
+ *      and socks. Mummy helps Bertie into the green jumper,
  *      and it goes on. "Not really my colour." Lavinia threw out trousers much
- *      better than these! Still, better than nothing. Teddy, to him: what a
+ *      better than these! Still, better than nothing. Teddy, to Mummy: what a
  *      grumpy old bear, he hasn't even said thank you! The sun's out: back
  *      to the woods.
  *   4. Back to the woods. Bertie sits by the path; Teddy and Daddy hide in
  *      the bushes to see if Lavinia comes. A little old lady walks by, but
- *      she doesn't see Bertie. His fourth turn: he taps Bertie, who sneezes,
+ *      she doesn't see Bertie. Bertie sneezes,
  *      and she turns: bless you! She calls Lavinia: isn't this the bear you
  *      lost? Lavinia, with her new doll: "What, that old thing?" and off she
  *      skips. Bertie looks as if he might cry.
  *   5. Loved again. The old lady: he reminds her of the teddy she had as a
  *      girl. Would he like to come home with her, for her grandchildren to
- *      play with? Bertie's face lights up. His fifth turn: Bertie whispers
- *      for a lift, and he drags him over to her side. She picks him up, and
+ *      play with? Bertie's face lights up. Bertie is shy, but he
+ *      makes his way over to her side. She picks him up, and
  *      before she carries him off he whispers to Teddy:
  *      thank you! Teddy wonders if Bertie will call at their cottage again.
  *
@@ -70,19 +70,15 @@ export default defineCartoon({
     tooWet: { who: 'daddy-bear', text: 'We’ve had a lot of rain lately, Teddy. It’s too wet to go far, so I think…' },
     listen: { who: 'teddy', text: 'Listen, Daddy! I’m sure I heard a voice!' },
     atishoo: { who: 'bertie', text: 'ATISHOO! Oh dear, oh dear! I feel so dreadful!' },
-    askBush: { who: 'teddy', text: 'It came from the bushes. {name}, can you find him? Tap the bush that sneezed!' },
-    nudgeBush: { who: 'teddy', text: 'Tap the big bush, {name}!' },
-    helpedBush: { who: 'daddy-bear', text: 'Let’s look just under this clump of bushes.' },
-    foundHim: { who: 'teddy', text: 'You found him, {name}!' },
+    helpedBush: { who: 'daddy-bear', text: 'It came from the bushes. Let’s look just under this clump.' },
+    foundHim: { who: 'teddy', text: 'You found him, Daddy!' },
     whoAreYou: { who: 'teddy', text: 'Hello! Who are you?' },
     bertie: { who: 'bertie', text: 'The name’s Bertie. Atishoo! Ooh, I’m soaked to the skin!' },
     comeHome: { who: 'daddy-bear', text: 'You’d best come home with us, Bertie. Take his arm, Teddy.' },
     // 2. Daddy's chair
     beforeLong: { who: 'narrator', text: 'Soon Bertie was in Daddy’s chair, in Teddy’s dressing gown. There was a hot chocolate by the window.' },
-    askMug: { who: 'mummy-bear', text: 'Bertie needs a hot chocolate to warm him up. {name}, can you drag the mug to Bertie?' },
-    nudgeMug: { who: 'mummy-bear', text: 'Drag the mug over to Bertie!' },
+    askMug: { who: 'mummy-bear', text: 'Bertie needs a hot chocolate to warm him up. Teddy, will you take him the mug?' },
     helpedMug: { who: 'teddy', text: 'I’ll carry it to him, Mummy.' },
-    thanksMug: { who: 'mummy-bear', text: 'Thank you, {name}. That’s just what he needs.' },
     thanksTeddyMug: { who: 'mummy-bear', text: 'Thank you, Teddy. That’s just what he needs.' },
     lavinia: { who: 'bertie', text: 'I belong to a girl called Lavinia. Our house is much bigger than this!' },
     lovely: { who: 'mummy-bear', text: 'Well! We think our little cottage is lovely, dear.' },
@@ -92,22 +88,17 @@ export default defineCartoon({
     ofCourseNot: { who: 'daddy-bear', text: 'Of course not. Dry clothes first, then back to the woods. Maybe Lavinia will be looking for you.' },
     // 3. Not my colour
     foundClothes: { who: 'teddy', text: 'I found you a woolly jumper and some trousers, Bertie!' },
-    askJumper: { who: 'teddy', text: 'Help Bertie put the jumper on, {name}! Drag the jumper to Bertie!' },
-    nudgeJumper: { who: 'teddy', text: 'Drag the green jumper to Bertie!' },
     helpedJumper: { who: 'mummy-bear', text: 'Here, Bertie. Arms up, dear!' },
     notMyColour: { who: 'bertie', text: 'Hmm. Not really my colour.' },
     betterTrousers: { who: 'bertie', text: 'And Lavinia threw out a pair of trousers much better than these!' },
     betterThanNothing: { who: 'bertie', text: 'Still, they’re better than nothing. I’ll get new clothes when I’m home.' },
-    noThankYou: { who: 'teddy', text: 'Psst, {name}! What a grumpy old bear. He hasn’t even said thank you!' },
+    noThankYou: { who: 'teddy', text: 'Psst, Mummy! What a grumpy old bear. He hasn’t even said thank you!' },
     sunOut: { who: 'mummy-bear', text: 'Look, the sun’s out! Back to the woods, everyone.' },
     // 4. Back to the woods
     waited: { who: 'narrator', text: 'Bertie’s own jacket was dry now. He sat by the path, and Teddy and Daddy hid to watch.' },
     someone: { who: 'teddy', text: 'Someone’s coming! But she hasn’t seen Bertie!' },
-    askBertie: { who: 'teddy', text: '{name}, tap Bertie, quick! Then she’ll look!' },
-    nudgeBertie: { who: 'teddy', text: 'Tap Bertie, {name}!' },
-    helpedBertie: { who: 'bertie', text: 'Ah… ah… ATISHOO!' },
     atishooAgain: { who: 'bertie', text: 'Ah… ah… ATISHOO!' },
-    heardHim: { who: 'teddy', text: 'She heard him, {name}! She’s looking!' },
+    heardHim: { who: 'teddy', text: 'She heard him, Daddy! She’s looking!' },
     blessYou: { who: 'great-aunt', text: 'Oh! What was that? Why, it’s a teddy bear! Lavinia, dear, come here a minute!' },
     lostBear: { who: 'great-aunt', text: 'Isn’t this the bear you lost the other day?' },
     thatOldThing: { who: 'lavinia', text: 'What, that old thing, Auntie? I’ve got my new doll now!' },
@@ -118,10 +109,8 @@ export default defineCartoon({
     thankYouTeddy: { who: 'bertie', text: 'Psst! Thank you, Teddy. Thank you for everything!' },
     welcome: { who: 'teddy', text: 'Psst! You’re welcome, Bertie! Goodbye!' },
     thinking: { who: 'daddy-bear', text: 'What are you thinking about, Teddy?' },
-    askCarry: { who: 'bertie', text: 'Psst! {name}! Drag me over to her, would you?' },
-    nudgeCarry: { who: 'bertie', text: 'Psst! Just drag me to the lady!' },
+    askCarry: { who: 'bertie', text: 'Psst! I’m a bit shy. But here goes. Off I go to her.' },
     helpedCarry: { who: 'great-aunt', text: 'Come along, then, dear. Up you come.' },
-    thanksCarry: { who: 'bertie', text: 'Psst! Thank you, {name}!' },
     callAgain: { who: 'teddy', text: 'I was just wondering if Bertie will call at our cottage again.' },
   },
   scenes: [
@@ -154,13 +143,14 @@ export default defineCartoon({
         await k.all(k.shake(bush, 8, 3), k.say('atishoo', bertie));
         await k.wait(300);
 
-        const how = await k.tapToHelp(bush, { ask: 'askBush', nudge: 'nudgeBush', helped: 'helpedBush', by: teddy, helper: daddy, size: 280 });
+        await k.say('helpedBush', daddy);
+        k.flourish(bush);
         k.sfx.rustle();
         await k.shake(bush, 8, 2);
         // Out he crawls, in front of the bush.
         k.set(bertie, { zIndex: 12 });
         await k.all(k.to(bertie, 0.9, { x: -320, ease: 'power2.out' }), k.to(bertie, 0.9, { y: 0, ease: 'back.out(1.4)' }));
-        if (how === 'tapped') await k.all(k.say('foundHim', teddy), k.hop(teddy, 30));
+        await k.all(k.say('foundHim', teddy), k.hop(teddy, 30));
         await k.say('whoAreYou', teddy);
         sneeze();
         await k.wait(800);
@@ -176,7 +166,7 @@ export default defineCartoon({
       set(k) {
         parlour(k);
         k.music('cosy');
-        // The hot chocolate waits on the window sill, in plain view, until he carries it over.
+        // The hot chocolate waits on the window sill, in plain view, until Teddy carries it over.
         cast.mug = k.prop('mug', { x: 470, y: 280, w: 110, z: 12 });
         cast.daddy = k.character('daddy-bear', { x: 40, y: 390, w: 250 });
         cast.teddy = k.character('teddy', { x: 250, y: 460, w: 190 });
@@ -188,9 +178,11 @@ export default defineCartoon({
         await k.say('beforeLong');
         pour();
         await k.wait(500);
-        const mugHow = await k.dragToHelp(cast.mug, { to: bertie, ask: 'askMug', nudge: 'nudgeMug', helped: 'helpedMug', by: mummy, helper: teddy });
+        await k.say('askMug', mummy);
+        await k.say('helpedMug', teddy);
+        await k.carry(cast.mug, bertie);
         sip();
-        await k.say(mugHow === 'dragged' ? 'thanksMug' : 'thanksTeddyMug', mummy);
+        await k.say('thanksTeddyMug', mummy);
         await k.wait(400);
         await k.say('lavinia', bertie);
         await k.to(mummy, 0.3, { rotation: -5, yoyo: true, repeat: 1 });
@@ -224,7 +216,8 @@ export default defineCartoon({
         await k.say('foundClothes', teddy);
         await k.wait(200);
 
-        await k.dragToHelp(jumper, { to: bertie, ask: 'askJumper', nudge: 'nudgeJumper', helped: 'helpedJumper', by: teddy, helper: mummy });
+        await k.say('helpedJumper', mummy);
+        await k.carry(jumper, bertie);
         // It lands on Bertie, and on it goes.
         k.puff(800, 480, 140);
         k.pose(bertie, 'jumper');
@@ -269,15 +262,13 @@ export default defineCartoon({
         await k.all(k.say('someone', teddy), k.to(aunt, 2, { x: 0, ease: 'power1.out' }));
         await k.wait(200);
 
-        const how = await k.tapToHelp(bertie, { ask: 'askBertie', nudge: 'nudgeBertie', helped: 'helpedBertie', by: teddy, helper: bertie });
-        if (how === 'tapped') {
-          sneeze();
-          await k.wait(700);
-          await k.say('atishooAgain', bertie);
-        }
+        k.flourish(bertie);
+        sneeze();
+        await k.wait(700);
+        await k.say('atishooAgain', bertie);
         await k.shake(bertie, 5, 2);
         k.face(aunt, true);
-        if (how === 'tapped') await k.say('heardHim', teddy);
+        await k.say('heardHim', teddy);
         // Teddy and Daddy duck down out of sight.
         await k.all(moves.duck(k, [daddy, teddy]), k.shake(hide, 4, 2));
         await k.say('blessYou', aunt);
@@ -321,10 +312,11 @@ export default defineCartoon({
         k.sparkle(560, 560, 12, 140);
         await k.say('shining');
 
-        // He's too shy to go to her alone: he asks for a lift over.
+        // He's a little shy, but he makes his way over to her side.
         k.set(bertie, { zIndex: 20 });
-        const carry = await k.dragToHelp(bertie, { to: [730, 570], ask: 'askCarry', nudge: 'nudgeCarry', helped: 'helpedCarry', by: bertie, helper: aunt });
-        if (carry === 'dragged') await k.say('thanksCarry', bertie);
+        await k.say('askCarry', bertie);
+        await k.carry(bertie, [730, 570]);
+        await k.say('helpedCarry', aunt);
 
         // A whisper to the bushes before she picks him up.
         await moves.peep(k, [daddy, teddy]);

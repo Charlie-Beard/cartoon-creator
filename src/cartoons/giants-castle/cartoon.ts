@@ -4,27 +4,27 @@
  *
  *   1. The playroom. Mollie and Peter run down to the playroom, but Jigs
  *      isn't there: only his umbrella on the chair, and a footprint in the
- *      garden as big as a bath. A note flutters in at the door. His turn:
- *      he taps it to catch it. It's from Jigs: a giant took him to polish
+ *      garden as big as a bath. A note flutters in at the door. Mollie
+ *      catches it. It's from Jigs: a giant took him to polish
  *      his boots! The chair wriggles and grows its wings all by itself. It
  *      wants to help too.
  *   2. The castle door. The chair lands on the grass outside a giant's
  *      castle with a door as big as a house. STOMP, STOMP, and a voice from
  *      inside roars "SHINIER!" But down at the bottom of the big door is a
- *      tiny mouse door. His turn: he taps it open, and they tiptoe in.
+ *      tiny mouse door. Peter pushes it open, and they tiptoe in.
  *   3. The giant's kitchen. Jigs is up on an enormous boot, polishing. Then
  *      STOMP: Giant Grumble looms in, roaring for his boots to be SHINIER;
  *      the children hide behind the table leg. Back to the heroes: he's
  *      grumpy because he's tired, Jigs whispers. If he goes to sleep, they
- *      can escape. His turn: he taps the big clock, and it bongs bedtime.
- *      The giant yawns and wants his nightcap. His turn: he drags the
- *      nightcap up onto the giant's head. Snore.
+ *      can escape. Jigs hops up and taps the big clock, and it bongs bedtime.
+ *      The giant yawns and wants his nightcap. Jigs tosses it up onto the
+ *      giant's head. Snore.
  *   4. The escape. Jigs never finished the boots, and the giant will be
- *      grumpy all over again. His turn: he taps the boots and they shine
+ *      grumpy all over again. Jigs gives the boots one last rub and they shine
  *      like mirrors. They tiptoe out, and a squeak wakes the giant. One eye
  *      opens, and he sees his face in his boots. He beams: what a lovely
  *      surprise. Off they go, with a thank-you, and he snores again.
- *   5. Home. Cocoa in the playroom. His turn: he drags a biscuit to Jigs.
+ *   5. Home. Cocoa in the playroom. Peter passes a biscuit to Jigs.
  *      Jigs will never polish another boot. "Not even mine?" asks Peter.
  *
  * Scary, never cruel (docs/STYLE.md): the giant is heard before he's seen,
@@ -178,12 +178,10 @@ export default defineCartoon({
   lines: {
     // 1. The playroom
     morning: { who: 'narrator', text: 'One sunny morning, Mollie and Peter ran down to the playroom.' },
-    hello: { who: 'mollie', text: 'Good morning, {name}! Jigs, we’re here!' },
+    hello: { who: 'mollie', text: 'Jigs! Jigs! We’re here!' },
     whereJigs: { who: 'peter', text: 'Jigs? Where are you? His umbrella’s here, but he isn’t.' },
     footprint: { who: 'mollie', text: 'Peter, look in the garden! A footprint as big as a bath!' },
     noteFlies: { who: 'peter', text: 'And there’s a note, blowing about in the wind!' },
-    askNote: { who: 'peter', text: 'Can you catch it, {name}? Tap the note!' },
-    nudgeNote: { who: 'peter', text: 'Tap the flappy note!' },
     mollieNote: { who: 'mollie', text: 'I’ll catch it. Got it!' },
     readNote: { who: 'mollie', text: 'It’s from Jigs! Help! A giant took me to polish his boots!' },
     rescue: { who: 'peter', text: 'A giant! Poor Jigs. We have to rescue him!' },
@@ -195,10 +193,8 @@ export default defineCartoon({
     shinier: { who: 'grumble', text: 'SHINIER! Polish them SHINIER!' },
     thatsHim: { who: 'mollie', text: 'That’s the giant. Jigs must be in there.' },
     howIn: { who: 'peter', text: 'But how do we get in? We can’t open that.' },
-    mouseDoor: { who: 'mollie', text: 'Look, at the bottom! A teeny tiny mouse door!' },
-    askDoor: { who: 'mollie', text: 'Can you tap the little door, {name}? Open it up!' },
-    nudgeDoor: { who: 'mollie', text: 'Tap the tiny red door.' },
-    peterDoor: { who: 'peter', text: 'I’ll give it a push. Creak!' },
+    mouseDoor: { who: 'mollie', text: 'Look, at the bottom! A teeny tiny red mouse door!' },
+    peterDoor: { who: 'peter', text: 'Let’s open it up. I’ll give it a push. Creak!' },
     quietMice: { who: 'peter', text: 'In we go. Quiet as mice!' },
     // 3. The giant's kitchen
     polish: { who: 'jigs', text: 'Polish, polish, polish. Oh, my poor tired arms!' },
@@ -209,21 +205,15 @@ export default defineCartoon({
     soTired: { who: 'grumble', text: 'Oh, I’m so TIRED. Grumble, grumble, grumble.' },
     whisper: { who: 'jigs', text: 'He’s grumpy because he’s tired. If he goes to sleep, we can escape!' },
     clockPlan: { who: 'mollie', text: 'There’s a clock. If it says bedtime, he’ll go to bed!' },
-    askClock: { who: 'mollie', text: 'Can you tap the clock? Make it ring for bedtime!' },
-    nudgeClock: { who: 'mollie', text: 'Tap the big round clock.' },
-    jigsClock: { who: 'jigs', text: 'I’ll hop up and tap it. Ting!' },
+    jigsClock: { who: 'jigs', text: 'Make it ring for bedtime! I’ll hop up and tap it. Ting!' },
     bedtime: { who: 'grumble', text: 'BONG? Bedtime already? Where’s my nightcap?' },
-    askCap: { who: 'peter', text: 'Quick, {name}! Drag his nightcap up onto his head!' },
-    nudgeCap: { who: 'peter', text: 'Drag the stripy nightcap up to his head.' },
-    jigsCap: { who: 'jigs', text: 'I’ll toss it up. Wheee!' },
+    jigsCap: { who: 'jigs', text: 'Quick! I’ll toss his nightcap up. Wheee!' },
     nightNight: { who: 'grumble', text: 'Ahh, lovely. Night night…' },
     asleep: { who: 'peter', text: 'He’s fast asleep!' },
     // 4. The escape
     notFinished: { who: 'jigs', text: 'Oh dear. I never finished his boots. He’ll be grumpy all over again.' },
     surprise: { who: 'mollie', text: 'Then let’s make them shine, as a surprise!' },
-    askShine: { who: 'jigs', text: 'Tap the boots, {name}, and make them sparkle!' },
-    nudgeShine: { who: 'jigs', text: 'Tap the giant boots!' },
-    jigsShine: { who: 'jigs', text: 'One last rub. Swish, swish, swish!' },
+    jigsShine: { who: 'jigs', text: 'Let’s make them sparkle. One last rub. Swish, swish, swish!' },
     mirrors: { who: 'peter', text: 'They’re as shiny as mirrors!' },
     tiptoe: { who: 'jigs', text: 'Now tiptoe out. Don’t wake him!' },
     uhOh: { who: 'peter', text: 'Uh-oh. My shoe squeaked!' },
@@ -235,10 +225,7 @@ export default defineCartoon({
     homeAgain: { who: 'peter', text: 'Home again! Well done, chair.' },
     brave: { who: 'jigs', text: 'Thank you for rescuing me. You were all so brave!' },
     cocoa: { who: 'mollie', text: 'Cocoa for everyone. And a biscuit for Jigs.' },
-    askBiscuit: { who: 'mollie', text: 'Can you drag the biscuit over to Jigs?' },
-    nudgeBiscuit: { who: 'mollie', text: 'Drag the biscuit to Jigs.' },
     peterBiscuit: { who: 'peter', text: 'I’ll pass it. Here you are, Jigs!' },
-    yum: { who: 'jigs', text: 'Yum! Thank you, {name}!' },
     yumPeter: { who: 'jigs', text: 'Yum! Thank you, Peter!' },
     neverAgain: { who: 'jigs', text: 'I’m never polishing another boot again!' },
     notMine: { who: 'peter', text: 'Not even mine?' },
@@ -279,7 +266,8 @@ export default defineCartoon({
         k.set(paper, { x: 200, opacity: 1 });
         await k.to(paper, 1.4, { x: -360, y: 40, rotation: -25, ease: 'sine.inOut' });
         await k.say('noteFlies', peter);
-        await k.tapToHelp(paper, { ask: 'askNote', nudge: 'nudgeNote', helped: 'mollieNote', by: peter, helper: mollie, size: 150 });
+        await k.say('mollieNote', mollie);
+        k.flourish(paper);
         k.sfx.page();
         await k.to(paper, 0.6, { x: -720, y: 160, rotation: 0, scale: 0.6 });
         await k.vanish(paper, 0.3);
@@ -335,8 +323,9 @@ export default defineCartoon({
         k.sparkle(714, 580, 10, 80);
         await k.say('mouseDoor', mollie);
 
-        // His turn: open the mouse door.
-        await k.tapToHelp(door, { ask: 'askDoor', nudge: 'nudgeDoor', helped: 'peterDoor', by: mollie, helper: peter, size: 140 });
+        // Peter opens the mouse door.
+        await k.say('peterDoor', peter);
+        k.flourish(door);
         k.fx.creak();
         const flap = k.pivot(k.part(door, 'flap'));
         await k.to(flap, 0.8, { scaleX: 0.15, ease: 'power1.out' });
@@ -407,18 +396,20 @@ export default defineCartoon({
         k.sparkle(600, 200, 8, 80);
         await k.say('clockPlan', mollie);
 
-        // His turn: tap the clock to strike bedtime.
-        await k.tapToHelp(tick, { ask: 'askClock', nudge: 'nudgeClock', helped: 'jigsClock', by: mollie, helper: jigs, size: 160 });
+        // Jigs taps the clock to strike bedtime.
+        await k.say('jigsClock', jigs);
+        k.flourish(tick);
         const hands = k.pivot(k.part(tick, 'hands'));
         void k.to(hands, 1.2, { rotation: 360, ease: 'power1.inOut' });
         bong(3);
         await k.all(k.shake(tick, 3, 3), k.wait(2400));
         await k.say('bedtime', grumble);
 
-        // His turn: drag the nightcap up onto the giant's head.
+        // Jigs tosses the nightcap up onto the giant's head.
         await k.appear(cap, 0.4);
         const head: [number, number] = [970, 70];
-        await k.dragToHelp(cap, { to: head, ask: 'askCap', nudge: 'nudgeCap', helped: 'jigsCap', by: peter, helper: jigs, dropSize: 200 });
+        await k.say('jigsCap', jigs);
+        await k.carry(cap, head);
         k.fx.boing();
         await k.to(cap, 0.3, { rotation: -12 });
         k.pose(grumble, 'sleep');
@@ -454,8 +445,9 @@ export default defineCartoon({
         await k.say('notFinished', jigs);
         await k.all(k.say('surprise', mollie), k.hop(mollie, 20, 1));
 
-        // His turn: make the boots shine.
-        await k.tapToHelp(pair, { ask: 'askShine', nudge: 'nudgeShine', helped: 'jigsShine', by: jigs, size: 260 });
+        // Jigs gives the boots a last rub, and they shine.
+        await k.say('jigsShine', jigs);
+        k.flourish(pair);
         k.fx.twinkle();
         k.sparkle(BOOTS.x + 190, BOOTS.y + 140, 18, 220);
         await k.all(k.fade(k.part(pair, 'shine'), 1, 0.8), k.glow('#fff3c8', 0.3, 1));
@@ -531,10 +523,11 @@ export default defineCartoon({
         await k.appear(cup, 0.4);
         await k.appear(treat, 0.4);
         await k.say('cocoa', mollie);
-        const how = await k.dragToHelp(treat, { to: jigs, ask: 'askBiscuit', nudge: 'nudgeBiscuit', helped: 'peterBiscuit', by: mollie, helper: peter });
+        await k.say('peterBiscuit', peter);
+        await k.carry(treat, jigs);
         k.fx.pop();
         await k.vanish(treat, 0.3);
-        await k.all(k.say(how === 'dragged' ? 'yum' : 'yumPeter', jigs), k.hop(jigs, 20, 1));
+        await k.all(k.say('yumPeter', jigs), k.hop(jigs, 20, 1));
         await k.say('neverAgain', jigs);
         await k.all(k.say('notMine', peter), k.hop(peter, 20, 1));
         laugh();

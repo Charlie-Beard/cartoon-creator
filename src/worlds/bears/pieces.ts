@@ -6,8 +6,8 @@
  *
  *   import { candles, helicopterVisit, musicalChairs, storyCloud } from '../../worlds/bears/pieces';
  *
- * Lines are keys, never text; his turn (k.tapToHelp) stays in the script,
- * between a piece's parts.
+ * Lines are keys, never text; a beat of the cartoon's own goes in the
+ * script, between a piece's parts.
  */
 import type { Kit } from '../../kit';
 import { sounds } from './moves';
@@ -65,7 +65,7 @@ export const storyCloud = {
  *   set(k, { x, y, w?, from? })  puts it off stage on the `from` side
  *                                ('right' by default), to fly to x, y; returns { heli }
  *   arrive(k, a, { line?, by? }) flies in with a whirr, hovering, then says the line
- *   rope(k, a)                   lets the rope down (no turn: put k.tapToHelp before it)
+ *   rope(k, a)                   lets the rope down
  *   leave(k, a, { side?, with? }) flies off, taking `with` (Teddy) along
  *
  * The rope's end is at about (215, 316) in the prop's own units: at w 440
@@ -124,7 +124,7 @@ export async function musicalChairs<K extends string>(k: Kit<K>, o: { players: H
 /**
  * Candles blown out on a `birthday-cake` prop: a puff, the flames fade, a
  * curl of smoke, confetti and a fanfare, then (if given) `line` by `by`
- * ("Happy birthday!"). Put his `k.tapToHelp` on the cake just before it.
+ * ("Happy birthday!"). Say who blows just before it.
  */
 export async function candles<K extends string>(k: Kit<K>, o: { cake: HTMLElement; line?: K; by?: HTMLElement }): Promise<void> {
   sounds.blow();

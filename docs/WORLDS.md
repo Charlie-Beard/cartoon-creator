@@ -151,8 +151,9 @@ await ladderArrival.play(k, a, { line: 'newLand', by: a.friends[0] });          
   Anything with an opening picture is split: `set(k, …)` builds it (no
   waiting, no motion, so it is legal in a scene's `set`) and returns the
   actors it made; `play(k, a, …)` animates them. Some have more parts
-  (`reveal`, `open`, `approach`, `loom`, `cutBack`) so his turn can go
-  between them: **a piece never calls `k.tapToHelp`**.
+  (`reveal`, `open`, `approach`, `loom`, `cutBack`) so a scene's own
+  deeds can go between them: **a piece never asks anything of the
+  viewer** (there is nothing to ask).
 - **Lines are keys, never text:** `line: 'newLand'`, listed in your
   `lines`. The checker can't see ids inside a piece's options, so call
   `k.backdrop('…')` yourself before a whole-place piece's `set` (it only

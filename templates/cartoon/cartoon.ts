@@ -4,7 +4,7 @@
  * <The whole story, scene by scene, from the beat sheet:>
  *
  *   1. <Scene name>. <What happens.>
- *   2. <Scene name>. <What happens, and his turn: he taps …>
+ *   2. <Scene name>. <What happens, and a deed: <who> does …>
  *   3. <Scene name>. <The scary beat, and how it's put right.>
  *   4. <Scene name>. <The warm ending.>
  *
@@ -28,11 +28,8 @@ export default defineCartoon({
   ...meta,
   lines: {
     // In the order they're said. Keys say what the line is.
-    hello: { who: 'moonface', text: 'Hello, {name}! Something funny is going on.' },
-    askDoor: { who: 'moonface', text: 'The door is stuck! Can you tap it, {name}?' },
-    nudgeDoor: { who: 'moonface', text: 'Just tap the door!' },
-    pushDoor: { who: 'moonface', text: 'Never mind. One big push!' },
-    thanks: { who: 'moonface', text: 'You did it, {name}!' },
+    hello: { who: 'moonface', text: 'Hello! Something funny is going on.' },
+    stuckDoor: { who: 'moonface', text: 'The door is stuck! I will give it one big push.' },
     phew: { who: 'moonface', text: 'Phew! It’s open.' },
   },
   scenes: [
@@ -46,9 +43,10 @@ export default defineCartoon({
       },
       async play(k) {
         await k.say('hello', cast.mf);
-        const how = await k.tapToHelp(cast.door, { ask: 'askDoor', nudge: 'nudgeDoor', helped: 'pushDoor', by: cast.mf });
+        await k.say('stuckDoor', cast.mf);
         k.fx.creak();
-        await k.say(how === 'tapped' ? 'thanks' : 'phew', cast.mf);
+        k.flourish(cast.door); // the deed is done: chime and sparkles on the door
+        await k.say('phew', cast.mf);
         await cheer(k, cast.mf);
       },
     },

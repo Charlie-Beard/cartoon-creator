@@ -6,7 +6,7 @@ reference it points to.
 
 ## The shape of an episode
 
-**2–6 minutes, 3–5 scenes, at least 5 of his turns.** Lines are the budget
+**2–6 minutes, 3–5 scenes, no interaction.** The episode plays start to end like a TV episode. Lines are the budget
 that sets the length: with the action between them, about **13 lines a
 minute** (the first episode: 40 lines, 3 minutes).
 
@@ -18,18 +18,18 @@ minute** (the first episode: 40 lines, 3 minutes).
 
 | Part | Scenes | What happens |
 |---|---|---|
-| **Hello** | 1 | Somewhere familiar. The friends, being themselves. Something small is wrong or about to happen (the kettle is gone; a letter arrives). Someone says his name in the first minute. |
-| **Off we go** | 1–2 | The problem grows. They set out, meet someone, try something. **His first turns** come here: he helps them get going. |
-| **Uh-oh** | 1 | The scary or tricky bit: the villain looms, the way is blocked, someone is caught. Short, then cut back to the heroes. **His big turn** usually saves the day. |
+| **Hello** | 1 | Somewhere familiar. The friends, being themselves. Something small is wrong or about to happen (the kettle is gone; a letter arrives). |
+| **Off we go** | 1–2 | The problem grows. They set out, meet someone, try something. The heroes' first deeds come here: they get themselves going. |
+| **Uh-oh** | 1 | The scary or tricky bit: the villain looms, the way is blocked, someone is caught. Short, then cut back to the heroes. The heroes' big deed usually saves the day. |
 | **Home** | 1 | Everything put right. A warm, funny ending, everyone together, a sparkle, the end. |
 
 Rules of thumb:
 
 - **One clear problem**, said out loud early ("Saucepan's kettle is
   gone!"), and solved by the end. No subplots.
-- **He is the hero** without being drawn: the friends talk to him
-  ("{name}, can you see it?") and his taps make the turning points
-  happen. Use `{name}` 3–6 times an episode, not in every line.
+- **The friends are the heroes.** They talk to each other, never to the
+  viewer, and they do every turning point themselves, on screen, with a
+  flourish (see "Deeds" below).
 - **The friends act like themselves.** Read the world's `about` notes and
   the characters' notes before writing. Borrow their running jokes.
 - **Something to look at changes every few seconds**: an entrance, a
@@ -41,7 +41,7 @@ Rules of thumb:
 
 Before any code, write the beat sheet (copy `templates/beat-sheet.md`):
 title, world, cast, the problem, and each scene as 4–10 numbered beats
-of one line each, marking his turns and the scary beat. Check it against
+of one line each, marking the big deeds and the scary beat. Check it against
 the table above and docs/STYLE.md. It goes, shortened, into the comment
 at the top of the cartoon's `cartoon.ts`.
 
@@ -49,15 +49,14 @@ at the top of the cartoon's `cartoon.ts`.
 
 Before planning, run `npm run check -- --ledger` and read what the other
 episodes were about: pick a different problem, a different main place
-and, where you can, a different villain, and a new turn rather than the
-same tap again.
+and, where you can, a different villain, and a new kind of deed rather than the
+same one again.
 
 Every `meta.ts` has a `ledger`: one short line each for `problem`,
 `villain` (a character id, or a gentler danger in words, or left out),
-`places` (backdrop ids, **main place first**), `cast`, `turns` (one
-phrase per `tapToHelp`: "blow the cloud away"), `jokes` (running jokes,
+`places` (backdrop ids, **main place first**), `cast`, `jokes` (running jokes,
 always worded the same) and `ending`. `npm run check` fails without one,
-and warns when a villain, main place, turn, problem or running joke is
+and warns when a villain, main place, problem or running joke is
 much like a recent episode's. A warning is fine if the repeat is
 deliberate; a joke in each of a world's last two episodes is the one to
 rest.
@@ -74,11 +73,11 @@ rest.
 - Give each line a **key** that says what it is (`kettleGone`,
   `snapLooms`, `askTap`), listed in the order they're said.
 - **Who says it:** `'narrator'` sparingly (scene setting, "Meanwhile…"),
-  mostly the characters. The narrator speaks about him in the third
-  person rarely; characters speak to him directly.
-- `{name}` is replaced with his name. Without a name it becomes "you" or
-  is dropped (`generic` in `src/core/phrases.ts`), so write lines that
-  work both ways: "Well done, {name}!" and "{name} found it!" both work.
+  mostly the characters. Nobody ever speaks to the viewer: no
+  "can you see it?", no "well done, you!". Characters speak to each other
+  (or to themselves, or to a pet).
+- **Never name the child, and no `{placeholders}`** in any line:
+  `npm run check` fails on both.
 - **Say the plot plainly.** He is six and takes words literally. A
   back-to-front joke ("Goodbye!" for hello, "Oh dear, I mean, hooray!")
   is fun, but never the only place a plot point is said: someone says the
@@ -90,74 +89,37 @@ rest.
 - Every line in `lines` must be said in the script (`npm run check`
   fails on unused lines: they would be recorded for nothing).
 
-## His turns
+## Deeds
 
-There are two: **tap** (`k.tapToHelp`) and **drag**
-(`k.dragToHelp`). Every episode has **at least 5** of them, and most
-have a drag or two: he's on an iPad, and dragging the key to the lock
-feels like doing it himself.
+Nothing in an episode is for the viewer to do. The heroes do every deed
+themselves, so each one has to be **clear on screen** and feel finished.
 
-`k.tapToHelp(target, { ask, nudge, helped, by })` works like this:
-
-1. `by` says `ask` ("The door's stuck! Can you tap the handle, {name}?").
-2. A gold ring breathes round `target`; everything else holds still.
-3. If he taps: a sparkle, and the story goes on (it returns `'tapped'`).
-4. If he hasn't after about 9 s, `by` says `nudge` once ("Just tap the
-   handle!"). After about 12 s more, `helped` is said ("I'll give it a
-   push!") and the story goes on anyway (`'helped'`).
-
-Good turns:
-
-- **Something physical and obvious:** wake someone (tap their nose),
-  open a door, pop a bubble, ring a bell, drop the net, catch the
-  letter. The target is big and still.
-- **It matters:** his tap is what makes the next thing happen. Follow it
-  with an immediate, satisfying result (door creaks open, sparkle,
-  "You did it, {name}!").
-- **At least 5 per episode**, spread through the scenes (one or two a
-  scene), never back to back without a beat of story between, never in
-  the scary beat's first seconds (let it land, then ask for help). The
-  first comes in scene 1 or 2; there is one in the last scene too
+- **Say it, show it, mark it.** Someone says what they're about to do
+  ("I'll pull the handle!"), we watch them do it, a sound goes with it
+  (a creak, a boing), and the moment it's done it gets a flourish.
+- `k.flourish(el)` is a chime and a sparkle burst on an actor's middle.
+  Use it for the moment a deed is done: the door opens, the star is
+  hung, the lamp lights.
+- `await k.carry(item, to)` glides an item to an actor or a point and
+  flourishes on arrival: the key to the lock, the letter to the owl, the
+  sock into the basket. Good when something has to get from here to
+  there.
+- **Something physical and obvious:** wake someone, open a door, pop a
+  bubble, ring a bell, drop the net, catch the letter. The thing is big
+  and still, and the result is immediate and satisfying.
+- **It matters:** the deed makes the next thing happen. Don't spend a
+  flourish on something that changes nothing.
+- **Spread them through the scenes**, one or two a scene, with a beat of
+  story between. Not in the scary beat's first seconds: let it land,
+  then let a hero act. There is a happy one in the last scene too
   (lighting the candles, the hug, the final sparkle).
-- **Mix them up:** not five of the same kind. Wake someone, then drag
-  something, then pop something. A turn that only repeats the last one
-  ("tap the next sock") is filler; each makes its own little thing
-  happen.
-- Write the thank-you so it works either way, or branch on the result:
-
-```ts
-const how = await k.tapToHelp(handle, { ask: 'askHandle', nudge: 'nudgeHandle', helped: 'pushDoor', by: mf });
-await k.say(how === 'tapped' ? 'thanks' : 'phew', mf);
-```
-
-All four lines are said in some run, so all four count as used.
-
-### Drag to help
-
-`k.dragToHelp(item, { to, ask, nudge, helped, by })` is the same turn,
-but he drags `item` to `to` (an actor, or a world point `[x, y]`): a
-gold ring round the item, a dashed ring where it goes. Let go near the
-dashed ring and it settles there; anywhere else and it glides back to
-try again (nothing is wrong). A tap leans it towards the ring, as a
-hint. Waited out, `helped` is said and the item glides there itself. It
-returns `'dragged'` or `'helped'`, and the item always ends in place.
-
-Good drags: the key to the lock, the letter to the owl, the sock into
-the basket, the sweet into the jar, the star to the top of the tree.
-Short and obvious: the item and where it goes both on stage, not too
-close (200–600 px apart), nothing in between to confuse it. Ask with
-the gesture in it: "Can you drag the key to the door, {name}?"
-
-**Thank whoever did it.** When `helper` is someone else (Ron throws the
-snowball, Silky's wand lights the candles), the thank-you after a
-`'helped'` turn thanks *them*, not him: "Thank you, Silky!" Praising him
-for a tap he didn't make rings false. Branch the line on `how`.
-
-**A turn costs time.** About 5 s if he taps straight away, about 25 s if
-he waits it out (the nudge, the wait, the helped line). With five or
-more turns, keep the lines lean round them. Two turns in one
-scene that runs 70 s with taps can run past 110 s in the `--no-tap` run:
-spread turns across scenes, or keep that scene's lines lean.
+- **Mix them up:** wake someone, then carry something, then pop
+  something. A deed that only repeats the last one is filler.
+- **Never address the viewer.** No asking for help, no waiting for a
+  reply, no "did you see that?". If a hero needs something, they ask
+  another hero.
+- Pacing is simple now: the lines and the action between them are all
+  the time there is, with no waiting on anyone.
 
 ## Pacing
 
@@ -171,8 +133,8 @@ spread turns across scenes, or keep that scene's lines lean.
 
 The iPad's voice speaks at about 2.4 words a second; recordings are
 similar. `npm run check -- <id>` prints the speech estimate and, from it,
-the time on screen (about 1.15 × the speech when he taps, measured on
-the episodes so far, plus about 25 s for each turn he waits out). Aim
+the time on screen (about 1.15 × the speech, measured on
+the episodes so far). Aim
 the speech at about 105–130 s for a short episode, 155–200 s for 3–4
 minutes and 210–290 s for a long one, before you stage anything: adding
 lines after the shots is slower than writing them in. `npm run shots -- <id>` measures each scene for real and flags
@@ -199,7 +161,7 @@ Each scene is `{ name, set(k), play(k) }`:
 
 - [ ] Beat sheet in the file's top comment; title 2–5 words; summary 1–2
       sentences.
-- [ ] 3–5 scenes, 2–6 minutes, at least 5 turns (taps and drags), `{name}` used 3–6 times.
+- [ ] 3–5 scenes, 2–6 minutes, no interaction, nobody names or speaks to the viewer, no `{placeholders}`.
 - [ ] `npm run check -- <id>` passes (lines, ids, unused lines, length).
 - [ ] Scary beat follows docs/STYLE.md, and the ending is warm.
 - [ ] `npm run shots -- <id>`: every frame looked at, nothing off stage

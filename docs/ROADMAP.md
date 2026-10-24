@@ -4,7 +4,7 @@
 
 - The engine, ported from Up the Faraway Tree: paper art, audio, voice
   (with the iPad's fallback), the fixed stage, pause, rotate, the gear.
-- The kit, generalised: worlds by id, episodes of scenes, `tapToHelp`.
+- The kit, generalised: worlds by id, episodes of scenes.
 - Worlds: `common`, `faraway` (ported from maths-game), `hogwarts`, `bears` (Teddy Bear, in watercolour and ink), `wishing` (the Wishing-Chair)
   (ported from spelling-game).
 - Screens: the library (a bookcase with one book per world, each opening to its cartoons), the player, the grown-ups' corner.
@@ -49,13 +49,15 @@ looked at yet. Tick one off here in the PR that makes it.
 | 58 | My Teddy Bear (a poem) | not yet |
 | 59 | The Doll's House | ✅ `dolls-house` |
 
-## More turns for him ✅
+## Cartoons that just play ✅
 
-Every episode now has at least 5 of his turns, taps and drags
-(`k.dragToHelp`), and runs 2–6 minutes. The episodes made before the
-rule were all brought up to it, one PR each; `npm run check` (and
-`npm test`) now fail any episode with fewer than 5. The new lines are
-unrecorded until a grown-up runs `voice-cartoon`.
+The owner's decision: no interaction and no personalisation. Every
+episode plays start to end like a TV episode, the heroes do every deed
+themselves (`k.flourish`, `k.carry`), nobody speaks to the viewer or
+names the child, and the name feature is gone. `npm run check` fails any episode
+that taps, drags or listens for events, or has a `{placeholder}` in a
+line. Lines changed by the move are unrecorded until a grown-up runs
+`voice-cartoon`.
 
 ## Later, when wanted
 

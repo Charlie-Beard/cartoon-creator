@@ -55,7 +55,7 @@ export const sounds = {
     noiseBurst(now(), { freq: 5200, q: 0.8, peak: 0.035, attack: 0.08, decay: seconds, type: 'highpass' });
   },
 
-  /** One bright little ting, like a spoon on a cup or a tap on a lid. Use when he taps something small and shiny. */
+  /** One bright little ting, like a spoon on a cup or a tap on a lid. Use when a hero touches something small and shiny. */
   ting(): void {
     bell(NOTE.E6, now(), 0.1, 0.8);
   },

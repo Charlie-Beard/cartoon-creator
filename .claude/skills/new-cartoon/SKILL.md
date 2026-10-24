@@ -42,7 +42,7 @@ server yourself, give it its own port, `npx vite --port 52xx`.)
   `charlie-beard/spelling-game` `src/stories/`).
 
 Then `npm run check -- --ledger`: what every episode so far was about.
-Steer the idea away from recent villains, main places, turns and jokes,
+Steer the idea away from recent villains, main places, kinds of deed and jokes,
 and tell the person if their idea repeats one.
 
 ## 1. Ask (2–4 quick questions, then go)
@@ -54,7 +54,7 @@ idea and the world notes. Pick from:
 - **World and cast** (if the idea doesn't make it obvious): who's in it.
 - **The scary bit:** which villain, or a gentler danger (lost, stuck,
   a storm), or none this time.
-- **His turns:** at least five concrete ideas for what he taps or drags.
+- **The deeds:** a few concrete ideas for what the heroes do on screen to move the story (open the door, carry the key, light the lamp).
 - **Length:** short (about 2 min, 3 scenes, 25–30 lines), about 3 min
   (4 scenes, 35–40 lines) or long (4–6 min, 5 scenes, 50–65 lines).
 - **Ending flavour:** funny, cosy, a party.
@@ -65,8 +65,8 @@ this and use your recommendations.
 ## 2. Beat sheet
 
 Copy `templates/beat-sheet.md` into your scratchpad and fill it in.
-Check it against the table in docs/WRITING.md (shape, one problem, at least 5
-turns, `{name}` 3–6 times) and docs/STYLE.md (scary, not cruel; warm
+Check it against the table in docs/WRITING.md (shape, one problem, the heroes doing
+every turning point, nobody naming or speaking to the viewer) and docs/STYLE.md (scary, not cruel; warm
 ending). Fix it now: changing a beat sheet is cheap, changing a script
 is not. Show the person the beat sheet in a few lines, and carry on
 unless they stop you.
@@ -127,7 +127,7 @@ yourself when they're done, so no two agents edit the same file.
   Moon-Face's room, Dame Snap's loom and defeat, the owl post, the Great
   Hall, a spell lesson, brooms and apparating, Voldemort's loom, a
   "meanwhile…" cut, a noise off, the warm ending. Pass your line keys in;
-  keep his `k.tapToHelp` in your script, between a piece's parts. Vary
+  put your own deeds in your script, between a piece's parts. Vary
   them (a different line, a different place, a twist) so episodes don't
   feel the same.
 - Put a sound on every action that matters; music per scene; one thing
@@ -135,10 +135,11 @@ yourself when they're done, so no two agents edit the same file.
   `moves.ts` (`import { sounds, moves } from '../../worlds/<world>/moves'`)
   before writing your own; if you do write one a second episode would
   want, promote it there (docs/WORLDS.md, "moves.ts").
-- His turns via `k.tapToHelp` or `k.dragToHelp` (at least 5, mixed) with
-  `ask`, `nudge` and `helped` lines,
-  and a thank-you that works either way (after `'helped'`, thank the
-  helper, not him).
+- The heroes do every deed themselves, on screen: say what they'll do,
+  show it with a sound, then mark it with `k.flourish(el)` or
+  `await k.carry(item, to)` (docs/WRITING.md, "Deeds"). Mix the kinds.
+- Nobody addresses the viewer and nobody uses the child's name; no
+  `{placeholders}` in a line, no listeners (`npm run check` fails them).
 - Read docs/KIT.md "Pitfalls" before placing anyone: `flip` mirrors
   lettering, hats go on `k.box(el).face`, entrances start fully off stage,
   the speaker stays in the camera's shot, paths cross nobody.
@@ -159,7 +160,6 @@ Fix everything it reports. Don't silence a rule; rewrite the line.
 npm run shots -- <id> --openings          # each scene's opening picture only, ~5 s: after placing anyone
 npm run shots -- <id> --fast              # the whole episode on a fake clock, about a minute
 npm run shots -- <id> --fast --scene 2    # one scene (from 1), while fixing it
-npm run shots -- <id> --fast --no-tap     # lets every turn run out: see the nudge and helped lines
 npm run shots -- <id> --strict            # real time, 3–6 minutes: the final check (fails on any flag)
 ```
 
@@ -172,7 +172,7 @@ to the real thing); the last run before the PR is without it.
 
 It also checks the layout of every frame itself (an actor 25%+ off
 stage, a face in the caption band, characters overlapping 35%+, more
-than 4 characters, a tap target under 120 px or off stage, the speaker
+than 4 characters, the speaker
 out of shot) and lists **Frames to look at** (also `flags.json`, and a
 red outline on the contact sheet).
 
@@ -190,8 +190,7 @@ justify every flag. For each frame, ask:
 - Pacing: every scene 25–90 s, the whole episode 2–6 minutes, no long
   silent stretches.
 
-Fix, re-run `shots --fast`, look again, until every frame is right. Run
-it once with `--no-tap` too, and look at the turns done for him. Then
+Fix, re-run `shots --fast`, look again, until every frame is right. Then
 one real-time run for the pacing numbers in the PR. The real-time run
 takes 3–6 minutes: start it in the background and don't edit any file
 until it finishes (the dev server reloads the page and spoils it); a
@@ -220,7 +219,7 @@ their ElevenLabs key. The episode plays with the iPad's voice until then.
   cloud) must pass.
 - Commit (the cartoon's folder and any world art) with a message that
   says what the episode is, push, and open a PR whose description has
-  the summary, the scene list, his turns, the contact sheet's findings
+  the summary, the scene list, the deeds, the contact sheet's findings
   and the pacing numbers.
 - **Merge it** as soon as its CI check is green (the owner's standing
   instruction: always merge; no need to ask). If CI fails, fix it and

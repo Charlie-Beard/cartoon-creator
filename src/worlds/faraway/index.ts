@@ -443,7 +443,7 @@ export default defineWorld({
     'RULES. Dame Snap is the villain and returns again and again; she hates sums done well. She looms, shrieks, stomps and snaps rulers, locks doors and cages, but NEVER hits, slaps or hurts anyone. ' +
     'Nobody is lost for good: anyone she takes is rescued by the end of the episode, and no parent is in real danger. Her defeat is funny or fair (her ruler snaps, she is stuck in her own cupboard). ' +
     'Scary scenes belong in stories, then cut back to the heroes. The Red Goblins and the Jelly Goblin are comic menaces who sneak and grab but hurt nobody. ' +
-    'Maths shows up in the story (counting pop biscuits, measuring giant footsteps), and the child watching is the hero, so characters talk to {name}.',
+    'Maths shows up in the story (counting pop biscuits, measuring giant footsteps), and the friends talk to each other, never to the child watching.',
   characters,
   backdrops,
   props,
