@@ -7,7 +7,7 @@
  *   1. Hagrid's present. Christmas morning in the dormitory. A parcel from
  *      Hagrid: a little wooden flute he carved himself. Harry blows it, and
  *      it sounds just like an owl, so Hedwig swoops to the window and hoots
- *      back. His first turn: he taps the parcel to open it. Hook: one day
+ *      back. Harry tears open the parcel. Hook: one day
  *      soon that flute will be very important.
  *   2. Hagrid lets it slip. Spring, in Hagrid's hut. The friends ask about
  *      the giant three-headed dog on the third floor. "That's Fluffy. He's
@@ -16,21 +16,21 @@
  *      gets past Fluffy. Unless you play him a bit of music…" Oops. The
  *      problem: if someone else knows that, they could sneak past tonight,
  *      so the friends must get there first. How? With Hagrid's flute, lying
- *      on the floor. His second turn: he drags it over to Harry.
+ *      on the floor. Ron passes it over to Harry.
  *   3. Three heads. Night, in the forbidden room. A low growl in the dark,
- *      and one, two, three heads lift and growl. His first turn: he taps the
- *      flute and Harry plays (his third turn). The left head yawns and droops, then the
+ *      and one, two, three heads lift and growl. Harry
+ *      plays the flute. The left head yawns and droops, then the
  *      middle one. The right one is still wide awake, until Ron sings to it,
  *      so badly that it falls asleep. A triple snore blows Ron's hair about.
  *   4. The paw on the trapdoor. Fluffy's big paw is lying on the trapdoor,
- *      too heavy to move. His fourth turn: he tickles the paw, and Fluffy
+ *      too heavy to move. Ron tickles the paw, and Fluffy
  *      tucks it under him in his sleep, dreaming of bones. The trapdoor
  *      creaks open. Harry lowers the flute to look, the tune stops, and a
- *      head starts to wake! He plays again, and he drags Ron to the trapdoor
- *      (his fifth turn); one by one they jump: Ron, Hermione, Harry.
+ *      head starts to wake! He plays again, and Ron is first to the trapdoor;
+ *      one by one they jump: Ron, Hermione, Harry.
  *   5. Down in the dark. They land on something soft: lucky! Not lucky: it's
  *      Devil's Snare, curling round their legs. It loves the dark and hates
- *      bright light. His sixth turn: he taps Hermione's wand, "Lumos!", and
+ *      bright light. Hermione lifts her wand, "Lumos!", and
  *      the plant shrinks away. Safe together in the light, the friends set
  *      off side by side, ready for the next adventure.
  *
@@ -206,8 +206,6 @@ export default defineCartoon({
     // 1. Hagrid's present
     morning: { who: 'narrator', text: 'It was Christmas morning, and there were presents at the end of Harry’s bed.' },
     fromHagrid: { who: 'harry', text: 'Look! A present from Hagrid!' },
-    askPresent: { who: 'harry', text: '{name}, will you open it? Tap the parcel!' },
-    nudgePresent: { who: 'harry', text: 'Tap the parcel to open it!' },
     helpedPresent: { who: 'harry', text: 'I can’t wait. I’ll open it myself!' },
     flute: { who: 'narrator', text: 'Inside was a little wooden flute. Hagrid had carved it all by himself.' },
     blowIt: { who: 'ron', text: 'Go on, Harry. Give it a blow!' },
@@ -225,18 +223,13 @@ export default defineCartoon({
     oops: { who: 'hagrid', text: 'Oh no. I shouldn’t have told you that!' },
     firstProblem: { who: 'harry', text: 'If somebody else knows that, they could sneak past him tonight. We must get there first!' },
     how: { who: 'ron', text: 'But how do we get past a giant dog with three heads?' },
-    askBring: { who: 'harry', text: 'Hagrid’s flute is on the floor! {name}, can you drag it over to me?' },
-    nudgeBring: { who: 'harry', text: 'Drag the little flute across to me.' },
-    helpedBring: { who: 'ron', text: 'Oh, I’ll pass it over.' },
-    thanksBring: { who: 'harry', text: 'Thank you, {name}!' },
+    helpedBring: { who: 'ron', text: 'Look, Hagrid’s flute is on the floor! I’ll pass it over.' },
     thanksRonBring: { who: 'harry', text: 'Thanks, Ron!' },
     withThis: { who: 'harry', text: 'With this. Hagrid’s flute!' },
     // 3. Three heads
     night: { who: 'narrator', text: 'That night, the three friends crept into the forbidden room.' },
     hear: { who: 'hermione', text: 'Shh! Can you hear that?' },
     teeth: { who: 'ron', text: 'Three heads. Six eyes. And lots and lots of teeth!' },
-    askFlute: { who: 'harry', text: '{name}, help me play it. Tap the flute!' },
-    nudgeFlute: { who: 'harry', text: 'Tap the little wooden flute!' },
     helpedFlute: { who: 'harry', text: 'I’ll just play it. Here goes!' },
     oneAsleep: { who: 'hermione', text: 'It’s working! That head is falling asleep!' },
     twoAsleep: { who: 'ron', text: 'Two heads! Keep playing, Harry!' },
@@ -245,21 +238,16 @@ export default defineCartoon({
     singing: { who: 'narrator', text: 'Ron sang. It was not very good singing.' },
     ronDidIt: { who: 'hermione', text: 'Ron! Your singing sent it to sleep!' },
     worked: { who: 'ron', text: 'Oi! Well, it worked, didn’t it?' },
-    thanksFlute: { who: 'harry', text: 'And you helped me play, {name}. Thank you!' },
     thanksSelf: { who: 'hermione', text: 'Well played, Harry. He loves your flute!' },
     // 4. The paw on the trapdoor
     trapdoor: { who: 'narrator', text: 'There was the trapdoor. But Fluffy’s big paw was lying right on top of it.' },
     heavy: { who: 'ron', text: 'Ugh! It’s too heavy. I can’t move it!' },
     ticklish: { who: 'hermione', text: 'Maybe he’s ticklish. Lots of dogs have ticklish paws.' },
-    askPaw: { who: 'hermione', text: 'Can you tickle his paw? Tap it, very gently.' },
-    nudgePaw: { who: 'hermione', text: 'Tap the big furry paw.' },
     helpedPaw: { who: 'ron', text: 'I’ll tickle it. Tickle, tickle, tickle!' },
     rolledOver: { who: 'hermione', text: 'He moved it! He’s dreaming about bones.' },
-    thanksPaw: { who: 'harry', text: 'You did it! Thank you!' },
     thanksRon: { who: 'harry', text: 'Thanks, Ron!' },
     waking: { who: 'hermione', text: 'Oh no, Harry, you stopped playing! He’s waking up!' },
-    askRon: { who: 'harry', text: 'We have to jump! {name}, can you drag Ron to the trapdoor?' },
-    nudgeRon: { who: 'harry', text: 'Drag Ron over to the trapdoor.' },
+    jump: { who: 'harry', text: 'We have to jump! Ron, you go first.' },
     helpedRon: { who: 'ron', text: 'All right, all right. I’ll go first.' },
     hereGoes: { who: 'ron', text: 'Here goes. Whoaaa!' },
     // 5. Down in the dark
@@ -267,12 +255,9 @@ export default defineCartoon({
     notLucky: { who: 'harry', text: 'Lucky? It’s curling round my legs!' },
     snare: { who: 'hermione', text: 'It’s Devil’s Snare! It loves the dark, but it hates bright light.' },
     tickly: { who: 'ron', text: 'Then make a light, quick! It’s tickling my nose!' },
-    askLight: { who: 'hermione', text: '{name}, help me make a bright light. Tap my wand!' },
-    nudgeLight: { who: 'hermione', text: 'Tap my wand. Quick!' },
     helpedLight: { who: 'hermione', text: 'I remember the spell!' },
     lumos: { who: 'hermione', text: 'Lumos!' },
     lettingGo: { who: 'harry', text: 'It’s letting go!' },
-    thanksLight: { who: 'harry', text: 'Brilliant! You and Hermione did it!' },
     thanksHermione: { who: 'harry', text: 'Brilliant, Hermione! You did it!' },
     herbology: { who: 'ron', text: 'Good thing somebody listens in Herbology!' },
     together: { who: 'harry', text: 'We did it! Now let’s find out what’s down here. Together!' },
@@ -300,8 +285,9 @@ export default defineCartoon({
         await k.say('morning');
         await k.all(k.say('fromHagrid', harry), k.hop(harry, 20));
 
-        // His turn: tap the parcel to open it.
-        await k.tapToHelp(present, { ask: 'askPresent', nudge: 'nudgePresent', helped: 'helpedPresent', by: harry, size: 150 });
+        // Harry tears open the parcel.
+        await k.say('helpedPresent', harry);
+        k.flourish(present);
 
         // Paper off: out comes a little wooden flute.
         k.sfx.rustle();
@@ -347,7 +333,7 @@ export default defineCartoon({
         cast.hermione = k.character('hermione', { x: 150, y: 396, w: 220 });
         cast.harry = k.character('harry', { x: 300, y: 392, w: 220 });
         cast.hagrid = k.character('hagrid', { x: 790, y: 232, w: 380, flip: true });
-        // Hagrid's flute lies on the floor, across the hearth from Harry, where he can drag it over.
+        // Hagrid's flute lies on the floor, across the hearth from Harry, where Ron can pass it over.
         cast.flute = k.prop('woodenFlute', { x: 610, y: 565, w: 190, z: 20 });
         k.set(cast.flute, { opacity: 0 });
       },
@@ -371,10 +357,11 @@ export default defineCartoon({
         await k.say('firstProblem', harry);
         await k.say('how', ron);
 
-        // His turn: the flute lies on the floor; he drags it over to Harry.
+        // The flute lies on the floor; Ron passes it over to Harry.
         await k.fade(flute, 1, 0.3);
-        const bring = await k.dragToHelp(flute, { to: [460, 595], ask: 'askBring', nudge: 'nudgeBring', helped: 'helpedBring', by: harry, helper: ron });
-        await k.say(bring === 'dragged' ? 'thanksBring' : 'thanksRonBring', harry);
+        await k.say('helpedBring', ron);
+        await k.carry(flute, [460, 595]);
+        await k.say('thanksRonBring', harry);
 
         // Harry holds it up.
         k.music('magic');
@@ -429,8 +416,9 @@ export default defineCartoon({
         k.set(flute, { opacity: 0 });
         await k.fade(flute, 1, 0.3);
 
-        // His third turn: play the flute.
-        const how = await k.tapToHelp(flute, { ask: 'askFlute', nudge: 'nudgeFlute', helped: 'helpedFlute', by: harry, size: 150 });
+        // Harry plays the flute.
+        await k.say('helpedFlute', harry);
+        k.flourish(flute);
         k.music('dreamy');
         await k.all(playFlute(k, flute), k.wait(1600).then(() => headSleeps(k, fluffy, 'L')));
         await k.say('oneAsleep', hermione);
@@ -452,7 +440,7 @@ export default defineCartoon({
         giggle();
         await k.say('ronDidIt', hermione);
         await k.say('worked', ron);
-        await k.say(how === 'tapped' ? 'thanksFlute' : 'thanksSelf', how === 'tapped' ? harry : hermione);
+        await k.say('thanksSelf', hermione);
         snore(3);
         await k.wait(800);
       },
@@ -477,7 +465,7 @@ export default defineCartoon({
       },
       async play(k) {
         const { harry, hermione, ron, fluffy, paw: fluffyPaw, trapdoor, flute } = cast;
-        // Harry keeps playing (the tune only, so nothing moves while it's his turn) until the trapdoor opens.
+        // Harry keeps playing (the tune only, so nothing else moves) until the trapdoor opens.
         const tune = { on: true };
         void (async () => {
           while (tune.on) {
@@ -498,8 +486,9 @@ export default defineCartoon({
         snore(3);
         await k.say('ticklish', hermione);
 
-        // His fourth turn: tickle the paw. The ring goes round the paw (an invisible spot over it).
-        const how = await k.tapToHelp(fluffyPaw, { ask: 'askPaw', nudge: 'nudgePaw', helped: 'helpedPaw', by: hermione, helper: ron, size: 150 });
+        // Ron tickles the paw.
+        await k.say('helpedPaw', ron);
+        k.flourish(fluffyPaw);
         giggle();
         await k.all(k.shake(fluffy, 3, 3), k.shake(fluffyPaw, 4, 3));
         // He shuffles over in his sleep and tucks his paw under him, off the trapdoor. His tail wags.
@@ -511,7 +500,7 @@ export default defineCartoon({
         const tail = k.pivot(k.part(fluffy, 'tail'));
         void k.to(tail, 0.3, { rotation: 16, yoyo: true, repeat: 5, ease: 'sine.inOut' });
         await k.say('rolledOver', hermione);
-        await k.say(how === 'tapped' ? 'thanksPaw' : 'thanksRon', harry);
+        await k.say('thanksRon', harry);
 
         // The trapdoor creaks open: a dark hole.
         creakOpen();
@@ -530,7 +519,7 @@ export default defineCartoon({
         await k.all(playFlute(k, flute), k.wait(1500).then(() => headSleeps(k, fluffy, 'M')));
         snore(3);
 
-        // His turn: drag Ron to the trapdoor, then one by one they jump: Ron, Hermione, Harry.
+        // Ron goes to the trapdoor, then one by one they jump: Ron, Hermione, Harry.
         const tb = k.box(trapdoor);
         const drop = async (el: HTMLElement) => {
           const b = k.box(el);
@@ -540,7 +529,9 @@ export default defineCartoon({
           k.sfx.whoosh();
           await k.to(el, 0.5, { y: '+=260', scale: 0.6, opacity: 0, ease: 'power2.in' });
         };
-        await k.dragToHelp(ron, { to: [tb.x + tb.w / 2, 610], ask: 'askRon', nudge: 'nudgeRon', helped: 'helpedRon', by: harry, helper: ron, dropSize: 170 });
+        await k.say('jump', harry);
+        await k.say('helpedRon', ron);
+        await k.carry(ron, [tb.x + tb.w / 2, 610]);
         await k.all(k.say('hereGoes', ron), k.wait(300).then(() => drop(ron)));
         await drop(hermione);
         k.set(flute, { opacity: 0 });
@@ -584,13 +575,14 @@ export default defineCartoon({
         await k.say('snare', hermione);
         await k.all(k.say('tickly', ron), k.shake(ron, 5, 3));
 
-        // His sixth turn: tap Hermione's wand, for a bright light.
-        // The ring goes round her wand, in her hand at the right of her portrait (an invisible spot over it).
+        // Hermione lifts her wand for a bright light.
+        // The sparkle goes on her wand, in her hand at the right of her portrait (an invisible spot over it).
         const hb = k.box(hermione);
         const wandSpot = k.add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"></svg>', {
           x: hb.x + hb.w * 0.8 - 65, y: hb.y + hb.h * 0.72 - 65, w: 130, h: 130, z: 20,
         });
-        const how = await k.tapToHelp(wandSpot, { ask: 'askLight', nudge: 'nudgeLight', helped: 'helpedLight', by: hermione, size: 130 });
+        await k.say('helpedLight', hermione);
+        k.flourish(wandSpot);
         k.remove(wandSpot);
         k.music('magic');
         await k.say('lumos', hermione);
@@ -607,7 +599,7 @@ export default defineCartoon({
         await k.to(tendrils, 1, { scaleY: 0.4, ease: 'power1.in' });
         await k.to(snare, 0.8, { y: 60, opacity: 0.5, ease: 'power1.inOut' });
         await k.all(k.say('lettingGo', harry), k.hop(harry, 20));
-        await k.say(how === 'tapped' ? 'thanksLight' : 'thanksHermione', harry);
+        await k.say('thanksHermione', harry);
         await k.all(k.say('herbology', ron), k.hop(ron, 16));
 
         // Far above, Fluffy snores on.

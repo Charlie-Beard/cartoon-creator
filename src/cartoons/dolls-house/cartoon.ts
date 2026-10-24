@@ -6,8 +6,8 @@
  *
  *   1. The workshop. Teddy calls in on his friend the Toymaker: a doll's
  *      house for the Children's Hospital, for their party tomorrow. One last
- *      bit of painting. His first turn: he taps the doll's house and the
- *      brush paints the door blue (or the Toymaker paints it). "I'll leave
+ *      bit of painting. The Toymaker paints the door
+ *      of the doll's house blue. "I'll leave
  *      the window open, so the paint can dry." That night, it rains…
  *   2. The ugly wall. Next day, the hospital garden: Tom and Daisy wave from
  *      the balcony; a doll's house is coming! Matron sighs: if only the
@@ -19,16 +19,15 @@
  *      won't go in. Oh dear, and he worked so hard. A quiet beat. Then Teddy
  *      has an idea: hooks on the bottom, take out the back wall, a thicker
  *      roof. "Bring it to the hospital. I'll meet you there!" It's a secret.
- *   4. Nuts and berries. The wood with Daddy. His second turn: he taps the
- *      bush and the berries shake down into the basket (or Daddy shakes it).
+ *   4. Nuts and berries. The wood with Daddy. Daddy shakes the
+ *      bush and the berries tumble down into the basket.
  *      Nuts and pips too. Then the kitchen: Mummy gives them stale bread and
- *      an old saucer. His third turn: he drags the loaf of bread into the
- *      basket (or Teddy pops it in). "Now, to the hospital!"
+ *      an old saucer. Teddy pops the loaf of bread into the
+ *      basket. "Now, to the hospital!"
  *   5. A home for the birds. The Toymaker is fixing the strange-looking house
  *      onto the wall. "It's not for dolls. It's for the birds!" Teddy feeds
- *      the birds. His fourth turn: he drags the basket of berries up to the
- *      ledge (or Teddy carries it) and the food is put out. His fifth: he
- *      taps the saucer and it fills with water (or the Toymaker pours it). In
+ *      the birds. Teddy carries the basket of berries up to the
+ *      ledge and the food is put out. The Toymaker pours water into the saucer. In
  *      fly the birds, in and out of their new home. Daisy: what a sight from
  *      our balcony! Thank you, Toymaker. "And thank you, Teddy!"
  *
@@ -136,10 +135,7 @@ export default defineCartoon({
     wow: { who: 'teddy', text: 'A doll’s house! It’s got windows, and a little front door!' },
     pleased: { who: 'teddy', text: 'The children will be so pleased. Isn’t it their party tomorrow?' },
     lastBit: { who: 'toymaker', text: 'Yes! And there’s just one last bit of painting to do.' },
-    askPaint: { who: 'toymaker', text: 'Will you help me, {name}? Tap the doll’s house to paint the door!' },
-    nudgePaint: { who: 'toymaker', text: 'Tap the doll’s house, and the brush will paint it blue.' },
-    paintMyself: { who: 'toymaker', text: 'I’ll paint it myself, then. Swish, swish!' },
-    thanksPaintName: { who: 'toymaker', text: 'Beautiful! Thank you, {name}!' },
+    paintMyself: { who: 'toymaker', text: 'I’ll paint the door blue. Swish, swish!' },
     thanksPaint: { who: 'teddy', text: 'Beautiful! What a lovely blue door! Thank you, Toymaker!' },
     windowOpen: { who: 'toymaker', text: 'I’ll leave the window open tonight, so the paint can dry.' },
     thatNight: { who: 'narrator', text: 'But that night, it began to rain…' },
@@ -167,14 +163,10 @@ export default defineCartoon({
     // 4. Nuts and berries
     whatFor: { who: 'daddy-bear', text: 'Nuts and berries, Teddy? Whatever are they for?' },
     youllSee: { who: 'teddy', text: 'You’ll see, Daddy! Look, that bush is full of berries!' },
-    askBush: { who: 'teddy', text: 'Tap the bush, {name}, and shake the berries down!' },
-    nudgeBush: { who: 'teddy', text: 'Tap the big bush with the red berries.' },
     shakeIt: { who: 'daddy-bear', text: 'I’ll give it a shake. Here they come!' },
     whatALot: { who: 'daddy-bear', text: 'What a lot! And here are some nuts and pips, too.' },
     homeWeGo: { who: 'teddy', text: 'Now we need some bread, and something for water.' },
     staleBread: { who: 'mummy-bear', text: 'Here’s some stale bread. And you can have this old saucer.' },
-    askBread: { who: 'teddy', text: 'Can you drag the bread into the basket, {name}?' },
-    nudgeBread: { who: 'teddy', text: 'Drag the loaf over to the berry basket.' },
     breadMyself: { who: 'teddy', text: 'I’ll pop it in the basket myself.' },
     thanksMummy: { who: 'teddy', text: 'Thank you, Mummy! Now, to the hospital!' },
     goodIdea: { who: 'narrator', text: 'It really was a very good idea…' },
@@ -182,14 +174,9 @@ export default defineCartoon({
     fixing: { who: 'narrator', text: 'Soon, the Toymaker was fixing the strange-looking house onto the wall.' },
     funnyHouse: { who: 'tom', text: 'What a funny-looking house! It hasn’t got a back!' },
     forBirds: { who: 'teddy', text: 'It’s not for dolls. It’s for the birds!' },
-    askBasket: { who: 'teddy', text: 'Let’s feed them! Can you drag the basket to the bird house, {name}?' },
-    nudgeBasket: { who: 'teddy', text: 'Drag the basket of berries up to the ledge.' },
-    carryBasket: { who: 'teddy', text: 'I’ll carry it up there myself.' },
+    carryBasket: { who: 'teddy', text: 'Let’s feed them! I’ll carry the berries up to the ledge.' },
     putOut: { who: 'teddy', text: 'Berries and nuts, and pips, and bread.' },
-    askSaucer: { who: 'teddy', text: 'And water to drink. Tap the saucer, {name}, to fill it up!' },
-    nudgeSaucer: { who: 'teddy', text: 'Tap the saucer on the ledge.' },
-    pourIt: { who: 'toymaker', text: 'I’ll pour the water in. There!' },
-    thanksSaucerName: { who: 'teddy', text: 'Thank you, {name}! Look, here come the birds!' },
+    pourIt: { who: 'toymaker', text: 'And water to drink. I’ll pour it in. There!' },
     thanksSaucer: { who: 'teddy', text: 'Thank you, Toymaker! Look, here come the birds!' },
     inAndOut: { who: 'daisy', text: 'Birds! Flying in and out of their new home!' },
     whatASight: { who: 'tom', text: 'What a sight to see from our balcony! Thank you, Toymaker!' },
@@ -226,8 +213,9 @@ export default defineCartoon({
         k.pose(toymaker, 'paint');
         await k.say('lastBit', toymaker);
 
-        // His turn: paint the door.
-        const how = await k.tapToHelp(house, { ask: 'askPaint', nudge: 'nudgePaint', helped: 'paintMyself', by: toymaker, size: 240 });
+        // The Toymaker paints the door.
+        await k.say('paintMyself', toymaker);
+        k.flourish(house);
         await k.fade(brush, 1, 0.3);
         await k.to(brush, 0.6, { x: -180, y: 130, ease: 'power2.inOut' });
         for (let i = 0; i < 3; i++) {
@@ -239,7 +227,7 @@ export default defineCartoon({
         k.sparkle(460, 400, 10, 120);
         await k.all(k.to(brush, 0.5, { x: 0, y: 0 }), k.fade(brush, 0, 0.5));
         k.pose(toymaker, 'default');
-        await k.say(how === 'tapped' ? 'thanksPaintName' : 'thanksPaint', how === 'tapped' ? toymaker : teddy);
+        await k.say('thanksPaint', teddy);
         await k.say('windowOpen', toymaker);
         k.face(teddy, true);
         await wave(k, teddy, 2);
@@ -368,8 +356,9 @@ export default defineCartoon({
         k.face(teddy, false);
         await k.say('youllSee', teddy);
 
-        // His turn: shake the berries down.
-        const how = await k.tapToHelp(bush, { ask: 'askBush', nudge: 'nudgeBush', helped: 'shakeIt', by: teddy, helper: daddy, size: 260 });
+        // Daddy shakes the berries down.
+        await k.say('shakeIt', daddy);
+        k.flourish(bush);
         const [leaves] = k.pivot(k.part(bush, 'leaves'));
         k.sfx.rustle();
         void k.to(leaves, 0.12, { rotation: 4, yoyo: true, repeat: 7 });
@@ -383,7 +372,6 @@ export default defineCartoon({
         drops.forEach((d) => k.remove(d));
         await k.fade(k.part(basket, 'berries'), 1, 0.4);
         k.sparkle(485, 560, 10, 100);
-        void how;
         await k.say('whatALot', daddy);
         k.face(teddy, true);
         await k.say('homeWeGo', teddy);
@@ -403,8 +391,9 @@ export default defineCartoon({
         const bread = k.add(loaf(), { x: 470, y: 302, w: 130, h: 78, z: 15 });
         k.sparkle(695, 590, 8, 80);
 
-        // His turn: the bread goes into the basket.
-        await k.dragToHelp(bread, { to: cast.basket, ask: 'askBread', nudge: 'nudgeBread', helped: 'breadMyself', by: cast.teddy, dropSize: 200 });
+        // Teddy pops the bread into the basket.
+        await k.say('breadMyself', cast.teddy);
+        await k.carry(bread, cast.basket);
         k.fx.pop();
         await k.vanish(bread);
         k.pose(cast.teddy, 'happy');
@@ -446,19 +435,21 @@ export default defineCartoon({
         k.pose(teddy, 'happy');
         await k.say('forBirds', teddy);
         k.pose(teddy, 'default');
-        // His turn: the basket goes up to the ledge, and the food is put out.
+        // Teddy carries the basket up to the ledge, and the food is put out.
         k.face(teddy, true);
-        await k.dragToHelp(cast.basket, { to: [BIRDHOUSE.x + 90, LEDGE_Y - 20], ask: 'askBasket', nudge: 'nudgeBasket', helped: 'carryBasket', by: teddy, dropSize: 200 });
+        await k.say('carryBasket', teddy);
+        await k.carry(cast.basket, [BIRDHOUSE.x + 90, LEDGE_Y - 20]);
         k.fx.pop();
         await k.all(k.vanish(cast.basket), k.fade(food, 1, 0.6), k.fade(saucer, 1, 0.6));
         await k.say('putOut', teddy);
 
-        // His turn: fill the saucer.
-        const how = await k.tapToHelp(saucer, { ask: 'askSaucer', nudge: 'nudgeSaucer', helped: 'pourIt', by: teddy, helper: toymaker, size: 130 });
+        // The Toymaker fills the saucer.
+        await k.say('pourIt', toymaker);
+        k.flourish(saucer);
         pour();
         await k.fade(k.part(saucer, 'water'), 1, 0.8);
         k.sparkle(BIRDHOUSE.x + 200, LEDGE_Y - 20, 8, 80);
-        await k.say(how === 'tapped' ? 'thanksSaucerName' : 'thanksSaucer', teddy);
+        await k.say('thanksSaucer', teddy);
 
         // In fly the birds: to the ledge, in at the windows, out again.
         k.music('triumph');
