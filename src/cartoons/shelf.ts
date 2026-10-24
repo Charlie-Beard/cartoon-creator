@@ -74,7 +74,14 @@ export function sortShelf<T extends CartoonMeta>(entries: T[]): T[] {
  * checked and tested, and come back when this is null again. The scripts
  * keep the whole shelf; only the app (and the end-to-end tests of it) use this.
  */
-export const SHOWING: string[] | null = ['grims-school', 'teddy-surprise'];
+export const SHOWING: string[] | null = [
+  'grims-school',
+  'teddy-surprise',
+  'strange-day',
+  'washing-day',
+  'whistling-kettle',
+  'wishing-chair',
+];
 
 /** Only the cartoons in SHOWING, or all of them when it is null. */
 export function showing<T extends CartoonMeta>(entries: T[]): T[] {

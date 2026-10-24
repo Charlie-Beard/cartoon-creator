@@ -1,5 +1,5 @@
 {
   "_comment": "Settings shared by every voice. model_id is the ElevenLabs model. say_as respells words ElevenLabs says wrong, whole words only and case-sensitive: what is sent changes, the caption and the clip id don't. Fill it in after hearing `generate.py --risky`, e.g. \"Hmph\": \"Hmmph\", \"EH\": \"Ehh\".",
   "model_id": "eleven_multilingual_v2",
-  "say_as": {}
+  "say_as": { "Wheee": "Wheeeeee" }
 }
