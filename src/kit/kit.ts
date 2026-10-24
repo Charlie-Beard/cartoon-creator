@@ -3,8 +3,8 @@
  *
  * Ported from the story kit both games use (Wizard Words and Up the
  * Faraway Tree), with the games taken out: characters, backdrops and
- * props come from the worlds (src/worlds) by id, and there are his turns,
- * `tapToHelp` and `dragToHelp`, where the show waits for him to tap or drag.
+ * props come from the worlds (src/worlds) by id. Nothing on stage waits
+ * for a tap: the cartoon just plays, start to end.
  *
  * Actors are absolutely placed <div>s on the 1180 × 820 stage. Animate the
  * actor itself freely (x, y, rotation, scale, opacity); mirroring is done
@@ -21,9 +21,8 @@ import { C } from '../art/palette';
 import { circle, curve, piece, rng, svg, type Pt } from '../art/paper';
 import { parchment, star } from '../art/ui';
 import type { Line } from '../core/cartoon';
-import { personalise } from '../core/phrases';
 import { stepped } from '../ui/anim';
-import { h, onTap, place, wait } from '../ui/dom';
+import { h, place, wait } from '../ui/dom';
 import { findBackdrop, findCharacter, findProp, type World } from '../worlds';
 
 export type Side = 'left' | 'right' | 'top' | 'bottom';
@@ -43,36 +42,6 @@ export interface PlaceOpts {
   crop?: string;
   /** Kept for the art that set it in the games: art is always still now. */
   still?: boolean;
-}
-
-export interface TapToHelpOpts<K extends string> {
-  /** Said first, by `by`: what he should tap ("Can you wake him up? Tap his nose!"). */
-  ask?: K;
-  /** Said once if he hasn't tapped after a while ("Just tap his nose, {name}."). */
-  nudge?: K;
-  /** Said if he still hasn't, before the story carries on without him ("I'll do it!"). */
-  helped?: K;
-  /** Who says ask and nudge (bobs while talking). */
-  by?: HTMLElement;
-  /** Who says `helped`. Default `by`. */
-  helper?: HTMLElement;
-  /**
-   * Size of the tap area (and ring) round the target's centre, at least
-   * 120. Default: the target's size, capped at 260 so a big target (a
-   * cloud, a door) gets a ring round its middle, not the whole stage.
-   */
-  size?: number;
-}
-
-export interface DragToHelpOpts<K extends string> extends Omit<TapToHelpOpts<K>, 'size'> {
-  /**
-   * Where he drags it to: an actor (its middle) or a point in world
-   * coordinates, the same ones `place` and `k.box` use. The item ends with
-   * its middle there, dragged or helped.
-   */
-  to: HTMLElement | Pt;
-  /** Size of the drop ring round `to`, at least 140. Default 180. */
-  dropSize?: number;
 }
 
 /** The state every scene's view of the kit shares (see `Kit.scoped`). */
@@ -96,8 +65,6 @@ export class Kit<K extends string = string> {
   readonly stage: HTMLElement;
   /** The world the cartoon is set in. */
   readonly world: World;
-  /** The child's name ('' if none). */
-  readonly name: string;
   /** Ready-made sound effects (UI sounds and story sounds). */
   readonly sfx = sfx;
   readonly fx = fx;
@@ -106,12 +73,11 @@ export class Kit<K extends string = string> {
   private alive: () => boolean;
   private show: Show;
 
-  constructor(o: { root: HTMLElement; world: World; name: string; lines: Record<string, Line>; alive: () => boolean }) {
+  constructor(o: { root: HTMLElement; world: World; lines: Record<string, Line>; alive: () => boolean }) {
     this.stage = o.root;
     this.root = h('div', { class: 'story-world' });
     this.stage.append(this.root);
     this.world = o.world;
-    this.name = o.name;
     this.lines = o.lines;
     this.alive = o.alive;
     // No captions are shown: the voices carry the story. The caption box is
@@ -238,10 +204,10 @@ export class Kit<K extends string = string> {
   /**
    * Lettering as an actor, in Andika: a name on a cake, a sign, a word on a
    * letter. `x`, `y` is the middle of the text; it is drawn fresh each time,
-   * so it can carry his name (`k.name`, which may be empty: give a fallback).
+   * so it can carry any words.
    * Long text shrinks to fit `w` if you give one.
    *
-   *   k.lettering(k.name || 'You!', { x: 590, y: 618, size: 24, color: '#b5476b', z: 15 });
+   *   k.lettering('Hooray!', { x: 590, y: 618, size: 24, color: '#b5476b', z: 15 });
    */
   lettering(text: string, o: { x: number; y: number; size?: number; color?: string; w?: number; z?: number; weight?: number }): HTMLElement {
     const size = o.size ?? 28;
@@ -290,7 +256,7 @@ export class Kit<K extends string = string> {
     if (!this.alive()) return never();
     const line = this.lines[key];
     if (!line) throw new Error(`No line "${key}"`);
-    const text = personalise(line.text, this.name);
+    const text = line.text;
     this.caption(text, line.who);
     const stopBob = speaker ? this.talk(speaker) : () => {};
     this.show.bed?.duck(true);
@@ -388,226 +354,44 @@ export class Kit<K extends string = string> {
     lids.forEach((l) => (l.style.opacity = '0'));
   }
 
-  // ------------------------------------------------------------ his turn
+  // ---------------------------------------------------------- done deeds
 
   /**
-   * His turn: the story waits for him to tap `target` (wake someone up,
-   * open the door, pop the bubble). With `dragToHelp`, the only
-   * interactions in a cartoon.
-   *
-   * A soft gold ring breathes slowly round the target, and every idle loop
-   * on stage (motes, floats) holds still so nothing competes with it. If
-   * he doesn't tap, `nudge` is said once; if he still doesn't, `helped` is
-   * said and the story carries on without him. No timer shows, nothing is
-   * wrong, nobody waits on him for ever. Either way it ends with a sparkle
-   * on the target. Resolves 'tapped' or 'helped', so the script can thank
-   * him or not.
+   * The moment something is done (the cloud blows away, the door opens, the
+   * candles go out): a chime and a burst of paper stars on `el`'s middle.
    */
-  async tapToHelp(target: HTMLElement, o: TapToHelpOpts<K> = {}): Promise<'tapped' | 'helped'> {
-    if (!this.alive()) return never();
-    if (o.ask) await this.say(o.ask, o.by);
-
-    // Where the target is now, in stage coordinates (it may have moved, and the camera may be in).
-    const s = this.stage.getBoundingClientRect();
-    const r = target.getBoundingClientRect();
-    const k = s.width / 1180 || 1;
-    const cx = (r.left + r.width / 2 - s.left) / k;
-    const cy = (r.top + r.height / 2 - s.top) / k;
-    const size = Math.max(120, o.size ?? Math.min(260, Math.max(r.width, r.height) / k));
-
-    const ring = place(h('div', { class: 'story-tap-ring' }), cx - size / 2, cy - size / 2, size, size);
-    const hit = place(h('button', { class: 'story-tap', 'data-tap-to-help': '', 'aria-label': 'Tap to help' }), cx - size / 2, cy - size / 2, size, size);
-    this.stage.insertBefore(ring, this.show.captionEl);
-    this.stage.insertBefore(hit, this.show.captionEl);
-    gsap.set(ring, { opacity: 0, scale: 0.8 });
-    gsap.to(ring, { opacity: 1, scale: 1, duration: 0.5, ease: 'sine.out' });
-    const breathe = gsap.to(ring, { scale: 1.08, duration: 1.2, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 0.5 });
-    this.show.idle.forEach((t) => t.pause());
-
-    let tapped = false;
-    let stopTap = () => {};
-    const tap = new Promise<void>((resolve) => {
-      stopTap = onTap(hit, () => {
-        tapped = true;
-        resolve();
-      });
-    });
-    const tidy = () => {
-      stopTap();
-      breathe.kill();
-      hit.remove();
-      gsap.to(ring, { opacity: 0, scale: 1.3, duration: 0.35, ease: 'sine.in', onComplete: () => ring.remove() });
-      this.show.idle.forEach((t) => t.resume());
-    };
-
-    // Waiting on him: a nudge after a while, then the story helps itself.
-    const patience = (async () => {
-      await wait(9000);
-      if (tapped) return;
-      if (o.nudge) await Promise.race([this.say(o.nudge, o.by), tap]);
-      if (tapped) return;
-      await Promise.race([wait(12000), tap]);
-    })();
-    await Promise.race([tap, patience]);
-    if (!this.alive()) {
-      tidy();
-      return never();
-    }
-    tidy();
-    if (tapped) {
-      voice.stop();
-      this.caption('');
-      sfx.sparkle();
-      this.sparkle(cx, cy, 12, 120);
-      return 'tapped';
-    }
-    if (o.helped) await this.say(o.helped, o.helper ?? o.by);
-    // Done for him: the same sparkle, so the moment still lands.
+  flourish(el: HTMLElement): void {
+    if (!this.alive()) return;
+    const [x, y] = this.middle(el);
     sfx.sparkle();
-    this.sparkle(cx, cy, 12, 120);
-    return 'helped';
+    this.sparkle(x, y, 12, 120);
   }
 
   /**
-   * His turn, by dragging: the story waits for him to drag `item` to `to`
-   * (the key to the lock, the sock to the basket, the letter to the owl).
-   * Made for the iPad: his finger takes the item wherever it goes.
-   *
-   * A gold ring breathes round the item and a dashed one round where it
-   * goes; idle loops hold still. Let go near the drop ring and it settles
-   * there; let go anywhere else and it glides gently back to try again
-   * (nothing is wrong). A tap without a drag makes it lean towards the
-   * drop ring, as a hint. If he doesn't drag it, `nudge` is said once,
-   * then `helped`, and the item glides there by itself. Either way it ends
-   * in place with a sparkle. Resolves 'dragged' or 'helped'.
+   * Somebody carries `item` to `to` (the key to the lock, the letter to the
+   * owl): it glides until its middle is on `to` (an actor's middle, or a
+   * point in world coordinates, the ones `place` and `k.box` use), then a
+   * flourish.
    */
-  async dragToHelp(item: HTMLElement, o: DragToHelpOpts<K>): Promise<'dragged' | 'helped'> {
+  async carry(item: HTMLElement, to: HTMLElement | Pt, seconds = 0.9): Promise<void> {
     if (!this.alive()) return never();
-    if (o.ask) await this.say(o.ask, o.by);
+    const [sx, sy] = this.middle(item);
+    const [dx, dy] = to instanceof HTMLElement ? this.middle(to) : to;
+    const x = Number(gsap.getProperty(item, 'x')) || 0;
+    const y = Number(gsap.getProperty(item, 'y')) || 0;
+    await this.to(item, seconds, { x: x + dx - sx, y: y + dy - sy, ease: 'power2.inOut' });
+    this.flourish(item);
+  }
 
-    // Stage points (what he sees, camera included) and world points (what the item moves in).
+  /** An actor's middle in world coordinates (the camera taken out). */
+  private middle(el: HTMLElement): Pt {
     const s = this.stage.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
     const k = s.width / 1180 || 1;
-    const cam = () => ({ x: Number(gsap.getProperty(this.root, 'x')) || 0, y: Number(gsap.getProperty(this.root, 'y')) || 0, z: Number(gsap.getProperty(this.root, 'scale')) || 1 });
-    const centre = (el: HTMLElement): Pt => {
-      const r = el.getBoundingClientRect();
-      return [(r.left + r.width / 2 - s.left) / k, (r.top + r.height / 2 - s.top) / k];
-    };
-    const c = cam();
-    const [sx, sy] = centre(item);
-    const to = o.to;
-    const [dx, dy] = to instanceof HTMLElement ? centre(to) : [to[0] * c.z + c.x, to[1] * c.z + c.y];
-    const ir = item.getBoundingClientRect();
-    const size = Math.max(120, Math.min(220, Math.max(ir.width, ir.height) / k));
-    const drop = Math.max(140, o.dropSize ?? 180);
-    // Where the item's gsap x/y are now: moves are added to these, in world points.
-    const home = { x: Number(gsap.getProperty(item, 'x')) || 0, y: Number(gsap.getProperty(item, 'y')) || 0 };
-    const goal = { x: home.x + (dx - sx) / c.z, y: home.y + (dy - sy) / c.z };
-
-    const ring = place(h('div', { class: 'story-tap-ring' }), sx - size / 2, sy - size / 2, size, size);
-    const dropRing = place(h('div', { class: 'story-drop-ring' }), dx - drop / 2, dy - drop / 2, drop, drop);
-    const hit = place(
-      h('button', { class: 'story-tap story-drag', 'data-tap-to-help': '', 'data-drag-to': `${Math.round(dx)} ${Math.round(dy)}`, 'aria-label': 'Drag to help' }),
-      sx - size / 2,
-      sy - size / 2,
-      size,
-      size,
-    );
-    for (const el of [dropRing, ring, hit]) this.stage.insertBefore(el, this.show.captionEl);
-    gsap.set([ring, dropRing], { opacity: 0, scale: 0.8 });
-    gsap.to([ring, dropRing], { opacity: 1, scale: 1, duration: 0.5, ease: 'sine.out' });
-    const breathe = gsap.to([ring, dropRing], { scale: 1.08, duration: 1.2, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 0.5 });
-    this.show.idle.forEach((t) => t.pause());
-
-    // His finger: the item, its ring and the hit area follow it while he holds on.
-    let done = false;
-    let holding: number | null = null;
-    let start: Pt = [0, 0];
-    let moved = 0;
-    const follow = (ddx: number, ddy: number) => {
-      gsap.set([hit, ring], { x: ddx, y: ddy });
-      gsap.set(item, { x: home.x + ddx / c.z, y: home.y + ddy / c.z });
-    };
-    let finish = () => {};
-    const dragged = new Promise<void>((resolve) => (finish = resolve));
-    const down = (e: PointerEvent) => {
-      if (done || holding !== null) return;
-      holding = e.pointerId;
-      start = [e.clientX, e.clientY];
-      moved = 0;
-      hit.setPointerCapture?.(e.pointerId);
-      gsap.killTweensOf([hit, ring]);
-      gsap.killTweensOf(item, 'x,y');
-      gsap.to(item, { scale: 1.08, duration: 0.15, ease: 'sine.out' });
-    };
-    const move = (e: PointerEvent) => {
-      if (e.pointerId !== holding) return;
-      const ddx = (e.clientX - start[0]) / k;
-      const ddy = (e.clientY - start[1]) / k;
-      moved = Math.max(moved, Math.hypot(ddx, ddy));
-      follow(ddx, ddy);
-    };
-    const up = (e: PointerEvent) => {
-      if (e.pointerId !== holding) return;
-      holding = null;
-      const ddx = (e.clientX - start[0]) / k;
-      const ddy = (e.clientY - start[1]) / k;
-      gsap.to(item, { scale: 1, duration: 0.2, ease: 'sine.out' });
-      if (Math.hypot(sx + ddx - dx, sy + ddy - dy) < drop / 2 + 40) {
-        done = true;
-        finish();
-        return;
-      }
-      // Not there yet: back it goes, gently, to try again. A tap leans it towards the drop ring.
-      const lean = moved < 12 ? 0.12 : 0;
-      gsap.to([hit, ring], { x: (dx - sx) * lean, y: (dy - sy) * lean, duration: 0.3, ease: 'sine.out' });
-      gsap.to(item, { x: home.x + ((dx - sx) * lean) / c.z, y: home.y + ((dy - sy) * lean) / c.z, duration: 0.3, ease: 'sine.out' });
-      gsap.to([hit, ring], { x: 0, y: 0, duration: 0.45, delay: 0.3, ease: 'sine.inOut' });
-      gsap.to(item, { x: home.x, y: home.y, duration: 0.45, delay: 0.3, ease: 'sine.inOut' });
-    };
-    hit.addEventListener('pointerdown', down);
-    hit.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
-    window.addEventListener('pointercancel', up);
-    const tidy = () => {
-      done = true;
-      hit.removeEventListener('pointerdown', down);
-      hit.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-      window.removeEventListener('pointercancel', up);
-      breathe.kill();
-      hit.remove();
-      gsap.to([ring, dropRing], { opacity: 0, scale: 1.3, duration: 0.35, ease: 'sine.in', onComplete: () => (ring.remove(), dropRing.remove()) });
-      this.show.idle.forEach((t) => t.resume());
-    };
-
-    // Waiting on him, as tapToHelp; never taken from his finger while he's holding it.
-    const patience = (async () => {
-      await wait(9000);
-      if (done) return;
-      if (o.nudge) await Promise.race([this.say(o.nudge, o.by), dragged]);
-      if (done) return;
-      await Promise.race([wait(12000), dragged]);
-      while (holding !== null && !done) await Promise.race([wait(500), dragged]);
-    })();
-    await Promise.race([dragged, patience]);
-    const byHim = done;
-    if (!this.alive()) {
-      tidy();
-      return never();
-    }
-    tidy();
-    if (byHim) {
-      voice.stop();
-      this.caption('');
-      await this.to(item, 0.25, { x: goal.x, y: goal.y, ease: 'sine.out' });
-    } else {
-      if (o.helped) await this.say(o.helped, o.helper ?? o.by);
-      await this.to(item, 0.9, { x: goal.x, y: goal.y, ease: 'power2.inOut' });
-    }
-    sfx.sparkle();
-    this.sparkle((dx - c.x) / c.z, (dy - c.y) / c.z, 12, 120);
-    return byHim ? 'dragged' : 'helped';
+    const z = Number(gsap.getProperty(this.root, 'scale')) || 1;
+    const cx = Number(gsap.getProperty(this.root, 'x')) || 0;
+    const cy = Number(gsap.getProperty(this.root, 'y')) || 0;
+    return [((r.left + r.width / 2 - s.left) / k - cx) / z, ((r.top + r.height / 2 - s.top) / k - cy) / z];
   }
 
   // ----------------------------------------------------------------- motion
@@ -808,8 +592,7 @@ export class Kit<K extends string = string> {
   /**
    * Fills the scene with slow, looping atmosphere: floating dust motes,
    * fireflies, snow, rain, bubbles, rising embers or twinkling stars.
-   * In front of the actors unless `z` says otherwise. Holds still while
-   * he's tapping (tapToHelp).
+   * In front of the actors unless `z` says otherwise.
    */
   ambient(kind: 'dust' | 'fireflies' | 'snow' | 'rain' | 'bubbles' | 'embers' | 'stars', o: { count?: number; z?: number; area?: [number, number, number, number] } = {}): void {
     if (!this.alive()) return;
@@ -930,8 +713,6 @@ export class Kit<K extends string = string> {
     gsap.killTweensOf(this.root.querySelectorAll('*'));
     this.show.idle = [];
     this.root.replaceChildren();
-    // A skipped scene's tap target, if it was his turn.
-    this.stage.querySelectorAll(':scope > .story-tap, :scope > .story-tap-ring, :scope > .story-drop-ring').forEach((el) => el.remove());
     this.set(this.root, { x: 0, y: 0, scale: 1 });
   }
 

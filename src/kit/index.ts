@@ -4,7 +4,7 @@
  *   import { C, defineCartoon, piece, circle, svg, type Kit } from '../kit';
  */
 export { defineCartoon, type Cartoon, type CartoonDef, type SceneDef } from './cartoon';
-export { Kit, cloud, type PlaceOpts, type Side, type TapToHelpOpts } from './kit';
+export { Kit, cloud, type PlaceOpts, type Side } from './kit';
 export type { Line } from '../core/cartoon';
 export type { Mood } from '../audio/synth';
 
