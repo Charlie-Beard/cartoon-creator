@@ -4,7 +4,7 @@ export default defineMeta({
   id: 'degnoming',
   title: 'De-gnoming the Garden',
   world: 'hogwarts',
-  summary: 'On Harry’s first morning at the Burrow, Mrs Weasley sends the boys out to clear the garden of gnomes: you swing them round and round and over the hedge. But the gnomes keep coming back, and then the grumpy Gnome Chief stomps out.',
+  summary: 'On Harry’s first morning at the Burrow, Mrs Weasley sends the boys out to clear the garden of gnomes: they swing them round and round and over the hedge. But the gnomes keep coming back, and then the grumpy Gnome Chief stomps out.',
   thumb: 'the-burrow',
   added: '2026-10-16',
   ledger: {

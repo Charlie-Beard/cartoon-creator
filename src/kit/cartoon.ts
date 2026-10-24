@@ -5,9 +5,9 @@
  *     id: 'lost-kettle',
  *     title: 'The Lost Kettle',
  *     world: 'faraway',
- *     summary: 'The Saucepan Man loses his kettle, and Jasper helps find it.',
+ *     summary: 'The Saucepan Man loses his kettle, and his friends help find it.',
  *     lines: {
- *       hello: { who: 'moonface', text: 'Hello, {name}! Have you seen a kettle?' },
+ *       hello: { who: 'moonface', text: 'Hello! Have you seen a kettle?' },
  *     },
  *     scenes: [
  *       {

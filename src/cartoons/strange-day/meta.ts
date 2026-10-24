@@ -12,7 +12,6 @@ export default defineMeta({
     villain: 'a deep rumble and a big light coming down out of the night sky (it is only Hagrid)',
     places: ['privet-drive-night', 'privet-drive', 'dursley-kitchen', 'grunnings-office'],
     cast: ['vernon', 'petunia', 'dudley', 'tabbyCat', 'slughorn', 'dumbledore', 'mcgonagall', 'hagrid'],
-    turns: ['drag the porridge pot over to Dudley', 'tap the cat’s map so the cat reads it', 'tap the radio to switch it on', 'tap Dumbledore’s Put-Outer to click the street lamps out', 'drag baby Harry down onto the doorstep'],
     jokes: ['Mr Dursley never sees the owls', 'Mr Dursley goes purple', 'Sherbet lemon?'],
     ending: 'baby Harry asleep on the doorstep, and Mr Dursley snoring on',
   },

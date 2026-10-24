@@ -5,28 +5,28 @@
  *
  *   1. The final. On the pitch before the match, Oliver Wood: seven years
  *      he's waited for this Cup! Just catch the Snitch, Harry. Easy. Harry
- *      has his new Firebolt, the fastest broom in the world. His first turn,
- *      a drag: Wood holds out the golden Snitch and he drags it up to the
- *      hoops to let it go (it is what they chase). Malfoy sneers:
+ *      has his new Firebolt, the fastest broom in the world. Wood holds out
+ *      the golden Snitch and sends it up to the hoops to let it go (it is
+ *      what they chase). Malfoy sneers:
  *      "Nice broom, Potter. Pity you'll fall off it." Peep! Up they go.
  *   2. Malfoy cheats. High in the sky Harry spots the Snitch by the hoops,
  *      and Malfoy grabs the Firebolt's tail and holds on. Peep! A foul, and
  *      the crowd boos. In the Gryffindor stand: Ron, Hermione and Hagrid
- *      with their lion banner. His second turn: he waves the banner, the
+ *      with their lion banner. Ron waves the banner, the
  *      whole stand roars "Go, Gryffindor!", and Harry shoots off faster than
  *      ever.
  *   3. Dementors! It goes cold and quiet. Tall hooded shapes loom at
  *      the edge of the pitch. Dementors? Here? Harry remembers what
- *      Professor Lupin taught him. His big turn: he taps Harry's wand.
+ *      Professor Lupin taught him. Harry raises his wand.
  *      "Expecto Patronum!" A silver stag gallops at the hoods, and they
  *      tumble into a heap of robes… out pops Malfoy, all tangled: "Ow!
  *      Crabbe, get off my foot!" Professor McGonagall: fifty points from
  *      Slytherin!
  *   4. The Snitch. There it is again, and Malfoy sees it too. A race across
- *      the sky. His fourth turn: he catches the Snitch. Gryffindor wins!
+ *      the sky. Harry catches the Snitch. Gryffindor wins!
  *   5. The Cup. Everyone pours on to the pitch. Dumbledore gives the Cup to
  *      Gryffindor and Wood sobs for joy ("something in my eye… both eyes!").
- *      His fifth turn, a drag: he drags the Cup across to Harry, and Harry
+ *      Dumbledore carries the Cup across to Harry, and Harry
  *      and Wood lift it together under the confetti.
  *
  * The scary beat is the hooded shapes: sound and cold first, a slow loom,
@@ -114,9 +114,7 @@ export default defineCartoon({
     final: { who: 'narrator', text: 'It was the Quidditch final. Gryffindor against Slytherin, for the Quidditch Cup!' },
     sevenYears: { who: 'wood', text: 'This is it, Harry. Seven years I’ve waited for this Cup. Seven years!' },
     justSnitch: { who: 'wood', text: 'Just catch the golden Snitch, and we win. Easy!' },
-    askSnitchGo: { who: 'wood', text: 'Here’s the Snitch! Drag it up to the hoops, {name}, and let it go!' },
-    nudgeSnitchGo: { who: 'wood', text: 'Drag the golden Snitch up to the hoops!' },
-    helpedSnitchGo: { who: 'wood', text: 'Never mind, I’ll let it go myself. Off you fly!' },
+    helpedSnitchGo: { who: 'wood', text: 'Here’s the Snitch! Up to the hoops it goes. Off you fly!' },
     thanksSnitchGo: { who: 'wood', text: 'Off it flies! Now the match can start.' },
     flyHigh: { who: 'wood', text: 'Remember, Slytherin play rough. Fly high, fly fast, and watch out for Malfoy!' },
     easy: { who: 'harry', text: 'Easy. Right. Gulp.' },
@@ -133,8 +131,6 @@ export default defineCartoon({
     cheat: { who: 'ron', text: 'Cheat! Malfoy’s a cheat!' },
     comeOn: { who: 'hagrid', text: 'Come on, Harry! Don’t let him get to yeh!' },
     beauty: { who: 'hagrid', text: 'That Firebolt’s a beauty. Nothing can catch it!' },
-    askBanner: { who: 'hermione', text: 'Harry needs our cheers! {name}, wave our banner!' },
-    nudgeBanner: { who: 'hermione', text: 'Tap the big lion banner!' },
     helpedBanner: { who: 'ron', text: 'I’ll wave it! Go on, Harry!' },
     goGryffindor: { who: 'hagrid', text: 'GO, GRYFFINDOR!' },
     lookAtHim: { who: 'ron', text: 'Look at him go! He’s faster than ever!' },
@@ -144,8 +140,6 @@ export default defineCartoon({
     shapes: { who: 'harry', text: 'Who’s that? Tall dark shapes, in hoods…' },
     dementors: { who: 'harry', text: 'Dementors? Here?' },
     lupin: { who: 'harry', text: 'Professor Lupin taught me what to do. Think of something happy…' },
-    askWand: { who: 'harry', text: 'Help me! Tap me for luck, and I’ll cast it!' },
-    nudgeWand: { who: 'harry', text: 'Tap me, quick!' },
     helpedWand: { who: 'harry', text: 'I can do this. I can!' },
     patronus: { who: 'harry', text: 'Expecto Patronum!' },
     ow: { who: 'malfoy', text: 'Ow! Get off my foot, Crabbe!' },
@@ -158,10 +152,8 @@ export default defineCartoon({
     faster: { who: 'harry', text: 'Come on, Firebolt. Faster!' },
     neckAndNeck: { who: 'narrator', text: 'Faster and faster they flew, neck and neck, across the sky!' },
     mine: { who: 'malfoy', text: 'It’s mine, Potter!' },
-    askSnitch: { who: 'harry', text: '{name}, there it is! Tap the Snitch and catch it!' },
-    nudgeSnitch: { who: 'harry', text: 'Catch the golden Snitch!' },
-    helpedSnitch: { who: 'harry', text: 'Stretch… stretch… got it!' },
-    gotIt: { who: 'harry', text: 'We caught it, {name}! We caught the Snitch!' },
+    helpedSnitch: { who: 'harry', text: 'Stretch… stretch… almost there!' },
+    gotIt: { who: 'harry', text: 'I’ve got it! I’ve caught the Snitch!' },
     wins: { who: 'narrator', text: 'Gryffindor wins the Quidditch Cup!' },
     notFair: { who: 'malfoy', text: 'Not fair!' },
     // 5. The Cup
@@ -171,14 +163,11 @@ export default defineCartoon({
     isCrying: { who: 'ron', text: 'He’s crying!' },
     inMyEye: { who: 'wood', text: 'I’ve just got something in my eye. Both eyes!' },
     pillow: { who: 'wood', text: 'I’m going to sleep with this Cup under my pillow!' },
-    askCup: { who: 'dumbledore', text: 'Now, {name}, drag the Cup over to Harry!' },
-    nudgeCup: { who: 'dumbledore', text: 'Drag the big silver Cup to Harry!' },
-    helpedCup: { who: 'dumbledore', text: 'Never mind, I’ll carry it over to him myself.' },
-    thanksCup: { who: 'harry', text: 'Got it! Thank you!' },
-    thanksDumbledore: { who: 'harry', text: 'Thank you, Professor!' },
+    helpedCup: { who: 'dumbledore', text: 'Now, Harry, here is the Cup. I’ll carry it over to you.' },
+    thanksCup: { who: 'harry', text: 'Got it! Thank you, Professor!' },
     together: { who: 'harry', text: 'Let’s lift it together! One, two, three!' },
     brilliant: { who: 'ron', text: 'Harry, you were brilliant!' },
-    thanksName: { who: 'harry', text: 'Thank you, {name}. The best Quidditch match ever!' },
+    thanksName: { who: 'harry', text: 'That was the best Quidditch match ever!' },
     end: { who: 'narrator', text: 'And the Quidditch Cup went home with Gryffindor. Hooray!' },
   },
   scenes: [
@@ -205,13 +194,14 @@ export default defineCartoon({
         await k.say('sevenYears', wood);
         await k.say('justSnitch', wood);
 
-        // His first turn: let the Snitch go, up to the hoops.
+        // Wood lets the Snitch go, up to the hoops.
         await k.fade(snitch, 1, 0.4);
-        const go = await k.dragToHelp(snitch, { to: [730, 260], ask: 'askSnitchGo', nudge: 'nudgeSnitchGo', helped: 'helpedSnitchGo', by: wood, dropSize: 200 });
+        await k.say('helpedSnitchGo', wood);
+        await k.carry(snitch, [730, 260]);
         snitchFlutters(k, snitch);
         await k.to(snitch, 0.9, { x: '+=130', y: '-=130', ease: 'power1.out' });
         await k.vanish(snitch, 0.3);
-        if (go === 'dragged') await k.say('thanksSnitchGo', wood);
+        await k.say('thanksSnitchGo', wood);
         await k.say('flyHigh', wood);
         await k.all(k.say('easy', harry), k.shake(harry, 3, 2));
         k.sfx.sparkle();
@@ -291,8 +281,9 @@ export default defineCartoon({
         await k.say('comeOn', hagrid);
         await k.say('beauty', hagrid);
 
-        // His second turn: wave the banner.
-        await k.tapToHelp(banner, { ask: 'askBanner', nudge: 'nudgeBanner', helped: 'helpedBanner', by: hermione, helper: ron, size: 260 });
+        // Ron waves the banner.
+        await k.say('helpedBanner', ron);
+        k.flourish(banner);
         const cloth = k.pivot(k.part(banner, 'cloth'));
         void k.to(cloth.length ? cloth : banner, 0.3, { rotation: 6, yoyo: true, repeat: 5, ease: 'sine.inOut' });
         roar(3);
@@ -345,7 +336,8 @@ export default defineCartoon({
         // Back to Harry: he knows what to do.
         k.music('magic');
         await k.say('lupin', harry);
-        await k.tapToHelp(harry, { ask: 'askWand', nudge: 'nudgeWand', helped: 'helpedWand', by: harry, size: 200 });
+        await k.say('helpedWand', harry);
+        k.flourish(harry);
         await k.say('patronus', harry);
         await castSpell(k, harry, [650, 320]);
         k.sfx.shield();
@@ -409,8 +401,9 @@ export default defineCartoon({
           fly(k, [malfoy, malfoyBroom], 1.4, { x: 300, ease: 'power2.inOut' }),
         );
 
-        // His fourth turn: catch the Snitch.
-        const how = await k.tapToHelp(snitch, { ask: 'askSnitch', nudge: 'nudgeSnitch', helped: 'helpedSnitch', by: harry, size: 160 });
+        // Harry reaches for the Snitch.
+        await k.say('helpedSnitch', harry);
+        k.flourish(snitch);
         k.sfx.success();
         const sb = k.box(snitch);
         const hb = k.box(harry);
@@ -421,7 +414,7 @@ export default defineCartoon({
         whistle(true);
         roar(3);
         k.music('triumph');
-        if (how === 'tapped') await k.say('gotIt', harry);
+        await k.say('gotIt', harry);
         await k.say('wins');
         k.confetti(30);
         await k.say('notFair', malfoy);
@@ -460,9 +453,10 @@ export default defineCartoon({
         laugh();
 
         // Harry and Wood lift the Cup together.
-        // His fifth turn: drag the Cup over to Harry.
-        const passed = await k.dragToHelp(cup, { to: [610, 620], ask: 'askCup', nudge: 'nudgeCup', helped: 'helpedCup', by: dumbledore, dropSize: 200 });
-        await k.say(passed === 'dragged' ? 'thanksCup' : 'thanksDumbledore', harry);
+        // Dumbledore carries the Cup over to Harry.
+        await k.say('helpedCup', dumbledore);
+        await k.carry(cup, [610, 620]);
+        await k.say('thanksCup', harry);
         await k.say('together', harry);
         await k.to(cup, 0.6, { y: '-=300', ease: 'back.out(1.6)' });
         roar(3);

@@ -4,7 +4,7 @@
  * rock colours of the world's seaside props and the beach backdrop.
  *
  * - `turret`: the bucket-shaped tower that pops onto Teddy and Barney's
- *   castle on his first turn (the shape a bucket leaves when it's tipped up).
+ *   castle at the start (the shape a bucket leaves when it's tipped up).
  * - `heap`: what's left of their castle after Bully's spade: a low lumpy
  *   mound with a shell and a broken lump of tower.
  * - `moat`: the sea water that fills Bully's moat.

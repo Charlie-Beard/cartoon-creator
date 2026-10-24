@@ -5,9 +5,9 @@
  *   1. The competition (bear-beach). A gull, the waves. Captain Bear blows
  *      his whistle: the best sand-castle wins a prize, and he'll judge at
  *      teatime. His own castle, up on the dune, is "the finest castle on the
- *      beach!" Teddy and Barney are building theirs. His turn: he drags the
- *      red bucket onto the castle, it flips over and a new tower pops up (or
- *      Barney brings it and tips it). Thud, thud: Bully Bear swaggers in. "Sand-castles are for
+ *      beach!" Teddy and Barney are building theirs. Barney brings the
+ *      red bucket and tips it onto the castle: it flips over and a new tower
+ *      pops up. Thud, thud: Bully Bear swaggers in. "Sand-castles are for
  *      babies!" WHUMP goes his spade, and the castle is a heap. "Ha ha!"
  *      Off he runs. Barney: he's too big for any of us, what can we do?
  *      Teddy: "I've got an idea!"
@@ -16,7 +16,7 @@
  *      Bear's castle. Said plainly: it's not true, but Bully will THINK it
  *      is. Scribble, scribble, a seal. Teeny trots in, and Teddy says it
  *      loudly, so the rocks can hear: take this secret letter to Teacher
- *      Bear! Bully's ears poke up behind the rock. His turn: he drags the
+ *      Bear! Bully's ears poke up behind the rock. Teddy runs the
  *      letter over to Teeny, who holds it up; Bully leaps out and snatches
  *      it from the air above her (he never touches her). "That's what YOU
  *      think, Teddy Bear!" He reads it and runs off. "Good. I wanted him to!"
@@ -26,15 +26,15 @@
  *      "You RUFFIAN!" Bully goes small: "I-I thought the prizes were here…"
  *      "Go away, and don't come back until you can play nicely." Bully slinks
  *      off, head down. Cut back wide: the friends come up, Teddy owns up to
- *      the note. His turn: Captain Bear's face is still stern, so he taps
- *      him for a tickle (or Teeny tickles him) and Captain Bear laughs:
+ *      the note. Captain Bear's face is still stern, so Teeny
+ *      tickles him and Captain Bear laughs:
  *      "Well, scupper me scallywags! Clever Teddy Bear!" But their castles are squashed, and it's nearly
  *      teatime. "Let's build the best castle ever!"
- *   4. Teatime (bear-beach). A brand new castle, a bit lumpy: his turn, he taps
- *      it and it's patted smooth (or Barney pats it). Bully comes back, slowly,
+ *   4. Teatime (bear-beach). A brand new castle, a bit lumpy: Barney pats
+ *      it smooth. Bully comes back, slowly,
  *      head down: sorry, can I help? I'm good at digging. "Of course you
- *      can!" He digs the best moat ever and the sea fills it. His turn: he
- *      taps the flag and it flies up onto the top (or Teeny plants it).
+ *      can!" He digs the best moat ever and the sea fills it. Teeny
+ *      plants the flag and it flies up onto the top.
  *      Teeny runs to fetch Captain Bear; the whistle, and the prize goes to
  *      the castle they all built together. Shell medals for every builder,
  *      Bully too, and Teddy takes Teeny hers. Teatime!
@@ -106,11 +106,8 @@ export default defineCartoon({
     seaside: { who: 'narrator', text: 'Teddy Bear was at the seaside, and there was a sand-castle competition!' },
     ahoy: { who: 'captain-bear', text: 'Ahoy, little bears! The best sand-castle wins a prize. I’ll judge them at teatime!' },
     myCastle: { who: 'captain-bear', text: 'Mine is up on the dune. The finest castle on the beach!' },
-    hello: { who: 'teddy', text: 'Hello, {name}! Look at our castle. It needs one more tower.' },
-    askBucket: { who: 'teddy', text: 'Can you help? Drag the bucket onto the castle to make a tower!' },
-    nudgeBucket: { who: 'teddy', text: 'Drag the red bucket over!' },
+    hello: { who: 'teddy', text: 'Look at our castle, Barney. It needs one more tower.' },
     barneyTips: { who: 'barney', text: 'I’ll bring it over and tip it. One, two, three!' },
-    thanksBucket: { who: 'teddy', text: 'A brand new tower! Thank you, {name}!' },
     thanksBarney: { who: 'teddy', text: 'A brand new tower! Well done, Barney!' },
     babies: { who: 'bully-bear', text: 'Sand-castles are for babies!' },
     haha: { who: 'bully-bear', text: 'Ha ha! Ha ha ha!' },
@@ -118,14 +115,12 @@ export default defineCartoon({
     idea: { who: 'teddy', text: 'Hmm… I’ve got an idea!' },
     // 2. The pretend letter
     whisper: { who: 'teddy', text: 'Listen. We’ll write a pretend letter. It says the prizes are buried under Captain Bear’s castle.' },
-    notTrue: { who: 'teddy', text: 'It’s pretend, {name}. It’s not true! But Bully will THINK it is.' },
+    notTrue: { who: 'teddy', text: 'It’s pretend. It’s not true! But Bully will THINK it is.' },
     scribble: { who: 'teddy', text: 'Scribble, scribble… There! And a red seal.' },
     teenyHello: { who: 'teeny-bear', text: 'Hello! Can I help?' },
     loud: { who: 'teddy', text: 'Teeny! Take this SECRET letter to Teacher Bear!' },
     ears: { who: 'barney', text: 'Psst! Look! Bully’s behind the rock. He heard!' },
-    askLetter: { who: 'teddy', text: 'Send the letter to Teeny, {name}! Drag it over to her!' },
-    nudgeLetter: { who: 'teddy', text: 'Drag the letter to Teeny!' },
-    offItGoes: { who: 'teddy', text: 'I’ll run it over to her myself. Whoosh!' },
+    offItGoes: { who: 'teddy', text: 'I’ll run it over to her. Whoosh!' },
     thatsWhat: { who: 'bully-bear', text: 'That’s what YOU think, Teddy Bear!' },
     reads: { who: 'bully-bear', text: 'The prizes! Under Captain Bear’s castle! Ha ha!' },
     tookIt: { who: 'teeny-bear', text: 'Oh! He took it!' },
@@ -139,24 +134,17 @@ export default defineCartoon({
     goAway: { who: 'captain-bear', text: 'Go away! And don’t come back until you can play nicely.' },
     goodThing: { who: 'barney', text: 'See that, Teddy? Good thing Bully believed the note!' },
     explain: { who: 'teddy', text: 'I wrote it! I knew Bully would dig, and you would catch him!' },
-    askCaptain: { who: 'barney', text: 'Captain Bear still has his stern face. Tap him for a tickle!' },
-    nudgeCaptain: { who: 'barney', text: 'Tap Captain Bear!' },
-    tickle: { who: 'teeny-bear', text: 'I’ll tickle him myself! Tickle, tickle!' },
+    tickle: { who: 'teeny-bear', text: 'He still looks so stern. I’ll tickle him! Tickle, tickle!' },
     scupper: { who: 'captain-bear', text: 'Well, scupper me scallywags! Clever Teddy Bear!' },
     squashed: { who: 'teeny-bear', text: 'But our castles are squashed. And it’s nearly teatime!' },
     bestEver: { who: 'teddy', text: 'Then let’s build the best castle ever!' },
     // 4. Teatime
     patPat: { who: 'narrator', text: 'They built a brand new castle out of wet sand.' },
-    askPat: { who: 'teddy', text: 'It’s a bit lumpy. Tap the castle to pat it smooth, {name}!' },
-    nudgePat: { who: 'teddy', text: 'Tap the castle!' },
-    barneyPats: { who: 'barney', text: 'I’ll pat it. Pat, pat, pat!' },
+    barneyPats: { who: 'barney', text: 'It’s a bit lumpy. I’ll pat it smooth. Pat, pat, pat!' },
     sorry: { who: 'bully-bear', text: 'Sorry I spoiled your castles. Can I help? I’m good at digging.' },
     ofCourse: { who: 'teddy', text: 'Of course you can! Dig us a moat!' },
     bestMoat: { who: 'barney', text: 'Look! The best moat ever!' },
-    askFlag: { who: 'teddy', text: 'Now the flag on top. Tap the flag, {name}!' },
-    nudgeFlag: { who: 'teddy', text: 'Tap the little red flag!' },
     teenyFlag: { who: 'teeny-bear', text: 'I’ll put it up! There!' },
-    finished: { who: 'teeny-bear', text: 'Hooray! It’s finished!' },
     thanksTeeny: { who: 'teddy', text: 'Thank you, Teeny! It’s finished!' },
     fetch: { who: 'teeny-bear', text: 'It’s teatime! I’ll fetch Captain Bear!' },
     judging: { who: 'captain-bear', text: 'Judging time! The prize goes to… this castle, built together! Medals for everyone!' },
@@ -209,8 +197,9 @@ export default defineCartoon({
 
         await k.say('hello', teddy);
 
-        // His turn: the bucket flips onto the castle and leaves a tower.
-        const how = await k.dragToHelp(bucket, { to: [510, 545], ask: 'askBucket', nudge: 'nudgeBucket', helped: 'barneyTips', by: teddy, helper: barney });
+        // Barney tips the bucket onto the castle and leaves a tower.
+        await k.say('barneyTips', barney);
+        await k.carry(bucket, [510, 545]);
         k.fx.boing();
         k.set(bucket, { zIndex: 20 });
         await k.to(bucket, 0.7, { x: 290, y: -150, rotation: 180, ease: 'power1.inOut' });
@@ -220,7 +209,7 @@ export default defineCartoon({
         k.fx.pop();
         void k.to(tower, 0.35, { opacity: 1, scale: 1, ease: 'back.out(2)' });
         await k.to(bucket, 0.5, { y: -260, opacity: 0, ease: 'power1.in' });
-        await k.all(k.say(how === 'dragged' ? 'thanksBucket' : 'thanksBarney', teddy), k.hop(barney, 30));
+        await k.all(k.say('thanksBarney', teddy), k.hop(barney, 30));
 
         // Thud… thud… Bully Bear.
         k.music('sneaky');
@@ -309,8 +298,9 @@ export default defineCartoon({
         await k.wait(300);
         await k.say('ears', barney);
 
-        // His turn: drag the letter over to Teeny.
-        await k.dragToHelp(letter, { to: [440, 600], ask: 'askLetter', nudge: 'nudgeLetter', helped: 'offItGoes', by: teddy });
+        // Teddy runs the letter over to Teeny.
+        await k.say('offItGoes', teddy);
+        await k.carry(letter, [440, 600]);
         // Teeny holds it up high, and that's when Bully pounces.
         k.sfx.whoosh();
         await k.to(letter, 0.7, { y: '-=200', rotation: -10, ease: 'sine.out' });
@@ -405,8 +395,9 @@ export default defineCartoon({
         await k.all(k.enter(barney, 'left', 0.8), k.wait(200).then(() => k.enter(teeny, 'left', 0.8)), k.wait(400).then(() => k.enter(teddy, 'left', 0.8)));
         await k.all(k.say('goodThing', barney), k.hop(barney, 20));
         await k.say('explain', teddy);
-        // His turn: a tickle for Captain Bear's stern face.
-        await k.tapToHelp(captain, { ask: 'askCaptain', nudge: 'nudgeCaptain', helped: 'tickle', by: barney, helper: teeny, size: 260 });
+        // Teeny tickles Captain Bear's stern face.
+        await k.all(k.say('tickle', teeny), k.hop(teeny, 20, 2));
+        k.flourish(captain);
         laugh();
         k.pose(captain, 'happy');
         await k.all(k.say('scupper', captain), k.shake(captain, 4, 3));
@@ -441,8 +432,9 @@ export default defineCartoon({
         sounds.waves(2);
         await k.say('patPat');
 
-        // His turn: pat the lumpy castle smooth.
-        await k.tapToHelp(castle, { ask: 'askPat', nudge: 'nudgePat', helped: 'barneyPats', by: teddy, helper: barney, size: 260 });
+        // Barney pats the lumpy castle smooth.
+        await k.say('barneyPats', barney);
+        k.flourish(castle);
         for (let i = 0; i < 3; i++) {
           k.fx.thud();
           await k.pop(castle, 1.06);
@@ -471,8 +463,9 @@ export default defineCartoon({
         await k.all(k.say('bestMoat', barney), k.hop(barney, 24));
         k.pose(barney, 'default');
 
-        // His turn: the flag on top.
-        const how = await k.tapToHelp(flag, { ask: 'askFlag', nudge: 'nudgeFlag', helped: 'teenyFlag', by: teddy, helper: teeny, size: 130 });
+        // Teeny puts the flag on top.
+        await k.say('teenyFlag', teeny);
+        k.flourish(flag);
         k.fx.whizz();
         k.set(flag, { zIndex: 25 });
         await k.to(flag, 1, { x: 575, y: -124, ease: 'power1.inOut' });
@@ -482,7 +475,7 @@ export default defineCartoon({
         k.sfx.sparkle();
         k.sparkle(770, 430, 14, 160);
         k.pose(teeny, 'happy');
-        await k.all(k.say(how === 'tapped' ? 'finished' : 'thanksTeeny', how === 'tapped' ? teeny : teddy), k.hop(teeny, 22, 2));
+        await k.all(k.say('thanksTeeny', teddy), k.hop(teeny, 22, 2));
 
         // Teeny runs to fetch Captain Bear.
         await k.say('fetch', teeny);

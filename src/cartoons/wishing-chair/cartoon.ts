@@ -4,26 +4,26 @@
  *
  *   1. The odd little shop. Mollie and Peter have sixpence for Mum's
  *      birthday present. The shop is dim, full of odd things, and nobody
- *      is there. His turn: he rings the bell on the counter. Still nobody.
+ *      is there. Peter rings the bell on the counter. Still nobody.
  *      But in the corner is a little red chair with a card: "Sixpence. Put
- *      your money in the dish." His turn: he drags the sixpence to the
+ *      your money in the dish." Peter puts the sixpence in the
  *      dish. As they go to carry it home, the chair wriggles its legs.
  *   2. The playroom. Mum loves her chair, and it lives in the playroom at
  *      the bottom of the garden. Mollie and Peter squeeze into it and wish
  *      for an adventure; Peter wishes it could fly, and it wriggles again.
- *      His turn: he taps the chair to make the wish. It grows little red
+ *      They make the wish together. It grows little red
  *      wings, and out through the doors they fly.
  *   3. Up in the sky. Wind, clouds, tiny fields far below. A small voice
  *      calls for help: a pixie is stuck on a cloud, and the cloud is
- *      breaking up, puff by puff. His turn: he drags the pixie onto the
+ *      breaking up, puff by puff. Jigs jumps onto the
  *      chair. He's Jigs! His umbrella floats up after him, blown inside out.
- *   4. Tired wings. His turn: he taps Jigs's umbrella and it pops the right
+ *   4. Tired wings. Jigs shakes his umbrella and it pops the right
  *      way out. Jigs knows what the chair is: a Wishing-Chair, whose wings
  *      come and go. Uh-oh: the wings droop, and the chair sinks. "Home,
  *      chair!"
  *   5. Home. A bumpy landing in the playroom, just as the wings fold away.
  *      Jigs asks to stay and look after the chair; it will be their
- *      secret. His turn: he drags a cushion to the chair for Jigs's bed.
+ *      secret. Peter takes a cushion to the chair for Jigs's bed.
  *      Goodnight, chair. The very first adventure of the Wishing-Chair.
  *
  * The danger is gentle (a cloud breaking up, the wings drooping), so the
@@ -124,17 +124,14 @@ export default defineCartoon({
   ...meta,
   lines: {
     // 1. The odd little shop
-    hello: { who: 'mollie', text: 'Hello, {name}! It’s Mum’s birthday tomorrow.' },
+    hello: { who: 'mollie', text: 'Peter, it’s Mum’s birthday tomorrow.' },
     sixpence: { who: 'peter', text: 'And we’ve got a whole sixpence to spend!' },
     anybody: { who: 'mollie', text: 'What a funny little shop. Hello? Is anybody there?' },
-    askBell: { who: 'peter', text: 'Nobody’s here! Can you ring the bell on the counter, {name}?' },
-    nudgeBell: { who: 'peter', text: 'Just tap the bell. Ding!' },
-    peterBell: { who: 'peter', text: 'I’ll ring it myself. Ding!' },
+    askBell: { who: 'peter', text: 'Nobody’s here! I’ll ring the bell on the counter. Ding!' },
     stillNobody: { who: 'mollie', text: 'Still nobody. Oh, Peter! Look at that little red chair!' },
     mumWouldLove: { who: 'peter', text: 'It’s got a cushion and everything. Mum would love it!' },
     card: { who: 'mollie', text: 'There’s a card on it. It says, sixpence. Put your money in the dish.' },
-    askCoin: { who: 'mollie', text: 'Can you drag our sixpence over to the dish?' },
-    nudgeCoin: { who: 'mollie', text: 'Drag the shiny coin into the dish.' },
+    askCoin: { who: 'mollie', text: 'Now let’s put our sixpence in the dish.' },
     peterCoin: { who: 'peter', text: 'I’ll pop it in. Clink!' },
     ours: { who: 'mollie', text: 'Clink! Now it’s ours. Let’s carry it home.' },
     wriggle: { who: 'peter', text: 'Mollie… did that chair just WRIGGLE?' },
@@ -145,8 +142,7 @@ export default defineCartoon({
     adventure: { who: 'mollie', text: 'I wish we could have a real adventure.' },
     fly: { who: 'peter', text: 'Me too. I wish this chair could FLY!' },
     listening: { who: 'mollie', text: 'It wriggled again! I think it’s listening.' },
-    askWish: { who: 'peter', text: '{name}, tap the chair and make our wish come true!' },
-    nudgeWish: { who: 'peter', text: 'Tap the chair. Wish really hard!' },
+    askWish: { who: 'peter', text: 'Let’s wish really hard, Mollie!' },
     mollieWish: { who: 'mollie', text: 'Let’s all wish together. One, two, three!' },
     wings: { who: 'peter', text: 'WINGS! It’s got little red wings!' },
     holdOn: { who: 'mollie', text: 'Hold on tight!' },
@@ -160,15 +156,10 @@ export default defineCartoon({
     pixie: { who: 'peter', text: 'It’s a pixie! A real pixie!' },
     breaking: { who: 'jigs', text: 'My cloud is breaking up! Please, can I hop on?' },
     closer: { who: 'mollie', text: 'Quick, chair, fly closer!' },
-    askJigs: { who: 'mollie', text: 'Can you drag the pixie onto the chair, {name}? Quick!' },
-    nudgeJigs: { who: 'mollie', text: 'Drag him over onto the chair.' },
     jigsJump: { who: 'jigs', text: 'I’ll jump! One, two… hup!' },
     savedMe: { who: 'jigs', text: 'Phew, thank you! You saved me. I’m Jigs!' },
-    madeIt: { who: 'jigs', text: 'Jumping jigs, I made it! I’m Jigs!' },
     brolly: { who: 'jigs', text: 'Oh dear. My poor umbrella is blown inside out!' },
     // 4. Tired wings
-    askBrolly: { who: 'jigs', text: 'Can you tap my umbrella and pop it the right way out?' },
-    nudgeBrolly: { who: 'jigs', text: 'Tap my umbrella. Pop!' },
     jigsBrolly: { who: 'jigs', text: 'I’ll give it a shake. Pop!' },
     goodAsNew: { who: 'jigs', text: 'Good as new! And do you know what this chair is?' },
     wishingChair: { who: 'jigs', text: 'It’s a Wishing-Chair! It grows wings when it likes.' },
@@ -182,11 +173,8 @@ export default defineCartoon({
     stay: { who: 'jigs', text: 'What a lovely playroom. Could I stay and look after the chair?' },
     secret: { who: 'peter', text: 'Yes, please! But it’s our secret. Nobody else must know.' },
     bed: { who: 'mollie', text: 'Jigs can sleep in the chair. Here’s a soft cushion.' },
-    askCushion: { who: 'mollie', text: 'Can you drag the cushion to the chair, {name}?' },
-    nudgeCushion: { who: 'mollie', text: 'Drag the cushion onto the chair.' },
+    cosy: { who: 'jigs', text: 'Ooh, cosy! Thank you, Peter!' },
     peterCushion: { who: 'peter', text: 'I’ll fetch it. Here you are, Jigs!' },
-    cosy: { who: 'jigs', text: 'Ooh, cosy! Thank you, {name}!' },
-    cosyPeter: { who: 'jigs', text: 'Ooh, cosy! Thank you, Peter!' },
     teaTime: { who: 'narrator', text: 'Then Mum called them in for tea, and soon it was bedtime.' },
     goodnight: { who: 'peter', text: 'Goodnight, Jigs! Goodnight, chair!' },
     nextTime: { who: 'jigs', text: 'Goodnight! See you for the next adventure!' },
@@ -226,8 +214,9 @@ export default defineCartoon({
         k.fx.knock(4);
         await k.wait(700);
 
-        // His turn: ring the bell.
-        await k.tapToHelp(bell, { ask: 'askBell', nudge: 'nudgeBell', helped: 'peterBell', by: peter, size: 150 });
+        // Peter rings the bell.
+        await k.say('askBell', peter);
+        k.flourish(bell);
         ding();
         await k.shake(bell, 4, 2);
         await k.wait(1100);
@@ -242,8 +231,9 @@ export default defineCartoon({
         await k.say('card', mollie);
         await k.camera({}, 0.8);
 
-        // His turn: drag the sixpence to the dish.
-        await k.dragToHelp(coin, { to: [DISH.x + 70, DISH.y + 26], ask: 'askCoin', nudge: 'nudgeCoin', helped: 'peterCoin', by: mollie, helper: peter, dropSize: 170 });
+        // Peter puts the sixpence in the dish.
+        await k.say('askCoin', mollie);
+        await k.all(k.say('peterCoin', peter), k.carry(coin, [DISH.x + 70, DISH.y + 26]));
         clink();
         await k.shake(plate, 3, 1);
         k.music('magic');
@@ -278,8 +268,10 @@ export default defineCartoon({
         await wishing.wriggle(k, ride.chair, 3);
         await k.say('listening', mollie);
 
-        // His turn: tap the chair and make the wish.
-        await k.tapToHelp(ride.chair, { ask: 'askWish', nudge: 'nudgeWish', helped: 'mollieWish', by: peter, helper: mollie, size: 300 });
+        // They make the wish together.
+        await k.say('askWish', peter);
+        await k.say('mollieWish', mollie);
+        k.flourish(ride.chair);
         k.music('magic');
         await chairRide.wings(k, ride);
         await chairRide.flap(k, ride, 3);
@@ -340,9 +332,9 @@ export default defineCartoon({
         k.fx.poof();
         await k.to(puffL, 1, { x: -60, y: 30, opacity: 0, ease: 'sine.in' });
 
-        // His turn: drag Jigs onto the chair (he leaves his umbrella on the cloud for now).
+        // Jigs jumps onto the chair (he leaves his umbrella on the cloud for now).
         void k.fade(brolly, 0, 0.3);
-        const how = await k.dragToHelp(jigs, { to: chairRide.seatAt(k, ride, 'back'), ask: 'askJigs', nudge: 'nudgeJigs', helped: 'jigsJump', by: mollie, helper: jigs, dropSize: 200 });
+        await k.all(k.say('jigsJump', jigs), k.carry(jigs, chairRide.seatAt(k, ride, 'back')));
         k.remove(jigs);
         const seated = await chairRide.seat(k, ride, { id: 'jigs', slot: 'back', flip: true });
         // The last of the cloud puffs away.
@@ -350,7 +342,7 @@ export default defineCartoon({
         k.puff(960, 450, 220, '#ffffff');
         k.remove(cloud);
         hatBell();
-        await k.all(k.say(how === 'dragged' ? 'savedMe' : 'madeIt', seated), k.hop(seated, 20, 1));
+        await k.all(k.say('savedMe', seated), k.hop(seated, 20, 1));
 
         // His umbrella floats up after him, still inside out.
         k.remove(brolly);
@@ -380,8 +372,9 @@ export default defineCartoon({
       async play(k) {
         const { mollie, peter, jigs } = cast;
         let { brolly } = cast;
-        // His turn: tap the umbrella the right way out.
-        await k.tapToHelp(brolly, { ask: 'askBrolly', nudge: 'nudgeBrolly', helped: 'jigsBrolly', by: jigs, size: 160 });
+        // Jigs shakes his umbrella the right way out.
+        await k.say('jigsBrolly', jigs);
+        k.flourish(brolly);
         k.fx.pop();
         k.remove(brolly);
         brolly = k.prop('jigs-umbrella', { x: 760, y: 150, w: 130, z: 16 });
@@ -444,15 +437,15 @@ export default defineCartoon({
         await k.all(k.say('secret', peter), k.hop(peter, 24, 1));
         await k.say('bed', mollie);
 
-        // His turn: drag the cushion onto the chair.
+        // Peter takes the cushion to the chair.
         await k.appear(cushion, 0.4);
-        const how = await k.dragToHelp(cushion, { to: [590, 470], ask: 'askCushion', nudge: 'nudgeCushion', helped: 'peterCushion', by: mollie, helper: peter });
+        await k.all(k.say('peterCushion', peter), k.carry(cushion, [590, 470]));
         k.fx.boing();
         // Jigs hops over the chair back onto his new bed.
         jigs.style.zIndex = String(ride.at.z + 1);
         await k.to(jigs, 0.3, { y: '-=60', ease: 'power1.out' });
         await k.to(jigs, 0.5, { x: '-=70', y: '+=250', ease: 'power1.in' });
-        await k.all(k.say(how === 'dragged' ? 'cosy' : 'cosyPeter', jigs), k.blink(jigs));
+        await k.all(k.say('cosy', jigs), k.blink(jigs));
         yawn();
         await k.wait(600);
 

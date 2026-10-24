@@ -3,36 +3,37 @@
  * has it.
  *
  *   1. Tea time. Moon-Face's round room, the cups out on the table and no
- *      kettle. Silky flutters down with a tin of pop biscuits (his turn: he taps the
+ *      kettle. Silky flutters down with a tin of pop biscuits (she taps the
  *      tin and they pop out); the Saucepan Man
  *      clanks up through the trapdoor without his whistling kettle. He
  *      mishears ("Up my SLEEVE?"), then remembers: he left it on the top
  *      branch to cool, and if you tap its lid it whistles. Far above, a
  *      thin whistle and a clack, clack: it's up in the cloud.
  *   2. Above the cloud. They pop up through the cloud at the top of the
- *      ladder, but a thick grey cloud hides the new land. His turn: he
- *      taps the cloud and it puffs away (or Silky's spell does it). It's
+ *      ladder, but a thick grey cloud hides the new land. Silky
+ *      puffs it away with a little spell. It's
  *      Dame Snap's School. The kettle whistles from inside it ("I'd know
  *      that whistle anywhere!"), and a far-off CLACK.
  *   3. Dame Snap's School. They tiptoe in; the kettle is on her desk by a
  *      NO WHISTLING slate. The Saucepan Man shouts with joy. Her window
  *      goes dark, then clack… clack… CLACK: she looms in, smacks her ruler
  *      on the desk and shrieks NOBODY WHISTLES (he hears "no WHISKERS?").
- *      Moon-Face: she hates whistling, so let's give her a big one. His big turn: he
+ *      Moon-Face: she hates whistling, so let's give her a big one. The Saucepan Man
  *      taps the kettle's lid. It whistles a jolly tune, again and louder,
  *      and she stomps so hard her own ruler snaps. "Oh, BOTHER!" She stomps
- *      off and slams a door. His turn: he drags the kettle home to the
+ *      off and slams a door. The kettle goes home to the
  *      Saucepan Man, who hugs it, and the land starts to move on: back to
  *      the ladder.
  *   4. Tea at last. Home in Moon-Face's room, the kettle steaming on the
  *      table. Pop biscuits, thank-yous, one more mishearing ("A cup of
- *      BEES?"), and the kettle whistles its tune. His turn: he drags a pop
- *      biscuit across the table to Moon-Face.
+ *      BEES?"), and the kettle whistles its tune. The Saucepan Man
+ *      takes a pop biscuit across the table to Moon-Face, and Silky sends
+ *      one to him.
  *
  * Scary, never cruel (docs/STYLE.md): she looms, shouts, smacks the desk
  * and stomps; nobody is touched. Her defeat is her own temper: she stomps
  * until her ruler snaps, and goes off in a huff. The kettle's tap-the-lid
- * whistle is set up in scene 1 so the big turn pays it off.
+ * whistle is set up in scene 1 so the big moment pays it off.
  *
  * The kettle, the cloud-top place and the land's far view are in the
  * world (src/worlds/faraway/cloudtop.ts), and the grey cloud and the tea
@@ -51,7 +52,7 @@ import meta from './meta';
 // pieces (src/worlds/*/pieces.ts): the tea-time room, the climb up through
 // the cloud, Dame Snap's looming and her defeat, "the land is moving on",
 // the warm ending. What is left here is this episode's own: its lines, its
-// jokes, the desk and the window, and his five turns.
+// jokes, the desk and the window, and the five deeds.
 const { clank, heels, popBiscuit, whirr, whistle } = farawaySounds;
 const { buzz, laugh, pour, ting } = commonSounds;
 const { beam, earCup, flutter, popOut, rattle, whistleKettle } = farawayMoves;
@@ -97,23 +98,20 @@ export default defineCartoon({
   ...meta,
   lines: {
     // 1. Tea time
-    hello: { who: 'moonface', text: 'Hello, {name}! It’s tea time!' },
+    hello: { who: 'moonface', text: 'Hello, hello! It’s tea time!' },
     biscuits: { who: 'silky', text: 'I’ve baked pop biscuits! They go pop in your mouth.' },
     gone: { who: 'saucepan', text: 'Oh dear, oh dear! My whistling kettle! It’s GONE!' },
     where: { who: 'silky', text: 'Gone? Where did you leave it?' },
     sleeve: { who: 'saucepan', text: 'Eh? Up my SLEEVE? No, I’ve looked up there!' },
     louder: { who: 'moonface', text: 'Not your sleeve! Where did you LEAVE it?' },
     branch: { who: 'saucepan', text: 'Oh! On the top branch. Tap its lid, and it whistles a tune!' },
-    askTin: { who: 'silky', text: 'Tap the tin, and watch them pop!' },
-    nudgeTin: { who: 'silky', text: 'Just tap the tin.' },
-    silkyTin: { who: 'silky', text: 'I’ll pop the lid off myself.' },
+    askTin: { who: 'silky', text: 'Watch them pop!' },
     listen: { who: 'silky', text: 'Listen! That’s your kettle. It’s up in the cloud!' },
     // 2. Above the cloud
     newLand: { who: 'moonface', text: 'A new land! But this cloud is too thick to see it.' },
-    askCloud: { who: 'moonface', text: 'Can you blow the cloud away, {name}? Tap it!' },
-    nudgeCloud: { who: 'moonface', text: 'Just tap the cloud. Whoosh!' },
+    askCloud: { who: 'moonface', text: 'Silky, can you blow the cloud away?' },
     spellCloud: { who: 'silky', text: 'I’ll puff it away with a little spell.' },
-    thanksCloud: { who: 'moonface', text: 'Whoosh! It’s gone! Thank you, {name}!' },
+    thanksCloud: { who: 'moonface', text: 'Whoosh! It’s gone! Thank you, Silky!' },
     snapSchool: { who: 'silky', text: 'Oh no. It’s Dame Snap’s School!' },
     myKettle: { who: 'saucepan', text: 'That’s my kettle! I’d know that whistle anywhere!' },
     quiet: { who: 'moonface', text: 'In we go. Quiet as mice, everyone.' },
@@ -126,27 +124,21 @@ export default defineCartoon({
     whiskers: { who: 'saucepan', text: 'Eh? No WHISKERS? But I’ve got lovely whiskers!' },
     noFun: { who: 'dameSnap', text: 'NO whistling! NO kettles! And NO FUN!' },
     plan: { who: 'moonface', text: 'She hates whistling. Let’s give her a big one!' },
-    askKettle: { who: 'moonface', text: 'Can you tap the kettle’s lid, {name}? Make it whistle!' },
-    nudgeKettle: { who: 'moonface', text: 'Tap the little lid on top.' },
-    tingKettle: { who: 'saucepan', text: 'I’ll tap it myself. Ting!' },
+    tingKettle: { who: 'saucepan', text: 'I’ll tap its lid. Ting!' },
     stopIt: { who: 'dameSnap', text: 'STOP that WHISTLING!' },
     ruler: { who: 'dameSnap', text: 'My RULER! Oh, BOTHER and BOTHER!' },
-    askHome: { who: 'moonface', text: 'Can you drag the kettle home to the Saucepan Man, {name}?' },
-    nudgeHome: { who: 'moonface', text: 'Drag the kettle over to him.' },
-    panHome: { who: 'saucepan', text: 'I’ll fetch it myself. Come here, old friend!' },
-    wellDone: { who: 'silky', text: 'You did it! What a whistle!' },
+    askHome: { who: 'moonface', text: 'Take your kettle home, Saucepan Man!' },
+    panHome: { who: 'saucepan', text: 'Come here, old friend!' },
     whatAWhistle: { who: 'silky', text: 'What a whistle! She’s gone!' },
     oldFriend: { who: 'saucepan', text: 'My kettle! Hello, old friend!' },
     moving: { who: 'moonface', text: 'The land is moving on! Back to the ladder!' },
     // 4. Tea at last
     home: { who: 'moonface', text: 'Home safe, and just in time for tea!' },
-    askBis: { who: 'saucepan', text: 'I saved this one for Moon-Face. Can you drag it to him, {name}?' },
-    nudgeBis: { who: 'saucepan', text: 'Drag the biscuit over to Moon-Face.' },
-    helpedBis: { who: 'saucepan', text: 'I’ll carry it over myself. Clank, clank!' },
-    thanksBis: { who: 'moonface', text: 'Pop! Yum! Thank you, {name}!' },
+    askBis: { who: 'saucepan', text: 'I saved this one for Moon-Face.' },
+    helpedBis: { who: 'saucepan', text: 'Here you are! Clank, clank!' },
     thanksPan: { who: 'moonface', text: 'Pop! Yum! Thank you, Saucepan Man!' },
-    oneFor: { who: 'silky', text: 'Pop biscuits for everyone. And one for {name}!' },
-    thankYou: { who: 'saucepan', text: 'Thank you, {name}! You saved my kettle!' },
+    oneFor: { who: 'silky', text: 'Pop biscuits for everyone. And one for the Saucepan Man!' },
+    thankYou: { who: 'saucepan', text: 'Thank you, everyone! You found my kettle!' },
     cupOfTea: { who: 'moonface', text: 'Who would like a cup of tea?' },
     bees: { who: 'saucepan', text: 'A cup of BEES? No thank you! They buzz!' },
     tea: { who: 'saucepan', text: 'Oh! TEA! Yes please!' },
@@ -186,8 +178,9 @@ export default defineCartoon({
         k.fx.pop();
         await k.appear(tin, 0.4);
         await k.say('biscuits', silky);
-        // His turn: tap the tin and the biscuits pop out.
-        await k.tapToHelp(tin, { ask: 'askTin', nudge: 'nudgeTin', helped: 'silkyTin', by: silky, helper: silky, size: 170 });
+        // Silky taps the tin and the biscuits pop out.
+        await k.say('askTin', silky);
+        k.flourish(tin);
         await popOut(k, 470, 470, 1);
 
         // Clank, clank, CLANK: up through the trapdoor comes the Saucepan Man.
@@ -231,9 +224,10 @@ export default defineCartoon({
         // Up through the cloud they pop, and the grey cloud churns slowly while Moon-Face says what it hides.
         await ladderArrival.play(k, climb, { line: 'newLand', by: mf });
 
-        // His turn: blow the cloud away.
-        const how = await k.tapToHelp(climb.cover!, { ask: 'askCloud', nudge: 'nudgeCloud', helped: 'spellCloud', by: mf, helper: silky, size: 300 });
-        await ladderArrival.reveal(k, climb, { how, thanks: 'thanksCloud', by: mf });
+        // Silky blows the cloud away with a little spell.
+        await k.say('askCloud', mf);
+        await k.say('spellCloud', silky);
+        await ladderArrival.reveal(k, climb, { line: 'thanksCloud', by: mf });
 
         // It's Dame Snap's School.
         k.music('sneaky');
@@ -324,8 +318,9 @@ export default defineCartoon({
         void beam(k, mf, false);
         await k.camera({}, 0.8);
 
-        // His big turn: tap the kettle's lid.
-        const how = await k.tapToHelp(kettle, { ask: 'askKettle', nudge: 'nudgeKettle', helped: 'tingKettle', by: mf, helper: pan });
+        // The Saucepan Man taps the kettle's lid.
+        await k.say('tingKettle', pan);
+        k.flourish(kettle);
         ting();
         const first = whistleKettle(k, kettle, KETTLE_DESK, 1);
         await k.wait(900);
@@ -339,10 +334,11 @@ export default defineCartoon({
         await snapDefeat(k, snap, { line: 'ruler' });
         k.music('triumph');
         k.sparkle(590, 300, 16, 220);
-        await k.all(k.say(how === 'tapped' ? 'wellDone' : 'whatAWhistle', silky), k.hop(mf, 30, 2), flutter(k, silky, 6));
+        await k.all(k.say('whatAWhistle', silky), k.hop(mf, 30, 2), flutter(k, silky, 6));
 
-        // His turn: drag the kettle home to the Saucepan Man (it settles at his middle, in his arms).
-        await k.dragToHelp(kettle, { to: [370, 630], ask: 'askHome', nudge: 'nudgeHome', helped: 'panHome', by: mf, helper: pan });
+        // The kettle goes home to the Saucepan Man (it settles at his middle, in his arms).
+        await k.say('askHome', mf);
+        await k.all(k.say('panHome', pan), k.carry(kettle, [370, 630]));
         clank(3, 0.1);
         await k.all(k.say('oldFriend', pan), k.shake(pan, 4, 2), k.shake(kettle, 4, 2));
 
@@ -378,28 +374,24 @@ export default defineCartoon({
         await k.wait(700);
         whirr(6);
 
-        // His turn: drag a pop biscuit across the table to Moon-Face.
+        // The Saucepan Man takes a pop biscuit across the table to Moon-Face.
         const treat = k.prop('pop-biscuit', { x: 300, y: 400, w: 100, z: 14 });
         k.set(treat, { opacity: 0 });
         await k.appear(treat, 0.3);
-        const gave = await k.dragToHelp(treat, { to: mf, ask: 'askBis', nudge: 'nudgeBis', helped: 'helpedBis', by: pan, helper: pan });
+        await k.say('askBis', pan);
+        await k.all(k.say('helpedBis', pan), k.carry(treat, mf));
         popBiscuit(1);
-        k.sparkle(770, 450, 10, 100);
         await k.vanish(treat, 0.2);
-        await k.all(k.say(gave === 'dragged' ? 'thanksBis' : 'thanksPan', mf), k.hop(mf, 24, 1));
+        await k.all(k.say('thanksPan', mf), k.hop(mf, 24, 1));
 
         await k.all(k.say('oneFor', silky), flutter(k, silky, 6));
 
-        // A pop biscuit for him: it flies out towards the screen and pops.
-        // (down past the cushions first, then along the front, so it never crosses a face)
+        // A pop biscuit for the Saucepan Man.
         const bis = k.prop('pop-biscuit', { x: 950, y: 400, w: 80, z: 40 });
         k.set(bis, { opacity: 0 });
         await k.appear(bis, 0.3);
-        k.fx.whizz();
-        await k.to(bis, 0.35, { y: 190, rotation: 120, ease: 'power1.in' });
-        await k.to(bis, 0.6, { x: -280, y: 230, scale: 2.2, rotation: 360, ease: 'power1.out' });
+        await k.carry(bis, pan);
         popBiscuit(2);
-        k.sparkle(710, 670, 14, 160);
         await k.vanish(bis, 0.25);
 
         clank(3, 0.1);

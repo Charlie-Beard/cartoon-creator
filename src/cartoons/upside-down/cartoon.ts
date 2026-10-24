@@ -6,29 +6,25 @@
  *      is at the top, where everything is upside down. The Saucepan Man
  *      hears "a tipsy turkey", then "upside down" makes him think of his
  *      upside-down cake. Silky warns that Topsy-Turvy spells are catching;
- *      Moon-Face boasts that nothing could turn HIM upside down. His turn:
- *      the cake comes out of the Saucepan Man's pots and he drags it to
- *      Silky, who tucks it in her bag (or the Saucepan Man carries it over).
- *      Up they go.
+ *      Moon-Face boasts that nothing could turn HIM upside down. The cake
+ *      comes out of the Saucepan Man's pots and he carries it to Silky, who
+ *      tucks it in her bag. Up they go.
  *   2. The Land of Topsy-Turvy. The Topsy-Turvy Man hops in on his head:
  *      "Goodbye! Don't come in!" (he means hello). Moon-Face laughs at him,
  *      so he says "Try it yourself!" and, with a spell, flips Moon-Face
  *      upside down. It's only a joke, but he can't undo it himself: turning
- *      upside-down things the right way up does. His turn: he taps the hat,
- *      and the hat, the toadstool and the teacup flip the right way up (or
- *      Silky's wand does it). Moon-Face turns… half way. Now he's SIDEWAYS.
+ *      upside-down things the right way up does. Silky's wand turns the hat,
+ *      and the hat, the toadstool and the teacup flip the right way up. Moon-Face turns… half way. Now he's SIDEWAYS.
  *      Then the ground rumbles: the land is moving on! Back to the ladder.
  *   3. The top of the ladder. Everyone must climb down before the land goes,
  *      but Moon-Face can't fit down the hole sideways (the Saucepan
- *      Man hears "roll"). His turn: Silky sends the Saucepan Man down first,
- *      and he drags him to the ladder (or the Saucepan Man goes himself).
- *      Silky: there's one more upside-down thing. It's
- *      Moon-Face! His big turn: he taps Moon-Face, who twirls the right way
- *      up. The Topsy-Turvy Man calls "Hello!" from the land (he means
+ *      Man hears "roll"). Silky sends the Saucepan Man down first, and he
+ *      goes to the ladder. Silky: there's one more upside-down thing. It's
+ *      Moon-Face! Her wand twirls him the right way up. The Topsy-Turvy Man calls "Hello!" from the land (he means
  *      goodbye), and the land sails away. Home for tea.
  *   4. Upside-down cake. In Moon-Face's room the Saucepan Man brings out his
  *      upside-down cake. "Not more upside down!" It's the only upside down
- *      Moon-Face wants. His turn: he taps the cake to cut it. A slice for him, and Moon-Face, still a little
+ *      Moon-Face wants. The Saucepan Man cuts it. A slice for Moon-Face, and Moon-Face, still a little
  *      topsy-turvy, says goodbye when he means hello.
  *
  * The danger is the land moving on, never the Topsy-Turvy Man: he plays a
@@ -86,16 +82,13 @@ export default defineCartoon({
   ...meta,
   lines: {
     // 1. The foot of the Tree
-    hello: { who: 'moonface', text: 'Hello, {name}! Guess which land is at the top of the Tree today?' },
+    hello: { who: 'moonface', text: 'Hello, Saucepan Man! Guess which land is at the top of the Tree today?' },
     topsy: { who: 'silky', text: 'The Land of Topsy-Turvy! Everything there is upside down.' },
     turkey: { who: 'saucepan', text: 'Eh? A TIPSY TURKEY? Where?' },
     notTurkey: { who: 'moonface', text: 'Not a turkey! Topsy-Turvy! Everything is UPSIDE DOWN!' },
     cakeIdea: { who: 'saucepan', text: 'Oh! Upside down! Like my upside-down cake! I’ll bring it.' },
-    askCake: { who: 'silky', text: 'Can you drag the cake to me, {name}? I’ll tuck it in my bag.' },
-    nudgeCake: { who: 'silky', text: 'Just drag the cake over to me.' },
-    carryCake: { who: 'saucepan', text: 'I’ll carry it over myself. Clank, clank!' },
-    thanksCake: { who: 'silky', text: 'Lovely! Into my bag it goes.' },
-    thanksCakePan: { who: 'silky', text: 'Thank you, Saucepan Man! Into my bag it goes.' },
+    carryCake: { who: 'saucepan', text: 'Here you are, Silky! Clank, clank!' },
+    thanksCake: { who: 'silky', text: 'Thank you, Saucepan Man! Into my bag it goes.' },
     careful: { who: 'silky', text: 'Be careful, Moon-Face. Topsy-Turvy spells can catch you!' },
     boast: { who: 'moonface', text: 'Pooh! Nothing could turn ME upside down. Up we go!' },
     // 2. The Land of Topsy-Turvy
@@ -109,9 +102,8 @@ export default defineCartoon({
     cant: { who: 'topsyTurvyMan', text: 'Oh dear! I mean, hooray! I can’t undo it myself.' },
     rightWay: { who: 'topsyTurvyMan', text: 'Turn upside-down things the right way up. That undoes it!' },
     look: { who: 'silky', text: 'Look! The hat, the toadstool and the teacup!' },
-    askHat: { who: 'moonface', text: 'Tap the hat, {name}! Turn things the right way up!' },
-    nudgeHat: { who: 'moonface', text: 'Just tap the upside-down hat.' },
     wandHat: { who: 'silky', text: 'I’ll turn them with my wand. One, two, three!' },
+    turnThings: { who: 'moonface', text: 'Turn things the right way up, Silky!' },
     turning: { who: 'moonface', text: 'Ooh! I’m turning! I’m turning!' },
     sideways: { who: 'moonface', text: 'Oh. Now I’m SIDEWAYS.' },
     nearly: { who: 'topsyTurvyMan', text: 'Nearly there! Nearly the right way up!' },
@@ -120,15 +112,11 @@ export default defineCartoon({
     downWeGo: { who: 'silky', text: 'Down the ladder, everyone, before the land goes!' },
     noFit: { who: 'moonface', text: 'I can’t! I won’t fit down the hole sideways!' },
     roll: { who: 'saucepan', text: 'Eh? You want a ROLL? With butter?' },
-    askPan: { who: 'silky', text: 'Saucepan Man, down you go first. Drag him to the ladder!' },
-    nudgePan: { who: 'silky', text: 'Drag the Saucepan Man to the ladder.' },
+    goFirst: { who: 'silky', text: 'Saucepan Man, down you go first!' },
     downPan: { who: 'saucepan', text: 'Down I go, then! Mind my pots!' },
     oneMore: { who: 'silky', text: 'Wait! There’s one more thing to turn the right way up.' },
     itsYou: { who: 'silky', text: 'It’s you, Moon-Face!' },
-    askMf: { who: 'silky', text: 'Tap Moon-Face, {name}! Turn him the right way up!' },
-    nudgeMf: { who: 'silky', text: 'Tap Moon-Face. Quick as you can!' },
     twirl: { who: 'silky', text: 'I’ll twirl him round with my wand!' },
-    thanksMf: { who: 'moonface', text: 'The right way up! Thank you, {name}!' },
     phewMf: { who: 'moonface', text: 'The right way up! Thank you, Silky!' },
     hello2: { who: 'topsyTurvyMan', text: 'Hello! Hello! Come again soon!' },
     meansBye: { who: 'silky', text: 'He means goodbye!' },
@@ -139,11 +127,9 @@ export default defineCartoon({
     notAgain: { who: 'moonface', text: 'Upside down? Oh no! Not again!' },
     onlyCake: { who: 'silky', text: 'It’s only a cake, Moon-Face. It’s meant to be upside down!' },
     onlyOne: { who: 'moonface', text: 'Then that’s the only upside down for me!' },
-    askCut: { who: 'silky', text: 'Tap the cake, and we’ll cut a slice.' },
-    nudgeCut: { who: 'silky', text: 'Just tap the cake.' },
-    cutMe: { who: 'saucepan', text: 'I’ll cut it myself. Here goes!' },
-    forYou: { who: 'silky', text: 'A slice for {name}!' },
-    hello3: { who: 'moonface', text: 'Thank you, {name}. Goodbye! Oh, I mean hello!' },
+    cutMe: { who: 'saucepan', text: 'Time to cut it. Here goes!' },
+    forYou: { who: 'silky', text: 'A slice for Moon-Face!' },
+    hello3: { who: 'moonface', text: 'Thank you, Silky. Goodbye! Oh, I mean hello!' },
     end: { who: 'narrator', text: 'And Moon-Face said things back to front all through tea.' },
   },
   scenes: [
@@ -182,16 +168,16 @@ export default defineCartoon({
         await k.hop(pan, 30);
         await k.all(k.say('cakeIdea', pan), rattle(k, pan));
 
-        // His turn: the cake comes out of his pots, and goes into Silky's bag.
+        // The cake comes out of his pots, and goes into Silky's bag.
         const treat = k.add(cake(), { x: 870, y: 600, w: 160, z: 20 });
         k.set(treat, { opacity: 0 });
         clank(4, 0.1);
         k.fx.pop();
         await k.appear(treat, 0.5);
-        const cakeHow = await k.dragToHelp(treat, { to: silky, ask: 'askCake', nudge: 'nudgeCake', helped: 'carryCake', by: silky, helper: pan, dropSize: 200 });
+        await k.all(k.say('carryCake', pan), k.carry(treat, silky));
         whirr(4);
         await k.vanish(treat, 0.4);
-        await k.say(cakeHow === 'dragged' ? 'thanksCake' : 'thanksCakePan', silky);
+        await k.say('thanksCake', silky);
 
         // A warning, and a boast.
         await k.say('careful', silky);
@@ -257,12 +243,11 @@ export default defineCartoon({
         await k.say('look', silky);
         await k.camera({}, 0.7);
 
-        // His turn: turn things the right way up.
-        const how = await k.tapToHelp(hat, { ask: 'askHat', nudge: 'nudgeHat', helped: 'wandHat', by: mf, helper: silky, size: 170 });
-        if (how === 'helped') {
-          k.fx.spell();
-          await k.beam([560, 330], [635, 540], C.goldLight);
-        }
+        // Turn things the right way up: Silky's wand does it.
+        await k.say('turnThings', mf);
+        await k.say('wandHat', silky);
+        k.fx.spell();
+        await k.beam([560, 330], [635, 540], C.goldLight);
         await flipOver(k, hat, 0, [635, 540]);
         await flipOver(k, stool, 0, [1100, 530], 0.6);
         await flipOver(k, cup, 0, [1095, 380], 0.6);
@@ -314,9 +299,10 @@ export default defineCartoon({
         void earCup(k, pan, false);
         await k.to(mf, 0.6, { x: 0 });
 
-        // His turn: the Saucepan Man goes down the ladder first.
+        // The Saucepan Man goes down the ladder first.
         void flutter(k, silky, 4);
-        await k.dragToHelp(pan, { to: [170, 500], ask: 'askPan', nudge: 'nudgePan', helped: 'downPan', by: silky, helper: pan });
+        await k.say('goFirst', silky);
+        await k.all(k.say('downPan', pan), k.carry(pan, [170, 500]));
         clank(4, 0.1);
         k.fx.patter(4, 0.12);
         await k.vanish(pan, 0.5);
@@ -329,19 +315,17 @@ export default defineCartoon({
         await k.say('itsYou', silky);
         await k.camera({}, 0.6);
 
-        // His big turn.
-        const how = await k.tapToHelp(mf, { ask: 'askMf', nudge: 'nudgeMf', helped: 'twirl', by: silky, size: 240 });
-        if (how === 'helped') {
-          k.fx.spell();
-          await k.beam([860, 400], [590, 520], C.goldLight);
-        }
+        // The big moment: Silky twirls him round.
+        await k.say('twirl', silky);
+        k.fx.spell();
+        await k.beam([860, 400], [590, 520], C.goldLight);
         whirr(4);
         k.fx.whizz();
         await k.to(mf, 1.1, { rotation: 360, ease: 'back.out(1.3)' });
         k.set(mf, { rotation: 0 });
         k.sparkle(590, 500, 16, 200);
         void beam(k, mf, true);
-        await k.say(how === 'tapped' ? 'thanksMf' : 'phewMf', mf);
+        await k.say('phewMf', mf);
         await k.hop(mf, 36, 2);
         void beam(k, mf, false);
 
@@ -395,21 +379,20 @@ export default defineCartoon({
         laugh();
         await k.all(k.shake(pan, 3, 2), k.shake(silky, 3, 2), k.wait(600));
 
-        // His turn: tap the cake to cut a slice.
-        await k.tapToHelp(cast.cake, { ask: 'askCut', nudge: 'nudgeCut', helped: 'cutMe', by: silky, helper: pan, size: 240 });
+        // The Saucepan Man cuts the cake.
+        await k.say('cutMe', pan);
+        k.flourish(cast.cake);
         k.fx.pop();
         await k.pop(cast.cake, 1.12);
 
-        // A slice for him: it flies out towards the screen.
+        // A slice for Moon-Face.
         whirr(4);
         await k.say('forYou', silky);
         const s = k.add(slice(), { x: 390, y: 540, w: 100, z: 40 });
         k.set(s, { opacity: 0 });
         await k.appear(s, 0.3);
-        k.fx.whizz();
-        await k.to(s, 0.7, { x: 260, y: 40, scale: 2.4, rotation: 360, ease: 'power1.out' });
+        await k.carry(s, mf);
         popBiscuit(1);
-        k.sparkle(640, 640, 14, 160);
         await k.vanish(s, 0.3);
 
         // Still a little topsy-turvy.

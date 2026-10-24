@@ -11,25 +11,25 @@
  *      "Hmph." They'll deliver valentines all day! Harry hopes nobody has
  *      sent him one. Ron: imagine a singing one!
  *   2. Run, Harry! Hurrying to lessons. Stomp, stomp: "Oi! You! Harry
- *      Potter! I've got a musical message!" Not in front of everybody! His
- *      first turn: he taps the suit of armour, and Harry hides behind it.
+ *      Potter! I've got a musical message!" Not in front of everybody! Ron
+ *      says hide, and Harry ducks behind the suit of armour.
  *      The cupid stomps past… stops… sniffs… "Aha! I can see your
  *      glasses!" Run, Harry!
  *   3. The singing valentine. In a classroom the cupid catches Harry's bag.
  *      Rrrip! Books everywhere. "Stand still!" But his harp's out of tune.
- *      His second turn: he twangs the harp, and the song begins: "His eyes
+ *      Ron says to just twang it, and the cupid does, and the song begins: "His eyes
  *      are as green as a fresh pickled toad…" Everyone laughs, Harry goes
  *      red, then laughs too. Ginny goes very pink and hurries away. Who
  *      sent it?
  *   4. Lockhart's hearts. At teatime Lockhart's marvellous idea, a shower of
- *      hearts, makes one giant heart that grows and grows. His fourth turn:
- *      he pops it. Confetti everywhere, and Lockhart's hair goes fluffy:
+ *      hearts, makes one giant heart that grows and grows. Ron
+ *      pops it. Confetti everywhere, and Lockhart's hair goes fluffy:
  *      "My beautiful hair!" Hermione thinks she knows who sent Harry's
  *      valentine: someone kind, and very shy. "Never you mind, Ron."
- *      After the song (his third turn) one of Harry's books is still on the
- *      floor: he drags it back into the bag.
+ *      (After the song one of Harry's books was still on the floor: he put
+ *      it back in his bag.)
  *   5. A card for someone shy. By the common-room fire Harry makes a
- *      thank-you card. His fifth turn: he drags it to Hedwig, who flies off
+ *      thank-you card. He gives it to Hedwig, who flies off
  *      with it. Meanwhile: Ginny opens
  *      it, "From Harry!", and hugs it. Happy Valentine's Day.
  *
@@ -142,7 +142,7 @@ export default defineCartoon({
     fortySix: { who: 'lockhart', text: 'I’ve had forty-six valentines already! And I have a marvellous surprise.' },
     cupids: { who: 'lockhart', text: 'My friendly card-carrying cupids! Come in, come in!' },
     hmph: { who: 'dwarfCupid', text: 'Hmph.' },
-    allDay: { who: 'lockhart', text: 'They’ll deliver valentines all day long! Isn’t that lovely, {name}?' },
+    allDay: { who: 'lockhart', text: 'They’ll deliver valentines all day long! Isn’t that lovely, Harry?' },
     hopeNot: { who: 'harry', text: 'I hope nobody’s sent me one.' },
     singing: { who: 'ron', text: 'Imagine it, Harry. A singing one!' },
     // 2. Run, Harry!
@@ -151,8 +151,7 @@ export default defineCartoon({
     itsHim: { who: 'harry', text: 'Oh no. It’s the cupid!' },
     message: { who: 'dwarfCupid', text: 'I’ve got a musical message for Harry Potter. In person!' },
     notHere: { who: 'harry', text: 'Not here! Not in front of everybody!' },
-    askHide: { who: 'ron', text: 'Quick, hide! {name}, tap the suit of armour!' },
-    nudgeHide: { who: 'ron', text: 'Tap the suit of armour!' },
+    askHide: { who: 'ron', text: 'Quick, Harry, hide behind the suit of armour!' },
     helpedHide: { who: 'harry', text: 'Behind the armour. Shh!' },
     whereGone: { who: 'dwarfCupid', text: 'Where’s he gone? Hmph.' },
     glasses: { who: 'dwarfCupid', text: 'Aha! I can see your glasses!' },
@@ -161,27 +160,23 @@ export default defineCartoon({
     caught: { who: 'narrator', text: 'The cupid caught Harry’s bag. Rrrip! Books and quills went everywhere.' },
     standStill: { who: 'dwarfCupid', text: 'Stand still! Here is your singing valentine!' },
     outOfTune: { who: 'dwarfCupid', text: 'Hmph. My harp’s gone out of tune.' },
-    askHarp: { who: 'ron', text: '{name}, give his harp a twang! Then it’s over quicker!' },
-    nudgeHarp: { who: 'ron', text: 'Twang the harp!' },
-    helpedHarp: { who: 'dwarfCupid', text: 'Never mind. I’ll twang it myself!' },
+    askHarp: { who: 'ron', text: 'Just twang it, then. It’ll be over quicker!' },
+    helpedHarp: { who: 'dwarfCupid', text: 'Hmph. Twang it myself, then!' },
     song1: { who: 'dwarfCupid', text: 'His eyes are as green as a fresh pickled toad!' },
     song2: { who: 'dwarfCupid', text: 'His hair is as dark as a blackboard!' },
     song3: { who: 'dwarfCupid', text: 'I wish he was mine, he’s really divine, the hero who conquered the Dark Lord!' },
     pickled: { who: 'ron', text: 'A fresh pickled toad! Ha ha ha!' },
     tomato: { who: 'harry', text: 'My face is as red as a tomato! But… that was quite funny.' },
     mustGo: { who: 'ginny', text: 'Oh! Er… I have to go!' },
-    askBook: { who: 'ron', text: 'Harry’s book is on the floor. {name}, can you drag it back into his bag?' },
-    nudgeBook: { who: 'ron', text: 'Drag the book into the bag!' },
-    helpedBook: { who: 'harry', text: 'Never mind. I’ll pop it in myself.' },
-    thanksBook: { who: 'harry', text: 'Thank you! Safe and sound.' },
+    askBook: { who: 'ron', text: 'Harry, your book is still on the floor.' },
+    helpedBook: { who: 'harry', text: 'Oh yes! I’ll pop it back in my bag.' },
     whoSent: { who: 'harry', text: 'Who sent it, I wonder?' },
     // 4. Lockhart's hearts
     teatime: { who: 'narrator', text: 'At teatime, Professor Lockhart had one more marvellous idea.' },
     shower: { who: 'lockhart', text: 'Watch this! A shower of hearts, for everybody!' },
     tooBig: { who: 'hermione', text: 'Um, Professor? It’s getting rather big.' },
     nonsense: { who: 'lockhart', text: 'Nonsense! It’s perfectly marvellous!' },
-    askPop: { who: 'hermione', text: '{name}, pop the heart, before it gets any bigger!' },
-    nudgePop: { who: 'hermione', text: 'Tap the big heart!' },
+    askPop: { who: 'hermione', text: 'Somebody pop the heart, before it gets any bigger!' },
     helpedPop: { who: 'ron', text: 'I’ll pop it! Here goes!' },
     myHair: { who: 'lockhart', text: 'My hair! My beautiful hair!' },
     sheep: { who: 'ron', text: 'He looks like a pink sheep!' },
@@ -192,15 +187,12 @@ export default defineCartoon({
     evening: { who: 'narrator', text: 'That evening, by the fire, Harry made a card of his own.' },
     thankYou: { who: 'harry', text: 'Whoever sent my song was being kind. So I’ll say thank you.' },
     hedwigTake: { who: 'harry', text: 'Hedwig, take this to Ginny, please. Shh! Don’t tell Ron.' },
-    askCard: { who: 'harry', text: 'Can you drag my card to Hedwig, {name}?' },
-    nudgeCard: { who: 'harry', text: 'Drag the card to Hedwig!' },
-    helpedCard: { who: 'harry', text: 'Never mind. I’ll give it to her myself.' },
-    thanksCard: { who: 'harry', text: 'Perfect! Off you go, Hedwig.' },
+    helpedCard: { who: 'harry', text: 'Here you are, Hedwig. Off you go!' },
     ronCard: { who: 'ron', text: 'Does anybody want to send me a valentine?' },
     notSinging: { who: 'hermione', text: 'Only if it’s not a singing one!' },
     meanwhileGinny: { who: 'narrator', text: 'And in a quiet corner of the common room…' },
     fromHarry: { who: 'ginny', text: 'For me? “Thank you for my song. From Harry.” Oh!' },
-    end: { who: 'narrator', text: 'Happy Valentine’s Day, {name}. With love from everyone at Hogwarts.' },
+    end: { who: 'narrator', text: 'Happy Valentine’s Day, from everyone at Hogwarts.' },
   },
   scenes: [
     // ==================================================== 1. Pink everywhere
@@ -275,8 +267,10 @@ export default defineCartoon({
         await k.say('message', cupid);
         await k.say('notHere', harry);
 
-        // His first turn: hide Harry behind the suit of armour.
-        await k.tapToHelp(knight, { ask: 'askHide', nudge: 'nudgeHide', helped: 'helpedHide', by: ron, helper: harry, size: 170 });
+        // Ron tells Harry to hide behind the suit of armour.
+        await k.say('askHide', ron);
+        await k.say('helpedHide', harry);
+        k.flourish(knight);
         k.fx.whizz();
         k.set(harry, { zIndex: 12 });
         await k.to(harry, 0.7, { x: -240, y: -20, scale: 0.85, ease: 'power2.inOut' });
@@ -347,8 +341,9 @@ export default defineCartoon({
         await k.shake(harp, 3, 2);
         await k.say('outOfTune', cupid);
 
-        // His second turn: twang the harp.
-        await k.tapToHelp(harp, { ask: 'askHarp', nudge: 'nudgeHarp', helped: 'helpedHarp', by: ron, helper: cupid, size: 150 });
+        // Ron suggests a twang, and the cupid twangs the harp.
+        await k.say('askHarp', ron);
+        await k.say('helpedHarp', cupid);
         twang();
         const strings = k.part(harp, 'strings');
         if (strings.length) void k.to(strings, 0.08, { x: 2, yoyo: true, repeat: 9 });
@@ -374,10 +369,10 @@ export default defineCartoon({
         k.fx.patter(6);
         await k.exit(ginny, 'left', 0.7);
 
-        // His third turn: drag the fallen book back into Harry's bag.
-        const bookHow = await k.dragToHelp(spill[0], { to: bag, ask: 'askBook', nudge: 'nudgeBook', helped: 'helpedBook', by: ron, helper: harry, dropSize: 170 });
+        // Harry puts the fallen book back into his bag.
+        await k.say('askBook', ron);
+        await k.all(k.say('helpedBook', harry), k.carry(spill[0], bag));
         await k.all(k.vanish(spill[0]), k.shake(bag, 5, 2));
-        if (bookHow === 'dragged') await k.say('thanksBook', harry);
         await k.say('whoSent', harry);
       },
     },
@@ -414,8 +409,10 @@ export default defineCartoon({
         await k.to(heart, 1.4, { scale: 2.2, ease: 'sine.inOut' });
         await k.say('nonsense', lockhart);
 
-        // His fourth turn: pop it.
-        await k.tapToHelp(heart, { ask: 'askPop', nudge: 'nudgePop', helped: 'helpedPop', by: hermione, helper: ron, size: 240 });
+        // Ron pops it.
+        await k.say('askPop', hermione);
+        await k.say('helpedPop', ron);
+        k.flourish(heart);
         const hb = k.box(heart);
         const [hx, hy] = [hb.x + hb.w / 2, hb.y + hb.h / 2];
         k.fx.pop();
@@ -467,9 +464,8 @@ export default defineCartoon({
         await swoopIn(k, hedwig, 'right', 1.1);
         await hoot(k, hedwig, 1);
 
-        // His fifth turn: drag the card to Hedwig, who flies off with it.
-        const cardHow = await k.dragToHelp(card, { to: hedwig, ask: 'askCard', nudge: 'nudgeCard', helped: 'helpedCard', by: harry, dropSize: 200 });
-        if (cardHow === 'dragged') await k.say('thanksCard', harry);
+        // Harry gives the card to Hedwig, who flies off with it.
+        await k.all(k.say('helpedCard', harry), k.carry(card, hedwig));
         await k.all(flyOff(k, hedwig, 'right', 1.2), k.to(card, 1.2, { x: '+=420', y: '-=420', opacity: 0, ease: 'power1.in' }));
         await k.say('ronCard', ron);
         await k.say('notSinging', hermione);

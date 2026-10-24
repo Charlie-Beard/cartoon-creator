@@ -12,7 +12,6 @@ export default defineMeta({
     villain: 'none: a door nobody can open, and a knight who keeps falling off',
     places: ['grand-staircase'],
     cast: ['harry', 'ron', 'hermione', 'neville', 'sirCadogan', 'pinkLady'],
-    turns: ['knock on the empty painting', 'find today’s password on Neville’s list', 'call the pony back', 'find the painting with something pink in it', 'drag Ron’s sandwich up to Sir Cadogan'],
     jokes: ['Sir Cadogan falls off his pony', 'silly old-fashioned passwords', 'Ron has only a sandwich', 'the pony wants a nap'],
     ending: 'the Lady in Pink comes home and sings',
   },

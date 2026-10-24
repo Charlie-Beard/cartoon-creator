@@ -34,8 +34,6 @@ export interface Ledger {
   places: string[];
   /** Character ids who appear (drawn or speaking). */
   cast: string[];
-  /** One short phrase per tapToHelp, for what he does: 'blow the cloud away'. */
-  turns: string[];
   /** Running jokes used, short and always worded the same: 'Saucepan Man mishears'. */
   jokes?: string[];
   /** How it ends, in a word or two: 'tea party', 'cosy', 'funny'. */

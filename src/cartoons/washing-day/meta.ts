@@ -12,7 +12,6 @@ export default defineMeta({
     villain: 'a flood of bubbles coming up the Tree',
     places: ['tree', 'moon-room'],
     cast: ['moonface', 'saucepan', 'washalot', 'watzisname'],
-    turns: ['drag the smelly socks to Dame Washalot', 'throw the cushions down the slippery-slip', 'push the Saucepan Man free on the slide', 'tip out the tub on Mr Watzisname', 'drag the clean socks to the Saucepan Man'],
     jokes: ['Mr Watzisname sleeps through everything', 'the Saucepan Man’s smelly socks'],
     ending: 'a splash wakes Mr Watzisname, clean socks, and a bubble for him',
   },

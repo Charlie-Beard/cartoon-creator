@@ -360,7 +360,7 @@ export class Kit<K extends string = string> {
    * The moment something is done (the cloud blows away, the door opens, the
    * candles go out): a chime and a burst of paper stars on `el`'s middle.
    */
-  flourish(el: HTMLElement): void {
+  flourish(el: Element): void {
     if (!this.alive()) return;
     const [x, y] = this.middle(el);
     sfx.sparkle();
@@ -384,7 +384,7 @@ export class Kit<K extends string = string> {
   }
 
   /** An actor's middle in world coordinates (the camera taken out). */
-  private middle(el: HTMLElement): Pt {
+  private middle(el: Element): Pt {
     const s = this.stage.getBoundingClientRect();
     const r = el.getBoundingClientRect();
     const k = s.width / 1180 || 1;
