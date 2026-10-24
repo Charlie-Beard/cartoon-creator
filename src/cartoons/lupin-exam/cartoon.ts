@@ -9,27 +9,26 @@
  *      course, and there's chocolate at the end. Hermione has done it
  *      already (twice). Neville is worried: he's rubbish at exams. Harry and
  *      Ron will go round with him, and he has to do the tricky bits himself.
- *      His first turn: Neville looks glum, so he drags Professor Lupin's
- *      chocolate over to him, and Neville cheers up a little.
+ *      Neville looks glum, so Professor Lupin passes his chocolate over to
+ *      him, and Neville cheers up a little.
  *   2. The Grindylow pool. Wading through the green water, a little horned
  *      Grindylow pops up and grabs Neville's sleeve with its long knobbly
- *      fingers. Grindylows are very ticklish! His second turn: he tickles
+ *      fingers. Grindylows are very ticklish! Neville tickles
  *      it. It giggles, lets go and sinks with a
  *      bubble.
  *   3. The Red Caps. Potholes in the grass, and out of them pop little Red
  *      Caps, blowing raspberries and tugging at shoelaces. Red Caps can't
  *      bear being laughed at. Ron laughs his biggest laugh and one ducks
- *      away; the last one won't go. His third turn: he taps it, everybody
+ *      away; the last one won't go. Harry counts them in, everybody
  *      laughs, and down it goes. Neville is laughing too.
  *   4. The Hinkypunk's marsh. Misty reeds and bog. A wispy one-legged
  *      Hinkypunk swings its lantern: "This way, ooh!" Neville nearly
  *      follows it into the bog. Never follow the light: stay on the
- *      stones! His fourth turn: he taps the next stepping stone, and they
+ *      stones! Neville remembers the stepping stones, and they
  *      hop safely across. The Hinkypunk sulks and fades away.
  *   5. Full marks. Back on the sunny grass, Professor Lupin is waiting with
  *      chocolate. Full marks, all of them, and Neville most of all. Ron asks
- *      for more, and his fifth turn: he drags a spare bar from the
- *      Professor over to Ron.
+ *      for more, and the Professor takes a spare bar over to him.
  *
  * There's no villain: the creatures are cheeky, not nasty. Professor Lupin
  * is at the start and the finish; in the pool Harry remembers what he said. The Grindylow
@@ -150,12 +149,9 @@ export default defineCartoon({
     tip3: { who: 'lupin', text: 'And never, ever follow a Hinkypunk’s light.' },
     hermioneTwice: { who: 'ron', text: 'Hermione’s done it already. Twice!' },
     worried: { who: 'neville', text: 'I’ll never remember all that. I’m rubbish at exams.' },
-    askChoc: { who: 'lupin', text: 'A little chocolate always helps. Can you drag the bar to Neville, {name}?' },
-    nudgeChoc: { who: 'lupin', text: 'Drag the chocolate over to Neville.' },
-    helpedChoc: { who: 'lupin', text: 'Never mind, I’ll pass it over myself.' },
-    thanksChoc: { who: 'neville', text: 'Mmm. Thank you, {name}! I feel a bit better.' },
+    helpedChoc: { who: 'lupin', text: 'A little chocolate always helps. Here, Neville.' },
     thanksLupin: { who: 'neville', text: 'Mmm. Thank you, Professor! I feel a bit better.' },
-    withYou: { who: 'harry', text: 'We’ll go round with you, Neville. And {name} can help too!' },
+    withYou: { who: 'harry', text: 'We’ll go round with you, Neville. We’ll help!' },
     yourself: { who: 'lupin', text: 'Good. But Neville must do the tricky bits himself. Off you go!' },
     // 2. The Grindylow pool
     wading: { who: 'narrator', text: 'First, they waded into a big green pool.' },
@@ -163,8 +159,6 @@ export default defineCartoon({
     grabbed: { who: 'neville', text: 'Help! Something’s got my sleeve!' },
     wontLetGo: { who: 'neville', text: 'It won’t let go!' },
     grindylow: { who: 'harry', text: 'A Grindylow! Professor Lupin said they’re very ticklish!' },
-    askFingers: { who: 'neville', text: '{name}, will you tickle the Grindylow with me? Tap it!' },
-    nudgeFingers: { who: 'neville', text: 'Tap the little green Grindylow.' },
     helpedFingers: { who: 'neville', text: 'Tickle, tickle!' },
     letGo: { who: 'harry', text: 'It’s giggling! It let go!' },
     byeBye: { who: 'ron', text: 'Bye bye, giggly Grindylow!' },
@@ -177,8 +171,6 @@ export default defineCartoon({
     laughedAt: { who: 'neville', text: 'I know this one! Red Caps can’t bear being laughed at.' },
     ronLaughs: { who: 'ron', text: 'Ha! Ha ha ha! What a silly hat!' },
     another: { who: 'neville', text: 'There’s another one! It won’t go away.' },
-    askCap: { who: 'harry', text: '{name}, tap the Red Cap, and we’ll all laugh together!' },
-    nudgeCap: { who: 'harry', text: 'Tap the little Red Cap.' },
     helpedCap: { who: 'harry', text: 'Everybody laugh. One, two, three!' },
     allLaugh: { who: 'narrator', text: 'Everybody laughed, and the Red Cap ducked back into its hole.' },
     nevilleLaughing: { who: 'neville', text: 'I can’t stop laughing!' },
@@ -189,8 +181,6 @@ export default defineCartoon({
     followIt: { who: 'neville', text: 'Ooh, a light. Shall we go that way?' },
     noFollow: { who: 'harry', text: 'No, Neville! That’s a Hinkypunk. It wants you to fall in the bog!' },
     stones: { who: 'harry', text: 'Never follow the light. Stay on the stepping stones.' },
-    askStone: { who: 'harry', text: '{name}, which way is safe? Tap the big stepping stone!' },
-    nudgeStone: { who: 'harry', text: 'Tap the big pale stone by Ron.' },
     helpedStone: { who: 'neville', text: 'The stones! I remember. This way.' },
     sulk: { who: 'ron', text: 'Ha! Look, the Hinkypunk is sulking.' },
     across: { who: 'neville', text: 'We’re across! And I didn’t fall in the bog!' },
@@ -203,12 +193,9 @@ export default defineCartoon({
     whoopee: { who: 'neville', text: 'Full marks! Me! Wait till I tell my gran!' },
     goodFriends: { who: 'lupin', text: 'And Harry, Ron, you were very good friends.' },
     more: { who: 'ron', text: 'Thanks, Professor. Er… is there any more chocolate?' },
-    askMore: { who: 'lupin', text: 'Of course, Ron. Can you drag this spare bar over to him?' },
-    nudgeMore: { who: 'lupin', text: 'Drag the chocolate bar to Ron.' },
-    helpedMore: { who: 'lupin', text: 'Oh, I’ll bring it over myself.' },
-    thanksMore: { who: 'ron', text: 'Brilliant! Thanks!' },
+    helpedMore: { who: 'lupin', text: 'Of course, Ron. Here’s a spare bar.' },
     thanksMoreLupin: { who: 'ron', text: 'Brilliant! Thanks, Professor!' },
-    thanksName: { who: 'neville', text: 'Thank you, Harry and Ron. And thank you, {name}!' },
+    thanksName: { who: 'neville', text: 'Thank you, Harry and Ron. I couldn’t have done it without you.' },
     end: { who: 'narrator', text: 'And they sat in the sunshine and ate chocolate, until it was all gone.' },
   },
   scenes: [
@@ -235,13 +222,14 @@ export default defineCartoon({
         k.music('dreamy');
         await k.all(k.say('worried', neville), k.to(neville, 0.5, { y: 12, ease: 'sine.out' }));
 
-        // His first turn: drag Professor Lupin's chocolate over to Neville. The bar sits in his hand.
+        // Professor Lupin passes his chocolate over to Neville. The bar sits in his hand.
         const bar = k.add(chocolate(), { x: 883, y: 582, w: 110, z: 15 });
         k.fx.pop();
-        const how = await k.dragToHelp(bar, { to: neville, ask: 'askChoc', nudge: 'nudgeChoc', helped: 'helpedChoc', by: lupin, dropSize: 200 });
+        await k.say('helpedChoc', lupin);
+        await k.carry(bar, neville);
         await k.vanish(bar);
         giggle();
-        await k.all(k.say(how === 'dragged' ? 'thanksChoc' : 'thanksLupin', neville), k.to(neville, 0.4, { y: 0 }));
+        await k.all(k.say('thanksLupin', neville), k.to(neville, 0.4, { y: 0 }));
         await k.say('withYou', harry);
         k.music('adventure');
         await k.say('yourself', lupin);
@@ -281,8 +269,9 @@ export default defineCartoon({
         await k.all(k.say('wontLetGo', neville), k.shake(neville, 4, 2));
         await k.say('grindylow', harry);
 
-        // His second turn: tickle the Grindylow.
-        await k.tapToHelp(grindylow, { ask: 'askFingers', nudge: 'nudgeFingers', helped: 'helpedFingers', by: neville, size: 170 });
+        // Neville tickles the Grindylow.
+        await k.say('helpedFingers', neville);
+        k.flourish(grindylow);
         grindyGiggle();
         k.pose(grindylow, 'giggling');
         await k.shake(grindylow, 4, 3);
@@ -331,8 +320,9 @@ export default defineCartoon({
         await capUp(k, redCap, 2);
         await k.all(k.say('another', neville), k.shake(neville, 4, 2));
 
-        // His third turn: tap the Red Cap, and everybody laughs.
-        await k.tapToHelp(redCap, { ask: 'askCap', nudge: 'nudgeCap', helped: 'helpedCap', by: harry, size: 150 });
+        // Harry counts them in, and everybody laughs at the Red Cap.
+        await k.say('helpedCap', harry);
+        k.flourish(redCap);
         laugh();
         await k.all(...[harry, ron, neville].map((el, i) => k.wait(i * 120).then(() => k.hop(el, 20, 2))));
         await capDown(k, redCap);
@@ -378,12 +368,13 @@ export default defineCartoon({
         await k.to(neville, 0.5, { x: 0, y: 0 });
         await k.say('stones', harry);
 
-        // His fourth turn: tap the next stepping stone on the path (the big pale one, by Ron).
+        // Neville remembers the next stepping stone on the path (the big pale one, by Ron).
         k.fx.twinkle();
         const stone = k.add(bigStone(), { x: 555, y: 568, w: 130, z: 6 });
         k.set(stone, { opacity: 0 });
         await k.fade(stone, 1, 0.5);
-        const how = await k.tapToHelp(stone, { ask: 'askStone', nudge: 'nudgeStone', helped: 'helpedStone', by: harry, helper: neville, size: 120 });
+        await k.say('helpedStone', neville);
+        k.flourish(stone);
         k.fx.twinkle();
         k.sparkle(620, 596, 8, 80);
         // Hop, hop, hop, along the stones.
@@ -392,7 +383,6 @@ export default defineCartoon({
           void k.to(el, 1.2, { x: '+=280', y: '-=70', scale: 0.88, ease: 'power1.inOut' });
           await k.hop(el, 18, 2);
         }
-        if (how === 'tapped') k.sparkle(760, 572, 6, 60);
         // The Hinkypunk sulks, and fades into the mist.
         ooh();
         await k.to(k.part(hinkypunk, 'glow'), 0.8, { opacity: 0 });
@@ -440,12 +430,13 @@ export default defineCartoon({
         void k.vanish(bars[1]);
         await k.say('more', ron);
 
-        // His last turn: drag a spare bar from Professor Lupin over to Ron.
+        // Professor Lupin takes a spare bar over to Ron.
         const spare = k.add(chocolate(), { x: 883, y: 582, w: 110, z: 16 });
         k.fx.pop();
-        const gave = await k.dragToHelp(spare, { to: ron, ask: 'askMore', nudge: 'nudgeMore', helped: 'helpedMore', by: lupin, dropSize: 200 });
+        await k.say('helpedMore', lupin);
+        await k.carry(spare, ron);
         await k.vanish(spare);
-        await k.all(k.say(gave === 'dragged' ? 'thanksMore' : 'thanksMoreLupin', ron), k.hop(ron, 24));
+        await k.all(k.say('thanksMoreLupin', ron), k.hop(ron, 24));
         await k.say('thanksName', neville);
         await warmEnding(k, { cast: [harry, ron, neville], end: 'end' });
       },

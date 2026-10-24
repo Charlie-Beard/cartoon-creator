@@ -4,29 +4,28 @@
  *
  *   1. The common room. Harry and Hermione by the fire at night. Tap, tap at
  *      the window: Hedwig swoops in and drops a letter. No name on it, and
- *      inside, nothing at all. Hermione: it's invisible ink! His first turn:
- *      he taps the letter and the words come back: "Come to the forest at
+ *      inside, nothing at all. Hermione: it's invisible ink! She taps the
+ *      letter with her wand and the words come back: "Come to the forest at
  *      moonrise. Bring Hedwig. It's a surprise!" Harry is a bit scared;
  *      Hermione says they'll be brave together, and Hedwig leads the way.
  *   2. Moonrise. They creep out across the grounds under the moon, guessing
- *      who sent it. Hedwig flies on into the Forbidden Forest. His turn: he
- *      taps the tip of Harry's wand and "Lumos!" lights it up. Hook: deep in the trees, something was
+ *      who sent it. Hedwig flies on into the Forbidden Forest. Harry
+ *      lights his wand with "Lumos!". Hook: deep in the trees, something was
  *      waiting.
  *   3. The Forbidden Forest. Hedwig's urgent double hoot, the trees creak, a
  *      long soft hiss, and Voldemort looms out of the dark: what is in that
  *      letter? He wants ALL their secrets. Back to the heroes: Harry isn't
  *      scared of him. Voldemort lifts his wand to the sky; Hermione says
- *      Expelliarmus. His big turn: he taps Harry's wand, the spell flies, and
+ *      Expelliarmus. Hermione counts "one, two, three", the spell flies, and
  *      Voldemort's wand spins away out of his hand. It's not a secret, it's a
  *      surprise, maybe a party. "A PARTY? Bah! I HATE parties!" He melts away
  *      in a huff. A warm light through the trees: Hagrid's hut.
  *   4. Hagrid's hut. "SURPRISE! Happy birthday, Hedwig!" Hagrid sent the
  *      letter: a year ago he gave Hedwig to Harry, so today she gets a cake,
  *      and she carried her own party invitation. A rock cake (crunch!);
- *      Hedwig has the very first slice of birthday cake, then a slice for
- *      him, and it's her best birthday ever. Two drags here: he drags
- *      Hagrid's rock cake across the table to Hermione, then the first slice
- *      of birthday cake to Hedwig.
+ *      Hedwig has the very first slice of birthday cake, and it's her best
+ *      birthday ever. Hagrid slides his rock cake across the table to
+ *      Hermione, and Harry passes the first slice of cake to Hedwig.
  *
  * Scary, never cruel (docs/STYLE.md): Voldemort looms and hisses and wants
  * the letter; nobody is touched, and his wand is only ever lifted to the
@@ -61,7 +60,7 @@ const write = (x: number, y: number, s: string, size: number): Node =>
 /**
  * The open letter (360 × 260): a sheet of parchment with a muddy smudge in
  * the corner (a clue for grown-ups: Hagrid's thumb). The words are the part
- * `ink`, hidden until his tap brings them back.
+ * `ink`, hidden until Hermione’s spell brings them back.
  */
 const openLetter = cached(() =>
   svg({ w: 360, h: 260, name: 'mysterious-letter-letter', label: 'The letter' }, [
@@ -107,8 +106,6 @@ const hutWindow = cached(() =>
   ]),
 );
 
-/** An empty box over Harry's wand: something for the his-turn ring to sit on (nothing drawn). */
-const wandSpot = cached(() => svg({ w: 110, h: 140, name: 'mysterious-letter-wand-spot' }, []));
 
 // ---------------------------------------------------------------- sounds
 
@@ -159,15 +156,13 @@ export default defineCartoon({
   ...meta,
   lines: {
     // 1. The common room
-    hello: { who: 'harry', text: 'Hello, {name}! It’s so cosy by the fire tonight.' },
+    hello: { who: 'harry', text: 'Hello, Hermione! It’s so cosy by the fire tonight.' },
     cosy: { who: 'hermione', text: 'Cosy and quiet. Perfect for reading my book!' },
     hedwigLetter: { who: 'harry', text: 'Look! It’s Hedwig! She’s brought me a letter!' },
     noName: { who: 'hermione', text: 'But who is it from? There’s no name on it.' },
     empty: { who: 'harry', text: 'That’s funny. There’s nothing written inside at all!' },
     invisible: { who: 'hermione', text: 'Actually, I read about this. It’s invisible ink!' },
-    askInk: { who: 'hermione', text: 'Tap the letter, {name}, and the words will come back!' },
-    nudgeInk: { who: 'hermione', text: 'Just tap the letter. Go on!' },
-    helpedInk: { who: 'hermione', text: 'I’ll give it a tap with my wand.' },
+    helpedInk: { who: 'hermione', text: 'I’ll give it a tap with my wand, and the words will come back!' },
     wordsBack: { who: 'hermione', text: 'There! The words are coming back!' },
     readLetter: { who: 'harry', text: '“Come to the forest at moonrise. Bring Hedwig. It’s a surprise!”' },
     scared: { who: 'harry', text: 'The forest? At night? What if it’s something scary?' },
@@ -178,8 +173,6 @@ export default defineCartoon({
     guess: { who: 'hermione', text: 'Someone who knows Hedwig very well. Look how she leads the way!' },
     edge: { who: 'harry', text: 'She’s flying into the Forbidden Forest. It’s so dark in there!' },
     needLight: { who: 'hermione', text: 'Then we need some light. Go on, Harry.' },
-    askLumos: { who: 'hermione', text: 'Tap the tip of his wand, and he’ll make a light!' },
-    nudgeLumos: { who: 'hermione', text: 'Just tap his wand. Go on!' },
     helpedLumos: { who: 'harry', text: 'Here I go, then.' },
     lumos: { who: 'harry', text: 'Lumos!' },
     thanksLumos: { who: 'hermione', text: 'Oh, that’s much better. Thank you!' },
@@ -190,14 +183,11 @@ export default defineCartoon({
     secrets: { who: 'voldemort', text: 'Give it to me. I want ALL your secrets!' },
     notScared: { who: 'harry', text: 'No! It’s not yours. And we’re not scared of you!' },
     idea: { who: 'hermione', text: 'Harry, Expelliarmus! Make his wand fly away!' },
-    askWand: { who: 'harry', text: 'Help me, {name}! Tap my wand!' },
-    nudgeWand: { who: 'harry', text: 'Tap my wand, and I’ll cast the spell!' },
     countThree: { who: 'hermione', text: 'Together, Harry! One, two, three!' },
     expelliarmus: { who: 'harry', text: 'Expelliarmus!' },
     myWand: { who: 'voldemort', text: 'My WAND! Where has it gone?' },
     surprise: { who: 'hermione', text: 'It’s not a secret. It’s a surprise! Maybe even a party!' },
     hateParties: { who: 'voldemort', text: 'A PARTY? Ugh! I HATE parties!' },
-    youDidIt: { who: 'harry', text: 'You did it, {name}! He’s gone!' },
     weDidIt: { who: 'harry', text: 'We did it! He’s gone!' },
     hagridsLight: { who: 'hermione', text: 'Look, a light in the trees! It’s Hagrid’s hut!' },
     // 4. Hagrid's hut
@@ -207,16 +197,11 @@ export default defineCartoon({
     ownInvite: { who: 'hermione', text: 'So Hedwig carried her OWN party invitation?' },
     bestOwl: { who: 'hagrid', text: 'Who better? She’s the best owl in the world!' },
     rockCake: { who: 'hagrid', text: 'Rock cake, anyone? Made ’em meself!' },
-    askRock: { who: 'hagrid', text: 'Drag the rock cake over to Hermione!' },
-    nudgeRock: { who: 'hagrid', text: 'Just drag it across the table.' },
     helpedRock: { who: 'hagrid', text: 'Here, Hermione. Have one!' },
-    thanksRock: { who: 'hagrid', text: 'Ha! Cheers! Go on, Hermione, try it.' },
+    thanksRock: { who: 'hagrid', text: 'Go on, Hermione, try it.' },
     crunch: { who: 'hermione', text: 'Er… I think I’ll have birthday cake, please.' },
-    askSlice: { who: 'harry', text: 'The first slice is for Hedwig. Can you drag it to her?' },
-    nudgeSlice: { who: 'harry', text: 'Drag the cake over to Hedwig!' },
-    helpedSlice: { who: 'harry', text: 'I’ll pass it along to her.' },
-    thanksSlice: { who: 'hermione', text: 'Well done! Look how happy she is!' },
-    slice: { who: 'harry', text: 'And a slice for {name}, for being so brave!' },
+    helpedSlice: { who: 'harry', text: 'The first slice is for Hedwig!' },
+    thanksSlice: { who: 'hermione', text: 'Look how happy she is!' },
     end: { who: 'narrator', text: 'And that was Hedwig’s best birthday ever.' },
   },
   scenes: [
@@ -269,9 +254,10 @@ export default defineCartoon({
         await k.say('empty', harry);
         await k.all(k.say('invisible', hermione), k.hop(hermione, 24));
 
-        // His first turn: tap the letter and the ink comes back.
-        const how = await k.tapToHelp(letter, { ask: 'askInk', nudge: 'nudgeInk', helped: 'helpedInk', by: hermione });
-        if (how === 'helped') await castSpell(k, hermione, [590, 280]);
+        // Hermione taps the letter with her wand and the ink comes back.
+        await k.say('helpedInk', hermione);
+        await castSpell(k, hermione, [590, 280]);
+        k.flourish(letter);
         k.fx.twinkle();
         k.sparkle(590, 280, 16, 260);
         await k.to(k.part(letter, 'ink'), 1.4, { opacity: 1, ease: 'sine.inOut' });
@@ -318,12 +304,10 @@ export default defineCartoon({
         await flyOff(k, hedwig, 'left', 1.4);
         await k.all(k.say('edge', harry), k.shake(harry, 3, 2));
         await k.say('needLight', hermione);
-        // His turn: tap the tip of Harry's wand and it lights up (the wand faces left here).
+        // Harry lights the tip of his wand (the wand faces left here).
         const lx = 840 + 52 * (230 / 300);
         const ly = 385 + 198 * (230 / 300);
-        const lspot = k.add(wandSpot(), { x: lx - 55, y: ly - 40, w: 110, h: 140, z: 29 });
-        const lhow = await k.tapToHelp(lspot, { ask: 'askLumos', nudge: 'nudgeLumos', helped: 'helpedLumos', by: hermione, helper: harry, size: 150 });
-        k.remove(lspot);
+        await k.say('helpedLumos', harry);
 
         // Lumos: the tip of his wand lights up.
         await k.all(k.say('lumos', harry), k.wait(300).then(() => castSpell(k, harry)));
@@ -331,7 +315,7 @@ export default defineCartoon({
         // Facing left, his wand is on his left side: its tip at x + (300 − 248) of his 300-wide box.
         lumos(k, [lx, ly]);
         await k.wait(700);
-        if (lhow === 'tapped') await k.say('thanksLumos', hermione);
+        await k.say('thanksLumos', hermione);
 
         // Something in the trees.
         k.silence();
@@ -388,11 +372,9 @@ export default defineCartoon({
         await k.all(swishCloak(k, voldemort), k.to(voldemort, 0.6, { y: DROP - LIFT }));
         await k.say('idea', hermione);
 
-        // His big turn: tap Harry's wand.
+        // Hermione counts them in: Harry raises his wand.
         const [tx, ty] = wandTip(HARRY_FOREST);
-        const spot = k.add(wandSpot(), { x: tx - 55, y: ty - 30, w: 110, h: 140, z: 29 });
-        const how = await k.tapToHelp(spot, { ask: 'askWand', nudge: 'nudgeWand', helped: 'countThree', by: harry, helper: hermione, size: 150 });
-        k.remove(spot);
+        await k.say('countThree', hermione);
 
         // Expelliarmus: the spell flies to his wand, and the wand spins away out of his hand.
         await k.all(
@@ -415,7 +397,7 @@ export default defineCartoon({
         // Hooray!
         k.music('triumph');
         k.sparkle(590, 300, 16, 220);
-        await k.all(k.say(how === 'tapped' ? 'youDidIt' : 'weDidIt', harry), k.hop(hermione, 30, 2), hoot(k, hedwig, 2));
+        await k.all(k.say('weDidIt', harry), k.hop(hermione, 30, 2), hoot(k, hedwig, 2));
 
         // A warm lit window through the trees: Hagrid's hut.
         const win = k.add(hutWindow(), { x: 1040, y: 440, w: 60, z: 3 });
@@ -477,9 +459,10 @@ export default defineCartoon({
         k.set(rock, { opacity: 0 });
         k.fx.pop();
         await k.appear(rock, 0.3);
-        // His turn: drag the rock cake across the table to Hermione.
-        const rhow = await k.dragToHelp(rock, { to: hermione, ask: 'askRock', nudge: 'nudgeRock', helped: 'helpedRock', by: hagrid, dropSize: 200 });
-        if (rhow === 'dragged') await k.say('thanksRock', hagrid);
+        // Hagrid slides the rock cake across the table to Hermione.
+        await k.say('helpedRock', hagrid);
+        await k.carry(rock, hermione);
+        await k.say('thanksRock', hagrid);
         await k.wait(300);
         crunch();
         k.puff(340, 500, 60, '#8a7a64');
@@ -493,23 +476,13 @@ export default defineCartoon({
         const first = k.add(cakeSlice(), { x: 385, y: 560, w: 100, z: 17 });
         k.set(first, { opacity: 0 });
         await k.appear(first, 0.3);
-        // His turn: drag the first slice to Hedwig.
-        const show = await k.dragToHelp(first, { to: hedwig, ask: 'askSlice', nudge: 'nudgeSlice', helped: 'helpedSlice', by: harry, dropSize: 200 });
+        // Harry passes the first slice to Hedwig.
+        await k.say('helpedSlice', harry);
+        await k.carry(first, hedwig);
         k.sparkle(620, 540, 8, 80);
         await k.vanish(first, 0.3);
         await k.all(hoot(k, hedwig, 2), k.hop(hedwig, 20));
-        if (show === 'dragged') await k.say('thanksSlice', hermione);
-
-        // And a slice for him: it flies out of the cake towards the screen.
-        await k.say('slice', harry);
-        const bit = k.add(cakeSlice(), { x: 430, y: 470, w: 90, z: 40 });
-        k.set(bit, { opacity: 0 });
-        await k.appear(bit, 0.3);
-        k.fx.whizz();
-        await k.to(bit, 0.7, { y: 200, scale: 2.2, rotation: 20, ease: 'power1.out' });
-        k.fx.pop();
-        k.sparkle(560, 660, 14, 160);
-        await k.vanish(bit, 0.25);
+        await k.say('thanksSlice', hermione);
 
         // Everyone together.
         await k.pop(cake, 1.08);

@@ -12,7 +12,6 @@ export default defineMeta({
     villain: 'peeves, and the Baron, who looks scary but is on their side',
     places: ['castle-corridor', 'classroom', 'potions-dungeon', 'common-room'],
     cast: ['harry', 'ron', 'neville', 'nick', 'peeves', 'baron'],
-    turns: ['tap the floating sticks so Peeves has to show himself', 'tap Trevor so he croaks', 'ring the Baron’s bell', 'drag Trevor down to Neville', 'drag the teddy over to Neville for bed'],
     jokes: ['Peeves blows a raspberry', 'Ickle firsties!'],
     ending: 'cosy by the fire, and one last tiny raspberry',
   },

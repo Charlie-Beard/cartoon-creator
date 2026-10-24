@@ -12,7 +12,6 @@ export default defineMeta({
     villain: 'feeling lonely in the wood (only for a moment)',
     places: ['bear-wood', 'bear-garden', 'bear-green'],
     cast: ['teddy', 'mummy-bear', 'uncle-bill', 'posy', 'bella', 'bobby'],
-    turns: ['drag the spade across to Teddy', 'knock on Barney’s door with the knocker', 'drag the picnic basket to the stone', 'find the map in the hollow tree', 'open the treasure chest by the duck pond'],
     jokes: ['Well, scupper me scallywags!', 'You’ll find out soon enough!'],
     ending: 'picnic on the green by Teddy’s home, and honey sweets',
   },
