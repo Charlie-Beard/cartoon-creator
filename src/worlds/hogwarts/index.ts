@@ -94,7 +94,15 @@ import { honeydukes } from './places/honeydukes';
 import { secretTunnel } from './places/secret-tunnel';
 import { fizzingWhizbee, iceMouse, pepperImp, sweetJar, trapdoor } from './objects/sweets';
 import { dursleyKitchen } from './places/dursley-kitchen';
+import { dursleyHall } from './places/dursley-hall';
+import { dursleyLounge } from './places/dursley-lounge';
+import { reptileHouse } from './places/reptile-house';
+import { auntMarge, auntMargeSwollen, dudleyBig, ripper } from './characters/dursleys2';
+import { hutOnTheRock } from './places/hut-on-the-rock';
+import { knightBus } from './places/knight-bus';
 import { grunningsOffice } from './places/grunnings-office';
+import { boa } from './characters/boa';
+import { harryMuggle } from './characters/harryMuggle';
 import { hillsBackdrop } from './places/countryside';
 import {
   birthdayCake, bat, broomstick, cauldron, cobweb, crescentMoon, dragon, flame, frog, galleon, lantern, magicWand,
@@ -143,10 +151,13 @@ import { sundae } from './objects/sundae';
 import { grindylow, grindylowGiggling } from './characters/grindylow';
 import { redCap } from './characters/redCap';
 import { hinkypunk } from './characters/hinkypunk';
+import { mrMason, mrsMason, mrWeasley, stan } from './characters/grownups';
 import { sunnyGrounds } from './places/sunny-grounds';
 import { marsh } from './places/marsh';
 import { poolBack, poolFront } from './objects/grindylowPool';
 import { potholeBack, potholeFront } from './objects/pothole';
+import { trunk, owlCage, windowBars, planks, pudding, puddingSplat, grapefruit, toffee, toffeePile, letterPile, hagridCake, blackDog, snakeGlass, presentPile, flooPot } from './objects/dursley-props';
+import { flyingCarArt, knightBusArt } from './objects/vehicles';
 
 // The hair-and-robe portraits, shared by the notes below.
 const PERSON = ['figure', 'head', 'lids', 'mouth', 'mouthOpen'];
@@ -182,6 +193,7 @@ export default defineWorld({
     harry: {
       name: 'Harry',
       art: harry,
+      poses: { muggle: harryMuggle },
       parts: PERSON_WAND,
       about:
         'Harry Potter, 11 or 12: messy black hair, round glasses, a lightning scar, a red and gold Gryffindor tie. Brave, kind and a bit unsure of himself; he leads with his heart and always looks after his friends. He talks plainly and gently ("Come on, we can do this!", "Are you all right?"). He would never be cruel, show off or leave anyone behind. When he casts, the wand lifts and sparkles. He does not speak in the spelling game (the child picks him as a hero), so he is free to be given lines here.',
@@ -760,6 +772,81 @@ export default defineWorld({
         'A little one-legged creature made of curling pale grey-blue smoke, see-through and frail-looking, with big sly yellow-green eyes and a sneaky grin. Hops on one leg and holds up a lantern on a pole. Lives in the marsh and swings its lantern to tempt people off the path into the bog; harmless if you do not follow the light. Part `lantern` (pole and lantern) swings from the hand (222, 252); `glow` inside it (centre 264, 134) is a soft yellow-green light a script can fade.',
       voice: 'No words: a whispery giggle and "ooh" (synth or recorded sounds, not an ElevenLabs voice).',
     },
+
+    dudleyBig: {
+      name: 'Dudley',
+      art: dudleyBig,
+      parts: [...PERSON, 'armR', 'tongue', 'cross'],
+      about:
+        'Dudley Dursley aged about eleven to fourteen: VERY big and round, a huge pink face with a double chin, small watery blue piggy eyes, thick neat blond hair, in a maroon jumper with orange stripes stretched tight over his tummy; he fills the whole 300 px width. Face centre about (150, 142), mouth at (150, 190), chin to y 232. Spoilt, greedy and whiny ("Mu-um!"), a figure of fun, never menacing. Part `armR` swings from the shoulder (234, 258): grab a present, point, wave a fist (the other arm hangs). Part `tongue` (hidden, opacity 0) is the Ton-Tongue Toffee tongue: long and purple, hangs from the mouth (150, 192) down to about y 328 (about 135 px, chest level); fade it in with `mouthOpen`, and scale it from the mouth (origin 150, 192) to make it grow. Part `cross` fades his face tantrum-red.',
+      voice: 'A big, whiny, spoilt, thick and slow boy of eleven; whines "Mu-um!".',
+    },
+
+    auntMarge: {
+      name: 'Aunt Marge',
+      art: auntMarge,
+      poses: { swollen: auntMargeSwollen },
+      parts: [...PERSON, 'armR'],
+      about:
+        'Aunt Marge, Vernon\'s sister: very like him, big and beefy with a ruddy pink-purple face, small narrow eyes, jowls, a small moustache, short grey-brown hair, pearl earrings, a tweed jacket and a long string of pearls. Loud and bossy ("Still here, are you?"). Face centre (150, 142), mouth at (150, 198). Part `armR` swings from the shoulder (240, 252). The `swollen` pose is the same face (surprised round O mouth, wide eyes) on a body blown up into a huge round tweed balloon (x 26 to 274, y 116 to 340) with stiff starfish arms up at both sides (`armR` pivots at 244, 214), stocking legs and shoes at the bottom corners, buttons popping and pearls stretched tight. Show it and float her up to the ceiling; funny, never painful or scary.',
+      voice: 'Loud, booming, bossy, plummy older Englishwoman; a fox-hunting voice.',
+    },
+
+    ripper: {
+      name: 'Ripper',
+      art: ripper,
+      parts: ['figure', 'head', 'lids', 'mouth', 'mouthOpen', 'tail'],
+      chip: '40 90 164 164',
+      about:
+        'Aunt Marge\'s bulldog: stout, bandy-legged, wrinkly and fawn-and-white with a brown patch, a big jowly underbite, a flat black nose and a studded collar. Stands side-on facing the viewer\'s left, head turned three-quarters to the viewer: face centre about (122, 166), body running right to x 296, feet on the ground at y 340 (the lowest 8 px of the box is paw). Bad-tempered and slobbery, comic not scary: growls, barks (flap `mouthOpen`), drools. Part `tail` is a little stub that wags from (276, 214).',
+      voice: 'A bulldog: growls, snuffles and barks only (synth or recorded sounds, not an ElevenLabs voice).',
+    },
+
+    boa: {
+      name: 'The boa constrictor',
+      art: boa,
+      parts: ['head', 'lids', 'wink', 'mouth', 'mouthOpen', 'tongue'],
+      about:
+        'The big snake in the zoo\'s reptile house, whom Harry (who can speak to snakes) chats to: a long, fat, olive-and-brown snake with dark saddle blotches, coiled in loops on the floor (ground line about y 322, coils fill the bottom 120 px of the box and the full width), the front of her body rising on the right into a raised head that faces the viewer. Face centre about (152, 130) of the 300 × 340 box, inside the usual face box. FRIENDLY and funny, never scary: huge round amber eyes, a small smile, pink cheeks, a flicking forked tongue. Part `head` sways or rises from the neck (origin 152, 168); `lids` is a blink; `wink` is ONE eye\'s lid (the viewer\'s right eye, centre about 184, 124), hidden until shown: the gag, so she can wink at Harry. `mouth` / `mouthOpen` for talking; `tongue` (hidden) fades in to flick below the chin. She is delighted to be spoken to, a bit surprised, and grateful ("Thanksss, amigo!"). She never hurts anyone; she just wants out of the glass.',
+      voice:
+        'A slow, friendly, lisping hiss of a voice, surprised and delighted, with Brazilian-ish warmth: long soft "sss" sounds, a big smiling laugh. Speed about 0.85, stability about 0.4. Not yet cast.',
+    },
+
+    mrWeasley: {
+      name: 'Mr Weasley',
+      art: mrWeasley,
+      parts: [...PERSON_WAND, 'armR'],
+      about:
+        'Arthur Weasley, Ron\'s dad: tall and thin, bald on top with a fringe of ginger over the ears, thick horn-rimmed glasses, a kind, eager, slightly bewildered face with freckles, long patched green robes. Mad about Muggle things ("Ecklectricity! Fascinating!"); absent-minded but warm, never cross for long. Face centre about (150, 142), face box 78 62 144 144; shoulders at y 232, robes run off the bottom edge. Part `wand` (origin 238, 318) is held up at his right; `armR` swings from the shoulder (232, 266) to wave or point.',
+      voice: 'Kind, enthusiastic, slightly absent-minded middle-aged British dad; delighted by everything, a little flustered.',
+    },
+
+    stan: {
+      name: 'Stan Shunpike',
+      art: stan,
+      parts: [...PERSON, 'armR'],
+      about:
+        'Stan Shunpike, conductor of the Knight Bus: a skinny young man of about eighteen with big sticking-out ears, a few spots, a cheeky grin, a purple conductor\'s jacket with two rows of gold buttons and a purple peaked cap with a gold badge. Chirpy and fast-talking ("Welcome to the Knight Bus!"). Face centre about (150, 142); ears reach out to x 58 and x 242; cap top at y 44; shoulders at y 236. `armR` swings from the shoulder (232, 266) to wave or point.',
+      voice: 'Chirpy, fast-talking cockney young man in his late teens; cheeky and eager.',
+    },
+
+    mrMason: {
+      name: 'Mr Mason',
+      art: mrMason,
+      parts: PERSON,
+      about:
+        'Mr Mason, a rich, important builder who comes to dinner at the Dursleys: portly and bald with a shiny head, a round pink face, a neat grey moustache, a dark dinner suit with a white shirt front and a black bow tie, and a polite, stiff smile. Slow, pompous and very pleased with himself. Wide shoulders fill the box from x 8 to 292; face centre about (150, 142); bow tie at (150, 244).',
+      voice: 'Rich, pompous, slow and deep middle-aged British man; plummy and self-satisfied.',
+    },
+
+    mrsMason: {
+      name: 'Mrs Mason',
+      art: mrsMason,
+      parts: PERSON,
+      about:
+        'Mrs Mason, Mr Mason\'s wife: a grand lady with a tall stiff silver-grey hairdo (up to y 0), a sparkly pale-blue evening dress, pearls and big pearl earrings. Terrified of birds: she shrieks and runs when an owl flies in. Face centre about (150, 142), face box 78 62 144 144; earrings hang at x 94 and x 206, y 180; neckline at y 250.',
+      voice: 'Grand, fluting, posh British lady; airy and refined, and she shrieks at birds.',
+    },
   },
 
   backdrops: {
@@ -798,9 +885,14 @@ export default defineWorld({
     'london-sunset': { art: cached(() => london()), about: 'London at sunset: a pink, orange and peach sky with a big sun at right, dark silhouettes of buildings and a clock tower from y 400 to 640, and a purple street. Ground line (the street) at about y 700; room for 3 actors.' },
     'castle-courtyard': { art: cached(() => courtyard()), about: 'The castle courtyard at dusk: a purple and orange sky with dark clouds, Hogwarts rising behind a stone wall (x 370 to 850, y 100 to 470), and a stone-paved yard in front. Ground line at about y 640 (the paving runs from y 500 to the bottom); room for 4 actors.' },
     'dursley-kitchen': { art: cached(() => dursleyKitchen()), about: 'The Dursleys\' spotless lemon-yellow kitchen at No. 4 Privet Drive, morning: white tiles, tidy cupboards, a wall clock (x 302 to 378, y 58 to 134), a kettle (x 334 to 446) and a toaster (x 722 to 816) on the worktop. A big window at the back, upper middle (x 420 to 760, y 110 to 330) showing garden, picket fence and blue sky: owls can fly across it. Ground line at about y 650; room for 3 actors: left (x 80 to 340), middle (x 470 to 700, e.g. a baby in a high chair) and right (x 820 to 1080), heads at y 330 to 380 clear of the window.' },
+    'dursley-hall': { art: cached(() => dursleyHall()), about: 'The front hall at No. 4 Privet Drive: peach wallpaper, flowery pink carpet. Front door at the left (x 30 to 260, y 140 to 618, frosted glass panel x 90 to 200, y 200 to 380), brass LETTERBOX at waist height (plate x 88 to 202, y 452 to 498, slot at y 468 to 484: letters shoot out of it; plank it over at x 80 to 210, y 445 to 505), doormat at its foot (x 50 to 270, y 622 to 652). Coat hooks high at x 286 to 376, y 176; a mirror at x 372 to 492, y 170 to 270 and a little table with a vase of plastic flowers and a framed photo (x 358 to 508, top y 540, flowers at y 464 to 496). The staircase climbs to the right from x 560 (steps rise to the top right edge); beneath it the wall is a darker pink, and HARRY\'S CUPBOARD is the small wooden door at x 772 to 910, y 410 to 612 (grille x 810 to 872, y 440 to 470; latch at x 876, y 521). Ground line y 655; room for 3 actors across x 300 to 1000 (heads at y 300 to 420 are against plain wall and the stairs\' side). Bottom band y 700 on is plain carpet.' },
+    'dursley-lounge': { art: cached(() => dursleyLounge()), about: 'The Dursleys\' sitting room at No. 4 Privet Drive, daytime: mint striped wallpaper, lilac carpet. FIREPLACE in the middle back: tiled surround x 400 to 780, y 296 to 602; the OPENING is x 460 to 720, y 380 to 602, covered by a flat cream board; the ELECTRIC FIRE stands in front of it (x 486 to 694, y 496 to 602, two glowing orange bars at y 536 to 550 and 560 to 574, x 512 to 668). Letters can pour or people burst out from about (590, 490). MANTELPIECE shelf x 386 to 794, y 268 to 292, holding a gold clock (x 568 to 612, y 206 to 268) and two framed photos of Dudley (x 420 to 476 and x 704 to 760, y 216 to 268); a bigger portrait on the wall at x 520 to 660, y 70 to 170. Big WINDOW at the left (frame x 60 to 350, y 80 to 410, sill y 404 to 420) with net curtains, looking across Privet Drive to a brick house and a hedge under blue sky (owls can fly across it). Flowery pink SOFA under it (x 10 to 354, y 436 to 612), a standard lamp at x 840 (shade y 238 to 300), a blue armchair at x 876 to 1054 (y 440 to 600), a television on a stand at far right (x 1076 to 1212, screen y 408 to 478). Ground line y 660; room for 3 or 4 actors across x 380 to 860 in front of the fireplace (heads at y 300 to 420 are against the fireplace surround; keep x 460 to 720 free to see the fire) or lined up x 250 to 1000. Bottom band y 700 on is plain carpet.' },
     'grunnings-office': { art: cached(() => grunningsOffice()), about: 'Mr Dursley\'s beige office at Grunnings (they make drills): a big window at the back right (x 640 to 1120, y 100 to 420) with blue sky and far rooftops low down (owls can fly over the sky part), a framed drill picture and a certificate on the left wall, a filing cabinet, and a big wooden desk across the front left (x 80 to 620, top edge y 540, front down to the bottom) with a telephone, papers and a drill on it. Keep x 220 to 480 of the desktop clear: stand a portrait behind the desk there, head at y 260 to 330. Ground line at about y 680 (right of the desk, x 640 to 1100).' },
     'privet-drive': { art: cached(() => privetDrive(false)), about: 'Privet Drive by day: a neat street of identical brick houses and tidy hedges under a pale blue sky. Number Four is middle-right: front door x 640 to 740 (y 380 to 600, brass 4), stone doorstep in front with a flat top at y 600 (x 615 to 765), Mr Dursley\'s bedroom window above-left of the door (x 560 to 660, y 200 to 290, curtained). Low brick garden wall at left (x 0 to 420, flat top y 520), "Privet Drive" street sign above it (x 175 to 325, y 372 to 424). Pavement ground line at y 640, plain road below y 710. No lamps (put them at x 120, 470, 1050). Room for 3 actors across the middle.' },
     'privet-drive-night': { art: cached(() => privetDrive(true)), about: 'Privet Drive by night: deep blue sky, stars and a crescent moon top right, the same street dim blue-grey with dark windows (a neighbour\'s window or two softly lit, never Number Four\'s). Door x 640 to 740 (y 380 to 600), doorstep top y 600 (x 615 to 765), bedroom window x 560 to 660, y 200 to 290 (dark, curtained: add a light with a script), garden wall at left x 0 to 420 with its top at y 520, street sign x 175 to 325, y 372 to 424. Ground line y 640; no lamps (put them at x 120, 470, 1050).' },
+    'reptile-house': { art: cached(() => reptileHouse()), about: "The zoo's reptile house: dim, green-lit, a wall of glass tanks, a dark green tiled floor. ONE BIG TANK in the middle, frame x 358 to 922, y 140 to 630; its OPENING (where the separate glass prop goes) is x 390 to 890, y 170 to 590, with nothing alive in it: sand floor from y 515, two rocky piles with leaves at the sides (left x 390 to 560, right x 770 to 890), a flat basking rock (x 600 to 760, top y 488), a branch across the back (y 262 to 300), a warm lamp glow from the top (x 560 to 720). The little pool is at the front left: x 460 to 660, y 550 to 582. A snake character fits in the opening, e.g. on the sand at x 520 to 800, y 480 to 560. The sign is right of the tank on a post: plaque x 928 to 1058, y 258 to 358 with a green map blob and a snake picture, no words. Small dim tanks to each side: left x 40 to 310 (y 130 to 270 and y 330 to 600), right x 960 to 1140 (y 130 to 240 and y 400 to 600). Cabinets y 612 to 680, floor ground line at about y 680 (calm below y 690). Actors stand left (x 80 to 340) and right (x 940 to 1100) of the big tank, or in front of it (x 400 to 880); the area in front of the big tank is open." },
+    'hut-on-the-rock': { art: cached(() => hutOnTheRock()), about: 'Inside the miserable little hut on a rock in the sea, stormy night: bare blue-grey plank walls, dim but not scary. The DOOR is at the left, big and clear: frame x 30 to 270, door x 50 to 250, y 110 to 660 (iron straps at y 210 and 540, handle at x 222, y 400). The window is upper middle-left, opening x 340 to 560, y 130 to 330 (stormy dark sea, clouds and rain; sill y 346 to 360). The empty cold FIREPLACE is middle-right: stone surround x 590 to 870, y 196 to 660, the dark hearth opening x 650 to 810, y 360 to 660 with a few sticks and ash at its foot (x 690 to 780, y 616 to 652): a script puts a fire there. The lumpy old SOFA is at the right: x 870 to 1180, back top y 440, seat y 520 to 660 (Dudley sleeps on it, head about x 1000 to 1100, y 470 to 520). Bare floorboards; ground line at about y 660; room for 4 actors across x 290 to 860 in front of the window and fireplace (heads clear of the window sill at y 360 if they are in front of it), and more on the sofa side.' },
+    'knight-bus': { art: cached(() => knightBus()), about: "Inside the Knight Bus at night, funny and cosy: a purple wall with brass trim, a purple floor (starts at y 640) with a lighter runner (x 290 to 890). Brass bedsteads with patchwork quilts line both sides, cut by the screen edge: left lower bed x 0 to 245 (quilt y 565 to 615, headboard post x 195 to 245), left upper bed x 0 to 205 (quilt y 395 to 445); right lower bed x 935 to 1180 (quilt y 565 to 615), right upper bed x 975 to 1180 (quilt y 395 to 445). Three windows at the back, each 160 wide with a brass frame (x 310 to 470, 510 to 670, 710 to 870; y 220 to 462, sills at y 470 to 482) with streetlight streaks on dark blue night. A little brass CHANDELIER hangs from the ceiling at x 500 to 680, y 76 to 225 (its group is data-part 'chandelier', pivot x 590, y 80: swing it by rotating a few degrees). Candles in wall brackets at x 60 and 1120 (y 150), x 262 and 910 (y 330), x 268 and 912 (y 520). Ground line y 660; room for 3 actors in the middle across x 290 to 890, heads in front of the windows (y 300 to 450)." },
     'snowy-grounds': { art: cached(() => snowyGrounds()), about: 'The school grounds on a snowy winter afternoon: a pale grey-blue sky with a few falling flakes, the castle small on its hill at middle-right (x 690 to 925, y 195 to 450) with snow on its roofs and a few warm yellow windows, tall snow-laden dark firs on the left edge (x 0 to 300, y 175 to 690), small firs on the far hills, rolling white hills and deep plain snow in front. Ground line at about y 660; room for 3 actors across x 300 to 1180 (a big prop can come in from the right). Foreground x 300 to 1180, y 400 to 690 is plain snow; keep actors clear of the firs at the left.' },
     'castle-doors': { art: cached(() => castleDoors()), about: 'The castle\'s great front entrance from outside, in the snow: a big grey stone wall with a tall arched doorway in the middle (the glowing opening is x 430 to 750, y 150 to 660, with a stone surround and keystone up to y 108), two oak doors standing open against the wall each side (slabs x 366 to 430 and x 750 to 814), warm golden candlelight inside with two torches, a lantern at x 260 and x 920, snow on the ledges, the steps and the ground. Ground line at about y 660 (the doorway floor); two shallow snowy steps in front of the door, x 380 to 800, y 660 to 695. Actors stand left (x 0 to 360) and right (x 820 to 1180); a prop or tree can be pushed into the doorway.' },
     dormitory: { art: cached(() => dormitory()), about: 'The Gryffindor boys\' dormitory on a snowy Christmas morning: round stone tower walls, a tall arched window in the middle top (x 490 to 690, y 40 to 370) with snow falling and pale light, two four-poster beds with red velvet curtains tied back and red-and-gold covers (left x 20 to 380, right x 800 to 1160; the beds\' feet face the middle, at x 380 and x 800), a wooden trunk at the foot of the left bed, two holly wreaths, two stockings, a stone floor and a red rug in the middle. Ground line at about y 660; the middle (x 400 to 790, y 300 to 690) is clear for 2 actors, with room on the rug at x 500 to 700, y 560 to 680 for a pile of presents.' },
@@ -937,5 +1029,23 @@ export default defineWorld({
     poolFront: { art: cached(() => poolFront()), size: [700, 220], about: 'The near half of the same pool: wavy water with its top edge (the water line) at y 128 in the box, and a low stone rim below, y 168 to 220. Transparent above the waves. Put it in front of the actors at the same x, y as poolBack; an actor with its feet at box y 160 to 190 wades in it.' },
     potholeBack: { art: cached(() => potholeBack()), size: [220, 110], about: 'The far half of a pothole in the grass: a dark oval hole with an earth rim and grass tufts. Opening centred at (110, 54) in the box, rx 84, ry 28. Place at the SAME x, y as potholeFront and put a small creature between them in z.' },
     potholeFront: { art: cached(() => potholeFront()), size: [220, 110], about: 'The near lip of the same pothole: earth and grass below the opening\'s lower edge (y 54 at the sides, curving to y 84 at x 110), flat bottom at y 108. In front of a creature that pops up out of the hole (slide it up from box y 85 or lower).' },
+    knightBus: { art: cached(() => knightBusArt()), size: [460, 560], about: "The Knight Bus: a violently purple triple-decker, tall and narrow, side-on facing LEFT (it arrives from the right). No words on it. Wheel bottoms are at the box bottom (y 556, x 120 and 370 are the wheel centres at y 512): stand the box with its bottom on the road (e.g. y 700). Three rows of lit yellow windows (y 70, 178, 286), a door and windscreen on the bottom deck (door x 190 to 270), big round headlamps at the front-left (46, 436). Parts: wheels (both wheels, spin them), lamps (headlamp glow in front of the bus, starts at opacity 0: fade it in)." },
+    flyingCar: { art: cached(() => flyingCarArt()), size: [440, 220], about: "Mr Weasley's old turquoise-blue family car, rounded, no brand, side-on facing LEFT, headlamps at the nose. Wheel bottoms at the box bottom (y 214; wheel centres x 100 and 344, y 178). Pale sky-blue glass: front window x 130 to 204 (y 52 to 104), back window x 216 to 320. Parts: wheels (spin them), lamps (headlight beam at the nose, opacity 0 until faded in), fred (ginger head in the front window, centre 172, 84) and ron (ginger head in the back window, centre 284, 84), both opacity 0 until faded in. Or put a portrait behind the car with a small w to peep over the windows." },
+    // The Dursley cartoons
+    trunk: { art: cached(() => trunk()), size: [240, 160], about: "Harry's school trunk, closed: brown wood, brass corners and lock, a leather strap down the middle. Bottom (ground) at y 150 of 160, centred." },
+    owlCage: { art: cached(() => owlCage()), size: [140, 200], about: "Hedwig's EMPTY brass birdcage: domed top with a ring on top, bars, a perch at y 118, a little door in front, a base. Bottom at y 180. Put Hedwig in front of it as a character." },
+    windowBars: { art: cached(() => windowBars()), size: [236, 252], about: "Black iron bars (five) in a bolted frame, EXACTLY the size of the bedroom backdrop's window frame: place at x 862, y 72 (top left) over the bedroom window; the night sky shows between the bars." },
+    planks: { art: cached(() => planks()), size: [220, 120], about: 'Three rough wooden planks nailed in a cross with nails showing: to board up a letterbox or fireplace. Centre of the cross at about (110, 60).' },
+    pudding: { art: cached(() => pudding()), size: [200, 220], about: "Aunt Petunia's masterpiece: a tall tiered mountain of whipped cream dotted with sugared violets on a cake stand. Stand foot at y 208, top of the cream at y 6, centre x 100." },
+    puddingSplat: { art: cached(() => puddingSplat()), size: [300, 110], about: 'The pudding splatted flat on the floor: a wide puddle of cream with violets and splashes. Floor level about y 90, centre x 150.' },
+    grapefruit: { art: cached(() => grapefruit()), size: [120, 80], about: 'A sad small quarter of grapefruit on a little white plate. Plate bottom at y 72.' },
+    toffee: { art: cached(() => toffee()), size: [70, 40], about: 'One Ton-Tongue Toffee: a pink toffee in a twist of bright wrapper.' },
+    toffeePile: { art: cached(() => toffeePile()), size: [200, 70], about: 'A small scatter of six toffees in different bright wrappers (pink, blue, yellow, green, purple), lying on the floor. Floor at y 62.' },
+    letterPile: { art: cached(() => letterPile()), size: [300, 160], about: 'A big heap of cream envelopes with red wax seals (the letters from no one), same look as owlPostLetter. Heap bottom at y 152, top at y 10, centre x 150.' },
+    hagridCake: { art: cached(() => hagridCake()), size: [200, 150], about: "Hagrid's birthday cake: big, pink, a bit squashed and lopsided, with green icing squiggles on top and round the middle (no words). Bottom at y 142." },
+    blackDog: { art: cached(() => blackDog()), size: [260, 180], about: 'A huge shaggy black dog crouched half-hidden in shadow (the Grim; Sirius as Padfoot), side-on facing right: dark shape, head at right (x 170 to 255, y 14 to 118). Two pale gleaming eyes at about (206, 68) and (236, 68). Part eyes: fade it to hide or show the gleam (origin [218, 68]). Mysterious, not scary. Paws at y 174. Best on a dark backdrop.' },
+    snakeGlass: { art: cached(() => snakeGlass()), size: [520, 440], about: 'The glass front of a zoo tank: a see-through pale blue-green pane (fill opacity 0.35) with three white shine streaks and a thin grey frame. Place over the big tank of reptile-house so the snake shows through; fade the whole prop out to make the glass vanish.' },
+    presentPile: { art: cached(() => presentPile()), size: [360, 220], about: "A big tumbling heap of wrapped birthday presents in shiny paper with ribbons and bows (Dudley's). Bottom at y 214, top at y 4, centre x 180." },
+    flooPot: { art: cached(() => flooPot()), size: [90, 90], about: 'A little terracotta flowerpot full of glittering green Floo powder. Pot foot at y 82.' },
   },
 });
