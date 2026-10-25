@@ -73,8 +73,14 @@ export function sortShelf<T extends CartoonMeta>(entries: T[]): T[] {
  * special day, a new favourite). The others stay in their folders, still
  * checked and tested, and come back when this is null again. The scripts
  * keep the whole shelf; only the app (and the end-to-end tests of it) use this.
+ *
+ * An entry can wait for a set time, `{ id, from: 'YYYY-MM-DDTHH:mm' }`, read
+ * on the iPad's own clock: a treat that turns up in the morning. The shelf
+ * is worked out when the app loads, so it appears on the next open after that.
  */
-export const SHOWING: string[] | null = [
+export type Showing = string | { id: string; from: string };
+
+export const SHOWING: Showing[] | null = [
   'giants-castle',
   'grims-school',
   'teddy-surprise',
@@ -83,9 +89,18 @@ export const SHOWING: string[] | null = [
   'washing-day',
   'whistling-kettle',
   'wishing-chair',
+  { id: 'seaside-adventure', from: '2026-10-26T10:00' },
+  { id: 'mysterious-letter', from: '2026-10-26T10:00' },
 ];
 
-/** Only the cartoons in SHOWING, or all of them when it is null. */
-export function showing<T extends CartoonMeta>(entries: T[]): T[] {
-  return SHOWING ? entries.filter((c) => SHOWING!.includes(c.id)) : entries;
+/** The ids in `list` that are showing at `now` (a timed one once its `from` has come). */
+export function showingIds(list: Showing[], now: Date): string[] {
+  return list.flatMap((s) => (typeof s === 'string' ? [s] : now >= new Date(s.from) ? [s.id] : []));
+}
+
+/** Only the cartoons in SHOWING (as of `now`), or all of them when it is null. */
+export function showing<T extends CartoonMeta>(entries: T[], now = new Date()): T[] {
+  if (!SHOWING) return entries;
+  const ids = showingIds(SHOWING, now);
+  return entries.filter((c) => ids.includes(c.id));
 }
