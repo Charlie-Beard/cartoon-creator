@@ -25,9 +25,9 @@
  *      ("Easily mended!"). "Is this a PLUG? I collect plugs!" Ron: where's
  *      your trunk? Harry fetches it from upstairs (a deed: he carries it).
  *      As Fred bends to help, toffees spill out of his pocket.
- *   3. The toffee. "Oops. Dropped our toffees." Dudley looks round, nobody's
- *      watching, and gobbles one. "Wait for it…" Bwoing! His tongue rolls out,
- *      long and purple. Mrs Dursley shrieks and rushes in; Mr Dursley goes
+ *   3. The toffee. "Oops! Dropped our Ton-Tongue Toffees." Dudley looks
+ *      round, nobody's watching, and gobbles one. "Wait for it… They make
+ *      your tongue grow!" Bwoing! His tongue rolls out, long and purple. Mrs Dursley shrieks and rushes in; Mr Dursley goes
  *      purple too. Mr Weasley: "FRED! GEORGE!" The twins say it shrinks back
  *      when the toffee's gone. Harry gives Dudley a glass of water (the big
  *      deed): gulp, gulp, sproing! The tongue shrinks back. "Yuck. That
@@ -117,7 +117,7 @@ async function mend<K extends string>(k: Kit<K>): Promise<void> {
   k.set([cast.boardL, cast.boardR, cast.fire], { opacity: 1, rotation: 0, scale: 1 });
   k.set(cast.boardL, { x: -500, y: -200 });
   k.set(cast.boardR, { x: 540, y: -200 });
-  k.set(cast.fire, { x: 330, y: 60 });
+  k.set(cast.fire, { x: 330, y: 60, zIndex: 6 }); // back behind Mr Weasley, where it was before the bang
   await k.all(
     k.to(cast.boardL, 0.6, { x: 0, y: 0, ease: 'back.out(1.6)' }),
     k.to(cast.boardR, 0.6, { x: 0, y: 0, ease: 'back.out(1.6)' }),
@@ -168,10 +168,10 @@ export default defineCartoon({
     trunk: { who: 'ron', text: 'Harry! Where’s your trunk?' },
     fetch: { who: 'harry', text: 'Upstairs. I’ll get it!' },
     // 3. The toffee
-    oops: { who: 'fred', text: 'Oops. Dropped our toffees.' },
+    oops: { who: 'fred', text: 'Oops! Dropped our Ton-Tongue Toffees.' },
     toffees: { who: 'dudley', text: 'Toffees!' },
     waitForIt: { who: 'george', text: 'Ooh. He’s eaten one.' },
-    waitWait: { who: 'fred', text: 'Wait for it…' },
+    waitWait: { who: 'fred', text: 'Wait for it… They make your tongue grow!' },
     mmmph: { who: 'dudley', text: 'Mmmph! Mmmuuum!' },
     petuniaTongue: { who: 'petunia', text: 'DUDLEY! His TONGUE!' },
     whatHaveYouDone: { who: 'vernon', text: 'What have you DONE to my son?' },
@@ -335,8 +335,8 @@ export default defineCartoon({
         k.puff(HEARTH[0], HEARTH[1], 360, '#44444c');
         k.puff(HEARTH[0] - 90, HEARTH[1] + 50, 260, '#55555d');
         k.puff(HEARTH[0] + 90, HEARTH[1] - 20, 260, '#55555d');
-        void k.to(boardL, 0.8, { x: -560, y: -160, rotation: -200, scale: 1.2, ease: 'power2.out' }).then(() => k.set(boardL, { opacity: 0 }));
-        void k.to(boardR, 0.8, { x: 760, y: -140, rotation: 220, scale: 1.2, ease: 'power2.out' }).then(() => k.set(boardR, { opacity: 0 }));
+        void k.to(boardL, 0.8, { x: -160, y: -560, rotation: -200, scale: 1.2, ease: 'power2.out' }).then(() => k.set(boardL, { opacity: 0 }));
+        void k.to(boardR, 0.8, { x: 260, y: -560, rotation: 220, scale: 1.2, ease: 'power2.out' }).then(() => k.set(boardR, { opacity: 0 }));
         void k.to(fire, 0.7, { x: 330, y: 60, rotation: 12, ease: 'power2.out' });
         void k.to(plugEl, 0.7, { x: 120, y: 65, rotation: 40, ease: 'power2.out' });
         await k.all(k.exit(vernon, 'left', 0.6), k.exit(petunia, 'left', 0.6), k.wait(150).then(() => k.exit(harry, 'left', 0.6)));
@@ -620,7 +620,8 @@ export default defineCartoon({
         k.set(pie, { opacity: 1 });
         await k.appear(pie, 0.4);
         await k.say('pie', mrsW);
-        await k.carry(pie, harry, 0.9);
+        const hb = k.box(harry);
+        await k.carry(pie, [hb.x + hb.w * 0.5, hb.y + hb.h * 0.85], 0.9); // at his chest, so his mouth shows
         await k.say('notGrapefruit', harry);
         laugh();
         await k.all(k.hop(harry, 24, 2), k.hop(ron, 24, 2));

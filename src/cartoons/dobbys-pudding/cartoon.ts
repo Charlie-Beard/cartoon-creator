@@ -219,7 +219,7 @@ export default defineCartoon({
     myLetters: { who: 'harry', text: 'My letters! From Ron and Hermione! Give them here!' },
     promise: { who: 'dobby', text: 'Dobby will, sir, if Harry Potter promises not to go back to school!' },
     cantPromise: { who: 'harry', text: 'I can’t promise that. Hogwarts is the best place in the world.' },
-    noChoice: { who: 'dobby', text: 'Then Dobby has no choice.' },
+    noChoice: { who: 'dobby', text: 'Then Dobby has no choice. Dobby must stop the dinner, sir!' },
     kitchenPudding: { who: 'harry', text: 'Oh no. Where’s he gone? The kitchen! The PUDDING!' },
     // 3. The pudding
     putItDown: { who: 'harry', text: 'Dobby! Put the pudding down. Please!' },
@@ -554,10 +554,11 @@ export default defineCartoon({
         await k.all(
           k.to(bars, 0.9, { x: '-=10', y: '+=360', rotation: -40, ease: 'power2.in' }),
           k.to(line, 0.9, { x: '+=10', y: '+=330', rotation: 30, opacity: 0.0, ease: 'power2.in' }),
-          k.to(car, 0.6, { x: '-=150', ease: 'power2.out' }),
         );
         k.fx.thud();
         k.puff(WIN.x + 40, WIN.y + 380, 140, '#2f4f4a');
+        // Only once the bars are down does the car come back to the window, so they never fall across it.
+        await k.to(car, 0.6, { x: '-=150', ease: 'power2.out' });
         await k.wait(500);
 
         // The lights come on next door: Vernon, purple, at the window.
@@ -600,7 +601,7 @@ export default defineCartoon({
           cast.moon = k.prop('crescentMoon', { x: 100, y: 110, w: 340, z: 3 });
           cast.car = k.prop('flyingCar', { x: 400, y: 330, w: 440, z: 12, flip: true });
           k.set(cast.car, { x: -1000 });
-          cast.harry = muggle(k, { x: 504, y: 240, w: 140, z: 10 });
+          cast.harry = muggle(k, { x: 504, y: 285, w: 140, z: 10 }); // behind the car: only his head pops up above the roof
           cast.hedwig = k.character('hedwig', { x: 760, y: 170, w: 170, z: 14, pose: 'fly' });
           k.set([cast.harry, cast.hedwig], { opacity: 0 });
         });

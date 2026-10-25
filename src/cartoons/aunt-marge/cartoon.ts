@@ -141,7 +141,7 @@ export default defineCartoon({
     stanWandHand: { who: 'stan', text: 'Just stick out your wand hand, and we’ll take you anywhere! I’m Stan.' },
     harryWandHand: { who: 'harry', text: 'My wand hand… I did, didn’t I!' },
     name: { who: 'stan', text: 'And what’s your name, then?' },
-    neville: { who: 'harry', text: 'Er… Neville. Neville Longbottom.' },
+    neville: { who: 'harry', text: 'Better not say my real name. Er… Neville. Neville Longbottom.' },
     rightYou: { who: 'stan', text: 'Right you are, Neville! In you get!' },
     // 4. The Knight Bus
     stanHoldOn: { who: 'stan', text: 'Hold on to your bed, Neville! Ernie drives a bit fast!' },
@@ -452,8 +452,10 @@ export default defineCartoon({
         void k.to(wheels, 1.4, { rotation: -900, ease: 'power3.out' });
         void k.fade(k.part(bus, 'lamps'), 1, 0.5);
         await k.to(bus, 1.4, { x: -580, ease: 'power3.out' });
-        k.quake(8);
+        k.quake(6);
         k.puff(1050, 690, 200, '#8a8aa0');
+        // The bus is here: Harry's wand hand comes down, so it never points at Stan.
+        void k.to(wand, 0.4, { rotation: 0, ease: 'power1.out' });
         await k.wait(500);
 
         // Stan hops down from the door.
@@ -503,7 +505,7 @@ export default defineCartoon({
         await k.say('stanHoldOn', stan);
         // BANG: the bus lurches sideways; the beds skid; nobody falls.
         lurch();
-        k.quake(14);
+        k.quake(7);
         await k.to(everyone, 0.25, { x: '+=110', rotation: 3, ease: 'power2.out' });
         await k.to(everyone, 0.7, { x: '-=110', rotation: 0, ease: 'elastic.out(1, 0.5)' });
         await k.all(k.say('whoa', harry), k.shake(stan, 4, 3));
@@ -528,7 +530,7 @@ export default defineCartoon({
         await k.all(k.say('cocoa', stan), k.appear(cocoa, 0.4));
         await k.carry(cocoa, [525, 520], 0.9);
         lurch();
-        k.quake(12);
+        k.quake(6);
         slosh();
         await k.to([harry, stan, cot], 0.2, { x: '+=70', ease: 'power2.out' });
         await k.all(k.to([harry, stan, cot], 0.5, { x: '-=70', ease: 'back.out(2)' }), k.shake(cocoa, 5, 4));

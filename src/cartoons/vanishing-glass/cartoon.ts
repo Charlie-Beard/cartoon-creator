@@ -15,7 +15,7 @@
  *      glass. Dudley wants it to move, Uncle Vernon bangs on the glass, and
  *      the snake does not stir. "This is BORING." Ice cream! They all go.
  *      Harry says sorry for them, and the snake opens one eye and WINKS. He
- *      can talk to her! She has never been to Brazil: she was born in this
+ *      can talk to him! He has never been to Brazil: he was born in this
  *      tank. "I wish you could go and see it," says Harry. Then Dudley comes
  *      bursting back: "Mum! Dad! Come and look what the snake's doing!"
  *   3. The glass vanishes. (The big deed.) Harry puts his hand on the glass:
@@ -28,10 +28,10 @@
  *      slowly, goes purple, and the camera comes in: "BOY! What… did… you…
  *      DO?" "Nothing! The glass just went!"
  *   4. The cupboard under the stairs. No more trips for Harry: cupboard,
- *      NOW. Poor wet Diddy-kins is dried and given cake, and the Dursleys
+ *      NOW. A zookeeper had to let Dudley out; poor wet Diddy-kins is dried and given cake, and the Dursleys
  *      go. Harry is alone in the cupboard, and smiling. He draws his new
  *      friend and pins the drawing to the wall (the warm deed). Far, far
- *      away, a big snake is on her way to Brazil, sunbathing, and she winks.
+ *      away, a big snake is on his way to Brazil, sunbathing, and he winks.
  *
  * One-off art here: the frying pan and bacon, Dudley's counting fingers, the
  * water he sits in, the snake drawing, the open cupboard (a patch laid over
@@ -40,7 +40,7 @@
  * Safety: Uncle Vernon looms, purple, and shouts once; nobody is touched.
  * Dudley falls in a shallow pool and is only wet, then shut in a glass tank
  * for a moment, safe and cross, and he's out and dried by the end. The snake
- * is friendly, never frightening, and nobody is hurt by her; she is simply
+ * is friendly, never frightening, and nobody is hurt by him; he is simply
  * going home. Harry's cupboard is cosy with his own torch-glow.
  */
 import { C, cached, circle, defineCartoon, ellipse, group, ink, noiseBurst, now, piece, poly, rect, svg, tone, type Kit } from '../../kit';
@@ -275,7 +275,7 @@ export default defineCartoon({
     wasntMe: { who: 'harry', text: 'Nothing! The glass just went!' },
     // 4. The cupboard under the stairs
     cupboard: { who: 'vernon', text: 'Cupboard. NOW. And no more trips for you, boy!' },
-    stillWet: { who: 'dudleyBig', text: 'I’m still wet, Mum.' },
+    stillWet: { who: 'dudleyBig', text: 'The zookeeper had to let me out. And I’m still wet, Mum!' },
     poorDiddy: { who: 'petunia', text: 'Poor Diddy-kins. Come and have some cake.' },
     smiling: { who: 'narrator', text: 'Harry was in his cupboard again. But he was smiling.' },
     talked: { who: 'harry', text: 'I talked to a snake. A real snake! And he said thank you.' },

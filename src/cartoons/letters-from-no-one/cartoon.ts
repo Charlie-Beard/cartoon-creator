@@ -26,8 +26,9 @@
  *   4. Happy birthday, Harry. It's only Hagrid, and he'd like a cup of tea.
  *      He has sat on the cake, but it tastes fine (Harry opens the box:
  *      deed). Hagrid lights the fire with his umbrella, pointed only at the
- *      fireplace, and the Dursleys duck behind the sofa. Harry reads his
- *      letter at last (the big deed): he is a wizard! Vernon pops up to say
+ *      fireplace, and the Dursleys duck behind the sofa.
+ *   5. Harry reads his letter. Hagrid hands it over, and Harry reads it at
+ *      last (the big deed): he is a wizard! Vernon pops up to say
  *      he is not going and Hagrid booms him back down. Sausages for all,
  *      the Dursleys peeping, and "the best birthday ever".
  *
@@ -100,7 +101,7 @@ function carAway(): void {
 function doorBoom<K extends string>(k: Kit<K>, back: HTMLElement): void {
   k.sfx.boom();
   k.fx.stomp(1, 0.3);
-  k.quake(9);
+  k.quake(5);
   void k.to(back, 0.06, { x: 5, yoyo: true, repeat: 5, ease: 'sine.inOut' });
 }
 
@@ -282,7 +283,7 @@ function lightFlames<K extends string>(k: Kit<K>): HTMLElement[] {
 /** The hut after the door has fallen: Hagrid in the doorway, Harry, the Dursleys behind the sofa. `lit` for after the fire. */
 function hutInside<K extends string>(k: Kit<K>, lit: boolean): void {
   cast.back = k.backdrop('hut-on-the-rock');
-  k.music(lit ? 'cosy' : 'cosy');
+  k.music('cosy');
   k.ambient('rain', { count: 22, z: 6, area: [340, 130, 220, 200] });
   hutDoor(k, true);
   cast.hagrid = k.character('hagrid', { ...HAGRID, x: lit ? 50 : HAGRID.x, z: 8 });
@@ -395,7 +396,7 @@ export default defineCartoon({
 
         // Vernon takes it (it floats over to him: nobody is grabbed), reads, and goes purple.
         const vb = k.box(vernon);
-        await glide(k, letter, [vb.x + vb.w * 0.5, vb.y + vb.h * 0.62], 0.8, { rotation: -8 });
+        await glide(k, letter, [vb.x + vb.w * 0.5, vb.y + vb.h * 0.85], 0.8, { rotation: -8 }); // low, so his mouth shows as he shouts
         await k.wait(400);
         await k.all(k.say('petunia', vernon), purple(k, vernon));
 
@@ -665,7 +666,7 @@ export default defineCartoon({
 
         // CRASH: the door falls in, and a giant shape fills the doorway in the dark.
         k.fx.crash();
-        k.quake(14);
+        k.quake(8);
         k.puff(150, 640, 300, '#3a3d48');
         k.set(hagrid, { opacity: 1 });
         await k.to(cast.leaf, 0.35, { scaleY: 0.1, scaleX: 1.5, y: 70, ease: 'power3.in' });
