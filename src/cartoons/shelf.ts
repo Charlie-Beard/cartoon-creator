@@ -75,9 +75,11 @@ export function sortShelf<T extends CartoonMeta>(entries: T[]): T[] {
  * keep the whole shelf; only the app (and the end-to-end tests of it) use this.
  */
 export const SHOWING: string[] | null = [
+  'giants-castle',
   'grims-school',
   'teddy-surprise',
   'strange-day',
+  'uncle-sailor-bill',
   'washing-day',
   'whistling-kettle',
   'wishing-chair',
