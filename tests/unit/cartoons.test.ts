@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ALL_CARTOONS as SHELF } from '../../src/cartoons';
 import { SHELF as ON_DISK } from '../../scripts/lib/shelf';
+import { SHOWING, showingIds } from '../../src/cartoons/shelf';
 import { checkLines, isKebab } from '../../src/core/cartoon';
 import { speakers, WORLDS } from '../../src/worlds';
 
@@ -14,6 +15,17 @@ describe('cartoons', () => {
     const ids = SHELF.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
     for (const id of ids) expect(isKebab(id), id).toBe(true);
+  });
+
+  it('show only cartoons that exist, and a timed one only once its time has come', () => {
+    for (const s of SHOWING ?? []) {
+      const id = typeof s === 'string' ? s : s.id;
+      expect(SHELF.some((c) => c.id === id), id).toBe(true);
+      if (typeof s !== 'string') expect(Number.isNaN(new Date(s.from).getTime()), s.from).toBe(false);
+    }
+    const list = ['a', { id: 'b', from: '2026-10-26T10:00' }];
+    expect(showingIds(list, new Date('2026-10-26T09:59'))).toEqual(['a']);
+    expect(showingIds(list, new Date('2026-10-26T10:00'))).toEqual(['a', 'b']);
   });
 
   for (const entry of SHELF) {
