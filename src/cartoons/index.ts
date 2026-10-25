@@ -20,4 +20,9 @@ export const ALL_CARTOONS: ShelfEntry[] = sortShelf(
 /** What he sees: only the cartoons a grown-up has picked, when they have (shelf.ts, SHOWING). */
 export const SHELF: ShelfEntry[] = showing(ALL_CARTOONS);
 
-export const shelfEntry = (id: string): ShelfEntry | undefined => SHELF.find((c) => c.id === id);
+/**
+ * Any cartoon by id, shown on the shelf or not: the shelf is what he can
+ * pick, but a grown-up (or `npm run shots`) can still play a cartoon that
+ * isn't on it yet with ?cartoon=<id>.
+ */
+export const shelfEntry = (id: string): ShelfEntry | undefined => ALL_CARTOONS.find((c) => c.id === id);
