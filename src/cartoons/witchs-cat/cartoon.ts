@@ -49,7 +49,7 @@ import { moves as commonMoves } from '../../worlds/common/moves';
 import { warmEnding } from '../../worlds/common/pieces';
 import { moves as wishing, sounds } from '../../worlds/wishing/moves';
 import { chairRide, type Ride } from '../../worlds/wishing/pieces';
-import { bat, bigMoon, biscuitTin, catBiscuit, glowEyes, hollyBush, owl, pumpkin, saucer, spikyShadow } from './art';
+import { bat, bigMoon, duskDoor, duskWindow, biscuitTin, catBiscuit, glowEyes, hollyBush, owl, pumpkin, saucer, spikyShadow } from './art';
 import meta from './meta';
 import { crunch, drone, flutter, glowChime, lightPumpkin, miaow, purr, whispers } from './sounds';
 
@@ -134,6 +134,8 @@ function nightSky(k: Kit): void {
 /** The playroom at dusk, with the pumpkin on the sill (lit, or not yet). */
 function duskPlayroom(k: Kit, lit: boolean): void {
   k.backdrop('playroom');
+  k.add(duskWindow(), { x: 84, y: 148, w: 218, h: 316, z: 1 });
+  k.add(duskDoor(), { x: 893, y: 160, w: 248, z: 1 });
   k.dim(0.3, '#1c2268');
   k.light(520, 470, 440, { color: '#ffe2a0', strength: 0.2 });
   cast.pumpkin = k.add(pumpkin(), { x: 70, y: 365, w: PUMPKIN_W, z: 14 });
@@ -318,7 +320,7 @@ export default defineCartoon({
           [cast.mollie, cast.peter, cast.jigs] = ride.riders;
           cast.pumpkin = k.add(pumpkin(), { x: 52, y: 380, w: PUMPKIN_W, z: 20 });
           k.set(k.part(cast.pumpkin, 'glow'), { opacity: 1 });
-          cast.lamp = k.light(107, 431, 270, { color: '#ffcc66', strength: 0, z: 36 });
+          cast.lamp = k.light(107, 431, 270, { color: '#ffcc66', strength: 0, z: 9 });
           cast.hazel = k.character('witchHazel', { x: 90, y: 372, w: 200, z: 16, pose: 'flying' });
           cast.owl = k.add(owl(), { x: 500, y: 238, w: 110, z: 8 });
           cast.shadow = k.add(spikyShadow(), { x: 430, y: 330, w: 620, z: 9 });
@@ -341,11 +343,9 @@ export default defineCartoon({
         );
         void wobble(k, witch, 2);
         void k.to(witch, 1.4, { x: 0, y: 0, ease: 'sine.inOut' });
-        await k.all(
-          chairRide.hopOff(k, ride, pete, { x: 330, y: 380, w: 220 }),
-          chairRide.hopOff(k, ride, mollie, { x: 560, y: 372, w: 220 }),
-          chairRide.hopOff(k, ride, jigs, { x: 850, y: 478, w: 140 }),
-        );
+        await chairRide.hopOff(k, ride, pete, { x: 330, y: 380, w: 220 });
+        await chairRide.hopOff(k, ride, mollie, { x: 560, y: 372, w: 220 });
+        await chairRide.hopOff(k, ride, jigs, { x: 850, y: 478, w: 140 });
         k.pose(witch, 'default');
         k.fx.thud();
         whispers(3);
@@ -423,7 +423,7 @@ export default defineCartoon({
         cast.jigs = k.character('jigs', { x: 660, y: 480, w: 140, z: 16 });
         cast.pumpkin = k.add(pumpkin(), { x: 490, y: 508, w: PUMPKIN_W, z: 20 });
         k.set(k.part(cast.pumpkin, 'glow'), { opacity: 1 });
-        cast.lamp = k.light(545, 560, 270, { color: '#ffcc66', strength: 0.5, z: 36 });
+        cast.lamp = k.light(545, 560, 270, { color: '#ffcc66', strength: 0.5, z: 9 });
         cast.midnight = k.character('midnight', { x: 760, y: 70, w: 160, z: 16, pose: 'scared' });
         k.set(cast.midnight, { opacity: 0 });
         cast.saucer = k.add(saucer(), { x: 190, y: 590, w: 110, z: 20 });
@@ -528,7 +528,7 @@ export default defineCartoon({
         [cast.mollie, cast.peter, cast.jigs] = ride.riders;
         cast.pumpkin = k.add(pumpkin(), { x: 505, y: 438, w: PUMPKIN_W, z: 20 });
         k.set(k.part(cast.pumpkin, 'glow'), { opacity: 1 });
-        cast.lamp = k.light(560, 490, 260, { color: '#ffcc66', strength: 0.4, z: 36 });
+        cast.lamp = k.light(560, 490, 260, { color: '#ffcc66', strength: 0.4, z: 9 });
         cast.midnight = k.character('midnight', { x: 625, y: 428, w: 110, z: 21, pose: 'purr' });
         cast.hazel = k.character('witchHazel', { x: 50, y: 372, w: 210, z: 16 });
       },
@@ -601,11 +601,9 @@ export default defineCartoon({
         k.music('cosy');
         const home = cast;
         await chairRide.land(k, ride);
-        await k.all(
-          chairRide.hopOff(k, ride, home.jigs, { x: 610, y: 425, w: 190 }),
-          chairRide.hopOff(k, ride, home.peter, { x: 400, y: 372, w: 240 }),
-          chairRide.hopOff(k, ride, home.mollie, { x: 190, y: 372, w: 240 }),
-        );
+        await chairRide.hopOff(k, ride, home.jigs, { x: 610, y: 425, w: 190 });
+        await chairRide.hopOff(k, ride, home.peter, { x: 400, y: 372, w: 240 });
+        await chairRide.hopOff(k, ride, home.mollie, { x: 190, y: 372, w: 240 });
         await k.all(k.say('homeAgain', home.jigs), k.hop(home.jigs, 20, 1));
 
         // Peter hands round the cat biscuits.

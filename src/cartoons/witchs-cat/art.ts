@@ -179,3 +179,22 @@ export const biscuitTin = cached(() =>
     ]),
   ]),
 );
+
+/** A dusk sky and a few stars for one opening of the playroom: its window panes or its doorway. */
+function duskSky(w: number, h: number, name: string, window: boolean): string {
+  const stars = Array.from({ length: 9 }, (_, i) => dot(14 + ((i * 53) % (w - 28)), 14 + ((i * 71) % (h * 0.5)), 2 + (i % 3) * 0.6, C.cream, 0.9));
+  return svg({ w, h, name }, [
+    piece(rect(0, 0, w, h), '#3a3f86', { edge: 'clean', shadow: false }),
+    piece(rect(0, h * 0.38, w, h * 0.3), '#4c4f9a', { edge: 'clean', shadow: false }),
+    piece(rect(0, h * 0.62, w, h * 0.4), '#2c3a6a', { edge: 'clean', shadow: false }),
+    ...stars,
+    piece(circle(w * 0.62, h * 0.22, window ? 26 : 34), '#f4f0cc', { edge: 'clean', shadow: false }),
+    piece(curve([[0, h * 0.92], [0, h * 0.74], [w * 0.4, h * 0.66], [w, h * 0.78], [w, h * 0.92]], 2), '#24305a', { edge: 'clean', shadow: false }),
+    ...(window ? [ink([[w / 2 - 5, 0], [w / 2 - 5, h]], { width: 8, color: '#4a3322' }), ink([[0, h * 0.4], [w, h * 0.4]], { width: 8, color: '#4a3322' })] : []),
+  ]);
+}
+
+/** Dusk over the playroom window panes, 200 × 316. */
+export const duskWindow = cached(() => duskSky(200, 316, 'witchs-cat-dusk-window', true));
+/** Dusk through the playroom's open doorway, 248 × 480. */
+export const duskDoor = cached(() => duskSky(248, 480, 'witchs-cat-dusk-door', false));
