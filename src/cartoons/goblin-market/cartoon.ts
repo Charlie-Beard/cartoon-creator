@@ -207,12 +207,25 @@ function swapUmbrella(k: Kit, to: 'jigs-umbrella' | 'jigs-umbrella-blown', at: {
 // ---------------------------------------------------------------- places
 
 /** Scene 2: where each of the three floats under the umbrella. */
-const UMB = { x: 410, y: 70, w: 330, z: 12 };
 const FLOAT = {
-  mollie: { x: 200, y: 370, w: 210, z: 14 },
-  jigs: { x: 480, y: 370, w: 190, z: 14 },
-  peter: { x: 690, y: 370, w: 200, z: 14 },
+  mollie: { x: 330, y: 370, w: 190, z: 14 },
+  jigs: { x: 490, y: 370, w: 170, z: 14 },
+  peter: { x: 620, y: 370, w: 180, z: 14 },
 };
+/** Jigs's right arm, held straight up. */
+const ARM_UP = -160;
+/**
+ * Where the umbrella goes so its handle sits in Jigs's raised hand, from
+ * Jigs's own box (the hand is about 0.83 of his width across and 1.28 down;
+ * the handle is the middle of the umbrella and its crook the bottom).
+ */
+const umbrellaFor = (j: { x: number; y: number; w: number }, z: number): { x: number; y: number; w: number; z: number } => ({
+  x: j.x - 0.044 * j.w,
+  y: j.y - 0.74 * j.w,
+  w: 1.737 * j.w,
+  z,
+});
+const UMB = umbrellaFor(FLOAT.jigs, 12);
 
 /** Scene 3: the chair, its tie, the pedlar, and the friends behind the left-hand stall. */
 const CHAIR = { x: 350, y: 320, w: 340, z: 12 };
@@ -287,7 +300,8 @@ export default defineCartoon({
         cast.mollie = k.character('mollie', { x: 560, y: 405, w: 220, z: 10, flip: true });
         cast.peter = k.character('peter', { x: 790, y: 405, w: 220, z: 11, flip: true });
         k.set([cast.mollie, cast.peter], { opacity: 0 });
-        cast.umbrella = k.prop('jigs-umbrella', { x: 290, y: 235, w: 250, z: 15 });
+        // The umbrella opens over where Jigs will stand, handle in his hand.
+        cast.umbrella = k.prop('jigs-umbrella', umbrellaFor({ x: 600, y: 500, w: 170 }, 9));
         k.set(cast.umbrella, { opacity: 0 });
       },
       async play(k) {
@@ -315,6 +329,11 @@ export default defineCartoon({
         await k.say('how', peter);
         await k.walk(peter, -90, 0.8, 3);
 
+        // The friends huddle close, and Jigs holds his hand up high.
+        await k.all(k.walk(mollie, -60, 0.9, 3), k.walk(peter, 40, 0.9, 3), k.walk(jigs, 270, 0.9, 3));
+        const armJ = k.pivot(k.part(jigs, 'armR'));
+        await k.to(armJ, 0.35, { rotation: ARM_UP, ease: 'back.out(1.4)' });
+
         // Jigs opens his umbrella, and up they go.
         k.fx.pop();
         await k.appear(umbrella, 0.4);
@@ -339,6 +358,7 @@ export default defineCartoon({
         cast.peter = k.character('peter', { ...FLOAT.peter, flip: true });
         cast.wood = k.add(farWood(), { x: 1200, y: 470, w: 360, z: 5 });
         // They start a little lower and to the left, and drift into place.
+        k.set(k.pivot(k.part(cast.jigs, 'armR')), { rotation: ARM_UP });
         k.set([cast.umbrella, cast.jigs, cast.mollie, cast.peter], { x: -120, y: 60 });
       },
       async play(k) {
@@ -398,8 +418,8 @@ export default defineCartoon({
         cast.cushions = k.add(cushions(), { x: 700, y: 556, w: 270, z: 9 });
         // The chair, tied up and sad, wings drooping, with a price tag.
         ride = chairRide.set(k, { ...CHAIR, wings: true });
-        k.set(k.pivot(k.part(ride.chair, 'wingL')), { rotation: 38 });
-        k.set(k.pivot(k.part(ride.chair, 'wingR')), { rotation: -38 });
+        k.set(k.pivot(k.part(ride.chair, 'wingL')), { rotation: -75 });
+        k.set(k.pivot(k.part(ride.chair, 'wingR')), { rotation: 75 });
         cast.rope = k.add(rope(), { x: 362, y: 452, w: 300, z: 20 });
         cast.tag = k.add(tag(), { x: 345, y: 420, w: 110, z: 21 });
         cast.tagWords = k.lettering('FOR SALE', { x: 398, y: 455, size: 17, color: C.ink, w: 80, z: 22 });
@@ -482,12 +502,11 @@ export default defineCartoon({
 
         // Everyone jumps on.
         await k.all(k.say('onBoard', jigs), k.walk(mollie, 70, 0.9, 3), k.walk(jigs, 50, 0.9, 3));
-        const peterAt = k.box(peter);
+        await k.all(k.hop(mollie, 40, 1), k.hop(peter, 40, 1), k.hop(jigs, 40, 1));
         for (const el of [mollie, peter, jigs]) k.remove(el);
         await chairRide.seat(k, ride, { id: 'mollie', slot: 'left' });
         await chairRide.seat(k, ride, { id: 'peter', slot: 'right' });
         await chairRide.seat(k, ride, { id: 'jigs', slot: 'arm', flip: true });
-        void peterAt;
         k.sparkle(600, 380, 10, 120);
         void chairRide.flap(k, ride, 3);
 
@@ -525,16 +544,17 @@ export default defineCartoon({
           riders: [{ id: 'mollie', slot: 'left' }, { id: 'peter', slot: 'right' }, { id: 'jigs', slot: 'arm', flip: true }],
         });
         [cast.mollie, cast.peter, cast.jigs] = ride.riders;
-        // Jigs's umbrella hooked over the arm of the chair.
-        cast.umbrella = k.prop('jigs-umbrella', { x: 300, y: 250, w: 110, z: 18 });
-        k.set(cast.umbrella, { rotation: -25 });
+        // Jigs's umbrella hung by its crook on the chair's left arm, canopy down.
+        // It rides as part of the ride, so it moves, lands and stays with the chair.
+        cast.umbrella = k.prop('jigs-umbrella', { x: 345, y: 372, w: 110, z: 18 });
+        k.set(cast.umbrella, { rotation: 172 });
+        ride.riders.push(cast.umbrella);
         chairRide.jump(k, ride, { x: -700, y: 50 });
-        k.set(cast.umbrella, { x: -700, y: 50 });
       },
       async play(k) {
-        const { mollie, peter, jigs, umbrella } = cast;
+        const { mollie, peter, jigs } = cast;
         highWind(3);
-        await common.together(k, ridePieces(ride, umbrella), 2, { x: 0, y: 0, ease: 'sine.out' });
+        await common.together(k, ridePieces(ride), 2, { x: 0, y: 0, ease: 'sine.out' });
         await chairRide.flap(k, ride, 2);
         await k.say('face', peter);
         await k.all(k.say('plop', jigs));
@@ -542,8 +562,8 @@ export default defineCartoon({
         await k.wait(500);
 
         // Home we go: say it while drifting on (only x changes).
-        await k.all(k.say('homeWeGo', mollie), common.together(k, ridePieces(ride, umbrella), 2.4, { x: '+=160', ease: 'sine.inOut' }));
-        await common.together(k, ridePieces(ride, umbrella), 1.4, { x: '+=800', ease: 'sine.in' });
+        await k.all(k.say('homeWeGo', mollie), common.together(k, ridePieces(ride), 2.4, { x: '+=160', ease: 'sine.inOut' }));
+        await common.together(k, ridePieces(ride), 1.4, { x: '+=800', ease: 'sine.in' });
 
         // The playroom, with the chair back in its corner.
         await k.cut(() => {
@@ -558,6 +578,10 @@ export default defineCartoon({
             riders: [{ id: 'mollie', slot: 'left' }, { id: 'peter', slot: 'right' }, { id: 'jigs', slot: 'arm', flip: true }],
           });
           [cast.mollie, cast.peter, cast.jigs] = ride.riders;
+          // Jigs's umbrella is still hooked on the arm of the chair.
+          cast.umbrella = k.prop('jigs-umbrella', { x: 278, y: 392, w: 115, z: 18 });
+          k.set(cast.umbrella, { rotation: 172 });
+          ride.riders.push(cast.umbrella);
           cast.bell = k.add(doorBell(), { x: 780, y: 520, w: 50, z: 20 });
           k.set(cast.bell, { opacity: 0 });
           chairRide.jump(k, ride, { x: 760 });
