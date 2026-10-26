@@ -36,6 +36,10 @@ import { puff, puffGrin, puffRoar, puffSad } from './puff';
 import { hazel, hazelFlying, hazelFlyingCat, hazelHappy, hazelWorried } from './hazel';
 import { midnight, midnightPurr, midnightScared } from './midnight';
 import { whisperingWood } from './whisperingwood';
+import { jackInBox, jackInBoxBoing, jackInBoxGrin, jackInBoxSulk, jackBox } from './jackinbox';
+import { brass, brassSalute, brassWorried } from './brass';
+import { toylandStation, toyCupboard } from './toyland';
+import { toyTrain, toyTruck, toyTruckFront } from './toytrain';
 
 export default defineWorld({
   id: 'wishing',
@@ -174,6 +178,22 @@ export default defineWorld({
       about: 'Midnight: Witch Hazel’s small fluffy black cat with big round green eyes, a pink nose, long whiskers and a silver bell on a red collar. He has NO lines: only miaows and purrs (sounds). The portrait is him sitting up, curious. Poses: scared (fur on end, eyes huge, clinging to a bit of branch), purr (curled in a contented ball, eyes shut). Part tail pivots at its root (swish it). Show him smallish (w 140 to 240). His bell tinkles when he moves.',
       voice: 'A cat: no speech. Soft miaows, a small scared mew, a rumbling purr.',
     },
+    jackInBox: {
+      name: 'Jack-in-the-Box',
+      art: jackInBox,
+      poses: { boing: jackInBoxBoing, sulk: jackInBoxSulk, grin: jackInBoxGrin },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat', 'spring'],
+      about: 'Jack-in-the-Box, a clown-faced toy on a big curly steel spring, coming out of a red box with yellow stars: a pointed jester’s hat with three bells, a white face with a red nose and round rosy cheeks, a ruff collar. He cannot walk: he lives in his box and goes where he is carried, and the other toys always forget him. Snappy and cross when he is lonely (the portrait: a frown), then bouncy and delighted. Poses: boing (sprung up tall on a long spring, arms flung out, mouth wide: stretch the actor taller from its bottom edge for the BOING and rock the hat part to jangle the bells), sulk (squashed half into the box, arms folded, a small sad frown), grin (a big red smile, arms up). He looms by springing up, never by touching anyone.',
+      voice: 'Squeaky-sharp and snappy when cross, a bit cracked and cartoonish; small and wobbly when sad; then bouncy and delighted. A boy-clown voice, never cruel.',
+    },
+    brass: {
+      name: 'Sergeant Brass',
+      art: brass,
+      poses: { salute: brassSalute, worried: brassWorried },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Sergeant Brass, the toy-soldier engine driver of Toyland: a wooden soldier with a tall black busby hat (gold cord), round red cheek spots, a red jacket with gold buttons and white cross-belts, a curly painted moustache. Fussy, stiff and kind: marches, salutes, says “Oh dear, oh dear!” when something goes wrong. Poses: salute (hand to his busby, a proud grin), worried (brows up, round “oh” mouth, hands wringing).',
+      voice: 'A fussy, plummy little man, brisk and clipped like a drill sergeant but gentle; flustered and fluttery when worried; proud and booming for “All aboard!”.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -236,6 +256,14 @@ export default defineWorld({
       art: whisperingWood,
       about: 'The Whispering Wood at night under a big round moon (upper left, x 300, y 190): blue-violet, kind, faces readable. Twisty dark trees with finger-like branches at the left (x < 230) and dim far trees; ONE VERY TALL TREE at the right (trunk x 900-1010 running off the top) with a long bare branch reaching left at y 240-280 (tip x 716) for a stuck cat, and finger-branches at y 310, 330, 440 and 470 for a chair rising past. Glowing pink, mint and amber toadstools along the edges, a mossy path winding to the front, silvery mist low down. Ground line y ≈ 640; open ground x 250-850, room for the chair and 3 actors. Add k.light for faces.',
     },
+    'toyland-station': {
+      art: toylandStation,
+      about: 'Toyland’s little station on the morning of the Toy Fair, in bright primary colours: a far town of building-block houses with painted windows, a red-and-white striped Fair tent on the right (x 750–950, y 270–495) with a yellow pennant, bunting across the sky, a tall blue clock on a pole at the left (x 76–184, y 114–600) showing five to twelve, a little track along the back of the platform (the rail is at y 573: stand a train’s wheels on it, so its bottom is y ≈ 574), and a warm wooden platform from y 590 with a calm band of coloured blocks at the front (y 706+). At the far right on the platform stands the dull, dusty old toy cupboard (x 1020–1170, y 330–620) with a dark gap between its doors. Ground line y ≈ 640; the open platform is x 250–950, room for 4 actors in front of the train.',
+    },
+    'toy-cupboard': {
+      art: toyCupboard,
+      about: 'Inside the big old toy cupboard: dim brown planks, a crack of golden light down the left edge (x 22–60) lighting the floor, cobwebs in the top corners, a dusty top shelf (y 252) over the left with a drum, three skittles and a sleepy doll, and a grey rocking horse on the floor at the left (x 40–290, painted in). On the right three wooden ledges rise like stairs, their tops at y 570 (x 740–1200), y 470 (x 820–1200) and y 360 (x 890–1200): stand people and a toy box on them. Ground line y ≈ 640; open floor x 300–760. Dim but readable: add k.light on the actors’ faces.',
+    },
   },
   props: {
     'wishing-chair': {
@@ -261,5 +289,25 @@ export default defineWorld({
       about: 'Old Barnacle’s back as a little island, 960 × 300: a sandy top (x 236–734, y 186–244 in the prop) with one palm tree (part palm, sways), grey-blue flanks with barnacles and foam, and his tail at the far right (part tail, origin at its base; wiggles). Stand riders with their bottoms at y ≈ 232 of the prop and lay whale-back-front over them.',
     },
     'whale-back-front': { art: whaleBackFront, size: [960, 300], about: 'The near lip of sand over the whale-back’s top, same box and position, laid over riders so their bottom edges are hidden.' },
+    'toy-train': {
+      art: toyTrain,
+      size: [360, 230],
+      about: 'The Toyland Express engine, facing right: a red cab with a yellow roof, a green boiler with brass bands, a tall black chimney (top at x 306, y 24), three red wheels (parts wheel1, wheel2, wheel3 spin about their middles) and a big round brass winding-key hole (part keyhole) in the side of the boiler at (230, 126) of the prop. Its wheels’ bottom is y 228. Place the truck 244 px to its left and 70 px lower (toy-truck, toy-truck-front).',
+    },
+    'toy-truck': {
+      art: toyTruck,
+      size: [250, 170],
+      about: 'The open truck behind the Toyland engine: only its far wall and floor, what is seen inside. Put whoever rides in it on top, then toy-truck-front over them (same box).',
+    },
+    'toy-truck-front': {
+      art: toyTruckFront,
+      size: [250, 170],
+      about: 'The truck’s blue near wall and its two wheels (parts wheelA, wheelB), same box as toy-truck, laid over the rider so they sit in it. The wall top is at y 70 of the prop.',
+    },
+    'jack-box': {
+      art: jackBox,
+      size: [250, 170],
+      about: 'Jack-in-the-Box’s box with its lid shut: red with yellow stars, a crank on the right (the box itself is x 4–216 of the prop), a little dusty. Swap it for the jackInBox character (his pose boing) when he springs out.',
+    },
   },
 });
