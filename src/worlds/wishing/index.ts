@@ -18,6 +18,8 @@ import { curiosityShop } from './shop';
 import { wishingSky } from './sky';
 import { grim, grimBack, grimDizzy, grimLaugh, grimShout } from './grim';
 import { grimSchoolroom, schoolCupboard } from './schoolroom';
+import { gardenNight, starCloud } from './nightplaces';
+import { littleStar, starKeeper, starKeeperCross, starKeeperKind } from './starkeeper';
 
 export default defineWorld({
   id: 'wishing',
@@ -67,6 +69,21 @@ export default defineWorld({
       about: 'Mr Grim, headmaster of Mr Grim’s School for Bad Brownies: a tall, thin, stern old brownie with a long pointed nose, bushy black brows, little round spectacles, a long pointed grey beard, pointy ears, a black gown with a plum lining and a black mortarboard (part hat: tip it, slide it, lift it). His long ruler is part of armR, so raising the arm raises it. Barks “SILENCE!” and smacks his ruler down, but never touches anyone: strict, pompous and more silly than scary. Poses: shout (brows down, mouth wide, ruler high), dizzy (swirly eyes, hat askew), laugh (crescent eyes, a big laugh), back (seen from behind, writing on the blackboard; no face, so he can’t speak in it).',
       voice: 'Dry, clipped, stern old schoolmaster; a thin sharp voice that barks when he shouts, a bit pompous and fussy, cracking into a wheezy, surprised giggle when he laughs.',
     },
+    starKeeper: {
+      name: 'The Star-Keeper',
+      art: starKeeper,
+      poses: { cross: starKeeperCross, kind: starKeeperKind },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'The Star-Keeper: a small, round old man of the sky with a pink face, round spectacles, a bushy white moustache, a long silver beard tucked into his belt, a midnight-blue coat and floppy nightcap sprinkled with tiny gold stars, and a brass lantern in his right hand (it goes with armR). Fussy and short-tempered at first, a bit pompous (the plain portrait, lantern held low), then twinkly and kind. Poses: cross (lantern raised high, brows down: booms out of the dark), kind (smiling, hands clasped). He gets cross only because he is worried about his stars, and is quick to say sorry. Never hurts anyone.',
+      voice: 'A fussy, grandfatherly old man; gruff and booming when cross, then soft, warm and twinkly when kind; gentle, a little creaky.',
+    },
+    littleStar: {
+      name: 'The little star',
+      art: littleStar,
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen'],
+      about: 'A little soft-yellow star with a halo, big shy eyes and a small smile, no arms or legs. Speaks in a tiny, sweet voice, only a few short soft words at a time. Brave and grateful, never cross. Show it small (w 120 to 200).',
+      voice: 'A tiny, sweet, silvery child-like voice, very soft and shy, a little sleepy.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -92,6 +109,14 @@ export default defineWorld({
     'grim-schoolroom': {
       art: grimSchoolroom,
       about: 'Mr Grim’s School for Bad Brownies, the schoolroom: grey stone walls, warm wood, a little gloomy but not dark. An open arched window on the left (x 50–270, y 70–420) with sky beyond: a way in for the chair. A blackboard on the back wall (x 380–800, y 120–380) with a chalk ledge and a duster, its middle (x 470–720, y 170–330) clear for chalk writing. A bare wall at x 820, y 300 for a key hook, and plain stone at x 860–1160 for the school-cupboard prop (x 870, y 200, w 280). Three low brownie desks at the front left (x 40–330, tops y 612). Ground line y ≈ 640; open floor x 300–860.',
+    },
+    'garden-night': {
+      art: gardenNight,
+      about: 'The garden at the bottom of the garden at night: the playroom’s wooden side at the left (x 0-270) with its window glowing (x 56-202, y 262-408) and a door ajar at x 226-274; a round lily pond across x 330-640, y 625-710 (stand behind it, feet on y 640); a fence and bushes behind; a deep blue sky with a few stars and one small dark gap at x 700, y 120. Ground line y ≈ 640; open ground x 300-950, room for the chair and 3 actors. Dark but readable: add k.light for faces. The pink dawn is a k.dim wash.',
+    },
+    'star-cloud': {
+      art: starCloud,
+      about: 'High among the stars on top of a silvery cloud: deep blue sky, many stars hanging on thin silver threads (all above y 340 or at the edges), one empty silver hook at x 905, y 215 and a tall thin silver ladder leaning on nothing (foot x 800, y 610 up to the hook, top x 880, y 250). Cloud top y ≈ 600; stand actors on y ≈ 630. Room for the chair and 3 actors in the middle (x 300-850).',
     },
   },
   props: {
