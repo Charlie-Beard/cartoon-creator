@@ -28,6 +28,9 @@ import { goblinMarket } from './market';
 import { slyboots, slybootsFlop, slybootsGrab, slybootsShout } from './slyboots';
 import { jackFrost, jackFrostHappy, jackFrostLaugh, jackFrostSulk } from './jackfrost';
 import { snowLand } from './snowland';
+import { hazel, hazelFlying, hazelFlyingCat, hazelHappy, hazelWorried } from './hazel';
+import { midnight, midnightPurr, midnightScared } from './midnight';
+import { whisperingWood } from './whisperingwood';
 
 export default defineWorld({
   id: 'wishing',
@@ -125,6 +128,22 @@ export default defineWorld({
       about: 'Jack Frost, cheeky sprite of the Land of Winter: skinny, with spiky white-silver hair like icicles, a pale frost-blue face with bright blue cheeks, little pointed ears, long thin fingers and a narrow silver-blue tunic stitched with frost ferns. Freezes things for a game, never to hurt: he is really lonely, because everyone runs away from him for being too cold. Poses: the portrait (a sly smirk), laugh (wide eyes, big open icy “hee hee hee”), sulk (arms folded, worried brows, small frown), happy (wearing a red woolly scarf, delighted). Swap pose to happy once he is given a scarf. Looms by being big and high, never by hurting anyone.',
       voice: 'Crackly, quick and mischievous, a bit high and breathy like cold wind; giggly when he is pleased, small and quiet when he is sad. Never cruel.',
     },
+    witchHazel: {
+      name: 'Witch Hazel',
+      art: hazel,
+      poses: { worried: hazelWorried, flying: hazelFlying, flyingCat: hazelFlyingCat, happy: hazelHappy },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Witch Hazel: a young, kind, scatterbrained witch in a tall floppy black hat (purple band, little gold moon), wild red curly hair, freckles, a green dress, a purple cloak with patches and stripy stockings. Never warty, never scary. Quick and flustered, she loses her words and says “Oh!” a lot, but she is brave and grateful. Her broomstick will not fly without her cat. The portrait holds her broom upright. Poses: worried (both hands to her cheeks, “oh!” mouth), flying (sat on her broom, star-tipped wand in armR: wave it for a spell), flyingCat (the same with Midnight purring on the broom in front of her: use it, not a separate Midnight, when they fly together), happy (hugging Midnight to her chest, eyes shut in a big smile; the cat is drawn in, so do not also show the Midnight actor).',
+      voice: 'Young, quick and warm, a bit flustered; a bright English girl-witch of about sixteen, words tumbling over each other, giggly when she is relieved.',
+    },
+    midnight: {
+      name: 'Midnight',
+      art: midnight,
+      poses: { scared: midnightScared, purr: midnightPurr },
+      parts: ['figure', 'head', 'eyes', 'lids', 'mouth', 'mouthOpen', 'tail'],
+      about: 'Midnight: Witch Hazel’s small fluffy black cat with big round green eyes, a pink nose, long whiskers and a silver bell on a red collar. He has NO lines: only miaows and purrs (sounds). The portrait is him sitting up, curious. Poses: scared (fur on end, eyes huge, clinging to a bit of branch), purr (curled in a contented ball, eyes shut). Part tail pivots at its root (swish it). Show him smallish (w 140 to 240). His bell tinkles when he moves.',
+      voice: 'A cat: no speech. Soft miaows, a small scared mew, a rumbling purr.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -174,6 +193,10 @@ export default defineWorld({
     'snow-land': {
       art: snowLand,
       about: 'The Land of Winter: a pale lemon winter sky, a little ice palace with icicles on a far blue ridge (x 700-920, y 250-470), rolling snowy hills, frosted firs painted in at the left (x < 230) and right (x > 960) edges. Open snow x 250-950; ground line y ≈ 640; room for the chair and 3 actors. Pair with k.ambient("snow").',
+    },
+    'whispering-wood': {
+      art: whisperingWood,
+      about: 'The Whispering Wood at night under a big round moon (upper left, x 300, y 190): blue-violet, kind, faces readable. Twisty dark trees with finger-like branches at the left (x < 230) and dim far trees; ONE VERY TALL TREE at the right (trunk x 900-1010 running off the top) with a long bare branch reaching left at y 240-280 (tip x 716) for a stuck cat, and finger-branches at y 310, 330, 440 and 470 for a chair rising past. Glowing pink, mint and amber toadstools along the edges, a mossy path winding to the front, silvery mist low down. Ground line y ≈ 640; open ground x 250-850, room for the chair and 3 actors. Add k.light for faces.',
     },
   },
   props: {
