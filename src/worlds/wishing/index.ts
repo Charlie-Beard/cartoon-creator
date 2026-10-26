@@ -28,6 +28,8 @@ import { goblinMarket } from './market';
 import { slyboots, slybootsFlop, slybootsGrab, slybootsShout } from './slyboots';
 import { jackFrost, jackFrostHappy, jackFrostLaugh, jackFrostSulk } from './jackfrost';
 import { snowLand } from './snowland';
+import { dragonHill } from './dragonhill';
+import { puff, puffGrin, puffRoar, puffSad } from './puff';
 
 export default defineWorld({
   id: 'wishing',
@@ -125,6 +127,15 @@ export default defineWorld({
       about: 'Jack Frost, cheeky sprite of the Land of Winter: skinny, with spiky white-silver hair like icicles, a pale frost-blue face with bright blue cheeks, little pointed ears, long thin fingers and a narrow silver-blue tunic stitched with frost ferns. Freezes things for a game, never to hurt: he is really lonely, because everyone runs away from him for being too cold. Poses: the portrait (a sly smirk), laugh (wide eyes, big open icy “hee hee hee”), sulk (arms folded, worried brows, small frown), happy (wearing a red woolly scarf, delighted). Swap pose to happy once he is given a scarf. Looms by being big and high, never by hurting anyone.',
       voice: 'Crackly, quick and mischievous, a bit high and breathy like cold wind; giggly when he is pleased, small and quiet when he is sad. Never cruel.',
     },
+    puff: {
+      name: 'Puff',
+      art: puff,
+      poses: { roar: puffRoar, sad: puffSad, grin: puffGrin },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'wingL', 'wingR', 'tooth'],
+      chip: '52 36 196 204',
+      about: 'Puff, a young dragon as big as a horse but a baby at heart: a round green body with a cream tummy, little orange spines and ear fins, small floppy orange wings, stubby arms, big worried eyes and ONE big white front tooth that hangs over his lip. The tooth is its own part (tooth, origin at the gum): rotate it to wobble it, fade it out when it is gone, and swap to the grin pose for the gap. He breathes grey smoke, never fire at anyone (smoke and smoke rings are the cartoon’s own one-offs). Poses: roar (head up, eyes screwed shut, mouth wide, a few tears: he is sore, not fierce), sad (head hung low, wet eyes, a wobbly frown, tooth tipped, wings drooping), grin (happy eyes, a big smile with a gap, arms and wings up). Gulpy, sniffly and shy, then giggly. Never cross, never hurts anyone. Show him big (w 300 to 380).',
+      voice: 'A young, gulpy, slightly tearful boyish voice, shy and sniffly with a wobble; round and a little croaky, then bubbling into giggles when he is happy. Sweet, never growly.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -174,6 +185,10 @@ export default defineWorld({
     'snow-land': {
       art: snowLand,
       about: 'The Land of Winter: a pale lemon winter sky, a little ice palace with icicles on a far blue ridge (x 700-920, y 250-470), rolling snowy hills, frosted firs painted in at the left (x < 230) and right (x > 960) edges. Open snow x 250-950; ground line y ≈ 640; room for the chair and 3 actors. Pair with k.ambient("snow").',
+    },
+    'dragon-hill': {
+      art: dragonHill,
+      about: 'Dragon Hill under a soft evening sky: a pale sun sinking behind lavender hills, a tiny village of round thatched cottages far below on the left (x 30-290, bases y 495-530; the fifth cottage’s roof is at about (262, 494), see VILLAGE_SCORCH in dragonhill.ts), and a rocky mound on the right with a big dark cave mouth under a stone arch (x 845-1075, y 380-640; its dark middle about (960, 520), see CAVE_DARK). A big boulder at x 600-790 (top y 520, base y 650) to hide behind: stand on its left (x 400-580) with it between you and the cave. Two small boulders at the edges. Ground line y ≈ 640; open ground x 250-900, room for the chair and 3 actors.',
     },
   },
   props: {
