@@ -24,6 +24,8 @@ import { muddle, muddleCosy, muddleCross, muddleSneeze } from './muddle';
 import { enchanterTower } from './tower';
 import { gardenNight, starCloud } from './nightplaces';
 import { littleStar, starKeeper, starKeeperCross, starKeeperKind } from './starkeeper';
+import { goblinMarket } from './market';
+import { slyboots, slybootsFlop, slybootsGrab, slybootsShout } from './slyboots';
 
 export default defineWorld({
   id: 'wishing',
@@ -105,6 +107,14 @@ export default defineWorld({
       about: 'A little soft-yellow star with a halo, big shy eyes and a small smile, no arms or legs. Speaks in a tiny, sweet voice, only a few short soft words at a time. Brave and grateful, never cross. Show it small (w 120 to 200).',
       voice: 'A tiny, sweet, silvery child-like voice, very soft and shy, a little sleepy.',
     },
+    slyboots: {
+      name: 'Old Slyboots',
+      art: slyboots,
+      poses: { shout: slybootsShout, grab: slybootsGrab, flop: slybootsFlop },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Old Slyboots, the pedlar of the Goblin Market: a tall, thin hobgoblin with a green face, a long hooked nose, narrow sly eyes, a battered tall hat with a teal feather (part hat), a patched purple coat and a huge pack on his back hung with pots, ribbons and a lantern. Greedy and sneaky, with a loud market voice: calls his wares, snaps “Got any MONEY? Then shoo!” and “MINE!”, but he only looms and grabs at things, never at people: more silly than scary. Poses: shout (hand to his mouth, calling his wares), grab (hugging his money bag, greedy eyes), flop (sat in a heap, dizzy, hat over one ear).',
+      voice: 'A loud, wheedling, gravelly market-trader; a fast sing-song patter when he sells, a sharp snarl when he snaps “MINE!”, a whining wail when he loses.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -146,6 +156,10 @@ export default defineWorld({
     'star-cloud': {
       art: starCloud,
       about: 'High among the stars on top of a silvery cloud: deep blue sky, many stars hanging on thin silver threads (all above y 340 or at the edges), one empty silver hook at x 905, y 215 and a tall thin silver ladder leaning on nothing (foot x 800, y 610 up to the hook, top x 880, y 250). Cloud top y ≈ 600; stand actors on y ≈ 630. Room for the chair and 3 actors in the middle (x 300-850).',
+    },
+    'goblin-market': {
+      art: goblinMarket,
+      about: 'The Goblin Market in a wood clearing at dusk: a purple-and-gold sky, dark trees, a striped stall at each side (left: pots, hats and jars; right: cakes, jars and bottles), lanterns and bunting strung across the top (above y 330), toadstools along the edges. Ground line y ≈ 640; the open ground is x 280-900, room for the chair and 3 actors in front of the right stall.',
     },
   },
   props: {
