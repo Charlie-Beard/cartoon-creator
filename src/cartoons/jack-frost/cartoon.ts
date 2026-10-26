@@ -44,7 +44,7 @@ import { moves as commonMoves, sounds as common } from '../../worlds/common/move
 import { warmEnding } from '../../worlds/common/pieces';
 import { moves as wishing, sounds } from '../../worlds/wishing/moves';
 import { chairRide, type Ride } from '../../worlds/wishing/pieces';
-import { basket, breath, carrot, coalFace, cocoa, drift, farSnow, frostOverChair, frostPane, frostPicture, snowBody, snowDress, snowHead, stove, wornScarf } from './art';
+import { basket, breath, carrot, coalFace, cocoa, drift, farSnow, frostOverChair, frostPane, frostPicture, snowBody, snowDress, snowHead, snowWhirl, stove, wornScarf } from './art';
 import meta from './meta';
 
 const { creak, hatBell, highWind, wingbeats } = sounds;
@@ -95,7 +95,7 @@ function snap(): void {
 
 type Name =
   | 'mollie' | 'peter' | 'jigs' | 'jack' | 'chair' | 'basket' | 'scarf' | 'frost' | 'body' | 'dress' | 'head' | 'face' | 'nose'
-  | 'cup' | 'cupJigs' | 'pane' | 'fog' | 'picture' | 'far' | 'stove';
+  | 'whirl' | 'cup' | 'cupJigs' | 'pane' | 'fog' | 'picture' | 'far' | 'stove';
 const cast = {} as Record<Name, HTMLElement>;
 let ride: Ride;
 
@@ -395,16 +395,19 @@ export default defineCartoon({
         ride = chairRide.set(k, { x: 900, y: 367, w: 300, wings: true });
         cast.chair = ride.chair;
         frostChair(k, ride, true);
-        cast.peter = k.character('peter', { x: 540, y: 424, w: 190, z: 10 });
+        cast.peter = k.character('peter', { x: 470, y: 424, w: 190, z: 10 });
         cast.mollie = k.character('mollie', { x: 740, y: 420, w: 200, z: 11 });
         cast.scarf = scarfOn(k, 740, 420, 200, 17);
         cast.jigs = k.character('jigs', { x: 940, y: 492, w: 140, z: 19 });
-        cast.jack = k.character('jackFrost', { x: 400, y: -90, w: 420, z: 18, pose: 'laugh' });
-        k.set(cast.jack, { opacity: 0, y: -700 });
+        // His hair tips stay on stage (y >= 10), and a whirl of snow under his
+        // waist carries him, so he rides in rather than hangs in the sky.
+        cast.jack = k.character('jackFrost', { x: 425, y: 22, w: 370, z: 18, pose: 'laugh' });
+        cast.whirl = k.add(snowWhirl(), { x: 380, y: 450, w: 460, z: 9 });
+        k.set([cast.jack, cast.whirl], { opacity: 0, y: -700 });
         k.face(cast.peter, true);
       },
       async play(k) {
-        const { mollie, peter, jigs, jack, scarf } = cast;
+        const { mollie, peter, jigs, jack, scarf, whirl } = cast;
         // A whirl of snow, a deep creak, and he swoops down.
         k.fx.wind(3);
         await k.wait(200);
@@ -412,8 +415,14 @@ export default defineCartoon({
         iceCreak();
         k.sfx.ominous();
         await k.all(k.shake(mollie, 3, 2), k.shake(peter, 3, 2), k.shake(jigs, 3, 2));
-        k.set(jack, { opacity: 1, rotation: -18 });
-        await k.to(jack, 1.4, { y: 0, rotation: 0, ease: 'power2.out' });
+        k.set([jack, whirl], { opacity: 1 });
+        k.set(jack, { rotation: -18 });
+        await k.all(
+          k.to(jack, 1.4, { y: 0, rotation: 0, ease: 'power2.out' }),
+          k.to(whirl, 1.4, { y: 0, ease: 'power2.out' }),
+        );
+        // The whirl keeps turning gently under him.
+        void k.to(whirl, 1.2, { rotation: 3, yoyo: true, repeat: 5, ease: 'sine.inOut' });
         await k.camera({ zoom: 1.25, x: 610, y: 280 }, 1);
         await k.all(k.say('nobody', jack), k.quake(5));
         await k.camera({}, 0.8);
@@ -438,7 +447,11 @@ export default defineCartoon({
         k.pose(jack, 'sulk');
         k.music('dreamy');
         k.fx.whizz();
-        await k.to(jack, 1.2, { x: -180, y: 372, scale: 0.58, ease: 'power2.inOut' });
+        await k.all(
+          k.to(jack, 1.2, { x: -250, y: 305, scale: 0.66, ease: 'power2.inOut' }),
+          k.to(whirl, 1.2, { x: -250, y: 290, scale: 0.4, opacity: 0, ease: 'power2.inOut' }),
+        );
+        k.remove(whirl);
         k.fx.thud();
         await k.say('runAway', jack);
         await k.say('stayPlay', jack);
@@ -452,7 +465,7 @@ export default defineCartoon({
         // Mollie's big deed: her red scarf for Jack Frost.
         await k.all(k.say('cosy', mollie), k.to(mollie, 0.9, { x: '-=30' }), k.to(scarf, 0.9, { x: '-=30' }));
         k.sfx.rustle();
-        await k.carry(scarf, [430, 566], 1.1);
+        await k.carry(scarf, [360, 590], 1.1);
         k.remove(scarf);
         k.pose(jack, 'happy');
         k.fx.twinkle();

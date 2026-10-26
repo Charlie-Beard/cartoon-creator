@@ -90,25 +90,28 @@ export const carrot = cached(() =>
   ]),
 );
 
+/** The clear blue-white of frost: dark enough to show on a white-ish veil. */
+const FROST_LINE = '#6fb9e6';
+
 /**
  * Ice over the Wishing-Chair, laid exactly on the chair prop (440 × 400): a
  * pale blue frosting over both wings, the back, the arms and the legs,
  * with white frost-ferns and icicles hanging from the seat.
  */
 export const frostOverChair = cached(() => {
-  const ice = (pts: [number, number][], op = 0.6): ReturnType<typeof piece> => piece(curve(pts, 2), '#d4f1fd', { ...flat, opacity: Math.min(0.9, op + 0.28) });
+  const ice = (pts: [number, number][], op = 0.6): ReturnType<typeof piece> => piece(curve(pts, 2), '#eaf8ff', { ...flat, opacity: Math.min(0.95, op + 0.4) });
   const fern = (x: number, y: number, len: number, lean: number): ReturnType<typeof ink>[] => {
-    const out = [ink([[x, y], [x + lean, y + len]], { width: 3, color: '#ffffff', wobble: 0.2, opacity: 0.9 })];
+    const out = [ink([[x, y], [x + lean, y + len]], { width: 3, color: FROST_LINE, wobble: 0.2, opacity: 0.95 })];
     for (let i = 1; i < 5; i++) {
       const t = i / 5;
       const px = x + lean * t;
       const py = y + len * t;
-      out.push(ink([[px, py], [px - 14, py - 9]], { width: 2, color: '#ffffff', wobble: 0.1, opacity: 0.9 }));
-      out.push(ink([[px, py], [px + 14, py - 9]], { width: 2, color: '#ffffff', wobble: 0.1, opacity: 0.9 }));
+      out.push(ink([[px, py], [px - 14, py - 9]], { width: 2, color: FROST_LINE, wobble: 0.1, opacity: 0.95 }));
+      out.push(ink([[px, py], [px + 14, py - 9]], { width: 2, color: FROST_LINE, wobble: 0.1, opacity: 0.95 }));
     }
     return out;
   };
-  const icicle = (x: number, y: number, l: number): ReturnType<typeof piece> => piece(poly([[x - 5, y], [x + 5, y], [x, y + l]]), '#e8f6fc', flat);
+  const icicle = (x: number, y: number, l: number): ReturnType<typeof piece> => piece(poly([[x - 5, y], [x + 5, y], [x, y + l]]), '#bfe6fa', flat);
   return svg({ w: 440, h: 400, name: 'jack-frost-chair-frost', label: 'Ice on the chair' }, [
     // the wings, left and right
     ice([[8, 130], [30, 90], [100, 100], [130, 118], [128, 150], [90, 190], [40, 180]], 0.62),
@@ -128,7 +131,7 @@ export const frostOverChair = cached(() => {
     // icicles hanging from the seat and arms
     ...[[120, 292, 30], [160, 292, 20], [220, 292, 34], [280, 292, 22], [320, 292, 30]].map(([x, y, l]) => icicle(x, y, l)),
     ...[[96, 262, 22], [346, 262, 22]].map(([x, y, l]) => icicle(x, y, l)),
-    ...[[30, 140], [410, 140], [220, 90], [150, 120], [290, 120]].map(([x, y]) => dot(x, y, 3.4, '#ffffff', 0.95)),
+    ...[[30, 140], [410, 140], [220, 90], [150, 120], [290, 120]].map(([x, y]) => dot(x, y, 3.4, '#7cc3ea', 0.95)),
   ]);
 });
 
@@ -250,5 +253,22 @@ export const drift = cached(() =>
   svg({ w: 1180, h: 150, name: 'jack-frost-drift', label: 'A low snowdrift' }, [
     piece(curve([[-30, 160], [-30, 40], [90, 22], [210, 34], [330, 18], [470, 30], [610, 14], [760, 30], [900, 16], [1040, 32], [1160, 20], [1230, 36], [1230, 160]], 2), '#f6f9fc', { edge: 'torn', fibre: false, shadow: false, rough: 1.1 }),
     ink([[-10, 36], [90, 26], [210, 38], [330, 22], [470, 34], [610, 18], [760, 34], [900, 20], [1040, 36], [1160, 24]], { width: 3, color: '#d6e3f0', opacity: 0.9, wobble: 1 }),
+  ]),
+);
+
+/**
+ * A whirl of snow for Jack Frost to ride in: a wide, soft cloud at the top
+ * (hiding the bottom of his portrait) tapering down to a curling tip, with
+ * pale blue swirl lines going round it. 460 × 200.
+ */
+export const snowWhirl = cached(() =>
+  svg({ w: 460, h: 200, name: 'jack-frost-snow-whirl', label: 'A whirl of snow' }, [
+    piece(curve([[10, 40], [70, 6], [160, 0], [230, 12], [310, 0], [400, 8], [450, 40], [400, 74], [330, 96], [290, 140], [260, 192], [220, 190], [190, 140], [130, 96], [60, 74]], 2), '#f6fafe', { edge: 'torn', fibre: false, shadow: false, rough: 1.3, opacity: 0.96 }),
+    piece(curve([[60, 50], [150, 30], [230, 44], [320, 28], [400, 48], [330, 80], [270, 110], [240, 168], [214, 164], [196, 112], [140, 82]], 2), '#d8e8f6', { ...flat, opacity: 0.7 }),
+    ink([[30, 44], [120, 18], [230, 30], [340, 14], [430, 42]], { width: 4, color: '#a9cdea', wobble: 0.5, opacity: 0.9 }),
+    ink([[80, 70], [170, 52], [260, 64], [370, 50]], { width: 4, color: '#a9cdea', wobble: 0.5, opacity: 0.9 }),
+    ink([[160, 100], [230, 88], [300, 102]], { width: 4, color: '#a9cdea', wobble: 0.5, opacity: 0.9 }),
+    ink([[205, 140], [245, 128], [270, 142]], { width: 3, color: '#a9cdea', wobble: 0.4, opacity: 0.9 }),
+    ...[[40, 20], [100, 4], [250, 2], [360, 6], [430, 20], [20, 56], [450, 58], [340, 100]].map(([x, y]) => dot(x, y, 4, '#ffffff', 0.95)),
   ]),
 );
