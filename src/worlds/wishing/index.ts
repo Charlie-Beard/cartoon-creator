@@ -31,6 +31,8 @@ import { snowLand } from './snowland';
 import { dabble, dabbleHappy, dabblePaint, dabbleSad } from './dabble';
 import { bluster, blusterBeam, blusterBlow, blusterSulk } from './bluster';
 import { rainbowEnd } from './rainbowend';
+import { dragonHill } from './dragonhill';
+import { puff, puffGrin, puffRoar, puffSad } from './puff';
 
 export default defineWorld({
   id: 'wishing',
@@ -144,6 +146,15 @@ export default defineWorld({
       about: 'Bluster, a big grumpy grey storm cloud with a face: heavy frowning brows, puffed cheeks, a downturned mouth, no arms (swell him with scale to loom). Poses: blow (cheeks puffed, lips pursed, wind streaks), sulk (small, droopy, one tear of rain), beam (smiling, with a silver lining along his top). He rumbles and blows but never hurts anyone; he is cross only because nobody ever cheers for the rain. Show him big when cross, small when sulking.',
       voice: 'Deep, rumbly and grumbling, like far-off thunder; huffy and booming when cross, then small, shy and slow when sad, and a warm surprised chuckle at the end.',
     },
+    puff: {
+      name: 'Puff',
+      art: puff,
+      poses: { roar: puffRoar, sad: puffSad, grin: puffGrin },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'wingL', 'wingR', 'tooth'],
+      chip: '52 36 196 204',
+      about: 'Puff, a young dragon as big as a horse but a baby at heart: a round green body with a cream tummy, little orange spines and ear fins, small floppy orange wings, stubby arms, big worried eyes and ONE big white front tooth that hangs over his lip. The tooth is its own part (tooth, origin at the gum): rotate it to wobble it, fade it out when it is gone, and swap to the grin pose for the gap. He breathes grey smoke, never fire at anyone (smoke and smoke rings are the cartoon’s own one-offs). Poses: roar (head up, eyes screwed shut, mouth wide, a few tears: he is sore, not fierce), sad (head hung low, wet eyes, a wobbly frown, tooth tipped, wings drooping), grin (happy eyes, a big smile with a gap, arms and wings up). Gulpy, sniffly and shy, then giggly. Never cross, never hurts anyone. Show him big (w 300 to 380).',
+      voice: 'A young, gulpy, slightly tearful boyish voice, shy and sniffly with a wobble; round and a little croaky, then bubbling into giggles when he is happy. Sweet, never growly.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -197,6 +208,10 @@ export default defineWorld({
     'rainbow-end': {
       art: rainbowEnd,
       about: 'On top of the clouds where the rainbow starts: pale blue sky, a soft cloud floor (top y ≈ 620, open x 300–950), a great arch of seven GREY stripes rising from the left (foot x 60–240) and sweeping up off the top of the stage (at y 300 it is x ≈ 300–460, at y 100 about x 520–700), and a little cloud paint shed at the right (x 960–1160, y 440–660) with an empty pot rack. Lay colour over the arch with rainbowStripe(i, colour) from src/worlds/wishing/rainbowend.ts (i 0 = top/outer).',
+    },
+    'dragon-hill': {
+      art: dragonHill,
+      about: 'Dragon Hill under a soft evening sky: a pale sun sinking behind lavender hills, a tiny village of round thatched cottages far below on the left (x 30-290, bases y 495-530; the fifth cottage’s roof is at about (262, 494), see VILLAGE_SCORCH in dragonhill.ts), and a rocky mound on the right with a big dark cave mouth under a stone arch (x 845-1075, y 380-640; its dark middle about (960, 520), see CAVE_DARK). A big boulder at x 600-790 (top y 520, base y 650) to hide behind: stand on its left (x 400-580) with it between you and the cave. Two small boulders at the edges. Ground line y ≈ 640; open ground x 250-900, room for the chair and 3 actors.',
     },
   },
   props: {
