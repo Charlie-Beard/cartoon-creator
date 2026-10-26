@@ -297,6 +297,9 @@ export default defineCartoon({
         await chairRide.hopOff(k, ride, peter, { x: 490, y: topFor(190), w: 190 });
         await chairRide.hopOff(k, ride, mollie, { x: 680, y: topFor(190), w: 190 });
         for (const el of [jigs, peter, mollie]) k.face(el, true);
+        // The chair flutters up out of the way, so the platform is left to the friends and Sergeant Brass.
+        highWind(1.5);
+        await chairRide.fly(k, ride, { y: -900, s: 1.3, flaps: 3 });
         await k.say('waiting', mollie);
 
         // Sergeant Brass marches up, in a flap.
@@ -381,6 +384,9 @@ export default defineCartoon({
         // He lifts the big key off the lid.
         await k.to(key, 0.5, { y: '-=30', ease: 'sine.out' });
         await k.carry(key, peter, 0.8);
+        // The key rests against his chest, in front of him, not behind his head.
+        key.style.zIndex = '20';
+        await k.to(key, 0.3, { y: '+=80', ease: 'sine.inOut' });
         await k.say('gotKey', peter);
 
         // The box rattles harder... and Peter hops down.
@@ -591,6 +597,10 @@ export default defineCartoon({
         await k.all(chairRide.fly(k, ride, { x: 0, s: 2.6, flaps: 3 }), k.wait(1200).then(() => k.say('tinTrain', cast.peter)));
         await chairRide.land(k, ride);
         creak();
+        // Wings folded, and out they hop one at a time, near the little tin train.
+        await chairRide.hopOff(k, ride, cast.peter, { x: 270, y: topFor(190), w: 190 });
+        await chairRide.hopOff(k, ride, cast.mollie, { x: 70, y: topFor(190), w: 190 });
+        await chairRide.hopOff(k, ride, cast.jigs, { x: 480, y: topFor(130), w: 130 });
         await k.say('bit', cast.jigs);
         giggle();
         await warmEnding(k, { cast: [cast.mollie, cast.peter, cast.jigs], end: 'end', music: 'cosy' });
