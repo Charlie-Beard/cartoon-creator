@@ -776,7 +776,7 @@ export default defineCartoon({
         await k.all(chairRide.fly(k, ride, { x: 0, s: 1.6, flaps: 3 }), k.wait(500).then(() => k.say('whatMuddle', cast.mollie)));
         await chairRide.land(k, ride);
         creak();
-        await chairRide.hopOff(k, ride, cast.jigs, { x: 180, y: 440, w: 140 });
+        await chairRide.hopOff(k, ride, cast.jigs, { x: 180, y: 480, w: 140 });
         await chairRide.hopOff(k, ride, cast.mollie, { x: 370, y: 408, w: 200 });
         await chairRide.hopOff(k, ride, cast.peter, { x: 620, y: 412, w: 200 });
 
