@@ -213,7 +213,7 @@ export default defineCartoon({
         k.light(160, 340, 300, { color: '#ffe3a0', strength: 0.22, z: 5 });
         k.ambient('fireflies', { count: 8, z: 3, area: [320, 300, 700, 300] });
         // The chair stands by the playroom door with Jigs asleep behind it.
-        ride = chairRide.set(k, { x: 10, y: 300, w: 340, riders: [{ id: 'jigs', slot: 'back' }] });
+        ride = chairRide.set(k, { x: 10, y: 340, w: 340, riders: [{ id: 'jigs', slot: 'back' }] });
         cast.jigs = ride.riders[0];
         k.set(cast.jigs, { opacity: 0, y: 70 });
         // The friends and their torch, parked off to the right, ready to creep in.
@@ -381,7 +381,7 @@ export default defineCartoon({
         [cast.mollie, cast.peter, cast.jigs] = ride.riders;
         cast.star = seatStar(k, ride, 90);
         chairRide.jump(k, ride, { x: 0, y: 620 });
-        cast.keeper = k.character('starKeeper', { x: -40, y: 262, w: 340, z: 16, pose: 'cross' });
+        cast.keeper = k.character('starKeeper', { x: 40, y: 262, w: 340, z: 16, pose: 'cross' });
         k.set(cast.keeper, { x: -520 });
         cast.dust = k.add(dust(), { x: 150, y: 330, w: 56, z: 20 });
         k.set(cast.dust, { opacity: 0 });
@@ -411,7 +411,7 @@ export default defineCartoon({
         await k.to(keeper, 1.3, { x: 0, ease: 'sine.out' });
         k.fx.stomp(2, 0.4);
         void k.quake(5);
-        cast.lantern = k.light(257, 453, 230, { color: '#ffd98a', strength: 0.3, z: 36 });
+        cast.lantern = k.light(297, 453, 230, { color: '#ffd98a', strength: 0.3, z: 36 });
         await k.camera({ zoom: 1.3, x: 330, y: 470 }, 1.1);
         await k.say('thieves', keeper);
         await k.shake(keeper, 4, 2);
@@ -492,8 +492,8 @@ export default defineCartoon({
       set(k) {
         k.backdrop('garden-night');
         k.music('dreamy');
-        k.dim(0.28, '#f29bb0');
-        k.light(640, 520, 520, { color: '#ffd0a0', strength: 0.28, z: 5 });
+        k.dim(0.42, '#ff9c78');
+        k.light(640, 420, 760, { color: '#ffd27a', strength: 0.5, z: 5 });
         ride = chairRide.set(k, {
           x: 660,
           y: 290,
@@ -535,6 +535,8 @@ export default defineCartoon({
         await k.cut(() => {
           k.backdrop('playroom');
           k.music('dreamy');
+          // Early morning: a soft rose-gold wash over the sunny room.
+          k.dim(0.22, '#ff9f80');
           k.light(1010, 300, 260, { color: '#ffb4c0', strength: 0.28, z: 5 });
           cast.mollie = k.character('mollie', { x: 290, y: 395, w: 230, z: 12 });
           cast.peter = k.character('peter', { x: 540, y: 395, w: 230, z: 12 });
