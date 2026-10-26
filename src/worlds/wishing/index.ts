@@ -18,6 +18,8 @@ import { curiosityShop } from './shop';
 import { wishingSky } from './sky';
 import { grim, grimBack, grimDizzy, grimLaugh, grimShout } from './grim';
 import { grimSchoolroom, schoolCupboard } from './schoolroom';
+import { goblinMarket } from './market';
+import { slyboots, slybootsFlop, slybootsGrab, slybootsShout } from './slyboots';
 
 export default defineWorld({
   id: 'wishing',
@@ -67,6 +69,14 @@ export default defineWorld({
       about: 'Mr Grim, headmaster of Mr Grim’s School for Bad Brownies: a tall, thin, stern old brownie with a long pointed nose, bushy black brows, little round spectacles, a long pointed grey beard, pointy ears, a black gown with a plum lining and a black mortarboard (part hat: tip it, slide it, lift it). His long ruler is part of armR, so raising the arm raises it. Barks “SILENCE!” and smacks his ruler down, but never touches anyone: strict, pompous and more silly than scary. Poses: shout (brows down, mouth wide, ruler high), dizzy (swirly eyes, hat askew), laugh (crescent eyes, a big laugh), back (seen from behind, writing on the blackboard; no face, so he can’t speak in it).',
       voice: 'Dry, clipped, stern old schoolmaster; a thin sharp voice that barks when he shouts, a bit pompous and fussy, cracking into a wheezy, surprised giggle when he laughs.',
     },
+    slyboots: {
+      name: 'Old Slyboots',
+      art: slyboots,
+      poses: { shout: slybootsShout, grab: slybootsGrab, flop: slybootsFlop },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Old Slyboots, the pedlar of the Goblin Market: a tall, thin hobgoblin with a green face, a long hooked nose, narrow sly eyes, a battered tall hat with a teal feather (part hat), a patched purple coat and a huge pack on his back hung with pots, ribbons and a lantern. Greedy and sneaky, with a loud market voice: calls his wares, snaps “Got any MONEY? Then shoo!” and “MINE!”, but he only looms and grabs at things, never at people: more silly than scary. Poses: shout (hand to his mouth, calling his wares), grab (hugging his money bag, greedy eyes), flop (sat in a heap, dizzy, hat over one ear).',
+      voice: 'A loud, wheedling, gravelly market-trader; a fast sing-song patter when he sells, a sharp snarl when he snaps “MINE!”, a whining wail when he loses.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -92,6 +102,10 @@ export default defineWorld({
     'grim-schoolroom': {
       art: grimSchoolroom,
       about: 'Mr Grim’s School for Bad Brownies, the schoolroom: grey stone walls, warm wood, a little gloomy but not dark. An open arched window on the left (x 50–270, y 70–420) with sky beyond: a way in for the chair. A blackboard on the back wall (x 380–800, y 120–380) with a chalk ledge and a duster, its middle (x 470–720, y 170–330) clear for chalk writing. A bare wall at x 820, y 300 for a key hook, and plain stone at x 860–1160 for the school-cupboard prop (x 870, y 200, w 280). Three low brownie desks at the front left (x 40–330, tops y 612). Ground line y ≈ 640; open floor x 300–860.',
+    },
+    'goblin-market': {
+      art: goblinMarket,
+      about: 'The Goblin Market in a wood clearing at dusk: a purple-and-gold sky, dark trees, a striped stall at each side (left: pots, hats and jars; right: cakes, jars and bottles), lanterns and bunting strung across the top (above y 330), toadstools along the edges. Ground line y ≈ 640; the open ground is x 280-900, room for the chair and 3 actors in front of the right stall.',
     },
   },
   props: {
