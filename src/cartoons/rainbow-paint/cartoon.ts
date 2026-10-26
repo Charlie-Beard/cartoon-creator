@@ -241,8 +241,8 @@ export default defineCartoon({
         cast.veil = k.dim(0.3, '#3e4a5c');
         cast.bow = k.add(greyBow(), { x: 892, y: 160, w: 248, z: 4 });
         k.set(cast.bow, { opacity: 0 });
-        ride = chairRide.set(k, { x: 360, y: 300, w: 360, riders: [{ id: 'jigs', slot: 'arm', flip: true }] });
-        cast.jigs = ride.riders[0];
+        ride = chairRide.set(k, { x: 360, y: 300, w: 360 });
+        cast.jigs = k.character('jigs', { x: 590, y: 500, w: 150, z: 13, flip: true });
         cast.chair = ride.chair;
         cast.peter = k.character('peter', { x: 70, y: 388, w: 230 });
         cast.mollie = k.character('mollie', { x: 740, y: 400, w: 200, flip: true });
@@ -282,9 +282,12 @@ export default defineCartoon({
         await k.all(
           k.to(peter, 0.7, { x: '+=300', y: '-=40', opacity: 0, ease: 'power1.inOut' }),
           k.to(mollie, 0.7, { x: '-=330', y: '-=40', opacity: 0, ease: 'power1.inOut' }),
+          k.to(jigs, 0.7, { x: '-=100', y: '-=60', opacity: 0, ease: 'power1.inOut' }),
         );
         k.remove(peter);
         k.remove(mollie);
+        k.remove(jigs);
+        await chairRide.seat(k, ride, { id: 'jigs', slot: 'arm', flip: true });
         await chairRide.seat(k, ride, { id: 'mollie', slot: 'left' });
         await chairRide.seat(k, ride, { id: 'peter', slot: 'right' });
         creak();
