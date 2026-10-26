@@ -18,6 +18,10 @@ import { curiosityShop } from './shop';
 import { wishingSky } from './sky';
 import { grim, grimBack, grimDizzy, grimLaugh, grimShout } from './grim';
 import { grimSchoolroom, schoolCupboard } from './schoolroom';
+import { openSea } from './sea';
+import { whale, whaleBack, whaleBackFront, whaleHappy, whaleSleep } from './whale';
+import { muddle, muddleCosy, muddleCross, muddleSneeze } from './muddle';
+import { enchanterTower } from './tower';
 import { gardenNight, starCloud } from './nightplaces';
 import { littleStar, starKeeper, starKeeperCross, starKeeperKind } from './starkeeper';
 
@@ -69,6 +73,23 @@ export default defineWorld({
       about: 'Mr Grim, headmaster of Mr Grim’s School for Bad Brownies: a tall, thin, stern old brownie with a long pointed nose, bushy black brows, little round spectacles, a long pointed grey beard, pointy ears, a black gown with a plum lining and a black mortarboard (part hat: tip it, slide it, lift it). His long ruler is part of armR, so raising the arm raises it. Barks “SILENCE!” and smacks his ruler down, but never touches anyone: strict, pompous and more silly than scary. Poses: shout (brows down, mouth wide, ruler high), dizzy (swirly eyes, hat askew), laugh (crescent eyes, a big laugh), back (seen from behind, writing on the blackboard; no face, so he can’t speak in it).',
       voice: 'Dry, clipped, stern old schoolmaster; a thin sharp voice that barks when he shouts, a bit pompous and fussy, cracking into a wheezy, surprised giggle when he laughs.',
     },
+    whale: {
+      name: 'Old Barnacle',
+      art: whale,
+      poses: { sleep: whaleSleep, happy: whaleHappy },
+      chip: '20 50 270 240',
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen'],
+      about: 'Old Barnacle, a huge, slow, booming whale, grey-blue and covered in barnacles. Asleep he looks like a little island (the whale-back prop: a sandy hump with one palm tree). The portrait is his head raised out of the sea, facing left, with one big sleepy eye glancing back over his shoulder (the lids part starts hidden: set it to opacity 1, then fade it out to open the eye) and a wide mouth that talks. Poses: sleep (eye shut, snoozing smile), happy (eye crescent, big grin). Grumpy only because something itches, and kind underneath: he booms and spouts but never hurts anyone. Always show him big.',
+      voice: 'Very deep, slow and booming, a huffy old grump with a soft heart; long sleepy vowels, a rumbling chuckle when he is pleased.',
+    },
+    muddle: {
+      name: 'Enchanter Muddle',
+      art: muddle,
+      poses: { sneeze: muddleSneeze, cross: muddleCross, cosy: muddleCosy },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Enchanter Muddle: a plump, kind, very muddled old enchanter in a tall crooked purple hat with silver moons, a long white beard with a goose quill stuck in it, a starry purple robe and a big red runny nose. He means well and gets everything in a muddle; when he sneezes, his spells fly out. Poses: sneeze (head back, eyes shut, mouth wide), cross (brows down, fists up, hat askew: cross by accident, never really angry), cosy (wrapped in a stripy scarf, smiling). The hat is part hat (let it rise or wobble). Never cruel, always sorry afterwards.',
+      voice: 'A warm, wobbly, fussy old man, a little nasal and sniffly from a cold; kind and flustered (“Oh dear, oh dear!”), booming when cross but never frightening.',
+    },
     starKeeper: {
       name: 'The Star-Keeper',
       art: starKeeper,
@@ -110,6 +131,14 @@ export default defineWorld({
       art: grimSchoolroom,
       about: 'Mr Grim’s School for Bad Brownies, the schoolroom: grey stone walls, warm wood, a little gloomy but not dark. An open arched window on the left (x 50–270, y 70–420) with sky beyond: a way in for the chair. A blackboard on the back wall (x 380–800, y 120–380) with a chalk ledge and a duster, its middle (x 470–720, y 170–330) clear for chalk writing. A bare wall at x 820, y 300 for a key hook, and plain stone at x 860–1160 for the school-cupboard prop (x 870, y 200, w 280). Three low brownie desks at the front left (x 40–330, tops y 612). Ground line y ≈ 640; open floor x 300–860.',
     },
+    'open-sea': {
+      art: openSea,
+      about: 'The open sea all round: blue-green waves, a wide summer sky, a pale sun top right, a far line of white cliffs with a red-and-white lighthouse on the left (x 0–330, at the horizon y ≈ 312) and nothing else. No ground: a whale’s back or a flying chair floats on it, waterline about y 520–580, so riders’ heads stay above y 330. Open water from x 330 to 1180.',
+    },
+    'enchanter-tower': {
+      art: enchanterTower,
+      about: 'The round room at the top of Enchanter Muddle’s tower: curved grey-violet stone walls, wooden beams, high shelves of coloured bottles, jars and old books across the back (x 330–780, shelves at y 200 and 320), a hanging lantern, a big arched window on the left (x 60–280, y 90–420) with sky beyond (a way in for the chair), a bubbling green cauldron on a low fire on the right (x 880–1110, rim y ≈ 400, painted in), and a round star rug on the floor. Ground line y ≈ 640; open floor x 300–900, room for the chair and 4 actors.',
+    },
     'garden-night': {
       art: gardenNight,
       about: 'The garden at the bottom of the garden at night: the playroom’s wooden side at the left (x 0-270) with its window glowing (x 56-202, y 262-408) and a door ajar at x 226-274; a round lily pond across x 330-640, y 625-710 (stand behind it, feet on y 640); a fence and bushes behind; a deep blue sky with a few stars and one small dark gap at x 700, y 120. Ground line y ≈ 640; open ground x 300-950, room for the chair and 3 actors. Dark but readable: add k.light for faces. The pink dawn is a k.dim wash.',
@@ -137,5 +166,11 @@ export default defineWorld({
       size: [280, 440],
       about: 'Mr Grim’s tall dark-wood cupboard, with a brass keyhole. Its doors (parts doorL, doorR, hinged at their outer edges) open with scaleX towards 0.2 to show a big dark inside, room for the Wishing-Chair. Stands on y 640 when placed at y 200 at w 280.',
     },
+    'whale-back': {
+      art: whaleBack,
+      size: [960, 300],
+      about: 'Old Barnacle’s back as a little island, 960 × 300: a sandy top (x 236–734, y 186–244 in the prop) with one palm tree (part palm, sways), grey-blue flanks with barnacles and foam, and his tail at the far right (part tail, origin at its base; wiggles). Stand riders with their bottoms at y ≈ 232 of the prop and lay whale-back-front over them.',
+    },
+    'whale-back-front': { art: whaleBackFront, size: [960, 300], about: 'The near lip of sand over the whale-back’s top, same box and position, laid over riders so their bottom edges are hidden.' },
   },
 });
