@@ -26,6 +26,8 @@ import { gardenNight, starCloud } from './nightplaces';
 import { littleStar, starKeeper, starKeeperCross, starKeeperKind } from './starkeeper';
 import { goblinMarket } from './market';
 import { slyboots, slybootsFlop, slybootsGrab, slybootsShout } from './slyboots';
+import { jackFrost, jackFrostHappy, jackFrostLaugh, jackFrostSulk } from './jackfrost';
+import { snowLand } from './snowland';
 
 export default defineWorld({
   id: 'wishing',
@@ -115,6 +117,14 @@ export default defineWorld({
       about: 'Old Slyboots, the pedlar of the Goblin Market: a tall, thin hobgoblin with a green face, a long hooked nose, narrow sly eyes, a battered tall hat with a teal feather (part hat), a patched purple coat and a huge pack on his back hung with pots, ribbons and a lantern. Greedy and sneaky, with a loud market voice: calls his wares, snaps “Got any MONEY? Then shoo!” and “MINE!”, but he only looms and grabs at things, never at people: more silly than scary. Poses: shout (hand to his mouth, calling his wares), grab (hugging his money bag, greedy eyes), flop (sat in a heap, dizzy, hat over one ear).',
       voice: 'A loud, wheedling, gravelly market-trader; a fast sing-song patter when he sells, a sharp snarl when he snaps “MINE!”, a whining wail when he loses.',
     },
+    jackFrost: {
+      name: 'Jack Frost',
+      art: jackFrost,
+      poses: { laugh: jackFrostLaugh, sulk: jackFrostSulk, happy: jackFrostHappy },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR'],
+      about: 'Jack Frost, cheeky sprite of the Land of Winter: skinny, with spiky white-silver hair like icicles, a pale frost-blue face with bright blue cheeks, little pointed ears, long thin fingers and a narrow silver-blue tunic stitched with frost ferns. Freezes things for a game, never to hurt: he is really lonely, because everyone runs away from him for being too cold. Poses: the portrait (a sly smirk), laugh (wide eyes, big open icy “hee hee hee”), sulk (arms folded, worried brows, small frown), happy (wearing a red woolly scarf, delighted). Swap pose to happy once he is given a scarf. Looms by being big and high, never by hurting anyone.',
+      voice: 'Crackly, quick and mischievous, a bit high and breathy like cold wind; giggly when he is pleased, small and quiet when he is sad. Never cruel.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -160,6 +170,10 @@ export default defineWorld({
     'goblin-market': {
       art: goblinMarket,
       about: 'The Goblin Market in a wood clearing at dusk: a purple-and-gold sky, dark trees, a striped stall at each side (left: pots, hats and jars; right: cakes, jars and bottles), lanterns and bunting strung across the top (above y 330), toadstools along the edges. Ground line y ≈ 640; the open ground is x 280-900, room for the chair and 3 actors in front of the right stall.',
+    },
+    'snow-land': {
+      art: snowLand,
+      about: 'The Land of Winter: a pale lemon winter sky, a little ice palace with icicles on a far blue ridge (x 700-920, y 250-470), rolling snowy hills, frosted firs painted in at the left (x < 230) and right (x > 960) edges. Open snow x 250-950; ground line y ≈ 640; room for the chair and 3 actors. Pair with k.ambient("snow").',
     },
   },
   props: {
