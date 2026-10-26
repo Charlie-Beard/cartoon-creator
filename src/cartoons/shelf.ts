@@ -83,6 +83,8 @@ export type Showing = string | { id: string; from: string };
 export const SHOWING: Showing[] | null = [
   'giants-castle',
   'grims-school',
+  'mysterious-letter',
+  'seaside-adventure',
   'teddy-surprise',
   'strange-day',
   'uncle-sailor-bill',
