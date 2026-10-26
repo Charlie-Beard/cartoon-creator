@@ -53,15 +53,16 @@ const { together, wave } = commonMoves;
 // ------------------------------------------------------------ the island
 // Everything on Old Barnacle's back is placed from these, so the three sea
 // scenes agree. The whale-back prop (960 × 300) is drawn at 1.2 times, with
-// its sand top at y 463 and the heroes' feet at y 518, hidden by its lip.
+// its sand top at y 463; the heroes stand with their feet at y 482, just behind the lip,
+// so their chests and arms show above the sand; the chair's legs rest on the lip.
 
-const GROUND = 530;
+const GROUND = 482;
 const BACK = { x: 10, y: 240, w: 1152 };
-const CHAIR = { x: 190, y: 257, w: 300 };
+const CHAIR = { x: 255, y: 215, w: 300 };
 const HEAD = { x: -90, y: 147, w: 400 };
 /** Where someone w wide stands with their feet on the sand at x. */
 const stand = (x: number, w: number): { x: number; y: number; w: number } => ({ x, y: GROUND - Math.round((w * 340) / 300), w });
-const SPOT = { jigs: stand(410, 125), mollie: stand(530, 160), peter: stand(790, 160) };
+const SPOT = { jigs: stand(455, 125), mollie: stand(575, 160), peter: stand(805, 160) };
 const CASTLE = { x: 700, y: 470, w: 90 };
 /** The middle of the top of the sandcastle wall: where the pink shell sits. */
 const CASTLE_TOP: [number, number] = [745, 490];
@@ -421,7 +422,7 @@ export default defineCartoon({
         cast.mollie = k.character('mollie', { ...SPOT.mollie, z: 12 });
         cast.peter = k.character('peter', { ...SPOT.peter, z: 12, flip: true });
         cast.whale = head(k, 'happy');
-        cast.feather = k.add(feather(), { x: SPOT.jigs.x + 80, y: 420, w: 34, z: 18 });
+        cast.feather = k.add(feather(), { x: SPOT.jigs.x + 80, y: SPOT.jigs.y + 32, w: 34, z: 18 });
         k.set(cast.feather, { opacity: 0, rotation: 30 });
         cast.spout = k.add(spout(), { x: 0, y: 34, w: 90, z: 20 });
         k.set(cast.spout, { opacity: 0 });
@@ -447,8 +448,8 @@ export default defineCartoon({
         await k.all(k.say('trick', jigs), k.hop(jigs, 22, 1));
         hatBell();
         await k.appear(cast.feather, 0.4);
-        const tickleAt: [number, number] = [CHAIR.x + 232, 478];
-        await k.to(cast.feather, 0.8, { x: tickleAt[0] - (SPOT.jigs.x + 97), y: tickleAt[1] - 437, rotation: 10 });
+        const tickleAt: [number, number] = [CHAIR.x + 232, CHAIR.y + 221];
+        await k.to(cast.feather, 0.8, { x: tickleAt[0] - (SPOT.jigs.x + 97), y: tickleAt[1] - (SPOT.jigs.y + 49), rotation: 10 });
         tickle();
         const stir = k.to(cast.feather, 0.09, { rotation: 36, yoyo: true, repeat: 9, ease: 'sine.inOut' });
         chairGiggle();
