@@ -33,6 +33,9 @@ import { bluster, blusterBeam, blusterBlow, blusterSulk } from './bluster';
 import { rainbowEnd } from './rainbowend';
 import { dragonHill } from './dragonhill';
 import { puff, puffGrin, puffRoar, puffSad } from './puff';
+import { hazel, hazelFlying, hazelFlyingCat, hazelHappy, hazelWorried } from './hazel';
+import { midnight, midnightPurr, midnightScared } from './midnight';
+import { whisperingWood } from './whisperingwood';
 
 export default defineWorld({
   id: 'wishing',
@@ -155,6 +158,22 @@ export default defineWorld({
       about: 'Puff, a young dragon as big as a horse but a baby at heart: a round green body with a cream tummy, little orange spines and ear fins, small floppy orange wings, stubby arms, big worried eyes and ONE big white front tooth that hangs over his lip. The tooth is its own part (tooth, origin at the gum): rotate it to wobble it, fade it out when it is gone, and swap to the grin pose for the gap. He breathes grey smoke, never fire at anyone (smoke and smoke rings are the cartoon’s own one-offs). Poses: roar (head up, eyes screwed shut, mouth wide, a few tears: he is sore, not fierce), sad (head hung low, wet eyes, a wobbly frown, tooth tipped, wings drooping), grin (happy eyes, a big smile with a gap, arms and wings up). Gulpy, sniffly and shy, then giggly. Never cross, never hurts anyone. Show him big (w 300 to 380).',
       voice: 'A young, gulpy, slightly tearful boyish voice, shy and sniffly with a wobble; round and a little croaky, then bubbling into giggles when he is happy. Sweet, never growly.',
     },
+    witchHazel: {
+      name: 'Witch Hazel',
+      art: hazel,
+      poses: { worried: hazelWorried, flying: hazelFlying, flyingCat: hazelFlyingCat, happy: hazelHappy },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Witch Hazel: a young, kind, scatterbrained witch in a tall floppy black hat (purple band, little gold moon), wild red curly hair, freckles, a green dress, a purple cloak with patches and stripy stockings. Never warty, never scary. Quick and flustered, she loses her words and says “Oh!” a lot, but she is brave and grateful. Her broomstick will not fly without her cat. The portrait holds her broom upright. Poses: worried (both hands to her cheeks, “oh!” mouth), flying (sat on her broom, star-tipped wand in armR: wave it for a spell), flyingCat (the same with Midnight purring on the broom in front of her: use it, not a separate Midnight, when they fly together), happy (hugging Midnight to her chest, eyes shut in a big smile; the cat is drawn in, so do not also show the Midnight actor).',
+      voice: 'Young, quick and warm, a bit flustered; a bright English girl-witch of about sixteen, words tumbling over each other, giggly when she is relieved.',
+    },
+    midnight: {
+      name: 'Midnight',
+      art: midnight,
+      poses: { scared: midnightScared, purr: midnightPurr },
+      parts: ['figure', 'head', 'eyes', 'lids', 'mouth', 'mouthOpen', 'tail'],
+      about: 'Midnight: Witch Hazel’s small fluffy black cat with big round green eyes, a pink nose, long whiskers and a silver bell on a red collar. He has NO lines: only miaows and purrs (sounds). The portrait is him sitting up, curious. Poses: scared (fur on end, eyes huge, clinging to a bit of branch), purr (curled in a contented ball, eyes shut). Part tail pivots at its root (swish it). Show him smallish (w 140 to 240). His bell tinkles when he moves.',
+      voice: 'A cat: no speech. Soft miaows, a small scared mew, a rumbling purr.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -212,6 +231,10 @@ export default defineWorld({
     'dragon-hill': {
       art: dragonHill,
       about: 'Dragon Hill under a soft evening sky: a pale sun sinking behind lavender hills, a tiny village of round thatched cottages far below on the left (x 30-290, bases y 495-530; the fifth cottage’s roof is at about (262, 494), see VILLAGE_SCORCH in dragonhill.ts), and a rocky mound on the right with a big dark cave mouth under a stone arch (x 845-1075, y 380-640; its dark middle about (960, 520), see CAVE_DARK). A big boulder at x 600-790 (top y 520, base y 650) to hide behind: stand on its left (x 400-580) with it between you and the cave. Two small boulders at the edges. Ground line y ≈ 640; open ground x 250-900, room for the chair and 3 actors.',
+    },
+    'whispering-wood': {
+      art: whisperingWood,
+      about: 'The Whispering Wood at night under a big round moon (upper left, x 300, y 190): blue-violet, kind, faces readable. Twisty dark trees with finger-like branches at the left (x < 230) and dim far trees; ONE VERY TALL TREE at the right (trunk x 900-1010 running off the top) with a long bare branch reaching left at y 240-280 (tip x 716) for a stuck cat, and finger-branches at y 310, 330, 440 and 470 for a chair rising past. Glowing pink, mint and amber toadstools along the edges, a mossy path winding to the front, silvery mist low down. Ground line y ≈ 640; open ground x 250-850, room for the chair and 3 actors. Add k.light for faces.',
     },
   },
   props: {
