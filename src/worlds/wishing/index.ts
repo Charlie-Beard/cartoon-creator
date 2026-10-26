@@ -28,6 +28,9 @@ import { goblinMarket } from './market';
 import { slyboots, slybootsFlop, slybootsGrab, slybootsShout } from './slyboots';
 import { jackFrost, jackFrostHappy, jackFrostLaugh, jackFrostSulk } from './jackfrost';
 import { snowLand } from './snowland';
+import { dabble, dabbleHappy, dabblePaint, dabbleSad } from './dabble';
+import { bluster, blusterBeam, blusterBlow, blusterSulk } from './bluster';
+import { rainbowEnd } from './rainbowend';
 
 export default defineWorld({
   id: 'wishing',
@@ -125,6 +128,22 @@ export default defineWorld({
       about: 'Jack Frost, cheeky sprite of the Land of Winter: skinny, with spiky white-silver hair like icicles, a pale frost-blue face with bright blue cheeks, little pointed ears, long thin fingers and a narrow silver-blue tunic stitched with frost ferns. Freezes things for a game, never to hurt: he is really lonely, because everyone runs away from him for being too cold. Poses: the portrait (a sly smirk), laugh (wide eyes, big open icy “hee hee hee”), sulk (arms folded, worried brows, small frown), happy (wearing a red woolly scarf, delighted). Swap pose to happy once he is given a scarf. Looms by being big and high, never by hurting anyone.',
       voice: 'Crackly, quick and mischievous, a bit high and breathy like cold wind; giggly when he is pleased, small and quiet when he is sad. Never cruel.',
     },
+    dabble: {
+      name: 'Old Mother Dabble',
+      art: dabble,
+      poses: { sad: dabbleSad, paint: dabblePaint, happy: dabbleHappy },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Old Mother Dabble, who paints the rainbow every day: a little round cheerful old woman with rosy cheeks, round glasses, grey curls under a floppy straw hat with a paintbrush tucked in its band (part hat), and a lilac smock spattered with every colour of paint. The plain portrait holds her big brush low. Poses: sad (empty-handed, worried), paint (the huge brush raised high, a grin), happy (arms flung wide, a beam). Chirpy and flustered, never cross.',
+      voice: 'Warm, chirpy old country woman; quick and cheerful, a little flustered when things go wrong, with a bubbling laugh.',
+    },
+    bluster: {
+      name: 'Bluster',
+      art: bluster,
+      poses: { blow: blusterBlow, sulk: blusterSulk, beam: blusterBeam },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen'],
+      about: 'Bluster, a big grumpy grey storm cloud with a face: heavy frowning brows, puffed cheeks, a downturned mouth, no arms (swell him with scale to loom). Poses: blow (cheeks puffed, lips pursed, wind streaks), sulk (small, droopy, one tear of rain), beam (smiling, with a silver lining along his top). He rumbles and blows but never hurts anyone; he is cross only because nobody ever cheers for the rain. Show him big when cross, small when sulking.',
+      voice: 'Deep, rumbly and grumbling, like far-off thunder; huffy and booming when cross, then small, shy and slow when sad, and a warm surprised chuckle at the end.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -174,6 +193,10 @@ export default defineWorld({
     'snow-land': {
       art: snowLand,
       about: 'The Land of Winter: a pale lemon winter sky, a little ice palace with icicles on a far blue ridge (x 700-920, y 250-470), rolling snowy hills, frosted firs painted in at the left (x < 230) and right (x > 960) edges. Open snow x 250-950; ground line y ≈ 640; room for the chair and 3 actors. Pair with k.ambient("snow").',
+    },
+    'rainbow-end': {
+      art: rainbowEnd,
+      about: 'On top of the clouds where the rainbow starts: pale blue sky, a soft cloud floor (top y ≈ 620, open x 300–950), a great arch of seven GREY stripes rising from the left (foot x 60–240) and sweeping up off the top of the stage (at y 300 it is x ≈ 300–460, at y 100 about x 520–700), and a little cloud paint shed at the right (x 960–1160, y 440–660) with an empty pot rack. Lay colour over the arch with rainbowStripe(i, colour) from src/worlds/wishing/rainbowend.ts (i 0 = top/outer).',
     },
   },
   props: {
