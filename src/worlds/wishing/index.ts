@@ -22,6 +22,8 @@ import { openSea } from './sea';
 import { whale, whaleBack, whaleBackFront, whaleHappy, whaleSleep } from './whale';
 import { muddle, muddleCosy, muddleCross, muddleSneeze } from './muddle';
 import { enchanterTower } from './tower';
+import { gardenNight, starCloud } from './nightplaces';
+import { littleStar, starKeeper, starKeeperCross, starKeeperKind } from './starkeeper';
 
 export default defineWorld({
   id: 'wishing',
@@ -88,6 +90,21 @@ export default defineWorld({
       about: 'Enchanter Muddle: a plump, kind, very muddled old enchanter in a tall crooked purple hat with silver moons, a long white beard with a goose quill stuck in it, a starry purple robe and a big red runny nose. He means well and gets everything in a muddle; when he sneezes, his spells fly out. Poses: sneeze (head back, eyes shut, mouth wide), cross (brows down, fists up, hat askew: cross by accident, never really angry), cosy (wrapped in a stripy scarf, smiling). The hat is part hat (let it rise or wobble). Never cruel, always sorry afterwards.',
       voice: 'A warm, wobbly, fussy old man, a little nasal and sniffly from a cold; kind and flustered (“Oh dear, oh dear!”), booming when cross but never frightening.',
     },
+    starKeeper: {
+      name: 'The Star-Keeper',
+      art: starKeeper,
+      poses: { cross: starKeeperCross, kind: starKeeperKind },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'The Star-Keeper: a small, round old man of the sky with a pink face, round spectacles, a bushy white moustache, a long silver beard tucked into his belt, a midnight-blue coat and floppy nightcap sprinkled with tiny gold stars, and a brass lantern in his right hand (it goes with armR). Fussy and short-tempered at first, a bit pompous (the plain portrait, lantern held low), then twinkly and kind. Poses: cross (lantern raised high, brows down: booms out of the dark), kind (smiling, hands clasped). He gets cross only because he is worried about his stars, and is quick to say sorry. Never hurts anyone.',
+      voice: 'A fussy, grandfatherly old man; gruff and booming when cross, then soft, warm and twinkly when kind; gentle, a little creaky.',
+    },
+    littleStar: {
+      name: 'The little star',
+      art: littleStar,
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen'],
+      about: 'A little soft-yellow star with a halo, big shy eyes and a small smile, no arms or legs. Speaks in a tiny, sweet voice, only a few short soft words at a time. Brave and grateful, never cross. Show it small (w 120 to 200).',
+      voice: 'A tiny, sweet, silvery child-like voice, very soft and shy, a little sleepy.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -121,6 +138,14 @@ export default defineWorld({
     'enchanter-tower': {
       art: enchanterTower,
       about: 'The round room at the top of Enchanter Muddle’s tower: curved grey-violet stone walls, wooden beams, high shelves of coloured bottles, jars and old books across the back (x 330–780, shelves at y 200 and 320), a hanging lantern, a big arched window on the left (x 60–280, y 90–420) with sky beyond (a way in for the chair), a bubbling green cauldron on a low fire on the right (x 880–1110, rim y ≈ 400, painted in), and a round star rug on the floor. Ground line y ≈ 640; open floor x 300–900, room for the chair and 4 actors.',
+    },
+    'garden-night': {
+      art: gardenNight,
+      about: 'The garden at the bottom of the garden at night: the playroom’s wooden side at the left (x 0-270) with its window glowing (x 56-202, y 262-408) and a door ajar at x 226-274; a round lily pond across x 330-640, y 625-710 (stand behind it, feet on y 640); a fence and bushes behind; a deep blue sky with a few stars and one small dark gap at x 700, y 120. Ground line y ≈ 640; open ground x 300-950, room for the chair and 3 actors. Dark but readable: add k.light for faces. The pink dawn is a k.dim wash.',
+    },
+    'star-cloud': {
+      art: starCloud,
+      about: 'High among the stars on top of a silvery cloud: deep blue sky, many stars hanging on thin silver threads (all above y 340 or at the edges), one empty silver hook at x 905, y 215 and a tall thin silver ladder leaning on nothing (foot x 800, y 610 up to the hook, top x 880, y 250). Cloud top y ≈ 600; stand actors on y ≈ 630. Room for the chair and 3 actors in the middle (x 300-850).',
     },
   },
   props: {
