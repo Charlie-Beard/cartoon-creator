@@ -18,6 +18,8 @@ import { curiosityShop } from './shop';
 import { wishingSky } from './sky';
 import { grim, grimBack, grimDizzy, grimLaugh, grimShout } from './grim';
 import { grimSchoolroom, schoolCupboard } from './schoolroom';
+import { muddle, muddleCosy, muddleCross, muddleSneeze } from './muddle';
+import { enchanterTower } from './tower';
 
 export default defineWorld({
   id: 'wishing',
@@ -67,6 +69,14 @@ export default defineWorld({
       about: 'Mr Grim, headmaster of Mr Grim’s School for Bad Brownies: a tall, thin, stern old brownie with a long pointed nose, bushy black brows, little round spectacles, a long pointed grey beard, pointy ears, a black gown with a plum lining and a black mortarboard (part hat: tip it, slide it, lift it). His long ruler is part of armR, so raising the arm raises it. Barks “SILENCE!” and smacks his ruler down, but never touches anyone: strict, pompous and more silly than scary. Poses: shout (brows down, mouth wide, ruler high), dizzy (swirly eyes, hat askew), laugh (crescent eyes, a big laugh), back (seen from behind, writing on the blackboard; no face, so he can’t speak in it).',
       voice: 'Dry, clipped, stern old schoolmaster; a thin sharp voice that barks when he shouts, a bit pompous and fussy, cracking into a wheezy, surprised giggle when he laughs.',
     },
+    muddle: {
+      name: 'Enchanter Muddle',
+      art: muddle,
+      poses: { sneeze: muddleSneeze, cross: muddleCross, cosy: muddleCosy },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Enchanter Muddle: a plump, kind, very muddled old enchanter in a tall crooked purple hat with silver moons, a long white beard with a goose quill stuck in it, a starry purple robe and a big red runny nose. He means well and gets everything in a muddle; when he sneezes, his spells fly out. Poses: sneeze (head back, eyes shut, mouth wide), cross (brows down, fists up, hat askew: cross by accident, never really angry), cosy (wrapped in a stripy scarf, smiling). The hat is part hat (let it rise or wobble). Never cruel, always sorry afterwards.',
+      voice: 'A warm, wobbly, fussy old man, a little nasal and sniffly from a cold; kind and flustered (“Oh dear, oh dear!”), booming when cross but never frightening.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -92,6 +102,10 @@ export default defineWorld({
     'grim-schoolroom': {
       art: grimSchoolroom,
       about: 'Mr Grim’s School for Bad Brownies, the schoolroom: grey stone walls, warm wood, a little gloomy but not dark. An open arched window on the left (x 50–270, y 70–420) with sky beyond: a way in for the chair. A blackboard on the back wall (x 380–800, y 120–380) with a chalk ledge and a duster, its middle (x 470–720, y 170–330) clear for chalk writing. A bare wall at x 820, y 300 for a key hook, and plain stone at x 860–1160 for the school-cupboard prop (x 870, y 200, w 280). Three low brownie desks at the front left (x 40–330, tops y 612). Ground line y ≈ 640; open floor x 300–860.',
+    },
+    'enchanter-tower': {
+      art: enchanterTower,
+      about: 'The round room at the top of Enchanter Muddle’s tower: curved grey-violet stone walls, wooden beams, high shelves of coloured bottles, jars and old books across the back (x 330–780, shelves at y 200 and 320), a hanging lantern, a big arched window on the left (x 60–280, y 90–420) with sky beyond (a way in for the chair), a bubbling green cauldron on a low fire on the right (x 880–1110, rim y ≈ 400, painted in), and a round star rug on the floor. Ground line y ≈ 640; open floor x 300–900, room for the chair and 4 actors.',
     },
   },
   props: {
