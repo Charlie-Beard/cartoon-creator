@@ -89,8 +89,6 @@ export const SHOWING: Showing[] | null = [
   'washing-day',
   'whistling-kettle',
   'wishing-chair',
-  { id: 'seaside-adventure', from: '2026-10-26T10:00' },
-  { id: 'mysterious-letter', from: '2026-10-26T10:00' },
 ];
 
 /** The ids in `list` that are showing at `now` (a timed one once its `from` has come). */
