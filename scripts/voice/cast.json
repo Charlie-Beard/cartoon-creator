@@ -101,5 +101,9 @@
   "hermione": { "voice_id": "gyeuMTz1KvJp8hqXmFe9", "name": "Michelle Queen", "owner": "cee61fce74993517f151968f018c2290245c32d5a39d69ee5daff4764bfc25c5", "settings": { "stability": 0.45, "speed": 1.0 } },
   "fred": { "voice_id": "zd8HNypzBNewiMqUiZI9", "name": "Gadget - Energetic, Clear and Engaging", "owner": "606bd6870e66e479a7aa54d90d3f046c5af0bb61896d5674a94966386af489ff", "settings": { "stability": 0.35, "speed": 1.05 } },
   "george": { "voice_id": "FiQVBfstqvAXNba9nkRV", "name": "Cameron", "owner": "d9cf88409e4a49d33b5585b33a518c53bbdfd599e359c105abcdc120395a5711", "settings": { "stability": 0.35, "speed": 1.0 } },
-  "malfoy": { "voice_id": "NXaTw4ifg0LAguvKuIwZ", "name": "Posh Josh", "owner": "be7f2f07098dc23343bab4a9a1202b290c2456f82b01ebcecea0a8af8a146bd9", "settings": { "stability": 0.5, "speed": 0.95 } }
+  "malfoy": { "voice_id": "NXaTw4ifg0LAguvKuIwZ", "name": "Posh Josh", "owner": "be7f2f07098dc23343bab4a9a1202b290c2456f82b01ebcecea0a8af8a146bd9", "settings": { "stability": 0.5, "speed": 0.95 } },
+  "auntMarge": { "voice_id": "aAsWcN5jdLdiYG7Hq0YL", "name": "Harriet - British Actress", "owner": "3f2ca29fd2019c4a0516b646c73c6f21140f676ac6d45236a2b5ef291bf8d8e1", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "stan": { "voice_id": "DfE5EkknFF950NR6OMui", "name": "Bob", "owner": "ad827f2c0300d36094ca79e518b1a5df8c3609eb269353c30dcec3ac8878a437", "settings": { "stability": 0.4, "speed": 1.05 } },
+  "mrWeasley": { "voice_id": "yZ3w1DL4ZAxIdOscv2t8", "name": "Wilf - Cheerful, Quirky & Northern", "owner": "300b35287e8acc21dd12bd610b831e19b47dc75e8b8c15c2bca80cdcb776ef2d", "settings": { "stability": 0.4, "speed": 1.0 } },
+  "dudleyBig": { "voice_id": "4iqKdEXMW8NRF8USiS3Q", "name": "Bittu - Heavy Kid Cartoon Character", "owner": "7398804d9eaf2f463899a907587c33a390591775784f87857b6d0e1e4e3e66f6", "settings": { "stability": 0.5, "speed": 1.0 } }
 }
