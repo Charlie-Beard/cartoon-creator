@@ -39,6 +39,9 @@ import { whisperingWood } from './whisperingwood';
 import { jackInBox, jackInBoxBoing, jackInBoxGrin, jackInBoxSulk, jackBox } from './jackinbox';
 import { brass, brassSalute, brassWorried } from './brass';
 import { toylandStation, toyCupboard } from './toyland';
+import { grizzle, grizzleBeam, grizzleRoar, grizzleSulk } from './grizzle';
+import { prickles, pricklesBall, pricklesHappy } from './prickles';
+import { bridgePlank, bridgePlankBroken, bridgePlanks, trollBridge } from './trollbridge';
 import { toyTrain, toyTruck, toyTruckFront } from './toytrain';
 
 export default defineWorld({
@@ -194,6 +197,22 @@ export default defineWorld({
       about: 'Sergeant Brass, the toy-soldier engine driver of Toyland: a wooden soldier with a tall black busby hat (gold cord), round red cheek spots, a red jacket with gold buttons and white cross-belts, a curly painted moustache. Fussy, stiff and kind: marches, salutes, says “Oh dear, oh dear!” when something goes wrong. Poses: salute (hand to his busby, a proud grin), worried (brows up, round “oh” mouth, hands wringing).',
       voice: 'A fussy, plummy little man, brisk and clipped like a drill sergeant but gentle; flustered and fluttery when worried; proud and booming for “All aboard!”.',
     },
+    grizzle: {
+      name: 'Grizzle',
+      art: grizzle,
+      poses: { roar: grizzleRoar, sulk: grizzleSulk, beam: grizzleBeam },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR'],
+      about: 'Grizzle, the river troll who lives under the old wooden bridge (troll-bridge): big and knobbly, mossy grey-green skin, a huge lumpy nose, heavy craggy brows over small eyes, big floppy ears, a mop of rusty hair with a bit of pondweed in it, two small blunt teeth that poke up, and a patched sackcloth tunic. Shouts “Nobody crosses MY bridge!” and stomps, but he is only cross because his bridge is falling to bits and his fingers are too big for little nails, he is hungry, and nobody ever asks him to anything. Soft underneath, with a huge rumbling laugh once he has friends. Poses: roar (arms up, mouth wide, brows down: looms, never grabs), sulk (arms folded, bottom lip out, looking away), beam (a huge grin, arms open, laughing). He never touches anyone.',
+      voice: 'A big gruff troll: deep, rumbly and growly with a broad Yorkshire burr; grumpy and booming when cross, small and gruff when sad, then a huge rolling belly-laugh.',
+    },
+    prickles: {
+      name: 'Prickles',
+      art: prickles,
+      poses: { ball: pricklesBall, happy: pricklesHappy },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR'],
+      about: 'Prickles, the hedgehog postman: small and round, brown spines, a cream face with a pointed snout and a black button nose, a red postman’s cap, a navy jacket with gold buttons, and a red satchel full of letters. Fussy, polite and kind; very proud of always getting the post through, and easily startled. Poses: ball (curled up in a tight spiky ball when frightened, only his cap showing; roll him), happy (a big smile, waving a letter).',
+      voice: 'A small, fussy, kindly hedgehog: a middle-aged man, quick and a little breathless, with a soft Welsh lilt.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -264,6 +283,10 @@ export default defineWorld({
       art: toyCupboard,
       about: 'Inside the big old toy cupboard: dim brown planks, a crack of golden light down the left edge (x 22–60) lighting the floor, cobwebs in the top corners, a dusty top shelf (y 252) over the left with a drum, three skittles and a sleepy doll, and a grey rocking horse on the floor at the left (x 40–290, painted in). On the right three wooden ledges rise like stairs, their tops at y 570 (x 740–1200), y 470 (x 820–1200) and y 360 (x 890–1200): stand people and a toy box on them. Ground line y ≈ 640; open floor x 300–760. Dim but readable: add k.light on the actors’ faces.',
     },
+    'troll-bridge': {
+      art: trollBridge,
+      about: 'A green river valley on a sunny morning, seen side-on: a grassy near bank on the left (ground y ≈ 640, open x 20–320), a far bank on the right (ground y ≈ 640, x 880–1180) with a path up to three little cottages on the hill, and between them a calm river (water from y ≈ 650). An old, rickety humpbacked wooden bridge spans it: its walking surface runs from y ≈ 600 at each end (x 270 and 910) up to y ≈ 560 at the middle, with sagging rope rails on crooked posts (90 px high) and three old trestle legs (x 400, 590, 780) into the water; its walking surface is y 593 at x 300, 568 at 450, 560 at 590, 570 at 750, 598 at 900. The dark space under the deck (x 275–905, y 600–650, with a tiny washing line and a patched sock at x 420–570) is where the troll lives. Two planks are missing at the top of the hump (BRIDGE_GAP in trollbridge.ts): lay bridge-plank there to mend it, bridge-plank-broken to show the broken one dangling. Stand people on the banks (feet y 640) or on the deck (feet y ≈ 590).',
+    },
   },
   props: {
     'wishing-chair': {
@@ -308,6 +331,21 @@ export default defineWorld({
       art: jackBox,
       size: [250, 170],
       about: 'Jack-in-the-Box’s box with its lid shut: red with yellow stars, a crank on the right (the box itself is x 4–216 of the prop), a little dusty. Swap it for the jackInBox character (his pose boing) when he springs out.',
+    },
+    'bridge-plank': {
+      art: bridgePlank,
+      size: [74, 44],
+      about: 'Two new, pale wooden boards side by side, with nail heads, exactly the size of the gap in the troll-bridge deck (74 × 44): place it at BRIDGE_GAP.x, BRIDGE_GAP.y with w = BRIDGE_GAP.w and it fills the gap so the deck looks mended. Carry it there, then hammer it.',
+    },
+    'bridge-plank-broken': {
+      art: bridgePlankBroken,
+      size: [90, 110],
+      about: 'The troll-bridge’s old broken board, dark and cracked, hinged at its top left and dangling down-right at an angle with a jagged end (place it at BRIDGE_GAP.x, BRIDGE_GAP.y, natural size 90 × 110). Fade or drop it away before the new plank goes in.',
+    },
+    'bridge-planks': {
+      art: bridgePlanks,
+      size: [220, 120],
+      about: 'A stack of five spare old boards lying on the grass, tied with two loops of rope (220 × 120, its bottom at the box bottom): stand it on a bank with y = 640 - 120 so it sits on the ground line.',
     },
   },
 });
