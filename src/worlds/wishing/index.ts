@@ -39,7 +39,17 @@ import { whisperingWood } from './whisperingwood';
 import { jackInBox, jackInBoxBoing, jackInBoxGrin, jackInBoxSulk, jackBox } from './jackinbox';
 import { brass, brassSalute, brassWorried } from './brass';
 import { toylandStation, toyCupboard } from './toyland';
+import { grizzle, grizzleBeam, grizzleRoar, grizzleSulk } from './grizzle';
+import { prickles, pricklesBall, pricklesHappy } from './prickles';
+import { bridgePlank, bridgePlankBroken, bridgePlanks, trollBridge } from './trollbridge';
 import { toyTrain, toyTruck, toyTruckFront } from './toytrain';
+import { lostLand, lostHeap, lostRibbon, lostSock, lostSocks, lostSpectacles, lostBell, lostKite, lostGlove } from './lostland';
+import { muddlecup, muddlecupBeam, muddlecupCross, muddlecupFluster } from './muddlecup';
+import { pearl, pearlHappy, pearlSad, pearlSing } from './pearl';
+import { nipper, nipperGrin, nipperSnap, nipperSulk } from './nipper';
+import { combGolden, coveHoard, coveRock, coveTide, mermaidCove } from './cove';
+import { dozy, dozyBeam, dozySleep, dozyYawn } from './dozy';
+import { landOfNod, sandSack } from './landofnod';
 
 export default defineWorld({
   id: 'wishing',
@@ -194,6 +204,54 @@ export default defineWorld({
       about: 'Sergeant Brass, the toy-soldier engine driver of Toyland: a wooden soldier with a tall black busby hat (gold cord), round red cheek spots, a red jacket with gold buttons and white cross-belts, a curly painted moustache. Fussy, stiff and kind: marches, salutes, says “Oh dear, oh dear!” when something goes wrong. Poses: salute (hand to his busby, a proud grin), worried (brows up, round “oh” mouth, hands wringing).',
       voice: 'A fussy, plummy little man, brisk and clipped like a drill sergeant but gentle; flustered and fluttery when worried; proud and booming for “All aboard!”.',
     },
+    muddlecup: {
+      name: 'Mrs Muddlecup',
+      art: muddlecup,
+      poses: { fluster: muddlecupFluster, cross: muddlecupCross, beam: muddlecupBeam },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'specs', 'specsOn'],
+      about: 'Mrs Muddlecup, keeper of the Land of Lost Things, where everything anyone loses ends up, filed on a towering wobbly pile. A thin, bird-like little old lady (not round like Dabble) with a long pointy nose, rosy cheeks, a tall untidy silver bun with two pencils stuck through it and a luggage label tied on, a plum-and-mustard checked shawl over a dark green dress and a tape measure round her neck. Fussy and flustered but kind: says “dear” a lot, mutters “Lost things, lost things, everything in its place!”, and at first “Finders keepers!” until she is won round. Running joke: she has “lost” her half-moon gold spectacles and they are pushed up on top of her head all along (part specs, in front of the bun). When someone lifts them down for her, fade specs out and specsOn in (the same pair sitting on her nose over her eyes, hidden until then). The plain portrait holds up a luggage label. Poses: fluster (both hands flapping by her cheeks, brows up, a round “oh!”), cross (arms folded, brows down, nose in the air), beam (arms flung wide, a huge smile). Never unkind, only fussy.',
+      voice: 'A twittery, fussy little old Englishwoman; quick and fluttery, a bit flustered, warm underneath; high and bright when happy.',
+    },
+    pearl: {
+      name: 'Pearl',
+      art: pearl,
+      poses: { sad: pearlSad, sing: pearlSing, happy: pearlHappy },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hair', 'tail'],
+      about: 'Pearl, a young mermaid of the sunny cove, about eight: long wavy dark-brown hair with little shells in it, a coral-pink top, a pearl on a string, and a turquoise tail whose end curls up beside her on the right (part tail, flick it). She sings the tide in every evening, but she cannot sing with tangles in her hair, and she combs them out with her golden comb. The portrait has her hair in a tangle, worried; poses: sad (tangled, tears, a wobbly mouth), sing (hair combed smooth and shining, eyes shut, mouth open in song, hands at her chest), happy (combed smooth, a big smile, arms up). Show her sitting behind the cove-rock prop, which hides her from the waist down. Gentle, a bit dreamy, says “Oh, my!”; never cross.',
+      voice: 'A young girl of about eight, soft and sing-song, gentle southern English; tearful and small when sad, light and bubbling when happy.',
+    },
+    nipper: {
+      name: 'Old Nipper',
+      art: nipper,
+      poses: { snap: nipperSnap, sulk: nipperSulk, grin: nipperGrin },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'clawL', 'clawR'],
+      about: 'Old Nipper, a big grumpy red crab of the cove (as big as a dog): a round red shell with knobbly bumps, two eyes on stalks with bushy brows, a downturned mouth, and two huge claws (parts clawL and clawR, pivot at the elbow: open and shut them for a CLACK). He collects shiny things and hoards them in his dark cave, and says “MINE!” and “Pah!”. He clacks, snaps the air and scuttles sideways, but he never pinches anyone. Poses: snap (claws up wide open, cross brows, mouth open in a shout), sulk (claws drooping, a pout, eyes looking away), grin (claws up happily, a wide toothless smile). He is only grumpy because his cave is dark and lonely.',
+      voice: 'A crotchety old man with a gravelly, clicky voice and a Cornish burr; grumbling and shouty when cross, gruff-soft when he is touched.',
+    },
+    dozy: {
+      name: 'Old Dozy',
+      art: dozy,
+      poses: { yawn: dozyYawn, sleep: dozySleep, beam: dozyBeam },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Old Dozy, the Sandman of the Land of Nod: a kind, round, very sleepy old fellow in a long floppy striped nightcap (lilac and cream, a big white bobble), a warm sandy-gold dressing gown with a lilac collar, a fluffy white beard round his chin, bushy white brows and droopy, half-closed eyes. He carries a big sack of glittery sleepy-sand and sprinkles a pinch on everyone at bedtime for good dreams. He yawns all the time and nods off in the middle of a sentence (“And the most important thing is… zzz”), then wakes with a start: “Eh? Oh! Where was I?” Poses: yawn (arms stretched up, mouth wide, eyes shut), sleep (eyes shut, head drooped, a peaceful smile), beam (eyes open wide for once, a big warm smile). Never cross, never frightening.',
+      voice: 'A very old, kind man, soft and slow and drowsy, warm and a little creaky, with big yawns in his words; gentle English country voice.',
+    },
+    grizzle: {
+      name: 'Grizzle',
+      art: grizzle,
+      poses: { roar: grizzleRoar, sulk: grizzleSulk, beam: grizzleBeam },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR'],
+      about: 'Grizzle, the river troll who lives under the old wooden bridge (troll-bridge): big and knobbly, mossy grey-green skin, a huge lumpy nose, heavy craggy brows over small eyes, big floppy ears, a mop of rusty hair with a bit of pondweed in it, two small blunt teeth that poke up, and a patched sackcloth tunic. Shouts “Nobody crosses MY bridge!” and stomps, but he is only cross because his bridge is falling to bits and his fingers are too big for little nails, he is hungry, and nobody ever asks him to anything. Soft underneath, with a huge rumbling laugh once he has friends. Poses: roar (arms up, mouth wide, brows down: looms, never grabs), sulk (arms folded, bottom lip out, looking away), beam (a huge grin, arms open, laughing). He never touches anyone.',
+      voice: 'A big gruff troll: deep, rumbly and growly with a broad Yorkshire burr; grumpy and booming when cross, small and gruff when sad, then a huge rolling belly-laugh.',
+    },
+    prickles: {
+      name: 'Prickles',
+      art: prickles,
+      poses: { ball: pricklesBall, happy: pricklesHappy },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR'],
+      about: 'Prickles, the hedgehog postman: small and round, brown spines, a cream face with a pointed snout and a black button nose, a red postman’s cap, a navy jacket with gold buttons, and a red satchel full of letters. Fussy, polite and kind; very proud of always getting the post through, and easily startled. Poses: ball (curled up in a tight spiky ball when frightened, only his cap showing; roll him), happy (a big smile, waving a letter).',
+      voice: 'A small, fussy, kindly hedgehog: a middle-aged man, quick and a little breathless, with a soft Welsh lilt.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -264,6 +322,22 @@ export default defineWorld({
       art: toyCupboard,
       about: 'Inside the big old toy cupboard: dim brown planks, a crack of golden light down the left edge (x 22–60) lighting the floor, cobwebs in the top corners, a dusty top shelf (y 252) over the left with a drum, three skittles and a sleepy doll, and a grey rocking horse on the floor at the left (x 40–290, painted in). On the right three wooden ledges rise like stairs, their tops at y 570 (x 740–1200), y 470 (x 820–1200) and y 360 (x 890–1200): stand people and a toy box on them. Ground line y ≈ 640; open floor x 300–760. Dim but readable: add k.light on the actors’ faces.',
     },
+    'lost-land': {
+      art: lostLand,
+      about: 'The Land of Lost Things on a warm dreamy afternoon: duck-egg sky going apricot, soft clouds, and far rolling hills heaped with tiny lost socks, umbrellas, keys, kites, gloves, buttons, a teddy, hats and books. At the far left (x 20–230, y 392–612) the Keeper’s crooked wooden hut with a lit window (x 44–100, y 506–556), a crooked chimney and a leaning pigeonhole cabinet of odds and ends (x 168–230). Calm dusty sand from y 596; stray socks and buttons only at the edges. Ground line y ≈ 640; open ground x 250–1000 (stand actors at x 250–800; the tall lost-heap prop fits at about x 800–1100, w 360, with its bottom at y 640). Bottom band y 690+ is plain sand.',
+    },
+    'mermaid-cove': {
+      art: mermaidCove,
+      about: 'A sunny little cove at low tide: a soft blue sky with a warm sun at the top left, a grassy headland at the far left, the sea far out (a strip along y 330–420) beyond shiny wet sand, and warm dry sand from y 470 down. At the right a tall rocky outcrop (x 820–1180) with three rock steps up its left side (tops at about (850, 560), (905, 460) and the ledge (930–1140, 350)), a flat ledge for a hoard, and under it the dark mouth of Old Nipper’s cave (x 960–1150, y 420–640) with a little rock pool in front. Ground line y ≈ 640; open sand x 220–820, room for the chair and 3 actors. Put Pearl behind the cove-rock prop on the left. Lay the cove-tide prop over the bottom and slide it up for the tide coming in.',
+    },
+    'land-of-nod': {
+      art: landOfNod,
+      about: 'The Land of Nod at twilight: a soft violet sky with a few stars, a big sleepy crescent moon with a closed eye and a smile (upper right), round pillowy hills in lavender and rose, little houses shaped like floppy nightcaps with round glowing windows on the hills at the sides. Ground line y ≈ 640; open ground x 260–900, room for the chair and 3 actors. Pair with a soft k.light on the faces.',
+    },
+    'troll-bridge': {
+      art: trollBridge,
+      about: 'A green river valley on a sunny morning, seen side-on: a grassy near bank on the left (ground y ≈ 640, open x 20–320), a far bank on the right (ground y ≈ 640, x 880–1180) with a path up to three little cottages on the hill, and between them a calm river (water from y ≈ 650). An old, rickety humpbacked wooden bridge spans it: its walking surface runs from y ≈ 600 at each end (x 270 and 910) up to y ≈ 560 at the middle, with sagging rope rails on crooked posts (90 px high) and three old trestle legs (x 400, 590, 780) into the water; its walking surface is y 593 at x 300, 568 at 450, 560 at 590, 570 at 750, 598 at 900. The dark space under the deck (x 275–905, y 600–650, with a tiny washing line and a patched sock at x 420–570) is where the troll lives. Two planks are missing at the top of the hump (BRIDGE_GAP in trollbridge.ts): lay bridge-plank there to mend it, bridge-plank-broken to show the broken one dangling. Stand people on the banks (feet y 640) or on the deck (feet y ≈ 590).',
+    },
   },
   props: {
     'wishing-chair': {
@@ -308,6 +382,62 @@ export default defineWorld({
       art: jackBox,
       size: [250, 170],
       about: 'Jack-in-the-Box’s box with its lid shut: red with yellow stars, a crank on the right (the box itself is x 4–216 of the prop), a little dusty. Swap it for the jackInBox character (his pose boing) when he springs out.',
+    },
+    'lost-heap': {
+      art: lostHeap,
+      size: [360, 600],
+      about: 'THE great wobbly heap of lost things in the Land of Lost Things, 360 × 600, leaning right as it rises: a cushion, trunk and suitcases at the bottom, books, a birdcage, a horse’s head and a teapot in the middle, a hatbox and a top hat at the top. Bottom flat at y 600 (stands on the ground line). Three flat LEDGES up its left side for a small figure to stand on, in prop coordinates: A top y 440 (x 20–170, the trunk lid), B top y 300 (x 50–190, three big books), C top y 170 (x 80–210, a flat old case). The FLAT TOP of the top hat is at y 52, x 238–286: sit lost-ribbon there (centre about x 262, bottom edge at y 52). Everything from the books at y 300 upward is part top (origin 180, 300): sway it more than the base.',
+    },
+    'lost-ribbon': { art: lostRibbon, size: [120, 80], about: 'Mollie’s blue satin hair-ribbon tied in a bow with two tails (same blue and darker knot as her plaits). Reads best at w 60–100.' },
+    'lost-sock': { art: lostSock, size: [90, 120], about: 'One odd green-and-white striped sock (Peter’s), toe pointing down-right, heel on the left.' },
+    'lost-socks': { art: lostSocks, size: [180, 130], about: 'A big squashy armful of odd socks, mostly green-and-white striped, with a few other colours, toes and cuffs flopping out.' },
+    'lost-spectacles': { art: lostSpectacles, size: [120, 50], about: 'Half-moon gold-rimmed spectacles with arms and a little glint.' },
+    'lost-bell': {
+      art: lostBell,
+      size: [120, 240],
+      about: 'The Keeper’s brass hand-bell hanging from a curly iron bracket on a short wooden post (post bottom flat at y 240). The bell and its pull-cord are part bell, origin (90, 38) at the hook: rotate it to swing and ring.',
+    },
+    'lost-kite': { art: lostKite, size: [120, 160], about: 'A red-and-yellow diamond kite with a bow-tied tail, for drifting through the sky.' },
+    'lost-glove': { art: lostGlove, size: [90, 100], about: 'One red woolly glove with a ribbed cuff, for drifting through the sky.' },
+    'cove-rock': {
+      art: coveRock,
+      size: [360, 200],
+      about: 'Pearl’s rock: a big rounded grey-brown sea rock with limpets, barnacles and tufts of green seaweed, its flat top at about y 40 of the prop. Lay it over a mermaid (z above her) to hide her from the waist down, so she sits on it.',
+    },
+    'cove-tide': {
+      art: coveTide,
+      size: [1300, 300],
+      about: 'The tide coming in: a wide sheet of blue-green sea with a scalloped white foam edge along its top (y 0–40 of the prop) and calm paler bands below. Place it at x -60 below the stage and slide it up (to about y 560) to flood the sand; bob it gently once it is in.',
+    },
+    'cove-hoard': {
+      art: coveHoard,
+      size: [240, 120],
+      about: 'Old Nipper’s hoard of shiny things in a heap: old spoons, buttons, bottle tops, a teapot lid, a key, glass beads and a thimble, catching the light. Sits on the cove’s ledge; the golden comb (comb-golden) goes on top as its own prop.',
+    },
+    'comb-golden': {
+      art: combGolden,
+      size: [140, 70],
+      about: 'Pearl’s magic golden comb: a curved golden comb with fine teeth along the bottom and a little white pearl set in the middle of its top. Lying flat, teeth down.',
+    },
+    'sand-sack': {
+      art: sandSack,
+      size: [220, 240],
+      about: 'The Sandman’s big sack of sleepy-sand, slumped and burst: a split in its side with glittery gold sand spilling out (part spill: fade it out once it is mended), its neck open. A blue ribbon bow (part bow, hidden) ties its neck when it is mended: fade it in.',
+    },
+    'bridge-plank': {
+      art: bridgePlank,
+      size: [74, 44],
+      about: 'Two new, pale wooden boards side by side, with nail heads, exactly the size of the gap in the troll-bridge deck (74 × 44): place it at BRIDGE_GAP.x, BRIDGE_GAP.y with w = BRIDGE_GAP.w and it fills the gap so the deck looks mended. Carry it there, then hammer it.',
+    },
+    'bridge-plank-broken': {
+      art: bridgePlankBroken,
+      size: [90, 110],
+      about: 'The troll-bridge’s old broken board, dark and cracked, hinged at its top left and dangling down-right at an angle with a jagged end (place it at BRIDGE_GAP.x, BRIDGE_GAP.y, natural size 90 × 110). Fade or drop it away before the new plank goes in.',
+    },
+    'bridge-planks': {
+      art: bridgePlanks,
+      size: [220, 120],
+      about: 'A stack of five spare old boards lying on the grass, tied with two loops of rope (220 × 120, its bottom at the box bottom): stand it on a bank with y = 640 - 120 so it sits on the ground line.',
     },
   },
 });

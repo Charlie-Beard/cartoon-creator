@@ -4,6 +4,7 @@ person only has to judge the suspects (in /review.html) and ElevenLabs only
 re-records what is actually broken.
 
     pip install faster-whisper numpy
+    pip install nvidia-cublas-cu12 "nvidia-cudnn-cu12>=9,<10"   # optional: Whisper on an NVIDIA GPU (Windows)
     python scripts/voice/check.py                       # every clip → scripts/voice/qa.json
     python scripts/voice/check.py --cartoon lost-kettle # only the clips of one cartoon
     python scripts/voice/check.py --no-whisper          # only the length check (no install needed)
@@ -61,13 +62,50 @@ def duration(path):
     return float(out.strip() or 0)
 
 
-class Ears:
-    """Whisper, fed through ffmpeg (faster-whisper's own decoder is fussy about PyAV versions)."""
+def cuda_dlls():
+    """
+    On Windows, CUDA's runtime for faster-whisper comes as pip wheels
+    (pip install nvidia-cublas-cu12 "nvidia-cudnn-cu12>=9,<10"), whose DLLs
+    aren't on the search path until we put them there.
+    """
+    if os.name != "nt":
+        return
+    try:
+        import nvidia
+    except ImportError:
+        return
+    for base in nvidia.__path__:
+        for pkg in os.listdir(base):
+            b = os.path.join(base, pkg, "bin")
+            if os.path.isdir(b):
+                os.add_dll_directory(b)
+                os.environ["PATH"] = b + os.pathsep + os.environ["PATH"]
 
-    def __init__(self):
+
+class Ears:
+    """
+    Whisper, fed through ffmpeg (faster-whisper's own decoder is fussy about PyAV versions).
+
+    On an NVIDIA GPU it runs large-v3-turbo, which hears names and short
+    exclamations far better than small.en and is still about twice as fast as
+    small.en on the CPU; without CUDA it falls back to small.en on the CPU.
+    """
+
+    def __init__(self, cpu=False):
         global np
         import numpy as np
         from faster_whisper import WhisperModel
+        if not cpu:
+            cuda_dlls()
+            try:
+                import ctranslate2
+                if ctranslate2.get_cuda_device_count():
+                    self.m = WhisperModel("large-v3-turbo", device="cuda", compute_type="float16")
+                    self.m.transcribe(np.zeros(16000, dtype=np.float32), language="en")  # load the CUDA libraries now, not mid-run
+                    print("Whisper large-v3-turbo on the GPU", flush=True)
+                    return
+            except (RuntimeError, OSError) as e:
+                print(f"No GPU Whisper ({e}); using small.en on the CPU", flush=True)
         self.m = WhisperModel("small.en", device="cpu", compute_type="int8")
 
     def __call__(self, path):
@@ -101,9 +139,9 @@ def check_length(path, text):
 
 
 class Checker:
-    def __init__(self, data, whisper=True):
+    def __init__(self, data, whisper=True, cpu=False):
         self.text = {("lines", l["id"]): l["text"] for l in data["lines"]}
-        self.ears = Ears() if whisper else None
+        self.ears = Ears(cpu) if whisper else None
 
     def __call__(self, kind, cid, path):
         """(flags, hints) for one clip or take."""
@@ -119,11 +157,14 @@ def main():
     ap.add_argument("--cartoon", "--only", dest="cartoon", help="only the clips of the lines said in this cartoon")
     ap.add_argument("--no-whisper", action="store_true", help="skip transcription (only the length check)")
     ap.add_argument("--no-takes", action="store_true", help="don't check the earlier takes")
+    ap.add_argument("--cpu", action="store_true", help="small.en on the CPU even when there is a GPU")
     args = ap.parse_args()
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
 
     # lines.json is derived from the cartoons, not committed: rebuild it first.
     data = json.load(open(refresh_lines(), encoding="utf-8"))
-    check = Checker(data, whisper=not args.no_whisper)
+    check = Checker(data, whisper=not args.no_whisper, cpu=args.cpu)
     clips_dir = os.path.join(AUDIO, "lines")
     # The clips on disk (the same list Vite builds audio/manifest.json from).
     on_disk = sorted(f[:-4] for f in os.listdir(clips_dir) if f.endswith(".mp3")) if os.path.isdir(clips_dir) else []

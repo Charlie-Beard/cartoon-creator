@@ -8,7 +8,12 @@ lines are recorded: a cartoon has no questions or numbers to piece together.
 
 You need ElevenLabs (`ELEVENLABS_API_KEY` in your environment, **never in a
 file in this repo**), `ffmpeg`, and Python 3. For the automatic check also
-`pip install faster-whisper numpy`.
+`pip install faster-whisper numpy`. With an NVIDIA GPU, also
+`pip install nvidia-cublas-cu12 "nvidia-cudnn-cu12>=9,<10"` (on Windows; on
+Linux the system CUDA does): the check then runs Whisper `large-v3-turbo` on
+the GPU, about eight times faster than `small.en` on the CPU and much better at
+names and short exclamations. Without CUDA it falls back to the CPU by itself
+(`--cpu` forces that).
 
 ## Voicing one cartoon
 
@@ -51,7 +56,8 @@ its id, so record last.
    python scripts/voice/generate.py --cartoon lost-kettle
    ```
 
-   It records what is missing, then trims and levels each clip. A character with no voice stops it (it never uses someone
+   It records what is missing, four clips at a time (`--jobs N`; ElevenLabs
+   caps requests at once by plan, Creator 5, Pro 10), then trims and levels each clip. A character with no voice stops it (it never uses someone
    else's). If `--risky` clips come out wrong ("Hmph", "EH"), respell them in
    `config.json` under `say_as` and redo with `--force --risky`.
 

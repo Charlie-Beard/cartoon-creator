@@ -23,6 +23,7 @@ Choosing what to record (they combine):
     --risky                 only the lines export.ts thinks may come out wrong
     --limit 5               at most N clips, to audition a voice
     --force                 record again even if the clip exists
+    --jobs 4                clips recorded at once (the default)
 
 First, hear the lines text-to-speech often gets wrong (sounds like "Zzz",
 shouted CAPITALS) for a few hundred characters, and respell any that come
@@ -40,6 +41,7 @@ A clip that is replaced is kept in scripts/voice/takes/ (as "previous"),
 to switch back to in /review.html.
 """
 import argparse, json, os, re, shutil, sys, tempfile, time, urllib.error, urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
@@ -166,6 +168,7 @@ def main():
     ap.add_argument("--list-voices", action="store_true", help="print the voice IDs on your account")
     ap.add_argument("--redo", action="store_true", help="only the clips marked wrong in /review.html")
     ap.add_argument("--clips", help="only these clips, e.g. lines/1001tlp,lines/7a2")
+    ap.add_argument("--jobs", type=int, default=4, help="clips recorded at once (default 4; ElevenLabs caps it by plan)")
     ap.add_argument("--dry-run", action="store_true", help="print what would be sent and its cost; send nothing")
     ap.add_argument("--quiet", action="store_true", help="with --dry-run: only the totals")
     ap.add_argument("--manifest", action="store_true", help="no-op: the manifest is built automatically now")
@@ -255,17 +258,34 @@ def main():
                  "Record part of it (--cartoon, --speaker, --limit) or top up first.")
     print(f"Recording {summary}" + (f"; {left:,} left before" if left is not None else "") + ".", flush=True)
 
+    def record(j):
+        path = clip_path(j["id"])
+        with tempfile.TemporaryDirectory() as td:
+            tmp = os.path.join(td, "raw.mp3")
+            v.render(j, tmp)
+            stash("lines", j["id"])
+            encode(tmp, path)
+        return path
+
+    # Several clips at once: each is mostly waiting on ElevenLabs, then a
+    # second of ffmpeg on a local core. ElevenLabs caps requests at a time by
+    # plan (Creator 5, Pro 10) and answers 429 past that, which _request
+    # backs off from, so --jobs above the cap only slows things down.
     sent = 0
     try:
-        for i, j in enumerate(jobs, 1):
-            path = clip_path(j["id"])
-            with tempfile.TemporaryDirectory() as td:
-                tmp = os.path.join(td, "raw.mp3")
-                v.render(j, tmp)
-                sent += len(j["text"])
-                stash("lines", j["id"])
-                encode(tmp, path)
-            print(f"[{i}/{len(jobs)}] {j['speaker']}: wrote {os.path.relpath(path, ROOT)}", flush=True)
+        with ThreadPoolExecutor(max_workers=max(1, args.jobs)) as pool:
+            futures = {pool.submit(record, j): j for j in jobs}
+            try:
+                for i, f in enumerate(as_completed(futures), 1):
+                    j = futures[f]
+                    path = f.result()
+                    sent += len(j["text"])
+                    print(f"[{i}/{len(jobs)}] {j['speaker']}: wrote {os.path.relpath(path, ROOT)}", flush=True)
+            except BaseException:
+                # Stop sending more; the ones already sent finish, and a rerun carries on.
+                for f in futures:
+                    f.cancel()
+                raise
     finally:
         # Even when stopped part-way (Ctrl+C, an API error), list what was recorded; a rerun carries on.
         print(f"\nSent {sent:,} characters.")
