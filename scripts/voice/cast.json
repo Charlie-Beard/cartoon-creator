@@ -121,5 +121,7 @@
   "muddle": { "voice_id": "L1aJrPa7pLJEyYlh3Ilq", "name": "Oliver - Clean, British and Steady", "owner": "4e120f88d43f125a4c1f56885db63990e17568c80c5cca2f9f3a6459230fbeb1", "settings": { "stability": 0.5, "speed": 1.0 } },
   "starKeeper": { "voice_id": "0lp4RIz96WD1RUtvEu3Q", "name": "Grandfather Joe - Gentle, warm & wise", "owner": "34c483aaa9f266050bb548d8a3495b18c266f138401947fae23df13770cb6f7b", "settings": { "stability": 0.5, "speed": 1.0 } },
   "whale": { "voice_id": "2DwyWvJJS5LeWSltZbS6", "name": "Dan - Deep and Authentic Storyteller", "owner": "906607a32fe2ca6a408e996efaa58319ba8625ec72b932c5fc74005adb5d0de8", "settings": { "stability": 0.5, "speed": 1.0 } },
-  "muddlecup": { "voice_id": "aAsWcN5jdLdiYG7Hq0YL", "name": "Harriet - British Actress", "owner": "3f2ca29fd2019c4a0516b646c73c6f21140f676ac6d45236a2b5ef291bf8d8e1", "settings": { "stability": 0.5, "speed": 1.0 } }
+  "muddlecup": { "voice_id": "aAsWcN5jdLdiYG7Hq0YL", "name": "Harriet - British Actress", "owner": "3f2ca29fd2019c4a0516b646c73c6f21140f676ac6d45236a2b5ef291bf8d8e1", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "pearl": { "voice_id": "rCmVtv8cYU60uhlsOo1M", "name": "Ana - Emotional, Warm and Expressive", "owner": "76c9cb1aa5bde66e61587de2b16dd92ca167852393360a9c1f7e567f229a31b4", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "nipper": { "voice_id": "M5E055lOUxMi0kJpGyE9", "name": "Gravel Midnight – Deep Grit Character Voice", "owner": "72026985ddcf2e1b6cf05e05a8d5dc2e4d1b644e967553f8f6bf36210739d9a5", "settings": { "stability": 0.5, "speed": 1.0 } }
 }
