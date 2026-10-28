@@ -93,6 +93,16 @@ its id, so record last.
    each, and `review.json` is written with sorted keys and one verdict per line,
    so several cartoon PRs merge cleanly.
 
+## Auditing every clip at once
+
+`python scripts/voice/audit.py --serve` listens to every clip with Whisper
+`large-v3` (the most accurate one that fits in 16 GB; results are cached in
+`audit-cache.json`) and serves a page at <http://localhost:8765/> of the clips
+worth a listen, worst first. Keys: arrows move, Space plays, Y is Right, N is
+Wrong (type the note, Enter). Verdicts save to `review.json`, so
+`generate.py --redo` re-records the Wrong ones. `?ids=a,b,c` shows only those
+clips. `audit.html` and `audit-cache.json` are not committed.
+
 ## The files
 
 | File | What |
