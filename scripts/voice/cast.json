@@ -109,5 +109,16 @@
   "witchHazel": { "voice_id": "E4IXevHtHpKGh0bvrPPr", "name": "Emilia - Young, British and Engaging", "owner": "f47f37146809b7481fb8e55b2f9c3e5676a09f546195fcf2e114f252fe7c97bf", "settings": { "stability": 0.4, "speed": 1.05 } },
   "puff": { "voice_id": "bA58y3FqVI6b6gTNh0oT", "name": "Kavya - Cute & Engaging Character", "owner": "7398804d9eaf2f463899a907587c33a390591775784f87857b6d0e1e4e3e66f6", "settings": { "stability": 0.4, "speed": 0.95 } },
   "slyboots": { "voice_id": "fGIZlgPQ75MMlvQ6WxgY", "name": "Gerald - Exciting Older Character", "owner": "981267fcf71e91a066005ad65239898716b85010a5fbf21aada9b4d5aca9f0e1", "settings": { "stability": 0.35, "speed": 1.05 } },
-  "boa": { "voice_id": "LaDXAXAod3qiAkyfwUSV", "name": "Juliano - English with Brazilian Accent", "owner": "0df0316bef3afd4d681ef871016ca64bb956c534a528d6a681592bcbc44e8237", "settings": { "stability": 0.4, "speed": 0.85 } }
+  "boa": { "voice_id": "LaDXAXAod3qiAkyfwUSV", "name": "Juliano - English with Brazilian Accent", "owner": "0df0316bef3afd4d681ef871016ca64bb956c534a528d6a681592bcbc44e8237", "settings": { "stability": 0.4, "speed": 0.85 } },
+  "bluster": { "voice_id": "6sFKzaJr574YWVu4UuJF", "name": "Cornelius", "owner": "a72a436938f959ab051e6a27b035db67a4b75945b4d6e8c86ed40e6e946a2e11", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "brass": { "voice_id": "xru6qZB94sJdkyqP12qN", "name": "James - English Butler", "owner": "1f6f43b40b3c4d173c1fcb9377afb5df979ac7e2d478b7974ae1a5eb39047ccc", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "dabble": { "voice_id": "EQx6HGDYjkDpcli6vorJ", "name": "Lizzie - Cockney Character", "owner": "5214e3d3123945dcad0881d8743a206c4dbc617f34e858e8878c4fd90deb4892", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "jackFrost": { "voice_id": "chcMmmtY1cmQh2ye1oXi", "name": "Timmy", "owner": "ad827f2c0300d36094ca79e518b1a5df8c3609eb269353c30dcec3ac8878a437", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "jackInBox": { "voice_id": "wo6udizrrtpIxWGp2qJk", "name": "Northern Terry", "owner": "3d1fa6a5595e0a31fff8d7c1a2f2794b91ca87ddd200066dfbdfcef662a65a1b", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "littleStar": { "voice_id": "HzVnxqtdk9eqrcwfxD57", "name": "Jen - Relaxing, Soft and Storytelling", "owner": "5ec41cfd7b2a9c03e5819877091d908a8462134f113d3d73e54e89983139a5ac", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "mrMason": { "voice_id": "qkG6pQFWpZTnYnoQZGFs", "name": "Timothy Pemberton - British Posh", "owner": "c272124f6d23d31cb35ed1110e4a8bca5835fb30f2096db6074f2216e8576538", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "mrsMason": { "voice_id": "CmoLJ5IFIu3FQ1FZAYIK", "name": "Lorelai - Engaging, Elegant and Warm", "owner": "d6f30b81224f7160dafba6dfefe830e7d4084da6eb3d8569b2fcbb4acb27f9f2", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "muddle": { "voice_id": "L1aJrPa7pLJEyYlh3Ilq", "name": "Oliver - Clean, British and Steady", "owner": "4e120f88d43f125a4c1f56885db63990e17568c80c5cca2f9f3a6459230fbeb1", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "starKeeper": { "voice_id": "0lp4RIz96WD1RUtvEu3Q", "name": "Grandfather Joe - Gentle, warm & wise", "owner": "34c483aaa9f266050bb548d8a3495b18c266f138401947fae23df13770cb6f7b", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "whale": { "voice_id": "2DwyWvJJS5LeWSltZbS6", "name": "Dan - Deep and Authentic Storyteller", "owner": "906607a32fe2ca6a408e996efaa58319ba8625ec72b932c5fc74005adb5d0de8", "settings": { "stability": 0.5, "speed": 1.0 } }
 }
