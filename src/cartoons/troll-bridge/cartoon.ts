@@ -144,7 +144,6 @@ export default defineCartoon({
     sadHedgehog: { who: 'mollie', text: 'And there’s a little hedgehog. He looks ever so sad.' },
     pricklesHello: { who: 'prickles', text: 'Good morning. I’m Prickles, the postman.' },
     pricklesStuck: { who: 'prickles', text: 'I’ve got letters for the village. But I can’t get across!' },
-    whyNot: { who: 'jigs', text: 'Why ever not? There’s a bridge!' },
     pricklesTroll: { who: 'prickles', text: 'Shh! A troll lives under it. And he won’t let anybody cross.' },
     notScared: { who: 'peter', text: 'A troll? Pooh! I’m not scared. Watch me.' },
     ohMyPrickles: { who: 'prickles', text: 'Oh my prickles! Here he comes!' },
@@ -156,7 +155,7 @@ export default defineCartoon({
     // 3. A hole in the bridge
     whatsTheMatter: { who: 'mollie', text: 'Please, Mr Troll. What’s the matter?' },
     grizzleName: { who: 'grizzle', text: 'I’m Grizzle. And my bridge is falling to bits, that’s what!' },
-    lookHole: { who: 'grizzle', text: 'Look at that big hole! If folk tramp on it, my bridge will fall down.' },
+    lookHole: { who: 'grizzle', text: 'Look at that big hole! If people walk on it, my bridge will fall down.' },
     bigFingers: { who: 'grizzle', text: 'I’ve got planks. But my fingers are too big for the little nails.' },
     weCanMend: { who: 'peter', text: 'My fingers are little. And I brought my hammer!' },
     outWithOld: { who: 'peter', text: 'First, out with the old one!' },
@@ -164,8 +163,7 @@ export default defineCartoon({
     hammerTime: { who: 'peter', text: 'Hold still, little plank. Bang, bang, bang!' },
     testIt: { who: 'peter', text: 'Now let’s test it. One, two, three, jump!' },
     itHolds: { who: 'grizzle', text: 'It holds! It really holds!' },
-    thunder: { who: 'jigs', text: 'Ooh! Is that thunder?' },
-    tummyLine: { who: 'grizzle', text: 'No. That’s my tummy. I haven’t eaten all day.' },
+    tummyLine: { who: 'grizzle', text: 'Ooh. That’s my tummy rumbling. I haven’t eaten all day.' },
     // 4. Pie for a troll
     haveSomePie: { who: 'mollie', text: 'Then you must have some of our pie!' },
     bestPie: { who: 'grizzle', text: 'Mmm! Blackberry! That’s the best pie I ever had.' },
@@ -182,13 +180,11 @@ export default defineCartoon({
     bestPicnic: { who: 'mollie', text: 'This is the best picnic ever!' },
     firstFriends: { who: 'grizzle', text: 'My first picnic. And my first friends! Har, har, har!' },
     chairBack: { who: 'jigs', text: 'Look, here comes the chair. Its wings are getting tired.' },
-    timeToGo: { who: 'mollie', text: 'We must get home before they fold away.' },
     shinyStone: { who: 'grizzle', text: 'Wait! Take this shiny stone from my river, to remember me.' },
-    thankYou: { who: 'mollie', text: 'Thank you, Grizzle!' },
     byeGrizzle: { who: 'peter', text: 'Goodbye, Grizzle! We’ll come back for another picnic!' },
     onTheSill: { who: 'mollie', text: 'Grizzle’s stone can go on the windowsill.' },
     sparkles: { who: 'jigs', text: 'Look how it sparkles! Just like his river.' },
-    end: { who: 'narrator', text: 'And from that day on, anyone could cross Grizzle’s bridge. If they said hello!' },
+    end: { who: 'narrator', text: 'And from that day on, everyone could cross Grizzle’s bridge. And he always had friends for picnics.' },
   },
   scenes: [
     // ==================================================== 1. A picnic pie
@@ -276,15 +272,14 @@ export default defineCartoon({
         await landWith(k, ride, [bk]);
 
         // Mollie and Peter hop out; Jigs stays perched on the chair's arm.
-        await chairRide.hopOff(k, ride, mollie, { x: 96, y: 405, w: 200 });
         await chairRide.hopOff(k, ride, peter, { x: 432, y: 352, w: 200 });
+        await chairRide.hopOff(k, ride, mollie, { x: 96, y: 405, w: 200 });
         k.set(bk, { zIndex: 17 });
         await k.to(bk, 0.5, { ...at(bk, 230, 600), ease: 'sine.inOut' });
         k.fx.thud();
         await k.say('sadHedgehog', mollie);
         await k.say('pricklesHello', prickles);
         await k.say('pricklesStuck', prickles);
-        await k.say('whyNot', jigs);
         await k.say('pricklesTroll', prickles);
 
         // Peter isn't scared: he walks out onto the bridge. Creak...
@@ -335,7 +330,7 @@ export default defineCartoon({
         k.pose(grizzle, 'sulk');
         await k.say('goAway', grizzle);
         k.fx.splash();
-        await k.to(grizzle, 1.4, { y: 150, ease: 'sine.inOut' });
+        await k.to(grizzle, 1.4, { y: 195, ease: 'sine.inOut' });
         await k.wait(600);
         k.music('dreamy');
         await k.say('notCross', mollie);
@@ -356,7 +351,7 @@ export default defineCartoon({
         cast.jigs = k.character('jigs', { x: 14, y: 468, w: 140, z: 11 });
         cast.mollie = k.character('mollie', { x: 150, y: 405, w: 200, z: 11 });
         cast.peter = k.character('peter', { x: 352, y: 352, w: 200, z: 11 });
-        cast.grizzle = k.character('grizzle', { x: 720, y: 400, w: 340, z: 8, pose: 'sulk' });
+        cast.grizzle = k.character('grizzle', { x: 720, y: 445, w: 340, z: 8, pose: 'sulk' });
         cast.hammer = k.add(hammer(), { x: 538, y: 535, w: 80, z: 15, flip: true });
         k.set(cast.hammer, { transformOrigin: '8% 86%', opacity: 0 });
       },
@@ -419,7 +414,6 @@ export default defineCartoon({
         // A rumble like thunder... it's Grizzle's tummy.
         tummy(1.6);
         await k.all(k.shake(jigs, 3, 2), k.wait(1100));
-        await k.say('thunder', jigs);
         k.pose(grizzle, 'sulk');
         await k.say('tummyLine', grizzle);
         await k.wait(400);
@@ -441,7 +435,7 @@ export default defineCartoon({
         cast.pie = k.add(pie(), { x: 210, y: 520, w: 130, z: 15 });
         cast.slice = k.add(pieSlice(), { x: 278, y: 552, w: 54, z: 16 });
         k.set([cast.pie, cast.slice], { opacity: 0 });
-        cast.grizzle = k.character('grizzle', { x: 690, y: 380, w: 340, z: 8, pose: 'sulk' });
+        cast.grizzle = k.character('grizzle', { x: 690, y: 420, w: 340, z: 8, pose: 'sulk' });
         cast.jelly = k.add(jelly(), { x: 790, y: 566, w: 130, z: 9 });
         k.set(cast.jelly, { y: 520 });
         cast.prickles = k.character('prickles', { x: -260, y: 200, w: 130, z: 22, pose: 'ball' });
@@ -457,7 +451,7 @@ export default defineCartoon({
         k.set(slice, { opacity: 1 });
         k.set(k.part(p, 'slice'), { opacity: 0 });
         k.set(k.part(p, 'gap'), { opacity: 1 });
-        await k.carry(slice, [860, 600], 1.3);
+        await k.carry(slice, [860, 635], 1.3);
         k.pose(grizzle, 'default');
         munch(3);
         await k.to(slice, 0.9, { scale: 0.2, opacity: 0, ease: 'sine.in' });
@@ -473,7 +467,7 @@ export default defineCartoon({
         await k.hop(grizzle, 30, 1);
         await k.say('fetchFood', grizzle);
         k.fx.splash();
-        await k.exit(grizzle, 'bottom', 0.9);
+        await k.all(k.exit(grizzle, 'bottom', 0.9), k.fade(grizzle, 0, 0.5));
         k.set(grizzle, { opacity: 0 });
 
         // Prickles comes bouncing back, right over everyone, and across the mended bridge.
@@ -500,8 +494,8 @@ export default defineCartoon({
         k.remove(prickles);
 
         // Grizzle comes back up, with his picnic food.
-        k.set(grizzle, { opacity: 1 });
         k.pose(grizzle, 'beam');
+        void k.wait(500).then(() => k.fade(grizzle, 1, 0.5));
         await k.all(k.to(grizzle, 1.1, { y: 0, ease: 'power2.out' }), k.to(jl, 1.1, { y: 0, ease: 'power2.out' }));
         wobble();
         await k.to(k.part(jl, 'wobble'), 0.18, { scaleX: 1.08, scaleY: 0.94, yoyo: true, repeat: 3, ease: 'sine.inOut' });
@@ -552,14 +546,13 @@ export default defineCartoon({
         await k.all(k.to(ride.chair, 1.6, { x: 0, ease: 'sine.out' }), k.to(ride.front, 1.6, { x: 0, ease: 'sine.out' }));
         await wishing.droop(k, ride.chair);
         await k.say('chairBack', jigs);
-        await k.say('timeToGo', mollie);
 
         // Grizzle's present: a shiny stone from his river.
         await k.say('shinyStone', grizzle);
         k.fx.twinkle();
         await k.appear(st, 0.4);
         await k.carry(st, mollie, 1.1);
-        await k.all(k.say('thankYou', mollie), k.vanish(st, 0.3));
+        await k.all(k.hop(mollie, 16, 1), k.vanish(st, 0.3));
 
         // A wave from the sky as they fly away.
         await k.cut(() => {
@@ -580,7 +573,7 @@ export default defineCartoon({
           ride = chairRide.set(k, { x: 780, y: 280, w: 400, wings: true, riders: RIDERS });
           [cast.mollie, cast.peter, cast.jigs] = ride.riders;
           chairRide.jump(k, ride, { x: 0, y: -800 });
-          cast.birdbox = k.add(birdBox(), { x: 380, y: 522, w: 100, z: 12 });
+          cast.birdbox = k.add(birdBox(), { x: 600, y: 522, w: 100, z: 12 });
           cast.stone = k.add(stone(), { x: 560, y: 470, w: 60, z: 20 });
           k.set(cast.stone, { opacity: 0 });
         });
