@@ -123,5 +123,6 @@
   "whale": { "voice_id": "2DwyWvJJS5LeWSltZbS6", "name": "Dan - Deep and Authentic Storyteller", "owner": "906607a32fe2ca6a408e996efaa58319ba8625ec72b932c5fc74005adb5d0de8", "settings": { "stability": 0.5, "speed": 1.0 } },
   "muddlecup": { "voice_id": "aAsWcN5jdLdiYG7Hq0YL", "name": "Harriet - British Actress", "owner": "3f2ca29fd2019c4a0516b646c73c6f21140f676ac6d45236a2b5ef291bf8d8e1", "settings": { "stability": 0.5, "speed": 1.0 } },
   "pearl": { "voice_id": "rCmVtv8cYU60uhlsOo1M", "name": "Ana - Emotional, Warm and Expressive", "owner": "76c9cb1aa5bde66e61587de2b16dd92ca167852393360a9c1f7e567f229a31b4", "settings": { "stability": 0.5, "speed": 1.0 } },
-  "nipper": { "voice_id": "M5E055lOUxMi0kJpGyE9", "name": "Gravel Midnight – Deep Grit Character Voice", "owner": "72026985ddcf2e1b6cf05e05a8d5dc2e4d1b644e967553f8f6bf36210739d9a5", "settings": { "stability": 0.5, "speed": 1.0 } }
+  "nipper": { "voice_id": "M5E055lOUxMi0kJpGyE9", "name": "Gravel Midnight – Deep Grit Character Voice", "owner": "72026985ddcf2e1b6cf05e05a8d5dc2e4d1b644e967553f8f6bf36210739d9a5", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "dozy": { "voice_id": "WdZjiN0nNcik2LBjOHiv", "name": "David - Raspy and Soft", "owner": "70b349a69443847708b96adc21f73c31e4f86fceffc599a9bf3fe5ac57bd41f6", "settings": { "stability": 0.5, "speed": 1.0 } }
 }
