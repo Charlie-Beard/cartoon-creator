@@ -69,7 +69,8 @@ const { wave } = commonMoves;
 
 type Name =
   | 'mollie' | 'peter' | 'jigs' | 'dozy' | 'sack'
-  | 'sand' | 'hanky' | 'broom' | 'heap' | 'ribbon' | 'feather' | 'twist';
+  | 'sand' | 'hanky' | 'broom' | 'heap' | 'ribbon' | 'feather' | 'twist'
+  | 'spilt0' | 'spilt1' | 'spilt2';
 const cast = {} as Record<Name, HTMLElement>;
 let ride: Ride;
 
@@ -81,11 +82,13 @@ const THREE: { id: string; slot: 'left' | 'right' | 'armL' }[] = [
 ];
 
 /** The chair in the Land of Nod, and where Mollie, Peter, the sack and Old Dozy stand. */
-const NOD_CHAIR = { x: 20, y: 290, w: 400 };
+const NOD_CHAIR = { x: 40, y: 290, w: 400 };
 const MOLLIE_AT = { x: 430, y: 380, w: 210 };
 const PETER_AT = { x: 640, y: 380, w: 210 };
 const SACK_AT = { x: 800, y: 466, w: 170 };
 const DOZY_AT = { x: 930, y: 360, w: 240 };
+/** Patches of spilt sleepy-sand on the ground in scene 3 (top-left of each), swept into the heap one by one. */
+const SPILT: [number, number][] = [[430, 612], [720, 640], [520, 650]];
 
 // ------------------------------------------------------------- helpers
 
@@ -269,7 +272,8 @@ export default defineCartoon({
     // 3. Sweep it up
     quick: { who: 'mollie', text: 'Quick, Peter. Let’s get the sand back in the sack, before we fall asleep too.' },
     hereBroom: { who: 'dozy', text: 'Here’s my broom. Sweep it all into a heap.' },
-    holdSack: { who: 'peter', text: 'What a big, sparkly heap! I’ll hold the sack open. In it goes!' },
+    bigHeap: { who: 'mollie', text: 'Swish, swish! What a big, sparkly heap.' },
+    holdSack: { who: 'peter', text: 'I’ll hold the sack open. In it goes!' },
     mollieSleepy: { who: 'mollie', text: 'Peter, I feel so… sleepy.' },
     keepAwake: { who: 'peter', text: 'Keep your eyes open, Mollie! We’re nearly done.' },
     stillHole: { who: 'dozy', text: 'Oh dear, there’s still a hole. And the most important thing is…' },
@@ -462,6 +466,8 @@ export default defineCartoon({
         k.set(cast.broom, { opacity: 0 });
         cast.heap = k.add(heap(), { x: 560, y: 570, w: 170, z: 19 });
         k.set(cast.heap, { opacity: 0, scale: 0.3, transformOrigin: '50% 100%' });
+        // Sleepy-sand spilt on the ground, for Mollie to sweep up.
+        SPILT.forEach(([x, y], i) => (cast[`spilt${i}` as Name] = k.add(cushionSand(), { x, y, w: 110, z: 17 })));
         cast.ribbon = k.add(ribbon(), { x: 440, y: 420, w: 100, z: 20 });
         k.set(cast.ribbon, { opacity: 0 });
       },
@@ -475,16 +481,18 @@ export default defineCartoon({
         await k.all(k.say('hereBroom', dozy), k.appear(brush, 0.4));
         await k.carry(brush, [600, 560], 1);
         k.set(brush, { transformOrigin: '50% 10%' });
-        for (const s of [0.55, 0.8, 1]) {
+        for (const [i, s] of [0.55, 0.8, 1].entries()) {
+          const spilt = cast[`spilt${i}` as Name];
           swish();
           await k.to(brush, 0.3, { rotation: 18, ease: 'sine.inOut' });
           swish();
           await k.to(brush, 0.3, { rotation: -14, ease: 'sine.inOut' });
-          await k.to(pile, 0.3, { opacity: 1, scale: s, ease: 'sine.out' });
+          await k.all(k.to(spilt, 0.4, { ...at(spilt, 645, 620), opacity: 0, scale: 0.5, ease: 'sine.in' }), k.to(pile, 0.4, { opacity: 1, scale: s, ease: 'sine.out' }));
         }
         await k.to(brush, 0.3, { rotation: 0 });
         k.flourish(pile);
         await k.hop(mollie, 16, 1);
+        await k.say('bigHeap', mollie);
         void k.fade(brush, 0, 0.5);
 
         // Peter holds the sack open, and the heap goes in.
