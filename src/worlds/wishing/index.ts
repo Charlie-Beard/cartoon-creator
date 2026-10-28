@@ -50,6 +50,8 @@ import { nipper, nipperGrin, nipperSnap, nipperSulk } from './nipper';
 import { combGolden, coveHoard, coveRock, coveTide, mermaidCove } from './cove';
 import { dozy, dozyBeam, dozySleep, dozyYawn } from './dozy';
 import { landOfNod, sandSack } from './landofnod';
+import { bunloaf, bunloafBeam, bunloafFluster } from './bunloaf';
+import { birthdayCake, birthdayLand, candle, paperChain } from './birthday';
 
 export default defineWorld({
   id: 'wishing',
@@ -252,6 +254,14 @@ export default defineWorld({
       about: 'Prickles, the hedgehog postman: small and round, brown spines, a cream face with a pointed snout and a black button nose, a red postman’s cap, a navy jacket with gold buttons, and a red satchel full of letters. Fussy, polite and kind; very proud of always getting the post through, and easily startled. Poses: ball (curled up in a tight spiky ball when frightened, only his cap showing; roll him), happy (a big smile, waving a letter).',
       voice: 'A small, fussy, kindly hedgehog: a middle-aged man, quick and a little breathless, with a soft Welsh lilt.',
     },
+    bunloaf: {
+      name: 'Mr Bunloaf',
+      art: bunloaf,
+      poses: { fluster: bunloafFluster, beam: bunloafBeam },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Mr Bunloaf, the Birthday Baker of the Land of Birthdays, where it is somebody’s birthday every day: a small, plump, bustling brownie with little pointed ears, a tall floppy white chef’s hat (part hat: wobble it, let it flop), big rosy cheeks, flour on his nose, a curly ginger moustache, a red-and-white striped shirt with the sleeves rolled up and a white apron round his round tummy. He always has his wooden spoon (with a dab of pink icing) in his right hand: it goes with armR. Faces the front. Running joke: he wishes everyone “Happy birthday!” whether or not it is their birthday (“It’s not my birthday.” “Happy birthday anyway!”). Busy and breathless, says “Oh my buns and biscuits!” in a flap. The plain portrait is him busy and jolly, spoon held up. Poses: fluster (both hands up by his head, worried brows, a round “oh!”, hat flopped right over), beam (arms flung wide, a huge smile). Never cross, never unkind.',
+      voice: 'Jolly, bustling, warm, a bit breathless; a merry British baker, a plump middle-aged man with a round chuckly voice.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -337,6 +347,10 @@ export default defineWorld({
     'troll-bridge': {
       art: trollBridge,
       about: 'A green river valley on a sunny morning, seen side-on: a grassy near bank on the left (ground y ≈ 640, open x 20–320), a far bank on the right (ground y ≈ 640, x 880–1180) with a path up to three little cottages on the hill, and between them a calm river (water from y ≈ 650). An old, rickety humpbacked wooden bridge spans it: its walking surface runs from y ≈ 600 at each end (x 270 and 910) up to y ≈ 560 at the middle, with sagging rope rails on crooked posts (90 px high) and three old trestle legs (x 400, 590, 780) into the water; its walking surface is y 593 at x 300, 568 at 450, 560 at 590, 570 at 750, 598 at 900. The dark space under the deck (x 275–905, y 600–650, with a tiny washing line and a patched sock at x 420–570) is where the troll lives. Two planks are missing at the top of the hump (BRIDGE_GAP in trollbridge.ts): lay bridge-plank there to mend it, bridge-plank-broken to show the broken one dangling. Stand people on the banks (feet y 640) or on the deck (feet y ≈ 590).',
+    },
+    'birthday-land': {
+      art: birthdayLand,
+      about: 'The Land of Birthdays on a bright afternoon: a clear blue sky, a soft sun, green hills with a little street of cake-shaped cottages (icing roofs, a cherry on top, a candle chimney; small and far, tops below y 470 in the middle). At the left (x 0–300) Mr Bunloaf’s bakery, built like a two-tier cake, with a pink-and-white striped awning (y 330–420), a window full of cakes (x 22–168, y 440–570), a red door (x 196–272) and a bunch of balloons at the awning’s right end. At the right the CANDLE TREE (CANDLE_TREE in birthday.ts): trunk middle x 1030 (x ≈ 995–1065 low down), knot footholds at (1022, 570), (1044, 505), (1016, 440), (1040, 375); a long flat bough reaching left near the top with its upper surface at y ≈ 290 from x 860 to 1010 (stand Peter on it: feet y 290, e.g. w 170 at x 880–960, y ≈ 95); little unlit candles in leaf-cups on every branch, the best ones (bigger, gold-striped, twinkling) at the top, y 50–200, x 920–1160. Bunting from the bakery to the tree, all above y 300. Ground line y ≈ 640, soft grass with a pale sugar path; open ground x 300–880, room for the chair and 3–4 actors.',
     },
   },
   props: {
@@ -438,6 +452,21 @@ export default defineWorld({
       art: bridgePlanks,
       size: [220, 120],
       about: 'A stack of five spare old boards lying on the grass, tied with two loops of rope (220 × 120, its bottom at the box bottom): stand it on a bank with y = 640 - 120 so it sits on the ground line.',
+    },
+    'birthday-cake': {
+      art: birthdayCake,
+      size: [300, 260],
+      about: 'A big round two-tier birthday cake on a china plate: pink bottom tier with white drips, piped swags and five cherries; white top tier with pink drips. Five cream-and-gold candles on top (part candles; each also its own part candle1…candle5, left to right: set them to opacity 0 and fade each in as it is put on). Part flames (hidden) holds the five flames and their soft glows (flame1…flame5, origin at each wick, for a gentle flicker): fade flames in to light them, out to blow them out. Plate bottom at the box bottom.',
+    },
+    candle: {
+      art: candle,
+      size: [60, 140],
+      about: 'One loose birthday candle from the candle tree: cream with gold stripes, a little green leaf-cup on its bottom, a twinkle, unlit. Part flame (hidden, origin at the wick) lights it. Reads well at w 30–50.',
+    },
+    'paper-chain': {
+      art: paperChain,
+      size: [600, 120],
+      about: 'A paper chain of interlocking loops in red, yellow, blue, green, pink and purple, swagging in one curve from a brass pin at each top corner down to about y 96 in the middle. Hang it across a room (w 400–700).',
     },
   },
 });
