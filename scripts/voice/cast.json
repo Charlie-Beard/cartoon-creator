@@ -124,5 +124,7 @@
   "muddlecup": { "voice_id": "aAsWcN5jdLdiYG7Hq0YL", "name": "Harriet - British Actress", "owner": "3f2ca29fd2019c4a0516b646c73c6f21140f676ac6d45236a2b5ef291bf8d8e1", "settings": { "stability": 0.5, "speed": 1.0 } },
   "pearl": { "voice_id": "rCmVtv8cYU60uhlsOo1M", "name": "Ana - Emotional, Warm and Expressive", "owner": "76c9cb1aa5bde66e61587de2b16dd92ca167852393360a9c1f7e567f229a31b4", "settings": { "stability": 0.5, "speed": 1.0 } },
   "nipper": { "voice_id": "M5E055lOUxMi0kJpGyE9", "name": "Gravel Midnight – Deep Grit Character Voice", "owner": "72026985ddcf2e1b6cf05e05a8d5dc2e4d1b644e967553f8f6bf36210739d9a5", "settings": { "stability": 0.5, "speed": 1.0 } },
-  "dozy": { "voice_id": "WdZjiN0nNcik2LBjOHiv", "name": "David - Raspy and Soft", "owner": "70b349a69443847708b96adc21f73c31e4f86fceffc599a9bf3fe5ac57bd41f6", "settings": { "stability": 0.5, "speed": 1.0 } }
+  "dozy": { "voice_id": "WdZjiN0nNcik2LBjOHiv", "name": "David - Raspy and Soft", "owner": "70b349a69443847708b96adc21f73c31e4f86fceffc599a9bf3fe5ac57bd41f6", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "grizzle": { "voice_id": "q1h5HGdnfVxp4TXTJRNN", "name": "Gideon - Rugged, Gravelly & Northern", "owner": "655db62473dfb65f630c66cab2df71a87da6f912f5ac05ca869b852e1b7f9489", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "prickles": { "voice_id": "h9CKu0pq1LSjIPhJEGCv", "name": "Nathaniel C – Kid's Bedtime Storyteller", "owner": "7398804d9eaf2f463899a907587c33a390591775784f87857b6d0e1e4e3e66f6", "settings": { "stability": 0.5, "speed": 1.0 } }
 }
