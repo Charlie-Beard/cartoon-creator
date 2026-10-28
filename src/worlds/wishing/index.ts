@@ -40,6 +40,9 @@ import { jackInBox, jackInBoxBoing, jackInBoxGrin, jackInBoxSulk, jackBox } from
 import { brass, brassSalute, brassWorried } from './brass';
 import { toylandStation, toyCupboard } from './toyland';
 import { toyTrain, toyTruck, toyTruckFront } from './toytrain';
+import { pearl, pearlHappy, pearlSad, pearlSing } from './pearl';
+import { nipper, nipperGrin, nipperSnap, nipperSulk } from './nipper';
+import { combGolden, coveHoard, coveRock, coveTide, mermaidCove } from './cove';
 
 export default defineWorld({
   id: 'wishing',
@@ -194,6 +197,22 @@ export default defineWorld({
       about: 'Sergeant Brass, the toy-soldier engine driver of Toyland: a wooden soldier with a tall black busby hat (gold cord), round red cheek spots, a red jacket with gold buttons and white cross-belts, a curly painted moustache. Fussy, stiff and kind: marches, salutes, says “Oh dear, oh dear!” when something goes wrong. Poses: salute (hand to his busby, a proud grin), worried (brows up, round “oh” mouth, hands wringing).',
       voice: 'A fussy, plummy little man, brisk and clipped like a drill sergeant but gentle; flustered and fluttery when worried; proud and booming for “All aboard!”.',
     },
+    pearl: {
+      name: 'Pearl',
+      art: pearl,
+      poses: { sad: pearlSad, sing: pearlSing, happy: pearlHappy },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hair', 'tail'],
+      about: 'Pearl, a young mermaid of the sunny cove, about eight: long wavy dark-brown hair with little shells in it, a coral-pink top, a pearl on a string, and a turquoise tail whose end curls up beside her on the right (part tail, flick it). She sings the tide in every evening, but she cannot sing with tangles in her hair, and she combs them out with her golden comb. The portrait has her hair in a tangle, worried; poses: sad (tangled, tears, a wobbly mouth), sing (hair combed smooth and shining, eyes shut, mouth open in song, hands at her chest), happy (combed smooth, a big smile, arms up). Show her sitting behind the cove-rock prop, which hides her from the waist down. Gentle, a bit dreamy, says “Oh, my!”; never cross.',
+      voice: 'A young girl of about eight, soft and sing-song, gentle southern English; tearful and small when sad, light and bubbling when happy.',
+    },
+    nipper: {
+      name: 'Old Nipper',
+      art: nipper,
+      poses: { snap: nipperSnap, sulk: nipperSulk, grin: nipperGrin },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'clawL', 'clawR'],
+      about: 'Old Nipper, a big grumpy red crab of the cove (as big as a dog): a round red shell with knobbly bumps, two eyes on stalks with bushy brows, a downturned mouth, and two huge claws (parts clawL and clawR, pivot at the elbow: open and shut them for a CLACK). He collects shiny things and hoards them in his dark cave, and says “MINE!” and “Pah!”. He clacks, snaps the air and scuttles sideways, but he never pinches anyone. Poses: snap (claws up wide open, cross brows, mouth open in a shout), sulk (claws drooping, a pout, eyes looking away), grin (claws up happily, a wide toothless smile). He is only grumpy because his cave is dark and lonely.',
+      voice: 'A crotchety old man with a gravelly, clicky voice and a Cornish burr; grumbling and shouty when cross, gruff-soft when he is touched.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -264,6 +283,10 @@ export default defineWorld({
       art: toyCupboard,
       about: 'Inside the big old toy cupboard: dim brown planks, a crack of golden light down the left edge (x 22–60) lighting the floor, cobwebs in the top corners, a dusty top shelf (y 252) over the left with a drum, three skittles and a sleepy doll, and a grey rocking horse on the floor at the left (x 40–290, painted in). On the right three wooden ledges rise like stairs, their tops at y 570 (x 740–1200), y 470 (x 820–1200) and y 360 (x 890–1200): stand people and a toy box on them. Ground line y ≈ 640; open floor x 300–760. Dim but readable: add k.light on the actors’ faces.',
     },
+    'mermaid-cove': {
+      art: mermaidCove,
+      about: 'A sunny little cove at low tide: a soft blue sky with a warm sun at the top left, a grassy headland at the far left, the sea far out (a strip along y 330–420) beyond shiny wet sand, and warm dry sand from y 470 down. At the right a tall rocky outcrop (x 820–1180) with three rock steps up its left side (tops at about (850, 560), (905, 460) and the ledge (930–1140, 350)), a flat ledge for a hoard, and under it the dark mouth of Old Nipper’s cave (x 960–1150, y 420–640) with a little rock pool in front. Ground line y ≈ 640; open sand x 220–820, room for the chair and 3 actors. Put Pearl behind the cove-rock prop on the left. Lay the cove-tide prop over the bottom and slide it up for the tide coming in.',
+    },
   },
   props: {
     'wishing-chair': {
@@ -308,6 +331,26 @@ export default defineWorld({
       art: jackBox,
       size: [250, 170],
       about: 'Jack-in-the-Box’s box with its lid shut: red with yellow stars, a crank on the right (the box itself is x 4–216 of the prop), a little dusty. Swap it for the jackInBox character (his pose boing) when he springs out.',
+    },
+    'cove-rock': {
+      art: coveRock,
+      size: [360, 200],
+      about: 'Pearl’s rock: a big rounded grey-brown sea rock with limpets, barnacles and tufts of green seaweed, its flat top at about y 40 of the prop. Lay it over a mermaid (z above her) to hide her from the waist down, so she sits on it.',
+    },
+    'cove-tide': {
+      art: coveTide,
+      size: [1300, 300],
+      about: 'The tide coming in: a wide sheet of blue-green sea with a scalloped white foam edge along its top (y 0–40 of the prop) and calm paler bands below. Place it at x -60 below the stage and slide it up (to about y 560) to flood the sand; bob it gently once it is in.',
+    },
+    'cove-hoard': {
+      art: coveHoard,
+      size: [240, 120],
+      about: 'Old Nipper’s hoard of shiny things in a heap: old spoons, buttons, bottle tops, a teapot lid, a key, glass beads and a thimble, catching the light. Sits on the cove’s ledge; the golden comb (comb-golden) goes on top as its own prop.',
+    },
+    'comb-golden': {
+      art: combGolden,
+      size: [140, 70],
+      about: 'Pearl’s magic golden comb: a curved golden comb with fine teeth along the bottom and a little white pearl set in the middle of its top. Lying flat, teeth down.',
     },
   },
 });
