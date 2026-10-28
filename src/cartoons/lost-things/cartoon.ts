@@ -22,8 +22,9 @@
  *   3. The spectacles. She has looked in the teapot, in the boots,
  *      everywhere. Peter giggles: they're on top of her head! Mollie lifts
  *      them down on to her nose (deed). She can see! "Finders keepers? Oh,
- *      fiddlesticks!" Mollie found her spectacles, so Mollie shall have her
- *      ribbon. But blue ribbons are filed at the very top of the great heap.
+ *      fiddlesticks!" Mollie found her lost spectacles, so she will find
+ *      Mollie's lost ribbon: fair's fair. But blue ribbons are filed at the
+ *      very top of the great heap.
  *      "I'll climb up," says Peter.
  *   4. The wobbly heap. Peter climbs it like steps and finds another of his
  *      socks. The heap creaks and sways. At the top he takes the ribbon
@@ -35,8 +36,8 @@
  *   5. Home. The chair lands in the playroom. Mollie ties the ribbon back on
  *      her plait (deed): two blue bows again. Peter will never, ever lose a
  *      sock again... and one slips out of his armful and vanishes with a
- *      fwip: off to Mrs Muddlecup! "She'll file it under S, for Silly
- *      Peter!" Everyone laughs.
+ *      fwip: off to Mrs Muddlecup! "She'll file it under S, for Socks!"
+ *      Everyone laughs.
  *
  * Scary, never cruel (docs/STYLE.md): there's no villain. Mrs Muddlecup is
  * only fussy, and kind once she can see. The danger is the great heap
@@ -67,7 +68,7 @@ const { giggle, laugh } = common;
 type Name =
   | 'mollie' | 'peter' | 'jigs' | 'mrs'
   | 'kite' | 'glove' | 'sock' | 'sock2' | 'bell' | 'heap'
-  | 'ribbon' | 'specs' | 'umbrella' | 'socks';
+  | 'ribbon' | 'umbrella';
 const cast = {} as Record<Name, HTMLElement>;
 let ride: Ride;
 
@@ -90,7 +91,7 @@ const TOP: [number, number] = [HEAP.x + 262, HEAP.y + 34];
 /** Where the heap turns when it sways: the middle of its bottom. */
 const PIVOT: [number, number] = [HEAP.x + 180, HEAP.y + 600];
 /** Peter's width while climbing (a little smaller than on the ground, so he fits the ledges). */
-const CLIMB_W = 140;
+const CLIMB_W = 150;
 
 // ----------------------------------------------------------------- helpers
 
@@ -176,12 +177,12 @@ export default defineCartoon({
     cantFind: { who: 'muddlecup', text: 'And anyway, I can’t find a thing. I’ve lost my spectacles!' },
     // 3. The spectacles
     looked: { who: 'muddlecup', text: 'I’ve looked in the teapot. I’ve looked everywhere!' },
-    giggle: { who: 'peter', text: 'Mollie! Look at the top of her head!' },
+    peterSpots: { who: 'peter', text: 'Mollie! Look at the top of her head!' },
     onHead: { who: 'mollie', text: 'Mrs Muddlecup, your spectacles are on top of your head!' },
     onMyHead: { who: 'muddlecup', text: 'On my head? Don’t be silly, dear.' },
     letMe: { who: 'mollie', text: 'Let me get them for you. Bend down a little.' },
     canSee: { who: 'muddlecup', text: 'Oh! I can see! I can see everything!' },
-    foundMine: { who: 'muddlecup', text: 'You found my spectacles, dear. So you shall have your ribbon!' },
+    foundMine: { who: 'muddlecup', text: 'You found my lost spectacles! So I shall find your lost ribbon. Fair’s fair!' },
     filed: { who: 'muddlecup', text: 'Blue ribbons are filed at the very top.' },
     wayUp: { who: 'mollie', text: 'Right at the top? But it’s so wobbly!' },
     illClimb: { who: 'peter', text: 'I’m a good climber. I’ll get it!' },
@@ -205,7 +206,7 @@ export default defineCartoon({
     neverLose: { who: 'peter', text: 'I’ve got all my socks back. I’ll never lose one again!' },
     vanished: { who: 'mollie', text: 'Peter! One of your socks just vanished!' },
     offAgain: { who: 'jigs', text: 'It’s gone to the Land of Lost Things!' },
-    silly: { who: 'mollie', text: 'Under S, for Silly Peter!' },
+    silly: { who: 'mollie', text: 'She’ll file it under S, for Socks!' },
     end: { who: 'narrator', text: 'And far away, Mrs Muddlecup filed one more odd sock.' },
   },
   scenes: [
@@ -335,7 +336,7 @@ export default defineCartoon({
         });
         highWind(1.5);
         await chairRide.land(k, ride);
-        const { mollie, peter, jigs, sock, bell, heap, mrs } = cast;
+        const { mollie, peter, jigs, sock, bell, mrs } = cast;
         await k.say('jumble', mollie);
         hatBell();
         await k.say('umbrellas', jigs);
@@ -391,7 +392,6 @@ export default defineCartoon({
         await k.say('finders', mrs);
         k.pose(mrs, 'fluster');
         await k.all(k.say('cantFind', mrs), k.shake(mrs, 5, 3));
-        void heap;
       },
     },
 
@@ -416,7 +416,7 @@ export default defineCartoon({
 
         // Peter spots them first.
         giggle();
-        await k.all(k.say('giggle', peter), k.shake(peter, 4, 3));
+        await k.all(k.say('peterSpots', peter), k.shake(peter, 4, 3));
         const at = specsAt(k, mrs);
         k.sparkle(at.head[0], at.head[1], 8, 70);
         k.fx.twinkle();
@@ -462,7 +462,7 @@ export default defineCartoon({
         await k.camera({}, 1.2);
         await k.say('wayUp', mollie);
         k.face(peter, false);
-        await k.all(k.say('illClimb', peter), k.to(peter, 0.4, { x: '+=0' }));
+        await k.say('illClimb', peter);
         await k.hop(peter, 40, 1);
       },
     },
@@ -541,11 +541,13 @@ export default defineCartoon({
         k.sfx.whoosh();
         umbrella.style.zIndex = '17';
         await k.to(umbrella, 0.3, { rotation: 50, ease: 'power2.out' });
-        await k.carry(umbrella, [HEAP.x + 24, 560], 0.6);
+        await k.carry(umbrella, [HEAP.x + 14, 575], 0.6);
         k.fx.thud();
         heapCreak(0.8);
         await sway(k, -2, 1, [peter, ribbon], 'power2.out');
         k.flourish(heap);
+        k.pose(mrs, 'default');
+        specsOnNose(k, mrs);
         await k.wait(500);
         await k.all(k.say('steady', mollie), k.hop(mollie, 30, 1));
         await k.walk(jigs, -60, 0.6, 2);
@@ -573,7 +575,7 @@ export default defineCartoon({
         k.fx.thud();
         await k.all(k.say('allMySocks', peter), k.hop(peter, 0, 1));
         laugh();
-        await k.all(k.say('goodbye', mrs), k.to(mrs, 0.4, { x: '+=0' }));
+        await k.say('goodbye', mrs);
 
       },
     },
@@ -638,7 +640,6 @@ export default defineCartoon({
         await k.say('silly', mollie);
         laugh();
         await warmEnding(k, { cast: [mollie, peter, jigs], end: 'end', music: 'cosy' });
-        void socks;
       },
     },
   ],
