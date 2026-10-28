@@ -23,3 +23,6 @@ scripts/voice/takes/
 scripts/voice/lines.json
 public/audio/manifest.json
 scripts/voice/qa.json
+
+scripts/voice/audit.html
+scripts/voice/audit-cache.json

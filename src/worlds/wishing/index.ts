@@ -45,6 +45,8 @@ import { muddlecup, muddlecupBeam, muddlecupCross, muddlecupFluster } from './mu
 import { pearl, pearlHappy, pearlSad, pearlSing } from './pearl';
 import { nipper, nipperGrin, nipperSnap, nipperSulk } from './nipper';
 import { combGolden, coveHoard, coveRock, coveTide, mermaidCove } from './cove';
+import { dozy, dozyBeam, dozySleep, dozyYawn } from './dozy';
+import { landOfNod, sandSack } from './landofnod';
 
 export default defineWorld({
   id: 'wishing',
@@ -223,6 +225,14 @@ export default defineWorld({
       about: 'Old Nipper, a big grumpy red crab of the cove (as big as a dog): a round red shell with knobbly bumps, two eyes on stalks with bushy brows, a downturned mouth, and two huge claws (parts clawL and clawR, pivot at the elbow: open and shut them for a CLACK). He collects shiny things and hoards them in his dark cave, and says “MINE!” and “Pah!”. He clacks, snaps the air and scuttles sideways, but he never pinches anyone. Poses: snap (claws up wide open, cross brows, mouth open in a shout), sulk (claws drooping, a pout, eyes looking away), grin (claws up happily, a wide toothless smile). He is only grumpy because his cave is dark and lonely.',
       voice: 'A crotchety old man with a gravelly, clicky voice and a Cornish burr; grumbling and shouty when cross, gruff-soft when he is touched.',
     },
+    dozy: {
+      name: 'Old Dozy',
+      art: dozy,
+      poses: { yawn: dozyYawn, sleep: dozySleep, beam: dozyBeam },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Old Dozy, the Sandman of the Land of Nod: a kind, round, very sleepy old fellow in a long floppy striped nightcap (lilac and cream, a big white bobble), a warm sandy-gold dressing gown with a lilac collar, a fluffy white beard round his chin, bushy white brows and droopy, half-closed eyes. He carries a big sack of glittery sleepy-sand and sprinkles a pinch on everyone at bedtime for good dreams. He yawns all the time and nods off in the middle of a sentence (“And the most important thing is… zzz”), then wakes with a start: “Eh? Oh! Where was I?” Poses: yawn (arms stretched up, mouth wide, eyes shut), sleep (eyes shut, head drooped, a peaceful smile), beam (eyes open wide for once, a big warm smile). Never cross, never frightening.',
+      voice: 'A very old, kind man, soft and slow and drowsy, warm and a little creaky, with big yawns in his words; gentle English country voice.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -300,6 +310,10 @@ export default defineWorld({
     'mermaid-cove': {
       art: mermaidCove,
       about: 'A sunny little cove at low tide: a soft blue sky with a warm sun at the top left, a grassy headland at the far left, the sea far out (a strip along y 330–420) beyond shiny wet sand, and warm dry sand from y 470 down. At the right a tall rocky outcrop (x 820–1180) with three rock steps up its left side (tops at about (850, 560), (905, 460) and the ledge (930–1140, 350)), a flat ledge for a hoard, and under it the dark mouth of Old Nipper’s cave (x 960–1150, y 420–640) with a little rock pool in front. Ground line y ≈ 640; open sand x 220–820, room for the chair and 3 actors. Put Pearl behind the cove-rock prop on the left. Lay the cove-tide prop over the bottom and slide it up for the tide coming in.',
+    },
+    'land-of-nod': {
+      art: landOfNod,
+      about: 'The Land of Nod at twilight: a soft violet sky with a few stars, a big sleepy crescent moon with a closed eye and a smile (upper right), round pillowy hills in lavender and rose, little houses shaped like floppy nightcaps with round glowing windows on the hills at the sides. Ground line y ≈ 640; open ground x 260–900, room for the chair and 3 actors. Pair with a soft k.light on the faces.',
     },
   },
   props: {
@@ -381,6 +395,11 @@ export default defineWorld({
       art: combGolden,
       size: [140, 70],
       about: 'Pearl’s magic golden comb: a curved golden comb with fine teeth along the bottom and a little white pearl set in the middle of its top. Lying flat, teeth down.',
+    },
+    'sand-sack': {
+      art: sandSack,
+      size: [220, 240],
+      about: 'The Sandman’s big sack of sleepy-sand, slumped and burst: a split in its side with glittery gold sand spilling out (part spill: fade it out once it is mended), its neck open. A blue ribbon bow (part bow, hidden) ties its neck when it is mended: fade it in.',
     },
   },
 });
