@@ -31,13 +31,28 @@ stage.el.append(h('div', { class: 'vignette' }), h('div', { class: 'grain' }));
 const director = new Director(stage.el);
 const settings = loadSettings();
 
+// Set when a new version has taken over (see the service worker below): the
+// next trip to the library reloads into it instead of drawing the old shelf.
+let updateWaiting = false;
+let onLibrary = false;
+
 const app: App = {
   stage,
   settings,
   nav: {
-    library: () => void director.go(new LibraryScene(app)),
-    watch: (id, from) => void director.go(new PlayerScene(app, id, from)),
-    corner: () => void director.go(new CornerScene(app)),
+    library: () => {
+      if (updateWaiting) return location.reload();
+      onLibrary = true;
+      void director.go(new LibraryScene(app));
+    },
+    watch: (id, from) => {
+      onLibrary = false;
+      void director.go(new PlayerScene(app, id, from));
+    },
+    corner: () => {
+      onLibrary = false;
+      void director.go(new CornerScene(app));
+    },
   },
   save: () => {
     saveSettings(settings);
@@ -74,15 +89,24 @@ else if (q.get('scene') === 'corner') app.nav.corner();
 else app.nav.library();
 
 // Offline support (production builds only): see vite.config.ts.
+//
+// A home-screen app on the iPad is mostly resumed, not started, so 'load'
+// alone would hardly ever look for a new version: new cartoons stayed off
+// the shelf. It also looks each time the app comes back on screen. A new
+// version reloads at once on the library, or waits for the library if a
+// cartoon is playing, so nothing is cut off mid-story.
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(() => {});
+    const registered = navigator.serviceWorker.register('./sw.js');
+    registered.catch(() => {});
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') void registered.then((r) => r.update()).catch(() => {});
+    });
     if (navigator.serviceWorker.controller) {
-      let reloaded = false;
       navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (reloaded) return;
-        reloaded = true;
-        location.reload();
+        if (updateWaiting) return;
+        updateWaiting = true;
+        if (onLibrary) location.reload();
       });
     }
     void navigator.serviceWorker.ready.then((r) => r.active?.postMessage('fill-audio'));
