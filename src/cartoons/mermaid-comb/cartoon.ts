@@ -476,6 +476,8 @@ export default defineCartoon({
       },
       async play(k) {
         const { mollie, peter, jigs, nipper, pearl, comb, bell } = cast;
+        // Once picked up, the comb rides in front of everyone (it sat behind them on the ledge).
+        comb.style.zIndex = '24';
         await k.wait(400);
         // Up the rocks: step one, then step two (slippery!), then the ledge.
         await k.camera({ zoom: 1.2, x: 800, y: 400 }, 1);
