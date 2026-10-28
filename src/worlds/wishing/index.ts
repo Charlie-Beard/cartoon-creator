@@ -40,6 +40,8 @@ import { jackInBox, jackInBoxBoing, jackInBoxGrin, jackInBoxSulk, jackBox } from
 import { brass, brassSalute, brassWorried } from './brass';
 import { toylandStation, toyCupboard } from './toyland';
 import { toyTrain, toyTruck, toyTruckFront } from './toytrain';
+import { dozy, dozyBeam, dozySleep, dozyYawn } from './dozy';
+import { landOfNod, sandSack } from './landofnod';
 
 export default defineWorld({
   id: 'wishing',
@@ -194,6 +196,14 @@ export default defineWorld({
       about: 'Sergeant Brass, the toy-soldier engine driver of Toyland: a wooden soldier with a tall black busby hat (gold cord), round red cheek spots, a red jacket with gold buttons and white cross-belts, a curly painted moustache. Fussy, stiff and kind: marches, salutes, says “Oh dear, oh dear!” when something goes wrong. Poses: salute (hand to his busby, a proud grin), worried (brows up, round “oh” mouth, hands wringing).',
       voice: 'A fussy, plummy little man, brisk and clipped like a drill sergeant but gentle; flustered and fluttery when worried; proud and booming for “All aboard!”.',
     },
+    dozy: {
+      name: 'Old Dozy',
+      art: dozy,
+      poses: { yawn: dozyYawn, sleep: dozySleep, beam: dozyBeam },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hat'],
+      about: 'Old Dozy, the Sandman of the Land of Nod: a kind, round, very sleepy old fellow in a long floppy striped nightcap (lilac and cream, a big white bobble), a warm sandy-gold dressing gown with a lilac collar, a fluffy white beard round his chin, bushy white brows and droopy, half-closed eyes. He carries a big sack of glittery sleepy-sand and sprinkles a pinch on everyone at bedtime for good dreams. He yawns all the time and nods off in the middle of a sentence (“And the most important thing is… zzz”), then wakes with a start: “Eh? Oh! Where was I?” Poses: yawn (arms stretched up, mouth wide, eyes shut), sleep (eyes shut, head drooped, a peaceful smile), beam (eyes open wide for once, a big warm smile). Never cross, never frightening.',
+      voice: 'A very old, kind man, soft and slow and drowsy, warm and a little creaky, with big yawns in his words; gentle English country voice.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -264,6 +274,10 @@ export default defineWorld({
       art: toyCupboard,
       about: 'Inside the big old toy cupboard: dim brown planks, a crack of golden light down the left edge (x 22–60) lighting the floor, cobwebs in the top corners, a dusty top shelf (y 252) over the left with a drum, three skittles and a sleepy doll, and a grey rocking horse on the floor at the left (x 40–290, painted in). On the right three wooden ledges rise like stairs, their tops at y 570 (x 740–1200), y 470 (x 820–1200) and y 360 (x 890–1200): stand people and a toy box on them. Ground line y ≈ 640; open floor x 300–760. Dim but readable: add k.light on the actors’ faces.',
     },
+    'land-of-nod': {
+      art: landOfNod,
+      about: 'The Land of Nod at twilight: a soft violet sky with a few stars, a big sleepy crescent moon with a closed eye and a smile (upper right), round pillowy hills in lavender and rose, little houses shaped like floppy nightcaps with round glowing windows on the hills at the sides. Ground line y ≈ 640; open ground x 260–900, room for the chair and 3 actors. Pair with a soft k.light on the faces.',
+    },
   },
   props: {
     'wishing-chair': {
@@ -308,6 +322,11 @@ export default defineWorld({
       art: jackBox,
       size: [250, 170],
       about: 'Jack-in-the-Box’s box with its lid shut: red with yellow stars, a crank on the right (the box itself is x 4–216 of the prop), a little dusty. Swap it for the jackInBox character (his pose boing) when he springs out.',
+    },
+    'sand-sack': {
+      art: sandSack,
+      size: [220, 240],
+      about: 'The Sandman’s big sack of sleepy-sand, slumped and burst: a split in its side with glittery gold sand spilling out (part spill: fade it out once it is mended), its neck open. A blue ribbon bow (part bow, hidden) ties its neck when it is mended: fade it in.',
     },
   },
 });
