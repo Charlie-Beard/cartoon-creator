@@ -107,5 +107,7 @@
   "mrWeasley": { "voice_id": "yZ3w1DL4ZAxIdOscv2t8", "name": "Wilf - Cheerful, Quirky & Northern", "owner": "300b35287e8acc21dd12bd610b831e19b47dc75e8b8c15c2bca80cdcb776ef2d", "settings": { "stability": 0.4, "speed": 1.0 } },
   "dudleyBig": { "voice_id": "4iqKdEXMW8NRF8USiS3Q", "name": "Bittu - Heavy Kid Cartoon Character", "owner": "7398804d9eaf2f463899a907587c33a390591775784f87857b6d0e1e4e3e66f6", "settings": { "stability": 0.5, "speed": 1.0 } },
   "witchHazel": { "voice_id": "E4IXevHtHpKGh0bvrPPr", "name": "Emilia - Young, British and Engaging", "owner": "f47f37146809b7481fb8e55b2f9c3e5676a09f546195fcf2e114f252fe7c97bf", "settings": { "stability": 0.4, "speed": 1.05 } },
-  "puff": { "voice_id": "bA58y3FqVI6b6gTNh0oT", "name": "Kavya - Cute & Engaging Character", "owner": "7398804d9eaf2f463899a907587c33a390591775784f87857b6d0e1e4e3e66f6", "settings": { "stability": 0.4, "speed": 0.95 } }
+  "puff": { "voice_id": "bA58y3FqVI6b6gTNh0oT", "name": "Kavya - Cute & Engaging Character", "owner": "7398804d9eaf2f463899a907587c33a390591775784f87857b6d0e1e4e3e66f6", "settings": { "stability": 0.4, "speed": 0.95 } },
+  "slyboots": { "voice_id": "fGIZlgPQ75MMlvQ6WxgY", "name": "Gerald - Exciting Older Character", "owner": "981267fcf71e91a066005ad65239898716b85010a5fbf21aada9b4d5aca9f0e1", "settings": { "stability": 0.35, "speed": 1.05 } },
+  "boa": { "voice_id": "LaDXAXAod3qiAkyfwUSV", "name": "Juliano - English with Brazilian Accent", "owner": "0df0316bef3afd4d681ef871016ca64bb956c534a528d6a681592bcbc44e8237", "settings": { "stability": 0.4, "speed": 0.85 } }
 }
