@@ -105,5 +105,7 @@
   "auntMarge": { "voice_id": "aAsWcN5jdLdiYG7Hq0YL", "name": "Harriet - British Actress", "owner": "3f2ca29fd2019c4a0516b646c73c6f21140f676ac6d45236a2b5ef291bf8d8e1", "settings": { "stability": 0.5, "speed": 1.0 } },
   "stan": { "voice_id": "DfE5EkknFF950NR6OMui", "name": "Bob", "owner": "ad827f2c0300d36094ca79e518b1a5df8c3609eb269353c30dcec3ac8878a437", "settings": { "stability": 0.4, "speed": 1.05 } },
   "mrWeasley": { "voice_id": "yZ3w1DL4ZAxIdOscv2t8", "name": "Wilf - Cheerful, Quirky & Northern", "owner": "300b35287e8acc21dd12bd610b831e19b47dc75e8b8c15c2bca80cdcb776ef2d", "settings": { "stability": 0.4, "speed": 1.0 } },
-  "dudleyBig": { "voice_id": "4iqKdEXMW8NRF8USiS3Q", "name": "Bittu - Heavy Kid Cartoon Character", "owner": "7398804d9eaf2f463899a907587c33a390591775784f87857b6d0e1e4e3e66f6", "settings": { "stability": 0.5, "speed": 1.0 } }
+  "dudleyBig": { "voice_id": "4iqKdEXMW8NRF8USiS3Q", "name": "Bittu - Heavy Kid Cartoon Character", "owner": "7398804d9eaf2f463899a907587c33a390591775784f87857b6d0e1e4e3e66f6", "settings": { "stability": 0.5, "speed": 1.0 } },
+  "witchHazel": { "voice_id": "E4IXevHtHpKGh0bvrPPr", "name": "Emilia - Young, British and Engaging", "owner": "f47f37146809b7481fb8e55b2f9c3e5676a09f546195fcf2e114f252fe7c97bf", "settings": { "stability": 0.4, "speed": 1.05 } },
+  "puff": { "voice_id": "bA58y3FqVI6b6gTNh0oT", "name": "Kavya - Cute & Engaging Character", "owner": "7398804d9eaf2f463899a907587c33a390591775784f87857b6d0e1e4e3e66f6", "settings": { "stability": 0.4, "speed": 0.95 } }
 }
