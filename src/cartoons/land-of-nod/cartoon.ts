@@ -643,7 +643,8 @@ export default defineCartoon({
       set(k) {
         sunsetPlayroom(k);
         k.music('cosy');
-        ride = chairRide.set(k, { x: 780, y: 280, w: 400, wings: true, riders: THREE });
+        // Jigs rides home on the right arm, so Mollie and Peter hop out to the left without passing him.
+        ride = chairRide.set(k, { x: 780, y: 280, w: 400, wings: true, riders: [THREE[0], THREE[1], { id: 'jigs', slot: 'arm' }] });
         [cast.mollie, cast.peter, cast.jigs] = ride.riders;
         chairRide.jump(k, ride, { x: 0, y: -800 });
         cast.twist = k.add(twist(), { x: 560, y: 470, w: 70, z: 22 });
