@@ -40,6 +40,8 @@ import { jackInBox, jackInBoxBoing, jackInBoxGrin, jackInBoxSulk, jackBox } from
 import { brass, brassSalute, brassWorried } from './brass';
 import { toylandStation, toyCupboard } from './toyland';
 import { toyTrain, toyTruck, toyTruckFront } from './toytrain';
+import { lostLand, lostHeap, lostRibbon, lostSock, lostSocks, lostSpectacles, lostBell, lostKite, lostGlove } from './lostland';
+import { muddlecup, muddlecupBeam, muddlecupCross, muddlecupFluster } from './muddlecup';
 
 export default defineWorld({
   id: 'wishing',
@@ -194,6 +196,14 @@ export default defineWorld({
       about: 'Sergeant Brass, the toy-soldier engine driver of Toyland: a wooden soldier with a tall black busby hat (gold cord), round red cheek spots, a red jacket with gold buttons and white cross-belts, a curly painted moustache. Fussy, stiff and kind: marches, salutes, says “Oh dear, oh dear!” when something goes wrong. Poses: salute (hand to his busby, a proud grin), worried (brows up, round “oh” mouth, hands wringing).',
       voice: 'A fussy, plummy little man, brisk and clipped like a drill sergeant but gentle; flustered and fluttery when worried; proud and booming for “All aboard!”.',
     },
+    muddlecup: {
+      name: 'Mrs Muddlecup',
+      art: muddlecup,
+      poses: { fluster: muddlecupFluster, cross: muddlecupCross, beam: muddlecupBeam },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'specs', 'specsOn'],
+      about: 'Mrs Muddlecup, keeper of the Land of Lost Things, where everything anyone loses ends up, filed on a towering wobbly pile. A thin, bird-like little old lady (not round like Dabble) with a long pointy nose, rosy cheeks, a tall untidy silver bun with two pencils stuck through it and a luggage label tied on, a plum-and-mustard checked shawl over a dark green dress and a tape measure round her neck. Fussy and flustered but kind: says “dear” a lot, mutters “Lost things, lost things, everything in its place!”, and at first “Finders keepers!” until she is won round. Running joke: she has “lost” her half-moon gold spectacles and they are pushed up on top of her head all along (part specs, in front of the bun). When someone lifts them down for her, fade specs out and specsOn in (the same pair sitting on her nose over her eyes, hidden until then). The plain portrait holds up a luggage label. Poses: fluster (both hands flapping by her cheeks, brows up, a round “oh!”), cross (arms folded, brows down, nose in the air), beam (arms flung wide, a huge smile). Never unkind, only fussy.',
+      voice: 'A twittery, fussy little old Englishwoman; quick and fluttery, a bit flustered, warm underneath; high and bright when happy.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -264,6 +274,10 @@ export default defineWorld({
       art: toyCupboard,
       about: 'Inside the big old toy cupboard: dim brown planks, a crack of golden light down the left edge (x 22–60) lighting the floor, cobwebs in the top corners, a dusty top shelf (y 252) over the left with a drum, three skittles and a sleepy doll, and a grey rocking horse on the floor at the left (x 40–290, painted in). On the right three wooden ledges rise like stairs, their tops at y 570 (x 740–1200), y 470 (x 820–1200) and y 360 (x 890–1200): stand people and a toy box on them. Ground line y ≈ 640; open floor x 300–760. Dim but readable: add k.light on the actors’ faces.',
     },
+    'lost-land': {
+      art: lostLand,
+      about: 'The Land of Lost Things on a warm dreamy afternoon: duck-egg sky going apricot, soft clouds, and far rolling hills heaped with tiny lost socks, umbrellas, keys, kites, gloves, buttons, a teddy, hats and books. At the far left (x 20–230, y 392–612) the Keeper’s crooked wooden hut with a lit window (x 44–100, y 506–556), a crooked chimney and a leaning pigeonhole cabinet of odds and ends (x 168–230). Calm dusty sand from y 596; stray socks and buttons only at the edges. Ground line y ≈ 640; open ground x 250–1000 (stand actors at x 250–800; the tall lost-heap prop fits at about x 800–1100, w 360, with its bottom at y 640). Bottom band y 690+ is plain sand.',
+    },
   },
   props: {
     'wishing-chair': {
@@ -309,5 +323,21 @@ export default defineWorld({
       size: [250, 170],
       about: 'Jack-in-the-Box’s box with its lid shut: red with yellow stars, a crank on the right (the box itself is x 4–216 of the prop), a little dusty. Swap it for the jackInBox character (his pose boing) when he springs out.',
     },
+    'lost-heap': {
+      art: lostHeap,
+      size: [360, 600],
+      about: 'THE great wobbly heap of lost things in the Land of Lost Things, 360 × 600, leaning right as it rises: a cushion, trunk and suitcases at the bottom, books, a birdcage, a horse’s head and a teapot in the middle, a hatbox and a top hat at the top. Bottom flat at y 600 (stands on the ground line). Three flat LEDGES up its left side for a small figure to stand on, in prop coordinates: A top y 440 (x 20–170, the trunk lid), B top y 300 (x 50–190, three big books), C top y 170 (x 80–210, a flat old case). The FLAT TOP of the top hat is at y 52, x 238–286: sit lost-ribbon there (centre about x 262, bottom edge at y 52). Everything from the books at y 300 upward is part top (origin 180, 300): sway it more than the base.',
+    },
+    'lost-ribbon': { art: lostRibbon, size: [120, 80], about: 'Mollie’s blue satin hair-ribbon tied in a bow with two tails (same blue and darker knot as her plaits). Reads best at w 60–100.' },
+    'lost-sock': { art: lostSock, size: [90, 120], about: 'One odd green-and-white striped sock (Peter’s), toe pointing down-right, heel on the left.' },
+    'lost-socks': { art: lostSocks, size: [180, 130], about: 'A big squashy armful of odd socks, mostly green-and-white striped, with a few other colours, toes and cuffs flopping out.' },
+    'lost-spectacles': { art: lostSpectacles, size: [120, 50], about: 'Half-moon gold-rimmed spectacles with arms and a little glint.' },
+    'lost-bell': {
+      art: lostBell,
+      size: [120, 240],
+      about: 'The Keeper’s brass hand-bell hanging from a curly iron bracket on a short wooden post (post bottom flat at y 240). The bell and its pull-cord are part bell, origin (90, 38) at the hook: rotate it to swing and ring.',
+    },
+    'lost-kite': { art: lostKite, size: [120, 160], about: 'A red-and-yellow diamond kite with a bow-tied tail, for drifting through the sky.' },
+    'lost-glove': { art: lostGlove, size: [90, 100], about: 'One red woolly glove with a ribbed cuff, for drifting through the sky.' },
   },
 });
