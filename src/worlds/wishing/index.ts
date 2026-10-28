@@ -42,6 +42,9 @@ import { toylandStation, toyCupboard } from './toyland';
 import { toyTrain, toyTruck, toyTruckFront } from './toytrain';
 import { lostLand, lostHeap, lostRibbon, lostSock, lostSocks, lostSpectacles, lostBell, lostKite, lostGlove } from './lostland';
 import { muddlecup, muddlecupBeam, muddlecupCross, muddlecupFluster } from './muddlecup';
+import { pearl, pearlHappy, pearlSad, pearlSing } from './pearl';
+import { nipper, nipperGrin, nipperSnap, nipperSulk } from './nipper';
+import { combGolden, coveHoard, coveRock, coveTide, mermaidCove } from './cove';
 
 export default defineWorld({
   id: 'wishing',
@@ -204,6 +207,22 @@ export default defineWorld({
       about: 'Mrs Muddlecup, keeper of the Land of Lost Things, where everything anyone loses ends up, filed on a towering wobbly pile. A thin, bird-like little old lady (not round like Dabble) with a long pointy nose, rosy cheeks, a tall untidy silver bun with two pencils stuck through it and a luggage label tied on, a plum-and-mustard checked shawl over a dark green dress and a tape measure round her neck. Fussy and flustered but kind: says “dear” a lot, mutters “Lost things, lost things, everything in its place!”, and at first “Finders keepers!” until she is won round. Running joke: she has “lost” her half-moon gold spectacles and they are pushed up on top of her head all along (part specs, in front of the bun). When someone lifts them down for her, fade specs out and specsOn in (the same pair sitting on her nose over her eyes, hidden until then). The plain portrait holds up a luggage label. Poses: fluster (both hands flapping by her cheeks, brows up, a round “oh!”), cross (arms folded, brows down, nose in the air), beam (arms flung wide, a huge smile). Never unkind, only fussy.',
       voice: 'A twittery, fussy little old Englishwoman; quick and fluttery, a bit flustered, warm underneath; high and bright when happy.',
     },
+    pearl: {
+      name: 'Pearl',
+      art: pearl,
+      poses: { sad: pearlSad, sing: pearlSing, happy: pearlHappy },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'armL', 'armR', 'hair', 'tail'],
+      about: 'Pearl, a young mermaid of the sunny cove, about eight: long wavy dark-brown hair with little shells in it, a coral-pink top, a pearl on a string, and a turquoise tail whose end curls up beside her on the right (part tail, flick it). She sings the tide in every evening, but she cannot sing with tangles in her hair, and she combs them out with her golden comb. The portrait has her hair in a tangle, worried; poses: sad (tangled, tears, a wobbly mouth), sing (hair combed smooth and shining, eyes shut, mouth open in song, hands at her chest), happy (combed smooth, a big smile, arms up). Show her sitting behind the cove-rock prop, which hides her from the waist down. Gentle, a bit dreamy, says “Oh, my!”; never cross.',
+      voice: 'A young girl of about eight, soft and sing-song, gentle southern English; tearful and small when sad, light and bubbling when happy.',
+    },
+    nipper: {
+      name: 'Old Nipper',
+      art: nipper,
+      poses: { snap: nipperSnap, sulk: nipperSulk, grin: nipperGrin },
+      parts: ['figure', 'head', 'eyes', 'lids', 'brows', 'mouth', 'mouthOpen', 'clawL', 'clawR'],
+      about: 'Old Nipper, a big grumpy red crab of the cove (as big as a dog): a round red shell with knobbly bumps, two eyes on stalks with bushy brows, a downturned mouth, and two huge claws (parts clawL and clawR, pivot at the elbow: open and shut them for a CLACK). He collects shiny things and hoards them in his dark cave, and says “MINE!” and “Pah!”. He clacks, snaps the air and scuttles sideways, but he never pinches anyone. Poses: snap (claws up wide open, cross brows, mouth open in a shout), sulk (claws drooping, a pout, eyes looking away), grin (claws up happily, a wide toothless smile). He is only grumpy because his cave is dark and lonely.',
+      voice: 'A crotchety old man with a gravelly, clicky voice and a Cornish burr; grumbling and shouty when cross, gruff-soft when he is touched.',
+    },
   },
   backdrops: {
     'curiosity-shop': {
@@ -278,6 +297,10 @@ export default defineWorld({
       art: lostLand,
       about: 'The Land of Lost Things on a warm dreamy afternoon: duck-egg sky going apricot, soft clouds, and far rolling hills heaped with tiny lost socks, umbrellas, keys, kites, gloves, buttons, a teddy, hats and books. At the far left (x 20–230, y 392–612) the Keeper’s crooked wooden hut with a lit window (x 44–100, y 506–556), a crooked chimney and a leaning pigeonhole cabinet of odds and ends (x 168–230). Calm dusty sand from y 596; stray socks and buttons only at the edges. Ground line y ≈ 640; open ground x 250–1000 (stand actors at x 250–800; the tall lost-heap prop fits at about x 800–1100, w 360, with its bottom at y 640). Bottom band y 690+ is plain sand.',
     },
+    'mermaid-cove': {
+      art: mermaidCove,
+      about: 'A sunny little cove at low tide: a soft blue sky with a warm sun at the top left, a grassy headland at the far left, the sea far out (a strip along y 330–420) beyond shiny wet sand, and warm dry sand from y 470 down. At the right a tall rocky outcrop (x 820–1180) with three rock steps up its left side (tops at about (850, 560), (905, 460) and the ledge (930–1140, 350)), a flat ledge for a hoard, and under it the dark mouth of Old Nipper’s cave (x 960–1150, y 420–640) with a little rock pool in front. Ground line y ≈ 640; open sand x 220–820, room for the chair and 3 actors. Put Pearl behind the cove-rock prop on the left. Lay the cove-tide prop over the bottom and slide it up for the tide coming in.',
+    },
   },
   props: {
     'wishing-chair': {
@@ -339,5 +362,25 @@ export default defineWorld({
     },
     'lost-kite': { art: lostKite, size: [120, 160], about: 'A red-and-yellow diamond kite with a bow-tied tail, for drifting through the sky.' },
     'lost-glove': { art: lostGlove, size: [90, 100], about: 'One red woolly glove with a ribbed cuff, for drifting through the sky.' },
+    'cove-rock': {
+      art: coveRock,
+      size: [360, 200],
+      about: 'Pearl’s rock: a big rounded grey-brown sea rock with limpets, barnacles and tufts of green seaweed, its flat top at about y 40 of the prop. Lay it over a mermaid (z above her) to hide her from the waist down, so she sits on it.',
+    },
+    'cove-tide': {
+      art: coveTide,
+      size: [1300, 300],
+      about: 'The tide coming in: a wide sheet of blue-green sea with a scalloped white foam edge along its top (y 0–40 of the prop) and calm paler bands below. Place it at x -60 below the stage and slide it up (to about y 560) to flood the sand; bob it gently once it is in.',
+    },
+    'cove-hoard': {
+      art: coveHoard,
+      size: [240, 120],
+      about: 'Old Nipper’s hoard of shiny things in a heap: old spoons, buttons, bottle tops, a teapot lid, a key, glass beads and a thimble, catching the light. Sits on the cove’s ledge; the golden comb (comb-golden) goes on top as its own prop.',
+    },
+    'comb-golden': {
+      art: combGolden,
+      size: [140, 70],
+      about: 'Pearl’s magic golden comb: a curved golden comb with fine teeth along the bottom and a little white pearl set in the middle of its top. Lying flat, teeth down.',
+    },
   },
 });
