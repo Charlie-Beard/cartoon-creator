@@ -35,23 +35,27 @@ npm test               # Vitest: src/core, worlds, every cartoon's lines and ids
 npm run new -- <id> <world>   # start a cartoon: src/cartoons/<id>/ from the templates
 npm run check -- <id>  # one cartoon against the house rules (lines, ids, length, no interaction, ledger)
 npm run check -- --ledger   # what every episode so far was about: read before planning
-npm run shots -- <id> --fast [--scene n]   # frames + contact sheet on a fake clock, ~1 min: for iterating
-npm run shots -- <id> --openings   # only each scene's opening picture + sheet, ~5 s: after moving people
+npm run shots -- <id> --fast [--scene n]   # frames + sheets on a fake clock, ~1 min: for iterating
+npm run shots -- <id> --openings   # only each scene's opening picture, one sheet, ~10 s: after moving people
 npm run shots -- <id>  # the same in real time, for the final pacing check (3–6 min)
 npm run catalogue -- <world> --brief   # a world in text: who, where, props, sounds, moves (read this, not src/worlds/*)
-npm run lab -- <world> # sheets of every character, pose, backdrop and prop with its id
-npm run test:e2e       # Playwright at 1180×820 and 1180×760 (in the cloud: PW_CHROMIUM=/opt/pw-browsers/chromium)
+npm run lab -- <world> [chars|poses|backdrops|props] [--p id,id]   # the art as PNGs, with ids
+npm run verify -- <id> # typecheck + unit tests + check + e2e for <id> and the screens, ~1 min, short report
+npm run test:e2e       # Playwright at 1180×820 and 1180×760 (CARTOON=<id> for one, even if not on the shelf)
 npm run build
 ```
 
-All of typecheck, `npm test`, `npm run check` and `npm run test:e2e` must
-pass before a PR. CI on a PR runs only the quick ones; **the e2e tests are
-yours to run locally**, and a local pass is enough. **Look at the screenshots** of every scene you make or
-change (`npm run shots`), at 1180 × 820. Iterate with `--fast`; the
-last run before a PR is in real time. Reading the PNGs is part of the
-job, not optional: `shots` flags layout slips itself ("Frames to look
-at"), so read the contact sheet, each scene's opening frame and the
-flagged frames, and fix or justify every flag.
+`npm run verify -- <id>` (typecheck, `npm test`, `npm run check` and the
+e2e tests for the episode and the screens) must pass before a PR; after a
+change to the kit, the player or a world, run `npm run verify` (every
+cartoon). CI on a PR runs only the quick ones; **the e2e tests are yours
+to run locally**, and a local pass is enough. **Look at the screenshots**
+of every scene you make or change (`npm run shots`). Iterate with
+`--fast`; the last run before a PR is in real time. Reading them is part
+of the job, not optional: read `sheet.png` (the episode at a glance),
+`openings.png` (each scene's opening set) and `flags.png` (the frames
+`shots` flagged, with the actors boxed), not the frames one by one, and
+fix or justify every flag.
 
 **When a piece of work is done, always open a PR and merge it** (once
 the checks above pass and CI is green); don't stop at a pushed branch.

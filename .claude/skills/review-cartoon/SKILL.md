@@ -13,11 +13,13 @@ what to change. Fix what's clearly wrong; ask about matters of taste.
 
 ```bash
 npm run check -- <id>
-npm run shots -- <id> --strict # frames, contact sheet, layout flags, measured pacing (real time)
 ```
 
-Read the script top to bottom, then the contact sheet, each scene's
-opening frame and every frame under "Frames to look at".
+Read the script top to bottom, then `screenshots/<id>/sheet.png` (the
+episode), `openings.png` (each scene's set) and `flags.png` (the flagged
+frames, actors boxed). Only if they are missing or stale (below), make
+them with `npm run shots -- <id> --fast`; the author does the real-time
+run, so don't repeat it.
 
 **Check the frames are current.** Compare the PNGs' times with the
 script's last change (`ls -l --time-style=+%T screenshots/<id>/ src/cartoons/<id>/`).

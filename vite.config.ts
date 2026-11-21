@@ -216,6 +216,10 @@ export default defineConfig({
     // voice review) are served by the dev server alone (npm run dev, then
     // /lab.html or /review.html) and never ship.
     rollupOptions: { input: { main: 'index.html' } },
+    // Every world's art is in the main chunk (the shelf draws their backdrops), about
+    // 1.4 MB, 470 kB gzipped, cached offline by the service worker: known and fine on the
+    // iPad. The limit only keeps the warning out of every build and e2e log.
+    chunkSizeWarningLimit: 3000,
   },
   server: {
     host: true,

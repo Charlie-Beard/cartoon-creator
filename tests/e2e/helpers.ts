@@ -6,10 +6,14 @@ import { showing } from '../../src/cartoons/shelf';
 export const SHELF = showing(ALL);
 
 /**
- * The cartoons to play through: the whole shelf, or just CARTOON=<id>
- * (comma-separated for several) while one is being written.
+ * The cartoons to play through: the shelf as shown, or just CARTOON=<id>
+ * (comma-separated for several) while one is being written. A cartoon named
+ * in CARTOON is played even when it isn't showing on the shelf yet (a new
+ * episode usually isn't): it is opened with ?cartoon=<id> instead of its card.
  */
-export const CARTOONS = SHELF.filter((c) => !process.env.CARTOON || process.env.CARTOON.split(',').includes(c.id));
+const asked = process.env.CARTOON?.split(',').filter(Boolean);
+export const CARTOONS = (asked ? ALL.filter((c) => asked.includes(c.id)) : SHELF).map((c) => ({ ...c, shown: SHELF.some((s) => s.id === c.id) }));
+if (asked) for (const id of asked) if (!ALL.some((c) => c.id === id)) throw new Error(`CARTOON=${id}: no src/cartoons/${id}/meta.ts`);
 
 /** The grown-ups' gate's sum ("6 × 8", "54 ÷ 6"), worked out from what is on screen. */
 export function answerTo(text: string): number {
