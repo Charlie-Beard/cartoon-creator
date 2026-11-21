@@ -30,6 +30,12 @@ export interface CharacterDef {
   parts?: string[];
   /** The caption chip's crop, an SVG viewBox. Default '78 62 144 144'. */
   chip?: string;
+  /**
+   * Why they must never be flipped, when their art has lettering that would
+   * read backwards ("his jumper has an R on it"). `npm run check` fails a
+   * cartoon that places them with `flip: true`.
+   */
+  noFlip?: string;
   /** Who they are, how they speak, what they would and wouldn't do. For writers. */
   about: string;
   /** How they sound: for picking an ElevenLabs voice (scripts/voice/cast.json). */

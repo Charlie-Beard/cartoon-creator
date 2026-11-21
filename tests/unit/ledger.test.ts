@@ -205,6 +205,14 @@ describe('the ledger table', () => {
     expect(text).toMatch(/\(no ledger yet\)/);
     expect(text).toMatch(/places +snap-school, moon-room/);
   });
+
+  it('gives only the newest in full, older ones in a line each, and can keep to one world', () => {
+    const shelf = [ep('a', '2026-10-05'), ep('b', '2026-10-04'), ep('c', '2026-10-03'), ep('wiz', '2026-10-01', {}, 'hogwarts')];
+    const text = formatLedgers(shelf, undefined, { world: 'faraway', full: 2 });
+    expect(text).not.toContain('hogwarts');
+    expect(text.match(/problem /g)).toHaveLength(2); // a and b in full
+    expect(text).toMatch(/older, in one line each:\n {2}2026-10-03 .*\[c\]: the kettle is gone/);
+  });
 });
 
 describe('the cartoons on the shelf', () => {

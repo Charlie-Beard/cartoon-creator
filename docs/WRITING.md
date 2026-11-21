@@ -47,7 +47,7 @@ at the top of the cartoon's `cartoon.ts`.
 
 ## The ledger
 
-Before planning, run `npm run check -- --ledger` and read what the other
+Before planning, run `npm run check -- --ledger <world>` and read what the other
 episodes were about: pick a different problem, a different main place
 and, where you can, a different villain, and a new kind of deed rather than the
 same one again.

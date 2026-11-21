@@ -34,7 +34,7 @@ npm run typecheck
 npm test               # Vitest: src/core, worlds, every cartoon's lines and ids
 npm run new -- <id> <world>   # start a cartoon: src/cartoons/<id>/ from the templates
 npm run check -- <id>  # one cartoon against the house rules (lines, ids, length, no interaction, ledger)
-npm run check -- --ledger   # what every episode so far was about: read before planning
+npm run check -- --ledger <world>   # what the world's episodes were about: read before planning
 npm run shots -- <id> --fast [--scene n]   # frames + sheets on a fake clock, ~1 min: for iterating
 npm run shots -- <id> --openings   # only each scene's opening picture, one sheet, ~10 s: after moving people
 npm run shots -- <id>  # the same in real time, for the final pacing check (3–6 min)

@@ -41,7 +41,8 @@ server yourself, give it its own port, `npx vite --port 52xx`.)
   `charlie-beard/maths-game` `src/stories/l7c8.ts`, `opening.ts`;
   `charlie-beard/spelling-game` `src/stories/`).
 
-Then `npm run check -- --ledger`: what every episode so far was about.
+Then `npm run check -- --ledger <world>`: what the world's episodes were
+about (the newest 8 in full, older ones in a line).
 Steer the idea away from recent villains, main places, kinds of deed and jokes,
 and tell the person if their idea repeats one.
 

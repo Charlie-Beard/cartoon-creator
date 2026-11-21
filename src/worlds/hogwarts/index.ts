@@ -215,6 +215,7 @@ export default defineWorld({
       name: 'Ron',
       art: ron,
       parts: PERSON,
+      noFlip: 'his jumper has an R on it',
       about:
         'Ron Weasley: flaming ginger hair, freckles, a long nose, a big grin and a hand-knitted maroon jumper with an R on it. Loyal, funny and always hungry; scared of spiders and a bit nervous, but he stands by his friends. He says "Blimey!", "Brilliant!" and "Wicked!". Brave when it counts, a good chess player. He would never run off and leave Harry and Hermione.',
       voice:
@@ -657,6 +658,7 @@ export default defineWorld({
       name: 'Fred',
       art: fred,
       parts: [...PERSON, 'armR'],
+      noFlip: 'his jumper has an F on it',
       about:
         "Fred Weasley, Ron's older twin, identical to George: flaming ginger hair (longer and messier than Ron's), lots of freckles, a big mischievous grin and one eyebrow up. Fred wears a hand-knitted DARK BLUE Weasley jumper with a yellow F (George's is green with a G, so that is how to tell them apart). Do not flip Fred: it would mirror the F. Jokers who finish each other's sentences and love mischief, but kind to Harry and never cruel. Says \"Mischief managed!\". Part armR swings from the shoulder (232, 262) for a wave or a wink-and-point.",
       voice:
@@ -667,6 +669,7 @@ export default defineWorld({
       name: 'George',
       art: george,
       parts: [...PERSON, 'armR'],
+      noFlip: 'his jumper has a G on it',
       about:
         "George Weasley, Ron's older twin, identical to Fred: flaming ginger hair (longer and messier than Ron's), lots of freckles, a big mischievous grin and one eyebrow up. George wears a hand-knitted GREEN Weasley jumper with a yellow G (Fred's is dark blue with an F, so that is how to tell them apart). Do not flip George: it would mirror the G. Jokers who finish each other's sentences and love mischief, but kind to Harry and never cruel. Says \"Mischief managed!\". Part armR swings from the shoulder (232, 262) for a wave or a wink-and-point.",
       voice:
