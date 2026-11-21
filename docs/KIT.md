@@ -275,6 +275,6 @@ origin }, children)`; `raw(svgMarkup)`.
 - **A whole actor can turn** (`rotation: 180` for upside down, 90 for
   sideways): `say` bobs relative to it, so they still talk the other
   way up.
-- **Don't edit files while a real-time `shots` run is going**: the dev
-  server reloads the page and the run's timings are wrong. Edit after it
-  finishes (or stop it), then run again.
+- **A `shots` run plays the code as it was when it started** (its server
+  watches no files), so editing during a long real-time run is safe; the
+  edit just isn't in that run's frames or numbers.

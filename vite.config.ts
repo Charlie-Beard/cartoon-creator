@@ -223,6 +223,9 @@ export default defineConfig({
   },
   server: {
     host: true,
+    // The screenshot scripts' own server (scripts/lib/dev-server.mjs) serves a snapshot: no file
+    // watching and no hot reload, so editing while a long `npm run shots` goes on can't reload it.
+    ...(process.env.CARTOON_SNAPSHOT ? { watch: null, hmr: false } : {}),
     // Agent worktrees symlink node_modules from the main checkout: let the
     // dev server serve files (fonts) from wherever it really lives.
     fs: { allow: [searchForWorkspaceRoot(process.cwd()), realpathSync('node_modules')] },
