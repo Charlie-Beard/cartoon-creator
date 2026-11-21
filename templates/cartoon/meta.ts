@@ -8,7 +8,7 @@ export default defineMeta({
   thumb: '<backdrop-id>',
   added: '<YYYY-MM-DD>',
   // The episode ledger: one short line per field, so the series doesn't repeat
-  // itself. Read the others first: `npm run check -- --ledger`. Replace every
+  // itself. Read the others first: `npm run check -- --ledger <world>`. Replace every
   // <placeholder> (the check fails while any is left), and delete `villain`
   // and `jokes` if there are none.
   ledger: {

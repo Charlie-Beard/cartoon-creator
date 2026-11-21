@@ -40,5 +40,5 @@ const fill = (s: string) => s.replaceAll('<id>', id).replaceAll('<world>', world
 mkdirSync(dir, { recursive: true });
 for (const f of ['meta.ts', 'cartoon.ts']) writeFileSync(join(dir, f), fill(readFileSync(join(templates, f), 'utf8')));
 console.log(`Made src/cartoons/${id}/ (meta.ts, cartoon.ts). Fill in the title, summary, thumb, ledger and the script.`);
-console.log('Before planning, read what the other episodes were about: npm run check -- --ledger');
+console.log(`Before planning, read what the other episodes were about: npm run check -- --ledger ${world}`);
 console.log(`Backdrops in ${world}: ${Object.keys(WORLDS[world].backdrops).join(', ')}`);

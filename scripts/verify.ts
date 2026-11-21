@@ -17,6 +17,7 @@
  * anything failed.
  */
 import { spawn } from 'node:child_process';
+import { createServer, type AddressInfo } from 'node:net';
 
 const args = process.argv.slice(2);
 const ids = args.filter((a) => !a.startsWith('-'));
@@ -31,6 +32,17 @@ interface Step {
 }
 
 const ANSI = /\x1b\[[0-9;?]*[A-Za-z]/g;
+
+/** A port nothing is listening on (as scripts/lib/dev-server.mjs). */
+const freePort = (): Promise<number> =>
+  new Promise((resolve, reject) => {
+    const s = createServer();
+    s.once('error', reject);
+    s.listen(0, '127.0.0.1', () => {
+      const { port } = s.address() as AddressInfo;
+      s.close(() => resolve(port));
+    });
+  });
 
 function run(step: Step): Promise<{ step: Step; ok: boolean; out: string; seconds: number }> {
   const t0 = Date.now();
@@ -55,10 +67,12 @@ const quick: Step[] = [
   { name: 'unit tests', cmd: ['npx', 'vitest', 'run', '--reporter=dot'] },
   { name: ids.length ? `check ${ids.join(' ')}` : 'check (every cartoon)', cmd: ['npx', 'tsx', 'scripts/check-cartoon.ts', ...ids], show: ids.length > 0 },
 ];
+// The e2e tests serve the build on PW_PORT and reuse a server already there: on a fixed port, a
+// second session or worktree on the same machine would test the first one's build. A free port each time.
 const browser: Step = {
   name: ids.length ? `e2e: ${ids.join(', ')} and the screens` : 'e2e: every cartoon showing, and the screens',
   cmd: ['npx', 'playwright', 'test', '--reporter=dot'],
-  env: ids.length ? { CARTOON: ids.join(',') } : {},
+  env: { PW_PORT: String(process.env.PW_PORT ?? (await freePort())), ...(ids.length ? { CARTOON: ids.join(',') } : {}) },
 };
 
 console.log(`verify ${ids.join(' ') || '(everything)'}${e2e ? '' : ' (no e2e)'}`);
