@@ -25,6 +25,8 @@ export interface Catalogue {
   /** Backdrop ids from any world (the kit looks in the cartoon's world, then the common one, then the rest). */
   backdrops: ReadonlySet<string>;
   props: ReadonlySet<string>;
+  /** Character id → why they must never be flipped (lettering on their art), for those who mustn't. */
+  noFlip?: Readonly<Record<string, string>>;
 }
 
 export interface LintInput {
@@ -197,6 +199,62 @@ export function unknownIds(source: string, cat: Catalogue): string[] {
   return [...new Set(problems)];
 }
 
+// ------------------------------------------------------------------ scenes
+
+/** A scene method's parameter list, `(k)` or `(k: Kit)`, then its opening brace. */
+const METHOD = (name: string) => new RegExp(`(?<![.\\w])${name}\\s*\\(\\s*\\w+\\s*(?::\\s*\\w+(?:<[^>]*>)?)?\\s*\\)\\s*\\{`, 'g');
+
+/** The bodies (`{ … }`) of every scene's `set(k) { … }` or `play(k) { … }`, in order. */
+export function sceneBodies(source: string, method: 'set' | 'play'): string[] {
+  const code = stripComments(source);
+  return [...code.matchAll(METHOD(method))].map((m) => {
+    const open = m.index + m[0].length - 1;
+    return code.slice(open, endOfBraces(code, open));
+  });
+}
+
+/**
+ * `set` builds the opening picture behind the curtain or the wipe, so it
+ * must not wait (it would hold the curtain) or move anything (nobody sees
+ * it). Returns one problem per scene that does.
+ */
+export function setProblems(source: string): string[] {
+  const out: string[] = [];
+  sceneBodies(source, 'set').forEach((body, i) => {
+    const waits = [...new Set(body.match(/\bawait\b|\.(say|wait)\s*\(/g) ?? [])].map((m) => m.replace(/\s*\($/, '('));
+    const moves = [...new Set(body.match(/\.(enter|exit|walk|hop|carry|flourish|shake|spin|pop|appear|vanish|quake|glow|beam|sparkle|puff|confetti)\s*\(/g) ?? [])].map((m) => m.replace(/\s*\($/, '('));
+    if (waits.length) out.push(`scene ${i + 1}'s set() waits (${waits.join(', ')}): it runs behind the curtain and must only build the picture; move it to play()`);
+    if (moves.length) out.push(`scene ${i + 1}'s set() animates (${moves.join(', ')}): nobody sees it behind the curtain; move it to play() (hide later entrances with k.set(el, { opacity: 0 }))`);
+  });
+  return out;
+}
+
+/** How many deeds each scene's play() marks itself (k.flourish and k.carry), in order. */
+export function deedsPerScene(source: string): number[] {
+  return sceneBodies(source, 'play').map((body) => (body.match(/\.(flourish|carry)\s*\(/g) ?? []).length);
+}
+
+/**
+ * Line keys said by a character with no actor passed (`k.say('hello')`):
+ * nobody bobs or moves their mouth, and the shots speaker check can't see
+ * who is talking. Fine for a voice from off stage.
+ */
+export function saidWithNoSpeaker(source: string, lines: Record<string, Line>): string[] {
+  const body = withoutLinesTable(stripComments(source));
+  const keys = allMatches(body, new RegExp(`\\.say\\s*\\(\\s*${QUOTE}([^'"\`]+)${QUOTE}\\s*\\)`, 'g'));
+  return [...new Set(keys)].filter((key) => lines[key] && lines[key].who !== 'narrator');
+}
+
+/** Characters placed flipped (`k.character(id, { flip: true })`) whose art has lettering that would read backwards. */
+export function flippedLettering(source: string, cat: Catalogue): string[] {
+  const out: string[] = [];
+  for (const args of callArguments(stripComments(source), 'character')) {
+    const id = new RegExp(`^\\s*${QUOTE}([^'"\`]+)${QUOTE}`).exec(args)?.[1];
+    if (id && cat.noFlip?.[id] && /\bflip\s*:\s*true\b/.test(args)) out.push(`${id} is flipped, but ${cat.noFlip[id]}: turn the others to face them instead`);
+  }
+  return [...new Set(out)];
+}
+
 /** Calls a cartoon may not make: a cartoon only plays, nothing waits for a tap or a drag. */
 const INTERACTIVE = ['tapToHelp', 'dragToHelp', 'onTap', 'addEventListener'];
 
@@ -209,6 +267,8 @@ export function lintCartoon({ id, source, lines, catalogue }: LintInput): LintRe
   for (const key of unusedLines(source, lines)) errors.push(`line "${key}" is never said: delete it (it would be recorded for nothing)`);
   for (const key of undefinedLines(source, lines)) errors.push(`the script says "${key}" but there is no such line`);
   for (const p of unknownIds(source, catalogue)) errors.push(p);
+  for (const p of setProblems(source)) errors.push(p);
+  for (const p of flippedLettering(source, catalogue)) errors.push(p);
 
   const code = stripComments(source);
   for (const call of INTERACTIVE) if (new RegExp(`\\b${call}\\s*\\(`).test(code)) errors.push(`\`${call}\`: nothing in a cartoon is interactive, it just plays`);
@@ -431,15 +491,27 @@ export function compareLedgers(entry: LedgerEntry, shelf: readonly LedgerEntry[]
 /**
  * Every episode's ledger as plain text, for a writer to read before planning:
  * grouped by world, newest first within each. An episode with no ledger yet
- * says so (it can't be compared with).
+ * says so (it can't be compared with). Only the newest `full` of each world
+ * are given in full (the ones a new episode is compared with, and most like
+ * to be repeated); older ones get one line each, so the list stays short to
+ * read as the shelf grows. `world` keeps just that world.
  */
-export function formatLedgers(shelf: readonly LedgerEntry[], nameOf: (id: string) => string = (s) => s): string {
+export function formatLedgers(
+  shelf: readonly LedgerEntry[],
+  nameOf: (id: string) => string = (s) => s,
+  { world: only, full = 8 }: { world?: string; full?: number } = {},
+): string {
   const out: string[] = [];
-  const worlds = [...new Set(shelf.map((e) => e.world))].sort();
+  const worlds = [...new Set(shelf.map((e) => e.world))].filter((w) => !only || w === only).sort();
   for (const world of worlds) {
     const eps = shelf.filter((e) => e.world === world).sort((a, b) => b.added.localeCompare(a.added) || a.title.localeCompare(b.title));
     out.push(`${world} (${eps.length})`);
-    for (const e of eps) {
+    for (const [i, e] of eps.entries()) {
+      if (i === full) out.push(`  older, in one line each:`);
+      if (i >= full) {
+        out.push(`  ${e.added}  ${e.title}  [${e.id}]: ${e.ledger?.problem ?? '(no ledger yet)'}`);
+        continue;
+      }
       out.push(`  ${e.added}  ${e.title}  [${e.id}]`);
       const l = e.ledger;
       if (!l) {

@@ -20,8 +20,12 @@
  *     which is compared with the episodes already on the shelf: a repeated
  *     villain, main place, problem or running joke is a warning
  *
- *   npm run check -- --ledger    prints every episode's ledger, newest first
- *                                and grouped by world, to read before planning
+ *   npm run check -- --ledger [world]   prints the episodes' ledgers, newest first
+ *                                and grouped by world (the newest 8 of each in full,
+ *                                older ones in a line), to read before planning
+ *
+ * With no id, every cartoon is checked and only those with something to
+ * say (an error or a warning) are printed.
  *
  * Exits 1 if any cartoon has an error. Warnings are printed but allowed.
  * The checks themselves are in scripts/lib/cartoon-lint.ts (also run by
@@ -32,7 +36,7 @@ import { join } from 'node:path';
 import { isKebab } from '../src/core/cartoon';
 import { WORLDS } from '../src/worlds';
 import { catalogue } from './lib/catalogue';
-import { compareLedgers, formatLedgers, lintCartoon, lintLedger } from './lib/cartoon-lint';
+import { compareLedgers, deedsPerScene, formatLedgers, lintCartoon, lintLedger, saidWithNoSpeaker } from './lib/cartoon-lint';
 import { folderOf, SHELF, sourceOf } from './lib/shelf';
 
 // Character ids to names for the messages ('dameSnap' → 'Dame Snap').
@@ -40,12 +44,18 @@ const names: Record<string, string> = {};
 for (const w of Object.values(WORLDS)) for (const [id, c] of Object.entries(w.characters)) names[id] = c.name;
 const nameOf = (id: string): string => names[id] ?? id;
 
+const asks = process.argv.slice(2).filter((a) => !a.startsWith('-'));
+
 if (process.argv.includes('--ledger')) {
-  console.log(SHELF.length ? formatLedgers(SHELF, nameOf) : 'The shelf is empty: no ledgers yet.');
+  const world = asks[0];
+  if (world && !(world in WORLDS)) {
+    console.error(`No world "${world}". Worlds: ${Object.keys(WORLDS).join(', ')}`);
+    process.exit(1);
+  }
+  console.log(SHELF.length ? formatLedgers(SHELF, nameOf, { world }) : 'The shelf is empty: no ledgers yet.');
   process.exit(0);
 }
 
-const asks = process.argv.slice(2).filter((a) => !a.startsWith('-'));
 const unknown = asks.filter((id) => !SHELF.some((c) => c.id === id));
 if (unknown.length) {
   console.error(`Not on the shelf (no src/cartoons/<id>/meta.ts): ${unknown.join(', ')}`);
@@ -60,6 +70,7 @@ if (!chosen.length) {
 
 const cat = catalogue();
 let failed = 0;
+let quiet = 0;
 
 for (const entry of chosen) {
   const errors: string[] = [];
@@ -99,20 +110,31 @@ for (const entry of chosen) {
       const mmss = (s: number): string => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
       if (onScreen < 120) warnings.push(`about ${mmss(onScreen)} on screen: under the 2 minute floor (add a beat or a few lines)`);
       if (onScreen > 360) warnings.push(`about ${mmss(onScreen)} on screen: over the 6 minute ceiling (trim lines)`);
+      const deeds = deedsPerScene(sourceOf(entry.id));
       info.push(
         `${cartoon.scenes.length} scenes, ${n} lines, about ${Math.round(result.spokenSeconds)} s of speech`,
         `on screen: about ${mmss(onScreen)} (shots measures it)`,
         `scenes: ${cartoon.scenes.map((s, i) => `${i + 1} ${s.name}`).join(' · ')}`,
+        `deeds marked (k.flourish, k.carry) per scene: ${deeds.join(' · ')}`,
       );
+      // Often a voice from off stage, on purpose; otherwise pass the actor (k.say(key, el)) so they talk.
+      const offStage = saidWithNoSpeaker(sourceOf(entry.id), cartoon.lines);
+      if (offStage.length) info.push(`said by a character with no actor passed (off stage?): ${offStage.join(', ')}`);
     }
   }
 
+  // Checking everything: only the cartoons with something to say.
+  if (!asks.length && !errors.length && !warnings.length) {
+    quiet++;
+    continue;
+  }
   console.log(`${errors.length ? 'FAIL' : 'ok  '} ${entry.id}`);
-  for (const i of info) console.log(`       ${i}`);
+  if (asks.length) for (const i of info) console.log(`       ${i}`);
   for (const w of warnings) console.log(`  warn ${w}`);
   for (const e of errors) console.log(`  ERROR ${e}`);
   if (errors.length) failed++;
 }
 
+if (quiet) console.log(`(${quiet} more pass with nothing to report)`);
 console.log(failed ? `\n${failed} of ${chosen.length} cartoons have errors.` : `\n${chosen.length} cartoon${chosen.length === 1 ? '' : 's'} pass.`);
 process.exit(failed ? 1 : 0);

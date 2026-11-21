@@ -84,13 +84,12 @@ which frames you could not check.
       candles before they're lit, a character drawn into the scenery who
       also walks on as an actor). Look at the backdrop alone:
       `npm run lab -- <world> --backdrop <id>`.
-- [ ] Nobody with lettering on their art (Ron's "R") is flipped.
 
 **Code**
 - [ ] The top comment tells the whole story; one-off art and sounds are
       named uniquely and commented; reusable art is in the world.
-- [ ] `set` never awaits or animates; `play` awaits its beats; no
-      `Math.random` decides anything that matters for the story.
+- [ ] `play` awaits its beats. (`npm run check` already fails a `set`
+      that waits or animates, and a lettered character who is flipped.)
 - [ ] `meta.ts` is filled in and spread into the script; typecheck, `npm test` and e2e
       pass.
 

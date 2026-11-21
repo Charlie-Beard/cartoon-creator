@@ -4,6 +4,7 @@
  *   npm run catalogue -- --list                  # the worlds
  *   npm run catalogue -- faraway                 # everything a writer needs, compact
  *   npm run catalogue -- faraway characters      # one section: about | characters | backdrops | props | moves | pieces | kit
+ *   npm run catalogue -- faraway drawing         # for drawing new art: the paper engine and the world's builders, with signatures
  *   npm run catalogue -- faraway --id saucepan   # one entry in full (a character, backdrop, prop, sound, move or set piece)
  *   npm run catalogue -- faraway pieces --id snapLoom   # a set piece's whole doc comment, usage example included
  *   npm run catalogue -- faraway --no-common     # leave out the "common" world's items
@@ -33,7 +34,7 @@ import type { BackdropDef, CharacterDef, PropDef, World } from '../src/worlds';
 // ------------------------------------------------------------------ options
 
 export type Mode = 'brief' | 'normal' | 'full';
-export const SECTIONS = ['about', 'characters', 'backdrops', 'props', 'moves', 'pieces', 'kit'] as const;
+export const SECTIONS = ['about', 'characters', 'backdrops', 'props', 'moves', 'pieces', 'kit', 'drawing'] as const;
 export type Section = (typeof SECTIONS)[number];
 
 export interface CatalogueOptions {
@@ -220,6 +221,71 @@ function movesOf(worldId: string): Moves | undefined {
   const sf = readSource(root(file));
   if (!sf) return undefined;
   return { file, sounds: objectMembers(sf, 'sounds'), moves: objectMembers(sf, 'moves') };
+}
+
+// ---------------------------------------------------------- drawing (source)
+
+/**
+ * The files a world's art is built from, for whoever draws a new character,
+ * backdrop or prop there: the paper engine, then the world's own builders
+ * (heads, faces, arms, a whole `person`). Listed by the `drawing` section,
+ * which is not part of the default sheet (writers don't need it).
+ */
+const DRAWING: Record<string, string[]> = {
+  common: ['src/art/paper.ts'],
+  faraway: ['src/art/paper.ts', 'src/worlds/faraway/parts.ts'],
+  wishing: ['src/art/paper.ts', 'src/worlds/faraway/parts.ts'],
+  hogwarts: ['src/art/paper.ts', 'src/worlds/hogwarts/characters/people.ts'],
+  bears: ['src/art/paper.ts', 'src/art/watercolour.ts', 'src/worlds/bears/parts.ts'],
+};
+
+/** Plumbing in paper.ts that a drawing never calls itself. */
+const DRAWING_SKIP = new Set(['hashString', 'rng', 'tear', 'TearOpts', 'toPath', 'BOIL_FRAMES', 'Ctx', 'Node', 'Pt', 'Edge', 'FIBRE', 'tornRectPath']);
+
+/** One line per export of a drawing file: functions with their parameters, option interfaces with their keys, constants by name. */
+function drawingLines(file: string, b: Budget): string[] {
+  const sf = readSource(root(file));
+  if (!sf) return [`  (${file} not found)`];
+  const out: string[] = [];
+  const doc = (n: ts.Node): string => {
+    const d = docOf(sf, n);
+    return d ? ` — ${condense(d, b.doc)}` : '';
+  };
+  for (const st of sf.statements) {
+    if (!hasModifier(st, ts.SyntaxKind.ExportKeyword)) continue;
+    if (ts.isFunctionDeclaration(st) && st.name && !DRAWING_SKIP.has(st.name.text)) {
+      out.push(`  ${st.name.text}(${st.parameters.map((p) => paramText(sf, p)).join(', ')})${doc(st)}`);
+    } else if (ts.isInterfaceDeclaration(st) && !DRAWING_SKIP.has(st.name.text)) {
+      out.push(`  interface ${st.name.text} ${keysText(sf, st.members)}${doc(st)}`);
+    } else if (ts.isVariableStatement(st)) {
+      for (const d of st.declarationList.declarations) {
+        if (!ts.isIdentifier(d.name) && !ts.isArrayBindingPattern(d.name)) continue;
+        const names = ts.isIdentifier(d.name) ? [d.name.text] : d.name.elements.flatMap((e) => (ts.isBindingElement(e) && ts.isIdentifier(e.name) ? [e.name.text] : []));
+        if (names.every((n) => DRAWING_SKIP.has(n))) continue;
+        let init = d.initializer;
+        while (init && (ts.isAsExpression(init) || ts.isParenthesizedExpression(init))) init = init.expression;
+        if (init && (ts.isArrowFunction(init) || ts.isFunctionExpression(init))) out.push(`  ${names[0]}(${init.parameters.map((p) => paramText(sf, p)).join(', ')})${doc(st)}`);
+        else out.push(`  ${names.join(', ')} = ${cut(squash(init?.getText(sf) ?? ''), 60)}${doc(st)}`);
+      }
+    }
+  }
+  return out;
+}
+
+/** The palette's colour names (C.ink, C.cream …): what a drawing fills with. */
+function paletteLine(): string {
+  const sf = readSource(root('src/art/palette.ts'));
+  const names = sf ? objectMembers(sf, 'C').map((m) => m.name) : [];
+  return `C (src/art/palette.ts): ${names.join(', ')}`;
+}
+
+function drawingSection(worldId: string, b: Budget): string {
+  const files = DRAWING[worldId] ?? DRAWING.common;
+  return [
+    `## Drawing — what new art in ${worldId} is built from (docs/WORLDS.md; the new-character and new-backdrop skills)`,
+    paletteLine(),
+    ...files.map((f) => section(`### ${f}`, drawingLines(f, b))),
+  ].join('\n\n');
 }
 
 // ------------------------------------------------------- set pieces (source)
@@ -469,6 +535,7 @@ function characterBlock(id: string, c: CharacterDef, b: Budget, detail: boolean,
   });
   if (poses.length) lines.push(`  poses: ${poses.join(', ')}`);
   if (c.parts?.length) lines.push(`  parts: ${detail ? c.parts.join(', ') : partsText(c.parts, std)}`);
+  if (c.noFlip) lines.push(`  never flip: ${c.noFlip}`);
   lines.push(`  about: ${condense(c.about, b.about)}`);
   if (b.voice) lines.push(`  voice: ${condense(plainVoice(c.voice), b.voice)}`);
   return lines.join('\n');
@@ -727,6 +794,8 @@ export function catalogueText(worldId: string, opts: CatalogueOptions = {}): str
   if (want('kit')) {
     parts.push(section('## The kit’s own sounds — always available (src/kit/kit.ts)', kitLines(b)));
   }
+  // For drawing new art only: asked for by name, never in the writer's sheet.
+  if (opts.section === 'drawing') return `${drawingSection(w.id, b)}\n`;
   return `${parts.join('\n\n')}\n`;
 }
 

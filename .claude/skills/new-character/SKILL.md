@@ -25,10 +25,13 @@ Write down, before drawing:
 
 ## 2. Draw from what exists
 
-Open the world's drawing files and find the closest existing character.
-Reuse its building blocks (the world's `parts.ts` if it has one: heads,
-eyes, mouths, hands, clothes), its proportions and its palette, so the
-new one belongs. In `src/worlds/faraway/` and `src/worlds/hogwarts/` the
+`npm run catalogue -- <world> drawing` lists what the world's art is built
+from (the paper engine, the world's builders such as `person()`, eyes,
+mouths and arms, and the palette's colour names) with their signatures:
+read that, not `paper.ts` and `parts.ts`. Then open ONE existing character
+file, the closest to the new one (a recent file of 10–15 KB, not the
+world's `index.ts`), and reuse its building blocks, proportions and
+palette, so the new one belongs. In `src/worlds/faraway/` and `src/worlds/hogwarts/` the
 characters were ported from the games; the games' own
 `src/art/characters/` folders have more examples.
 

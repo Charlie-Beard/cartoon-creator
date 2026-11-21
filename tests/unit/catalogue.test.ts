@@ -142,6 +142,19 @@ describe('catalogue', () => {
     expect(catalogueText('faraway', { section: 'pieces', mode: 'brief' }).length).toBeLessThan(1200);
   });
 
+  it('lists what new art is drawn with, only when asked for, and in far less than the files', () => {
+    expect(catalogueText('faraway')).not.toContain('## Drawing');
+    const faraway = catalogueText('faraway', { section: 'drawing' });
+    expect(faraway).toMatch(/^\s+piece\(outline: Pt\[\], fill: string/m);
+    expect(faraway).toMatch(/^\s+person\(o: PersonOpts\)/m);
+    expect(faraway).toMatch(/^C \(src\/art\/palette\.ts\): ink, /m);
+    expect(faraway).not.toMatch(/^\s+hashString\(/m); // the engine's plumbing is left out
+    expect(catalogueText('bears', { section: 'drawing' })).toMatch(/^\s+wash\(outline/m);
+    expect(catalogueText('hogwarts', { section: 'drawing' })).toContain('src/worlds/hogwarts/characters/people.ts');
+    // paper.ts and a parts.ts together run past 30 KB.
+    for (const w of ['faraway', 'hogwarts', 'bears', 'wishing']) expect(catalogueText(w, { section: 'drawing' }).length, w).toBeLessThan(8000);
+  });
+
   it('lists the kit’s fx and sfx from kit.ts', () => {
     const kit = catalogueText('faraway', { section: 'kit' });
     expect(kit).toMatch(/^\s+boing\(\) — /m);

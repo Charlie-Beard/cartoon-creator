@@ -18,8 +18,10 @@ Read `docs/WORLDS.md` and `docs/STYLE.md` (Look, Composition) first.
 
 ## 2. Draw from what exists
 
-Find the closest existing backdrop in the world (or `common`) and reuse
-its approach: sky and far layers first, then the mid ground, then the
+`npm run catalogue -- <world> drawing` lists the paper engine's calls and
+the palette's colour names with their signatures. Find the closest
+existing backdrop in the world (or `common`), open that one file, and
+reuse its approach: sky and far layers first, then the mid ground, then the
 floor; each layer a few big torn `piece()`s, with detail (windows,
 leaves, stones, books) as small pieces on top. The games' scenery
 (`charlie-beard/maths-game` `src/art/scenery.ts`, `src/art/lands/`;

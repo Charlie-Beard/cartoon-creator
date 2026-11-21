@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { ALL_CARTOONS as SHELF } from '../../src/cartoons';
 import type { Line } from '../../src/core/cartoon';
-import { callArguments, lintCartoon, stripComments, undefinedLines, unknownIds, unusedLines, withoutLinesTable } from '../../scripts/lib/cartoon-lint';
+import { callArguments, deedsPerScene, flippedLettering, lintCartoon, saidWithNoSpeaker, sceneBodies, setProblems, stripComments, undefinedLines, unknownIds, unusedLines, withoutLinesTable } from '../../scripts/lib/cartoon-lint';
 import { catalogue } from '../../scripts/lib/catalogue';
 
 const cat = {
@@ -14,6 +14,43 @@ const lines: Record<string, Line> = {
   hello: { who: 'narrator', text: 'Hello! It’s a "test" (really).' },
   bye: { who: 'moonface', text: "Goodbye // not a comment /* nor this */ ." },
 };
+
+describe('the scenes', () => {
+  const src = `scenes: [
+    { name: 'One', set(k) { k.backdrop('meadow'); cast.m = k.character('moonface', { x: 1, y: 2 }); },
+      async play(k) { await k.say('bye', cast.m); k.flourish(cast.m); await k.carry(a, b); } },
+    { name: 'Two', set(k: Kit) { k.backdrop('meadow'); await k.wait(500); k.hop(cast.m); },
+      async play(k: Kit) { await k.say('hello'); await k.say('bye'); /* k.flourish(x) */ } },
+  ]`;
+
+  it('finds each scene\'s set and play, with or without a type on k', () => {
+    expect(sceneBodies(src, 'set')).toHaveLength(2);
+    expect(sceneBodies(src, 'play')).toHaveLength(2);
+    expect(sceneBodies('chairRide.set(k, { x: 1 }); ride.play(k)', 'set')).toHaveLength(0);
+  });
+
+  it('fails a set() that waits or animates, and only that one', () => {
+    const out = setProblems(src);
+    expect(out).toHaveLength(2);
+    expect(out[0]).toMatch(/^scene 2's set\(\) waits \(await, \.wait\(\)/);
+    expect(out[1]).toMatch(/^scene 2's set\(\) animates \(\.hop\(\)/);
+  });
+
+  it('counts the deeds each scene marks, not ones in comments', () => {
+    expect(deedsPerScene(src)).toEqual([2, 0]);
+  });
+
+  it('notices a character\'s line said with no actor, not the narrator\'s', () => {
+    expect(saidWithNoSpeaker(src, lines)).toEqual(['bye']);
+  });
+
+  it('fails a lettered character placed flipped', () => {
+    const withLetters = { ...cat, noFlip: { moonface: 'his hat says MF' } };
+    expect(flippedLettering("k.character('moonface', { x: 1, y: 2, flip: true })", withLetters)).toEqual(['moonface is flipped, but his hat says MF: turn the others to face them instead']);
+    expect(flippedLettering("k.character('moonface', { x: 1, y: 2 })", withLetters)).toEqual([]);
+    expect(flippedLettering("k.character('moonface', { flip: true })", cat)).toEqual([]);
+  });
+});
 
 describe('reading the script source', () => {
   it('blanks comments but not "//" inside strings', () => {

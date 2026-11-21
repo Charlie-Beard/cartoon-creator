@@ -10,10 +10,14 @@ export function catalogue(): Catalogue {
   const characters: Record<string, string[]> = {};
   const backdrops = new Set<string>();
   const props = new Set<string>();
+  const noFlip: Record<string, string> = {};
   for (const w of Object.values(WORLDS)) {
-    for (const [id, c] of Object.entries(w.characters)) characters[id] = Object.keys(c.poses ?? {});
+    for (const [id, c] of Object.entries(w.characters)) {
+      characters[id] = Object.keys(c.poses ?? {});
+      if (c.noFlip) noFlip[id] = c.noFlip;
+    }
     for (const id of Object.keys(w.backdrops)) backdrops.add(id);
     for (const id of Object.keys(w.props)) props.add(id);
   }
-  return { speakers: speakers(), characters, backdrops, props };
+  return { speakers: speakers(), characters, backdrops, props, noFlip };
 }
