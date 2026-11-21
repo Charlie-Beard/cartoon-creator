@@ -1,7 +1,7 @@
 /**
  * Layout checks on the boxes of one frame (and of a scene's frames in turn),
- * for `npm run shots`: so whoever writes a cartoon reads the contact sheet,
- * each scene's opening frame and the FLAGGED frames, not every frame.
+ * for `npm run shots`: so whoever writes a cartoon reads the sheets (the
+ * episode, the opening sets and the FLAGGED frames), not every frame.
  *
  * Pure: no DOM, no Playwright. shots.mjs collects a `Frame` from the page
  * at each screenshot (see collectFrame there) and hands the frames of a
@@ -84,8 +84,9 @@ export function onStage(a, stage) {
 }
 
 /**
- * The problems in one frame: [{ kind, key, message }]. `key` says what the
- * problem is about, so the same one in the next frame can be told from a new one.
+ * The problems in one frame: [{ kind, key, actors, message }]. `key` says what the
+ * problem is about, so the same one in the next frame can be told from a new one;
+ * `actors` are the keys of the actors it is about (boxed on the flags sheet).
  * `offstage` problems come back with kind 'offstage?': they only count if the
  * next frame has them too (checkScene decides).
  */
@@ -102,7 +103,7 @@ export function checkFrame(frame, { assumeCaption = false } = {}) {
       if (a.kind === 'art') continue;
       const off = 1 - onStage(a, stage);
       if (off > T.offstage && off < T.gone) {
-        issues.push({ kind: 'offstage?', key: `offstage:${a.key}`, message: `${a.key} is ${pct(off)} off the stage (${spot(a.box)}).` });
+        issues.push({ kind: 'offstage?', key: `offstage:${a.key}`, actors: [a.key], message: `${a.key} is ${pct(off)} off the stage (${spot(a.box)}).` });
       }
     }
   }
@@ -119,6 +120,7 @@ export function checkFrame(frame, { assumeCaption = false } = {}) {
         issues.push({
           key: `caption:${a.key}`,
           kind: 'caption',
+          actors: [a.key],
           message: `${a.key}'s face (y ${px(face.y)}–${px(face.y + face.h)}) reaches into the caption band, y ${T.bandTop}+${frame.caption?.on ? '' : ' (a caption will land there)'}.`,
         });
       }
@@ -135,12 +137,12 @@ export function checkFrame(frame, { assumeCaption = false } = {}) {
       const smaller = Math.min(area(a.box), area(b.box));
       const share = smaller > 0 ? overlapArea(a.box, b.box) / smaller : 0;
       if (share > T.overlap) {
-        issues.push({ kind: 'overlap', key: `overlap:${[a.key, b.key].sort().join('|')}`, message: `${a.key} and ${b.key} overlap by ${pct(share)} of the smaller one.` });
+        issues.push({ kind: 'overlap', key: `overlap:${[a.key, b.key].sort().join('|')}`, actors: [a.key, b.key], message: `${a.key} and ${b.key} overlap by ${pct(share)} of the smaller one.` });
       }
     }
   }
   if (present.length > T.maxCharacters) {
-    issues.push({ kind: 'crowd', key: 'crowd', message: `${present.length} characters on stage at once (${present.map((a) => a.key).join(', ')}); more than ${T.maxCharacters}.` });
+    issues.push({ kind: 'crowd', key: 'crowd', actors: present.map((a) => a.key), message: `${present.length} characters on stage at once (${present.map((a) => a.key).join(', ')}); more than ${T.maxCharacters}.` });
   }
 
   // The speaker, while their line is being said. The kit marks the actor it is bobbing for the line
@@ -153,7 +155,7 @@ export function checkFrame(frame, { assumeCaption = false } = {}) {
       const best = talkers.map((a) => ({ a, f: isVisible(a) ? onStage(a, stage) : 0 })).sort((p, q) => q.f - p.f)[0];
       if (best.f < T.speakerInView) {
         const why = !isVisible(best.a) ? 'invisible' : `${pct(1 - best.f)} off the stage${zoomed ? ' (out of the camera\'s shot)' : ''}`;
-        issues.push({ kind: 'speaker', key: `speaker:${best.a.key}`, message: `${best.a.key} is speaking but is ${why}.` });
+        issues.push({ kind: 'speaker', key: `speaker:${best.a.key}`, actors: [best.a.key], message: `${best.a.key} is speaking but is ${why}.` });
       }
     }
   }
@@ -162,7 +164,7 @@ export function checkFrame(frame, { assumeCaption = false } = {}) {
 
 /**
  * Checks a scene's frames in the order they were shot. Returns, for each
- * frame, the reasons it should be looked at: [{ kind, message }] ([] if it
+ * frame, the reasons it should be looked at: [{ kind, message, actors }] ([] if it
  * is fine). A problem that carries on over several frames is reported at the
  * first of them, with "(and for N more frames)"; an off-stage problem only
  * counts at all if it lasts two frames in a row.
@@ -178,7 +180,7 @@ export function checkScene(frames, opts = {}) {
       while (i + length < per.length && per[i + length].some((p) => p.key === issue.key)) length++;
       if (issue.kind === 'offstage?' && length < 2) continue;
       const more = length > 1 ? ` (and for ${length - 1} more frame${length > 2 ? 's' : ''})` : '';
-      out[i].push({ kind: issue.kind.replace('?', ''), message: issue.message + more });
+      out[i].push({ kind: issue.kind.replace('?', ''), message: issue.message + more, actors: issue.actors ?? [] });
     }
   });
   return out;

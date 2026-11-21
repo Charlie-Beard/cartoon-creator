@@ -157,30 +157,35 @@ Fix everything it reports. Don't silence a rule; rewrite the line.
 ## 6. Watch it
 
 ```bash
-npm run shots -- <id> --openings          # each scene's opening picture only, ~5 s: after placing anyone
+npm run shots -- <id> --openings          # each scene's opening picture only, ~10 s: after placing anyone
 npm run shots -- <id> --fast              # the whole episode on a fake clock, about a minute
 npm run shots -- <id> --fast --scene 2    # one scene (from 1), while fixing it
 npm run shots -- <id> --strict            # real time, 3–6 minutes: the final check (fails on any flag)
 ```
 
 It plays the episode in Chromium at 1180 × 820, saves a frame of every
-scene every few seconds to `screenshots/<id>/`, a contact sheet
-(`sheet.png`), and a pacing report with every caption's timing and any
-silent stretch over 4 s. Iterate with `--fast` after every round of
+scene every few seconds to `screenshots/<id>/`, sheets sized to read as
+one image each (`sheet.png`, `openings.png`, `flags.png`,
+`sheet-scene<n>.png`), and a pacing report: each scene's time and any
+silent stretch over 4 s (`--captions` adds every line's timing). Iterate with `--fast` after every round of
 changes (its times are story-clock times with the stand-in voice, close
 to the real thing); the last run before the PR is without it.
 
 It also checks the layout of every frame itself (an actor 25%+ off
 stage, a face in the caption band, characters overlapping 35%+, more
 than 4 characters, the speaker
-out of shot) and lists **Frames to look at** (also `flags.json`, and a
-red outline on the contact sheet).
+out of shot) and lists **Frames to look at** (also `flags.json`, and
+`flags.png`: every flagged frame at half size with the actors boxed).
 
 ## 7. Look (the step that matters most)
 
-Read the contact sheet, every scene's opening frame (`scene<n>-0.png`)
-and every flagged frame; you don't need the rest one by one. Fix or
-justify every flag. For each frame, ask:
+Read `sheet.png` (the episode at a glance), `openings.png` (every
+scene's opening set, half size) and `flags.png` (every flagged frame);
+not the frames one by one. A single frame costs as much as a sheet of
+four, so open `sheet-scene<n>.png` (one scene, every frame) or a single
+`scene<n>-<k>.png` only for a question the sheets can't answer. After
+fixing one scene, re-run and re-read just that scene (`--scene n`).
+Fix or justify every flag. For each frame, ask:
 
 - Is everyone where they should be: on stage, not under the caption
   band (y 690+), not overlapping by accident, facing whoever they talk to?
@@ -215,11 +220,12 @@ their ElevenLabs key. The episode plays with the iPad's voice until then.
 
 ## 10. Ship
 
-- `npm run test:e2e` (with `PW_CHROMIUM=/opt/pw-browsers/chromium` in the
-  cloud) must pass.
+- `npm run verify -- <id>` must pass (typecheck, unit tests, check, and
+  the e2e tests for this episode and the screens, in about a minute). If
+  you changed a world's shared art or moves, `npm run verify` (everything).
 - Commit (the cartoon's folder and any world art) with a message that
   says what the episode is, push, and open a PR whose description has
-  the summary, the scene list, the deeds, the contact sheet's findings
+  the summary, the scene list, the deeds, what the sheets showed
   and the pacing numbers.
 - **Merge it** as soon as its CI check is green (the owner's standing
   instruction: always merge; no need to ask). If CI fails, fix it and

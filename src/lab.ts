@@ -5,7 +5,7 @@
  *   /lab.html                              every world, every piece, small
  *   ?world=faraway                         one world
  *   ?world=faraway&set=chars|poses|backdrops|props
- *   &p=moonface,silky                      only these ids; &size=210 card width
+ *   &p=moonface,silky                      only these ids (a character's id picks all their poses); &size=210 card width
  *   ?backdrop=meadow                       one backdrop at stage size (1180 × 820)
  *
  * Not part of the production build (vite.config.ts only builds index.html).
@@ -39,7 +39,8 @@ function nav(): string {
 
 /** A grid of cards, one per named picture. */
 function grid(title: string, all: Record<string, () => string>, width = size): string {
-  const names = Object.keys(all).filter((n) => !only || only.includes(n));
+  // A pose card is "<character>:<pose>": &p=<character> picks all of theirs.
+  const names = Object.keys(all).filter((n) => !only || only.includes(n) || only.includes(n.split(':')[0]));
   if (!names.length) return '';
   return `<h2 class="lab-h">${title}</h2><div class="lab-grid">${names
     .map((n) => `<figure class="lab-card" data-id="${n}" style="width:${width}px">${all[n]()}<figcaption>${n}</figcaption></figure>`)

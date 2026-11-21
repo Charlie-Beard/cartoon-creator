@@ -1,10 +1,14 @@
 import { expect, test, type Page } from '@playwright/test';
 import { advance, cardFor, CARTOONS, openCorner, playerState } from './helpers';
 
+type Entry = (typeof CARTOONS)[number];
+
 /**
  * Every cartoon on the shelf (CARTOON=<id> for just one) is opened from the
  * library, played through every scene to the end button, and the library
- * shows the watched tick. With an empty shelf there is nothing here.
+ * shows the watched tick. With an empty shelf there is nothing here. A
+ * cartoon named in CARTOON that isn't showing on the shelf yet (a new
+ * episode) is opened with ?cartoon=<id> instead, and has no card to tick.
  *
  * Two ways through: skipping scene after scene (fast, and checks every
  * scene can be left), and playing it straight through with the clock sped up.
@@ -32,11 +36,30 @@ async function sceneCount(page: Page, id: string): Promise<number> {
   return n;
 }
 
-/** Back to the shelf from the end button: the cartoon carries its tick. */
-async function backToTheShelf(page: Page, id: string): Promise<void> {
+/** Opens a cartoon: from its card on the shelf, or by its address if it isn't showing there. */
+async function open(page: Page, entry: Entry, scene = 0): Promise<void> {
+  if (!entry.shown) {
+    await page.goto(`/?cartoon=${entry.id}&scene=${scene}`);
+    return;
+  }
+  await page.goto('/');
+  await (await cardFor(page, entry.id)).click();
+}
+
+/** How many scenes a cartoon has, as the player says once it has loaded the script. */
+async function scenesInPlayer(page: Page): Promise<number> {
+  const root = page.locator('[data-scenes]');
+  await expect(root).toBeAttached({ timeout: 20_000 });
+  return Number(await root.getAttribute('data-scenes'));
+}
+
+/** Back to the shelf from the end button: the cartoon carries its tick (if it has a card). */
+async function backToTheShelf(page: Page, entry: Entry): Promise<void> {
+  const id = entry.id;
   // The end button breathes for ever, so it is never "stable": press it anyway.
   await page.locator('[data-end]').click({ force: true });
   await expect(page.locator('.scene.library')).toBeVisible();
+  if (!entry.shown) return;
   const card = await cardFor(page, id);
   await expect(card).toBeVisible();
   await expect(card.locator('.shelf-tick'), `${id} should have the watched tick`).toHaveCount(1);
@@ -46,15 +69,15 @@ for (const entry of CARTOONS) {
   test.describe(entry.id, () => {
     test('opens from the library, every scene can be skipped, and the end goes back with a tick', async ({ page }) => {
       test.setTimeout(120_000);
-      const scenes = await sceneCount(page, entry.id);
-      expect(scenes, 'a cartoon has scenes').toBeGreaterThan(0);
-
       // The curtains and paper wipes run on the fake clock, pushed along
       // rather than waited for.
+      const fromCorner = entry.shown ? await sceneCount(page, entry.id) : null;
       await page.clock.install();
-      await page.goto('/');
-      await (await cardFor(page, entry.id)).click();
+      await open(page, entry);
       await expect(page.locator('.scene.library')).toHaveCount(0);
+      const scenes = await scenesInPlayer(page);
+      expect(scenes, 'a cartoon has scenes').toBeGreaterThan(0);
+      if (fromCorner !== null) expect(fromCorner, 'the corner lists every scene').toBe(scenes);
 
       const seen: string[] = [];
       for (let guard = 0; guard < scenes + 4; guard++) {
@@ -76,7 +99,7 @@ for (const entry of CARTOONS) {
       expect(seen.length, seen.join(',') + ' of ' + scenes).toBeLessThanOrEqual(scenes);
       expect(Number(seen[seen.length - 1])).toBeLessThanOrEqual(scenes - 1);
 
-      await backToTheShelf(page, entry.id);
+      await backToTheShelf(page, entry);
     });
 
     test('plays straight through to the end with nothing to tap', async ({ page }) => {
@@ -88,8 +111,7 @@ for (const entry of CARTOONS) {
       // whole episode takes seconds, not minutes. (The player moves on from
       // a scene that stalls after 180 s, so nothing can hang the test.)
       await page.clock.install();
-      await page.goto('/');
-      await (await cardFor(page, entry.id)).click();
+      await open(page, entry);
 
       let at = '';
       for (let second = 0; second < 700; second++) {
@@ -104,11 +126,20 @@ for (const entry of CARTOONS) {
       expect(errors, 'the script threw while it played').toEqual([]);
       expect(at, 'the cartoon never reached its end').toBe('end');
 
-      await backToTheShelf(page, entry.id);
+      await backToTheShelf(page, entry);
     });
 
     test('can be started from its last scene in the grown-ups’ corner', async ({ page }) => {
       await page.clock.install();
+      if (!entry.shown) {
+        // Not in the corner's list yet: start it from its last scene by its address.
+        await open(page, entry);
+        const last = (await scenesInPlayer(page)) - 1;
+        await open(page, entry, last);
+        for (let s = 0; s < 30 && (await playerState(page)) === ''; s++) await advance(page, 1000);
+        expect(await playerState(page)).toBe(String(last));
+        return;
+      }
       await page.goto('/');
       await openCorner(page);
       const row = page.locator(`[data-corner="${entry.id}"]`);

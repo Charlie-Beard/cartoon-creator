@@ -17,7 +17,9 @@
  *   screenshots/<id>/scene<n>-0.png    the scene's opening set
  *   screenshots/<id>/scene<n>-<k>.png  frames while it plays: one every 3 s until
  *                                      the scene ends
- *   screenshots/<id>/sheet.png         a contact sheet of them all (look at this first)
+ *   screenshots/<id>/sheet.png, openings.png, flags.png, sheet-scene<n>.png
+ *                                      sheets sized to be read as one image each
+ *                                      (see "sheets" below): read these, not the frames
  *
  * and prints a pacing report. The time is measured, not guessed: each
  * scene runs in real time (or on the fake clock with --fast, below), one at a time (see --parallel), and is timed
@@ -39,7 +41,7 @@
  * on a quarter of a second at a time, so a 3-minute episode takes under a
  * minute of wall-clock time instead of 3-4 (and the scenes run 4 at a time,
  * since the story clock doesn't care how busy the machine is). The frames
- * are the same: one every --every seconds of STORY time, the same contact sheet. The times in the report are
+ * are the same: one every --every seconds of STORY time, the same sheets. The times in the report are
  * story-clock times: GSAP, the captions, and the stand-in voice (estimateSeconds per line) all run on that clock, so they
  * match a real run closely, and the report says so. One difference: with
  * --fast, recordings in public/audio are not played, and every line is
@@ -55,9 +57,9 @@
  * than 35% of the smaller; more than 4 characters at once; the speaker off stage or
  * invisible while their line is captioned. After the pacing report it prints
  * "Frames to look at": each flagged frame's file and why. The same goes in
- * screenshots/<id>/flags.json, and flagged frames get a red outline on the
- * contact sheet. So: read the contact sheet, each scene's opening frame
- * (scene<n>-0.png) and the flagged frames, not every frame. --strict exits 1
+ * screenshots/<id>/flags.json, and flags.png shows every flagged frame with
+ * the actors boxed. So: read sheet.png, openings.png and flags.png, not every
+ * frame. --strict exits 1
  * if anything is flagged (pacing or layout). The page marks its actors with
  * data-actor / data-prop (src/kit/kit.ts) for this.
  *
@@ -67,7 +69,7 @@
  * until the scene's set() has built the stage, then the curtains and the
  * title banner are hidden and the frame taken: it is the set as it stands
  * before play() has moved anything. Frames go to <out>/openings/scene<n>.png
- * with a small sheet.png and flags.json beside them (a full run's files are
+ * with sheet.png (all of them, half size), flags.png and flags.json beside them (a full run's files are
  * left alone). The frame checks run on them (no caption is showing yet, so
  * not the caption-band or speaker checks: a set often parks people out of
  * sight behind a foreground prop for play() to bring up). Scenes run
@@ -78,7 +80,7 @@
  * 60), --parallel N (scenes at once, default 1, or 4 with --fast or
  * --openings: in real time more are quicker but a busy machine makes GSAP
  * lag-smooth and the times read high), --fast, --openings,
- * --strict, --out DIR, --help.
+ * --strict, --captions (print every line's timing), --out DIR, --help.
  *
  * Chromium comes from PW_CHROMIUM (or /opt/pw-browsers/chromium if that
  * exists, else Playwright's own).
@@ -119,11 +121,13 @@ const USAGE = `Usage: npm run shots -- <cartoonId> [options]
   --url URL      use a dev server that is already running
   --out DIR      where the PNGs go (default screenshots/<id>)
   --strict       exit 1 on a flag too (pacing or layout), not only on an error
+  --captions     print every line's timing too (long: silences are flagged anyway)
   --help         this
 
 Layout checks run on every frame (scripts/lib/frame-check.mjs): an actor 25%+ off stage, a face in
-the caption band (y 690+), characters overlapping 35%+, more than 4 characters, the speaker off stage. See "Frames to look at" in the report, flags.json, and the
-red outlines on sheet.png: read those and each scene's opening frame, not every frame.`;
+the caption band (y 690+), characters overlapping 35%+, more than 4 characters, the speaker off stage. See "Frames to look at"
+in the report. Read sheet.png (the episode), openings.png (each scene's set) and flags.png (the flagged frames, actors
+boxed), not the frames one by one; sheet-scene<n>.png has one scene's every frame.`;
 if (flag('help') || flag('h')) {
   console.log(USAGE);
   process.exit(0);
@@ -145,6 +149,7 @@ const EVERY = Number(option('every', 3));
 const MAX_FRAMES = 60;
 const FRAMES = Math.min(MAX_FRAMES, option('frames') === undefined ? MAX_FRAMES : Number(option('frames')));
 const OPENINGS = flag('openings');
+const CAPTIONS = flag('captions');
 const FAST = flag('fast') || OPENINGS; // the openings are shot on the fake clock too
 const PARALLEL = Math.max(1, Number(option('parallel', FAST ? 4 : 1)));
 const OUT = resolve(ROOT, option('out', join('screenshots', id)), OPENINGS ? 'openings' : '.');
@@ -501,47 +506,117 @@ async function shootOpening(browser, base, index) {
   return result;
 }
 
-// ------------------------------------------------------------- contact sheet
+// ------------------------------------------------------------------ sheets
 
-const esc = (s) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+/**
+ * The sheets are what the writer (usually Claude) looks at instead of the
+ * frames one by one. Each is sized to be read as ONE image, about 1240 px
+ * wide and not much taller, because a model shrinks a tall image until it
+ * fits: the old single contact sheet of every frame (1264 × 6000+) arrived
+ * with each frame about 95 px wide, too small to judge and still paid for.
+ * A frame read on its own costs about as much as a half-size sheet of four.
+ *
+ *   sheet.png            the whole episode at a glance: each scene's opening
+ *                        and up to 5 more frames, small
+ *   openings.png         every scene's opening set at half size, 2 to a row:
+ *                        the layout check
+ *   flags.png            every flagged frame at half size, the actors it is
+ *                        about boxed in red, the reasons under it (flags-2.png …
+ *                        when there are more than 6)
+ *   sheet-scene<n>.png   one scene's every frame at quarter size, 4 to a row:
+ *                        read only when a scene's action needs a closer look
+ *
+ * --openings writes only its own sheet.png (the openings.png layout) and
+ * flags.png into <out>/openings/.
+ */
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, '0')}`;
+const SHEET_WIDTH = 1240;
+const FLAGS_PER_SHEET = 6;
+const OVERVIEW_FRAMES = 6;
 
-async function contactSheet(context, results) {
-  const thumb = (f, label) => {
-    const flagged = f.reasons.length > 0;
-    const why = flagged ? `<div class="why">${esc([...new Set(f.reasons.map((r) => r.kind))].join(', '))}</div>` : '';
-    return `<figure${flagged ? ' class="flagged"' : ''}><img src="${pathToFileURL(f.file).href}"><figcaption>${label}${why}</figcaption></figure>`;
-  };
-  const rows = OPENINGS
-    ? `<div class="row">${results.map((r) => thumb(r.frames[0] ?? { file: join(OUT, `scene${r.index + 1}-error.png`), reasons: [] }, `scene ${r.index + 1}: ${esc(r.name)}`)).join('')}</div>`
-    : results
-        .map((r) => {
-          const label = `Scene ${r.index + 1}: ${esc(r.name)}${r.seconds === null ? '' : ` (${r.seconds.toFixed(0)} s)`}`;
-          const thumbs = r.frames.map((f, i) => thumb(f, i === 0 ? 'opening set' : `${f.t.toFixed(0)} s`)).join('');
-          return `<section><h2>${label}</h2><div class="row">${thumbs}</div></section>`;
-        })
-        .join('');
+/** Up to `k` of `n` items, evenly spread, always the first and the last. */
+function spread(n, k) {
+  if (n <= k) return Array.from({ length: n }, (_, i) => i);
+  return [...new Set(Array.from({ length: k }, (_, i) => Math.round((i * (n - 1)) / (k - 1))))];
+}
+
+/** One frame on a sheet: its label, any reasons, and (on the flags sheet) red boxes round the actors they're about. */
+function card(f, label, { reasons = false, boxes = false } = {}) {
+  const flagged = f.reasons?.length > 0;
+  const kinds = flagged ? [...new Set(f.reasons.map((r) => r.kind))].join(', ') : '';
+  const why = !flagged ? '' : reasons ? `<ul class="why">${f.reasons.map((r) => `<li>${esc(r.message)}</li>`).join('')}</ul>` : `<div class="why">${esc(kinds)}</div>`;
+  let marks = '';
+  if (boxes && flagged && f.data) {
+    const keys = new Set(f.reasons.flatMap((r) => r.actors ?? []));
+    marks = f.data.actors
+      .filter((a) => keys.has(a.key))
+      .map((a) => {
+        const { x, y, w, h } = a.box;
+        const pc = (v, of) => `${((v / of) * 100).toFixed(2)}%`;
+        return `<div class="mark" style="left:${pc(x, 1180)};top:${pc(y, 820)};width:${pc(w, 1180)};height:${pc(h, 820)}"><span>${esc(a.key)}</span></div>`;
+      })
+      .join('');
+  }
+  return `<figure${flagged ? ' class="flagged"' : ''}><div class="pic"><img src="${pathToFileURL(f.file).href}">${marks}</div><figcaption>${label}${why}</figcaption></figure>`;
+}
+
+/** Renders one sheet: `sections` of cards, `cols` to a row, to `name` in OUT. */
+async function renderSheet(context, name, heading, sections, cols) {
+  const body = sections.map((s) => `<section>${s.title ? `<h2>${s.title}</h2>` : ''}<div class="row">${s.cards.join('')}</div></section>`).join('');
   const html = `<!doctype html><meta charset="utf-8"><title>${esc(cartoon.title)}</title>
 <style>
-  body { margin: 0; padding: 16px; width: 1232px; background: #1f2a22; color: #f4ecd8; font: 15px/1.3 system-ui, sans-serif; }
-  h1 { margin: 0 0 12px; font-size: 22px; } h2 { margin: 16px 0 6px; font-size: 16px; }
-  .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  figure { margin: 0; } img { width: 100%; display: block; border-radius: 4px; background: #000; }
-  figure.flagged img { outline: 5px solid #e8302a; outline-offset: -5px; }
-  figcaption { font-size: 12px; opacity: 0.7; padding-top: 2px; }
-  .why { color: #ff8a80; font-weight: 700; opacity: 1; }
+  body { margin: 0; padding: 12px; width: ${SHEET_WIDTH - 24}px; background: #1f2a22; color: #f4ecd8; font: 15px/1.3 system-ui, sans-serif; }
+  h1 { margin: 0 0 6px; font-size: 20px; } h2 { margin: 10px 0 4px; font-size: 15px; }
+  .row { display: grid; grid-template-columns: repeat(${cols}, 1fr); gap: 6px; }
+  figure { margin: 0; } .pic { position: relative; } img { width: 100%; display: block; border-radius: 3px; background: #000; }
+  figure.flagged img { outline: 4px solid #e8302a; outline-offset: -4px; }
+  .mark { position: absolute; border: 3px solid #ff2a1a; box-sizing: border-box; }
+  .mark span { position: absolute; left: -3px; top: -18px; background: #ff2a1a; color: #fff; font: 700 11px/16px system-ui; padding: 0 4px; white-space: nowrap; }
+  figcaption { font-size: 12px; opacity: 0.75; padding-top: 2px; }
+  .why { color: #ff8a80; font-weight: 700; opacity: 1; margin: 2px 0 0; padding-left: 16px; }
   figure.flagged figcaption { opacity: 1; }
 </style>
-<h1>${esc(cartoon.title)} <small style="opacity:.6">(${esc(id)}${OPENINGS ? ', opening sets' : ''})</small></h1>${rows}`;
-  const file = join(OUT, 'sheet.html');
+<h1>${esc(cartoon.title)} <small style="opacity:.6">(${esc(id)}: ${esc(heading)})</small></h1>${body}`;
+  const file = join(OUT, `${name}.html`);
   writeFileSync(file, html);
   const page = await context.newPage();
-  await page.setViewportSize({ width: 1264, height: 800 });
+  await page.setViewportSize({ width: SHEET_WIDTH, height: 100 }); // fullPage grows it to fit
   await page.goto(pathToFileURL(file).href);
   await page.waitForFunction(() => [...document.images].every((i) => i.complete));
-  await page.screenshot({ path: join(OUT, 'sheet.png'), fullPage: true });
+  await page.screenshot({ path: join(OUT, `${name}.png`), fullPage: true });
   await page.close();
   rmSync(file);
+  return join(OUT, `${name}.png`);
+}
+
+/** Every sheet for a run (see above). Returns the files written, the ones to read first first. */
+async function sheets(context, results) {
+  const written = [];
+  const errorFrame = (r) => ({ file: join(OUT, `scene${r.index + 1}-error.png`), reasons: [] });
+  const sceneTitle = (r) => `Scene ${r.index + 1}: ${esc(r.name)}${r.seconds == null ? '' : ` (${r.seconds.toFixed(0)} s)`}`;
+  const time = (f) => (f.k === 0 ? 'opening set' : `${f.t.toFixed(0)} s`);
+
+  // The opening sets, half size.
+  const openings = results.map((r) => card(r.frames[0] ?? errorFrame(r), sceneTitle(r)));
+  written.push(await renderSheet(context, OPENINGS ? 'sheet' : 'openings', 'opening sets', [{ cards: openings }], 2));
+
+  if (!OPENINGS) {
+    // The overview: a few frames of each scene, evenly spread.
+    const overview = results.map((r) => ({ title: sceneTitle(r), cards: spread(r.frames.length, OVERVIEW_FRAMES).map((i) => card(r.frames[i], time(r.frames[i]))) }));
+    written.unshift(await renderSheet(context, 'sheet', 'every scene at a glance', overview, OVERVIEW_FRAMES));
+  }
+
+  // The flagged frames, half size, with the reasons and the actors boxed.
+  const flagged = results.flatMap((r) => r.frames.filter((f) => f.reasons.length).map((f) => card(f, `Scene ${r.index + 1}, ${time(f)}: ${relative(OUT, f.file)}`, { reasons: true, boxes: true })));
+  for (let i = 0; i < flagged.length; i += FLAGS_PER_SHEET) {
+    const n = i / FLAGS_PER_SHEET + 1;
+    written.push(await renderSheet(context, n === 1 ? 'flags' : `flags-${n}`, 'flagged frames', [{ cards: flagged.slice(i, i + FLAGS_PER_SHEET) }], 2));
+  }
+
+  // Each scene's every frame, quarter size: on demand.
+  if (!OPENINGS) for (const r of results) await renderSheet(context, `sheet-scene${r.index + 1}`, `scene ${r.index + 1}, every frame`, [{ title: sceneTitle(r), cards: r.frames.map((f) => card(f, time(f))) }], 4);
+  return written;
 }
 
 // ------------------------------------------------------------ frames to look at
@@ -573,7 +648,8 @@ let exitCode = 0;
 try {
   mkdirSync(OUT, { recursive: true });
   // Old frames from an earlier, longer run would mislead.
-  const stale = only === null ? /^scene\d+(-.*)?\.png$|^sheet\.png$/ : new RegExp(`^scene${only + 1}(-.*)?\\.png$|^sheet\\.png$`);
+  const sheetsRe = '^(sheet|openings|flags)(-.*)?\\.png$';
+  const stale = new RegExp(only === null ? `^scene\\d+(-.*)?\\.png$|${sheetsRe}` : `^scene${only + 1}(-.*)?\\.png$|${sheetsRe}`);
   for (const f of readdirSync(OUT)) if (stale.test(f)) rmSync(join(OUT, f));
 
   const base = (option('url') ?? (await startServer())).replace(/\/$/, '');
@@ -601,12 +677,12 @@ try {
         }
       }),
     );
-    await contactSheet(context, shots);
+    const written = await sheets(context, shots);
     await browser.close();
     const errs = shots.flatMap((r) => r.errors.map((e) => `scene ${r.index + 1}: ${e}`));
     const flagged = reportFrames(shots);
     for (const e of errs) console.log(`ERROR  ${e}`);
-    console.log(`\nOpening sets: ${OUT}/scene<n>.png   Sheet: ${join(OUT, 'sheet.png')}   Flags: ${join(OUT, 'flags.json')}   (${((Date.now() - t0) / 1000).toFixed(1)} s)`);
+    console.log(`\nLook at: ${written.map((f) => relative(ROOT, f)).join('  ')}   (${((Date.now() - t0) / 1000).toFixed(1)} s)`);
     if (errs.length || (flag('strict') && flagged.length)) exitCode = 1;
     process.exitCode = exitCode;
     stopServer();
@@ -626,7 +702,7 @@ try {
     }),
   );
 
-  await contactSheet(context, results);
+  const written = await sheets(context, results);
   await browser.close();
 
   // ---------------------------------------------------------- the report
@@ -634,9 +710,7 @@ try {
   const errors = [];
   console.log(`\nPacing for ${id} (${FAST ? 'STORY-CLOCK times from a --fast run' : 'measured in real time'}, ${parallel} scene${parallel === 1 ? '' : 's'} at a time)`);
   if (FAST) {
-    console.log('  FAST: every time below is STORY-CLOCK time, read off the page\'s fake clock, not wall-clock time. Lines are said by the stand-in voice');
-    console.log('        (estimateSeconds each), never the recordings, so a recorded cartoon will differ a little. Good for fixing frames; run without --fast');
-    console.log('        for the final pacing check.');
+    console.log('  (story-clock times, every line said by the stand-in voice: close, but the final pacing check is a run without --fast)');
   }
   if (parallel > 1 && !FAST) console.log(`  WARNING: ${parallel} scenes ran at once, so a busy machine makes the times read high (GSAP lag smoothing). Run with --parallel 1 for true times.`);
   console.log('  scene  seconds  lines  name');
@@ -650,8 +724,9 @@ try {
   }
 
   // Each scene's captions, in order: when each came on (from the scene's start) and how long it stayed.
-  console.log(`\nCaption timeline (seconds from each scene's start; silent = no caption, over ${SILENT_SECONDS} s)`);
-  for (const r of results) {
+  // Long (a line per line said), so only with --captions: the silences are FLAGs below either way.
+  if (CAPTIONS) console.log(`\nCaption timeline (seconds from each scene's start; silent = no caption, over ${SILENT_SECONDS} s)`);
+  for (const r of CAPTIONS ? results : []) {
     console.log(`  scene ${r.index + 1}: ${r.name}${r.seconds === null ? '' : ` (${r.seconds.toFixed(1)} s)`}`);
     if (!r.captions.length) console.log('    (no captions)');
     // Silences sit in the list where they happen.
@@ -660,8 +735,8 @@ try {
       if (row.c) console.log(`    ${row.c.start.toFixed(1).padStart(5)} s  ${row.c.dur.toFixed(1).padStart(4)} s  "${row.c.text}"`);
       else console.log(`    ${row.s.from.toFixed(1).padStart(5)} s  ${(row.s.to - row.s.from).toFixed(1).padStart(4)} s  ** SILENT ** (until ${row.s.to.toFixed(1)} s)`);
     }
-    if (r.capped !== null) console.log(`    (frames stopped at the cap of ${FRAMES}, ${r.capped.toFixed(0)} s in; raise --frames)`);
   }
+  for (const r of results) if (r.capped !== null) console.log(`  scene ${r.index + 1}: frames stopped at the cap of ${FRAMES}, ${r.capped.toFixed(0)} s in (raise --frames)`);
   console.log('');
   const timed = results.filter((r) => r.seconds !== null);
   const total = timed.reduce((t, r) => t + r.seconds, 0);
@@ -679,8 +754,8 @@ try {
   for (const f of flags) console.log(`FLAG   ${f}`);
   for (const e of errors) console.log(`ERROR  ${e}`);
   const layout = reportFrames(results);
-  console.log(`\nContact sheet: ${join(OUT, 'sheet.png')}   (look at this first, then each scene's opening frame and the frames to look at above)`);
-  console.log(`Screenshots:   ${OUT}/scene<n>-<k>.png`);
+  console.log(`\nLook at: ${written.map((f) => relative(ROOT, f)).join('  ')}`);
+  console.log(`  (one scene's every frame: ${relative(ROOT, OUT)}/sheet-scene<n>.png; single frames: scene<n>-<k>.png)`);
   if (errors.length || (flag('strict') && (flags.length || layout.length))) exitCode = 1;
 } catch (e) {
   console.error(e instanceof Error ? e.message : e);

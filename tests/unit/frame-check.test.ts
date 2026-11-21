@@ -143,6 +143,9 @@ describe('characters on top of each other', () => {
     const out = checkFrame(f);
     expect(out.map((i: { kind: string }) => i.kind)).toEqual(['overlap']);
     expect(out[0].message).toMatch(/moonface#1 and silky#1 overlap by \d+%/);
+    // Who it is about, for the boxes on shots' flags sheet; kept through checkScene.
+    expect(out[0].actors).toEqual(['moonface#1', 'silky#1']);
+    expect(checkScene([f])[0][0].actors).toEqual(['moonface#1', 'silky#1']);
   });
 
   it('lets two stand close, and counts the smaller one: a small friend fully in front is flagged', () => {

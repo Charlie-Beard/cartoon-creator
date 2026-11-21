@@ -170,6 +170,6 @@ Each scene is `{ name, set(k), play(k) }`:
 - [ ] `meta.ts` filled in (title, summary, a `thumb` backdrop, `added` date).
 - [ ] `ledger` in meta.ts filled in and true to the script; any "much like"
       warnings are deliberate.
-- [ ] typecheck, `npm test`, `npm run test:e2e` pass.
+- [ ] `npm run verify -- <id>` passes (typecheck, `npm test`, check, e2e).
 - [ ] Voice: new speakers have a cast entry or are listed for a grown-up
       to choose (`voice-cartoon` skill).

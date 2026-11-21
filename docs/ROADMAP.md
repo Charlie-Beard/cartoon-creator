@@ -8,7 +8,7 @@
 - Worlds: `common`, `faraway` (ported from maths-game), `hogwarts`, `bears` (Teddy Bear, in watercolour and ink), `wishing` (the Wishing-Chair)
   (ported from spelling-game).
 - Screens: the library (a bookcase with one book per world, each opening to its cartoons), the player, the grown-ups' corner.
-- Tooling: `check`, `shots` (frames, contact sheet, pacing), the voice
+- Tooling: `check`, `shots` (frames, sheets, pacing), `verify`, the voice
   pipeline with a cast file, unit and e2e tests, CI and Pages deploy.
 - Docs and skills: CLAUDE.md, STYLE, WRITING, KIT, WORLDS; new-cartoon,
   new-character, new-backdrop, review-cartoon, voice-cartoon.

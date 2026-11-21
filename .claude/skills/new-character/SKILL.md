@@ -78,7 +78,7 @@ invent ElevenLabs ids.
 
 ```bash
 npm run lab -- <world> chars --p <id>,<two or three others> --size 300
-npm run lab -- <world> poses
+npm run lab -- <world> poses --p <id>        # just their poses (without --p: every pose in the world)
 ```
 
 Each prints the PNGs it saved (`screenshots/lab/`): read them. (The same

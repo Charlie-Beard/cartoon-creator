@@ -17,7 +17,8 @@
     "catalogue": "tsx scripts/catalogue.ts",
     "voice:export": "tsx scripts/voice/export.ts",
     "voice:cast": "tsx scripts/voice/cast-check.ts",
-    "new": "tsx scripts/new-cartoon.ts"
+    "new": "tsx scripts/new-cartoon.ts",
+    "verify": "tsx scripts/verify.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.1",

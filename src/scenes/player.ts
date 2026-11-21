@@ -90,6 +90,8 @@ export class PlayerScene extends Scene {
     if (!this.alive) return;
     if (!cartoon || !cartoon.scenes.length) return this.done();
     const world = WORLDS[cartoon.world] ?? WORLDS.common;
+    // How many scenes there are, beside data-scene (the one playing): for the tests and tools.
+    this.root.dataset.scenes = String(cartoon.scenes.length);
 
     const title = banner(cartoon.title, { x: 240, y: 330, w: 700, h: 130, size: 52 });
     title.classList.add('story-title');

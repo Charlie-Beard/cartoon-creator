@@ -18,7 +18,7 @@
  *
  *   --backdrop <id>   screenshots/lab/<world>-backdrop-<id>.png: the backdrop alone, at 1180 × 820
  *                     (with no world, the first world that has it answers, as in a cartoon)
- *   --p a,b,c         only these ids (the lab's own &p=)
+ *   --p a,b,c         only these ids (the lab's own &p=; a character's id picks all their poses)
  *   --size N          card width in px (the lab's &size=, default 210)
  *   --width N         page width in px (default 1280)
  *   --max-height N    tallest PNG in px (default 2000)
@@ -151,7 +151,8 @@ try {
   mkdirSync(OUT, { recursive: true });
   const base = (option('url') ?? (await dev.start())).replace(/\/$/, '');
   const browser = await chromium.launch({ executablePath: chromiumPath() });
-  const context = await browser.newContext({ viewport: { width: WIDTH, height: 900 }, deviceScaleFactor: 1 });
+  // A short viewport, so a page of a few cards is cut to them (fullPage grows it to fit a long one).
+  const context = await browser.newContext({ viewport: { width: WIDTH, height: 200 }, deviceScaleFactor: 1 });
   const page = await context.newPage();
   const problems = [];
   page.on('pageerror', (e) => problems.push(e.message));

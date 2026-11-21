@@ -1,7 +1,11 @@
 import { defineConfig } from '@playwright/test';
+import { existsSync } from 'node:fs';
 
 /** PW_PORT lets several worktrees run their e2e tests at once. */
 const port = Number(process.env.PW_PORT ?? 4173);
+
+/** Chromium: PW_CHROMIUM, else the cloud's pre-installed one, else Playwright's own (as scripts/lib/dev-server.mjs). */
+const chromium = process.env.PW_CHROMIUM || (existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : undefined);
 
 /** PW_WORKERS is a count ("8") or a share of the cores ("150%"). */
 const workers = (v: string): number | string => (v.endsWith('%') ? v : Number(v));
@@ -10,8 +14,8 @@ const workers = (v: string): number | string => (v.endsWith('%') ? v : Number(v)
  * The cartoons target one device: iPad (11th gen), landscape.
  *
  * Every cartoon on the shelf is played through (tests/e2e/cartoons.spec.ts).
- * To test just one while you write it: CARTOON=lost-kettle npm run test:e2e
- * (in the cloud also PW_CHROMIUM=/opt/pw-browsers/chromium).
+ * To test just one while you write it (even one not showing on the shelf
+ * yet): CARTOON=lost-kettle npm run test:e2e, or npm run verify -- lost-kettle.
  */
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -27,7 +31,7 @@ export default defineConfig({
     hasTouch: true,
     isMobile: false,
     deviceScaleFactor: 2,
-    launchOptions: process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {},
+    launchOptions: chromium ? { executablePath: chromium } : {},
   },
   projects: [
     { name: 'home-screen', use: { viewport: { width: 1180, height: 820 } } },
