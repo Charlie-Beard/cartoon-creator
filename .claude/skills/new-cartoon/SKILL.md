@@ -214,7 +214,8 @@ their ElevenLabs key. The episode plays with the iPad's voice until then.
   the summary, the scene list, the deeds, what the sheets showed and the
   pacing numbers.
 - **Merge it** as soon as its CI check is green (the owner's standing
-  instruction: always merge; no need to ask). If CI fails, fix it and
-  push until it's green, then merge.
+  instruction: always merge; no need to ask). CI takes about a minute:
+  look once after that (the commit's check runs), rather than polling.
+  If CI fails, fix it and push until it's green, then merge.
 - Tell the person: the title, a two-line summary, how long it runs, how
   to watch it (`?cartoon=<id>`), and anything waiting on them (voices).
