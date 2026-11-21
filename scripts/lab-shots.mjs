@@ -18,7 +18,10 @@
  *
  *   --backdrop <id>   screenshots/lab/<world>-backdrop-<id>.png: the backdrop alone, at 1180 × 820
  *                     (with no world, the first world that has it answers, as in a cartoon)
+ *   --with a,b,c      ...with these characters standing on it, feet on its ground line (the one its
+ *                     notes give, or --ground N), at width --w N (default 230), the line drawn in
  *   --p a,b,c         only these ids (the lab's own &p=; a character's id picks all their poses)
+ *   --talk            each character or pose twice: as drawn, and with mouthOpen and lids shown
  *   --size N          card width in px (the lab's &size=, default 210)
  *   --width N         page width in px (default 1280)
  *   --max-height N    tallest PNG in px (default 2000)
@@ -45,7 +48,7 @@ const option = (name, fallback) => {
   const i = args.indexOf(`--${name}`);
   return i >= 0 && args[i + 1] !== undefined ? args[i + 1] : fallback;
 };
-const valueFlags = new Set(['backdrop', 'p', 'size', 'width', 'max-height', 'out', 'url']);
+const valueFlags = new Set(['backdrop', 'p', 'size', 'width', 'max-height', 'out', 'url', 'with', 'ground', 'w']);
 const positional = args.filter((a, i) => !a.startsWith('--') && !(i > 0 && args[i - 1].startsWith('--') && valueFlags.has(args[i - 1].slice(2))));
 
 const USAGE = `Usage: npm run lab -- <world> [chars|poses|backdrops|props] [options]
@@ -56,7 +59,9 @@ const USAGE = `Usage: npm run lab -- <world> [chars|poses|backdrops|props] [opti
   with every card's id under it. No set means one set of PNGs for each of the four.
 
   --backdrop <id>  one backdrop alone at 1180 x 820: screenshots/lab/<world>-backdrop-<id>.png
+  --with a,b,c     ...with these characters standing on its ground line (--ground N, --w N to override)
   --p a,b,c        only these ids        --size N     card width (default 210)
+  --talk           each character or pose twice: as drawn, and talking + blinking (mouthOpen, lids)
   --width N        page width (1280)     --max-height N  tallest PNG (2000)
   --out DIR        output folder         --url URL    use a dev server already running
   --list           list the worlds       --help       this`;
@@ -168,7 +173,7 @@ try {
     exitCode = 2;
   } else if (backdrop) {
     await page.setViewportSize({ width: 1180, height: 820 });
-    await page.goto(labUrl(base, { backdrop, world }));
+    await page.goto(labUrl(base, { backdrop, world, with: option('with'), ground: option('ground'), w: option('w') }));
     await ready(page);
     const found = await page.evaluate(() => !!document.querySelector('.lab-full svg'));
     if (!found) {
@@ -182,7 +187,7 @@ try {
   } else {
     const sets = setArg ? [setArg] : SETS;
     for (const set of sets) {
-      await page.goto(labUrl(base, { world, set, p: only, size }));
+      await page.goto(labUrl(base, { world, set, p: only, size, talk: flag('talk') ? '1' : undefined }));
       await ready(page);
       const cards = await page.locator('.lab-card').count();
       if (!cards) {

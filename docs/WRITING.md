@@ -157,19 +157,7 @@ Each scene is `{ name, set(k), play(k) }`:
   last line: each `set` must stand on its own.
 - A quick change of place inside a scene: `await k.cut(() => { … })`.
 
-## Checklist before you call it done
+## Before you call it done
 
-- [ ] Beat sheet in the file's top comment; title 2–5 words; summary 1–2
-      sentences.
-- [ ] 3–5 scenes, 2–6 minutes, no interaction, nobody names or speaks to the viewer, no `{placeholders}`.
-- [ ] `npm run check -- <id>` passes (lines, ids, unused lines, length).
-- [ ] Scary beat follows docs/STYLE.md, and the ending is warm.
-- [ ] `npm run shots -- <id>`: every frame looked at, nothing off stage
-      by mistake, nothing under the caption band, faces visible, no
-      clutter.
-- [ ] `meta.ts` filled in (title, summary, a `thumb` backdrop, `added` date).
-- [ ] `ledger` in meta.ts filled in and true to the script; any "much like"
-      warnings are deliberate.
-- [ ] `npm run verify -- <id>` passes (typecheck, `npm test`, check, e2e).
-- [ ] Voice: new speakers have a cast entry or are listed for a grown-up
-      to choose (`voice-cartoon` skill).
+The `new-cartoon` skill's steps and the `review-cartoon` checklist are
+the checklist; `npm run check` and `npm run verify` do the mechanical part.

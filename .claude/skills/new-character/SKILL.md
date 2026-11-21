@@ -6,7 +6,14 @@ description: Draw a new torn-paper character (portrait, poses, talking mouth, bl
 # New character
 
 A character is a 300 × 340 torn-paper portrait plus notes, in a world's
-catalogue. Read `docs/WORLDS.md` and `docs/STYLE.md` (Look) first.
+catalogue. Read `docs/WORLDS.md` ("Shape" and "Rules") and `docs/STYLE.md`
+("Look"; for the bears, "The bears" too) first. That's all the reading
+this needs: not the other docs, not the world's `index.ts`.
+
+If you were briefed by an episode's author, draw only your own file (they
+append the `index.ts` entry), and report back the id, the parts, the
+poses, the `about` and `voice` notes, and anything they should know when
+placing them (a tall hat, a wide body, which way they face).
 
 ## 1. Know who they are
 
@@ -20,8 +27,8 @@ Write down, before drawing:
   becomes `about`.
 - How they sound (age, accent, energy), for the voice cast. This becomes
   `voice`.
-- Which world they belong to, and a unique id (check every world's
-  `characters` for clashes).
+- Which world they belong to, and an id unique across every world
+  (`npm test` fails a clash).
 
 ## 2. Draw from what exists
 
@@ -31,18 +38,16 @@ mouths and arms, and the palette's colour names) with their signatures:
 read that, not `paper.ts` and `parts.ts`. Then open ONE existing character
 file, the closest to the new one (a recent file of 10–15 KB, not the
 world's `index.ts`), and reuse its building blocks, proportions and
-palette, so the new one belongs. In `src/worlds/faraway/` and `src/worlds/hogwarts/` the
-characters were ported from the games; the games' own
-`src/art/characters/` folders have more examples.
+palette, so the new one belongs.
 
 The rules of the portrait:
 
 - `svg({ w: 300, h: 340, name: '<world>-<id>' }, [...])`, built from
   `piece()` (torn paper), `ink()` (lines), `dot()` (eye highlights),
   `group()` (moving parts).
-- The **face inside the box 78 62 144 144** (the caption chip crops to
-  it). If it can't be (a tall bird, a wide creature), set `chip` to a
-  viewBox that frames the face.
+- The **face inside the box 78 62 144 144**: `k.box(el).face` uses it to
+  put hats on heads and the camera on faces. If it can't be (a tall bird,
+  a wide creature), set `chip` to a viewBox that frames the face.
 - **Talking:** a `group({ part: 'mouth' })` and a
   `group({ part: 'mouthOpen', opacity: 0 })` in the same place.
 - **Blinking:** `group({ part: 'lids', opacity: 0 })` over the eyes.
@@ -84,13 +89,11 @@ npm run lab -- <world> chars --p <id>,<two or three others> --size 300
 npm run lab -- <world> poses --p <id>        # just their poses (without --p: every pose in the world)
 ```
 
-Each prints the PNGs it saved (`screenshots/lab/`): read them. (The same
-pages are at `/lab.html?world=<world>&set=chars&p=<id>` with `npm run dev`.)
-Check it next to two or three of the world's other
-characters: same scale, same style, same line weight. Check the caption
-chip: render a scene with them speaking (`npm run shots -- <id> --fast
---scene <n>` on a cartoon that uses them), or crop the portrait to the chip box yourself. Check
-`mouthOpen` and `lids` by setting their opacity to 1 in a test render.
+Each prints the PNGs it saved (`screenshots/lab/`): read them. Check it
+next to two or three of the world's other characters: same scale, same
+style, same line weight. Add `--talk` to see each one again talking and
+blinking (`mouthOpen` and `lids` shown, `mouth` hidden), so the mouth and
+lids are checked without editing anything.
 
 ## 5. Check
 

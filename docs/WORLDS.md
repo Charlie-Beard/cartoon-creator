@@ -13,9 +13,12 @@ there can use by id. Source: [`src/worlds/`](../src/worlds/).
 
 See what's in each, drawn: `npm run lab -- faraway` saves a sheet of
 every character, pose, backdrop and prop, each with its id, to
-`screenshots/lab/` (`npm run lab -- faraway props` for one set,
-`--backdrop <id>` for one at stage size). The same pages are live at
-`/lab.html?world=faraway` with `npm run dev`.
+`screenshots/lab/`. Ask for only what you need: one set
+(`npm run lab -- faraway props`), some ids (`--p silky,moonface`; a
+character's id picks their poses), each character talking and blinking
+too (`--talk`), or one backdrop at stage size (`--backdrop <id>`) with
+characters standing on its ground line (`--with silky,moonface`). The
+same pages are live at `/lab.html?world=faraway` with `npm run dev`.
 
 Read a world in text with `npm run catalogue -- faraway`: every character
 (poses, parts, who they are, how they sound), backdrop (with its ground
@@ -27,7 +30,10 @@ built from `index.ts` and `moves.ts`, at about half their size, so
 - `--brief`: an index (a sentence per note, ~13 KB for faraway). Start here, then
 - `--id <id>`: one character, backdrop, prop, sound or move in full.
 - `<world> about`: the world's setting, tone and rules. Read it before writing.
-- `<world> characters|backdrops|props|moves|kit`: one section; `--no-common` drops common.
+- `<world> characters|backdrops|props|moves|pieces|kit`: one section; `--no-common` drops common.
+- `<world> drawing`: for drawing new art there, the paper engine's calls,
+  the world's builders (`person()`, eyes, arms …) and the palette's names,
+  with signatures: read it instead of `paper.ts` and `parts.ts`.
 - `--list`: the worlds.
 
 ## Shape
