@@ -760,7 +760,7 @@ export function catalogueText(worldId: string, opts: CatalogueOptions = {}): str
     if (chars.length) {
       parts.push(
         `## Characters (${chars.length})\n` +
-          `k.character(id, { x, y, w, pose }). Portraits are 300×340 (w ${KIT_W} gives h 295); face is in the box 78 62 144 144. ` +
+          `k.character(id, { x, y, w, pose }), or { cx, feet, w } to stand them on a backdrop's ground line. Portraits are 300×340 (w ${KIT_W} gives h 295); face is in the box 78 62 144 144. ` +
           `${std.length >= 4 ? `standard parts = ${std.join(', ')}. ` : ''}mouth + mouthOpen make them talk, lids blink, armL/armR/wingL/wingR swing (k.pivot(k.part(el, 'armR'))).\n\n` +
           chars.map(([id, c]) => characterBlock(id, c, b, false, std)).join('\n\n'),
       );

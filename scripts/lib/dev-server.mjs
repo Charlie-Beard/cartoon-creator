@@ -26,7 +26,13 @@ export function freePort() {
   });
 }
 
-/** One vite dev server on its own port, so it never clashes with `npm run dev` or another agent's. */
+/**
+ * One vite dev server on its own port, so it never clashes with `npm run dev`
+ * or another agent's. It watches no files and has no hot reload
+ * (CARTOON_SNAPSHOT, read by vite.config.ts): a run plays the code as it was
+ * when the run started, so files can be edited while a long real-time run
+ * goes on, without the page reloading under it and spoiling its timings.
+ */
 export function createDevServer(root) {
   let server = null;
   return {
@@ -35,6 +41,7 @@ export function createDevServer(root) {
       const base = `http://127.0.0.1:${port}`;
       server = spawn(process.execPath, [join(root, 'node_modules/vite/bin/vite.js'), '--port', String(port), '--strictPort', '--host', '127.0.0.1'], {
         cwd: root,
+        env: { ...process.env, CARTOON_SNAPSHOT: '1' },
         stdio: ['ignore', 'pipe', 'pipe'],
       });
       let log = '';

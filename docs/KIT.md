@@ -19,12 +19,14 @@ script simply stops where it was.
 |---|---|
 | `k.backdrop('meadow')` | Full-stage background by id (the cartoon's world first, then common, then any world) or any 1180 × 820 SVG string. Replaces the previous one. |
 | `k.character('moonface', { x, y, w?, z?, flip?, pose? })` | A character from any world. Default w 260 (portraits are 300 × 340, so h ≈ w × 1.13). `pose` picks one of their poses. Returns the actor. |
+| `{ cx, feet }` instead of `{ x, y }` | For any actor: `cx` is its middle across, `feet` its bottom edge. `k.character('mollie', { cx: 300, feet: 640, w: 230 })` stands her on a ground line of 640 at any width. |
 | `k.pose(el, 'loom')` | Swaps a character's art for another pose in place (`'default'` for the portrait). |
 | `k.prop('kettle', { x, y, w? })` | A prop by id. Default width from the prop's `size`. |
 | `k.add(svgString, { x, y, w?, h?, z?, flip?, crop? })` | Any art as an actor (one-off art drawn in the cartoon file). `crop` is a viewBox to show part of it. |
 | `k.face(el, flip)` | Turns an actor to face the other way. |
 | `k.remove(el)` | Takes an actor off for good. |
 | `k.box(el)` | Where an actor is now: `{ x, y, w, h, top, feet, face }`, its placed box moved by any `k.to` x/y. `face` is a portrait's face box with its middle (`cx`, `cy`): put a hat on a head, a sparkle on a nose, the camera on a face, without guessing. |
+| `k.centreOn(el, [x, y])` | The `{ x, y }` to give `k.to` or `k.set` so that the actor's middle lands on a stage point: `k.to(cake, 0.6, { ...k.centreOn(cake, [600, 420]) })`. |
 | `k.lettering(text, { x, y, size?, color?, w?, z? })` | Andika lettering as an actor, centred on `x`, `y` (a word on a cake, a sign). `w` squeezes long text to fit. |
 | `k.set(el, vars)` | Sets GSAP properties at once: `{ opacity: 0 }` to hide someone who enters later, `{ rotation: -10 }`, `{ scale: 0.8 }`. |
 
@@ -273,6 +275,6 @@ origin }, children)`; `raw(svgMarkup)`.
 - **A whole actor can turn** (`rotation: 180` for upside down, 90 for
   sideways): `say` bobs relative to it, so they still talk the other
   way up.
-- **Don't edit files while a real-time `shots` run is going**: the dev
-  server reloads the page and the run's timings are wrong. Edit after it
-  finishes (or stop it), then run again.
+- **A `shots` run plays the code as it was when it started** (its server
+  watches no files), so editing during a long real-time run is safe; the
+  edit just isn't in that run's frames or numbers.

@@ -26,7 +26,7 @@ script's last change (`ls -l --time-style=+%T screenshots/<id>/ src/cartoons/<id
 Frames older than the script show a version that no longer exists: say
 which findings come from them, or re-run `shots --fast` first. (Reviews
 have flagged a mirrored jumper and a short scene that were already fixed.)
-If you were told not to run shots because a run is in progress, say
+If you were told a run is in progress (its frames will replace these), say
 which frames you could not check.
 
 ## 2. Go through the list
