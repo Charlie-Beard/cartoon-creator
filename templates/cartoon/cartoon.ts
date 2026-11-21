@@ -38,7 +38,8 @@ export default defineCartoon({
       set(k) {
         k.backdrop('<backdrop-id>');
         k.music('cosy');
-        cast.mf = k.character('moonface', { x: 640, y: 350, w: 260 });
+        // Stand people on the backdrop's ground line (its `about` says where): cx is their middle, feet their bottom edge.
+        cast.mf = k.character('moonface', { cx: 770, feet: 645, w: 260 });
         cast.door = k.prop('<prop-id>', { x: 300, y: 380, w: 200 });
       },
       async play(k) {

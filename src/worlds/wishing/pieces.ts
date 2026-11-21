@@ -30,6 +30,13 @@ export interface Ride {
   chair: HTMLElement;
   front: HTMLElement;
   riders: HTMLElement[];
+  /**
+   * Anything else riding along (a cake on a lap, a cat on the back, a
+   * lantern): placed by the script anywhere, and moved by the same amount as
+   * the chair by fly, land and jump. Add with chairRide.load, take off with
+   * chairRide.unload.
+   */
+  cargo: HTMLElement[];
   /** Where the chair was placed, and its width (riders are placed from these). */
   at: { x: number; y: number; w: number; z: number };
 }
@@ -58,6 +65,8 @@ const all = (a: Ride): HTMLElement[] => [a.chair, ...a.riders, a.front];
  *       from where they were placed, flapping as it goes.
  *   flap(k, a, n)     the wings beat n times on the spot.
  *   land(k, a, { x?, y? })   a soft bumpy landing at an offset, wings folding.
+ *   load(a, ...els) / unload(a, ...els)   things placed by the script that
+ *       ride along (moved by fly, land and jump by as much as the chair is).
  *   hopOff(k, a, rider, { x, y, w })   a rider hops out of the chair to
  *       stand with their portrait's top-left at x, y and width w (they stay
  *       the same actor, scaled, so keep using them).
@@ -78,7 +87,7 @@ export const chairRide = {
     const z = o.z ?? 12;
     const chair = k.prop('wishing-chair', { x: o.x, y: o.y, w, z });
     const front = k.prop('wishing-chair-front', { x: o.x, y: o.y, w, z: z + 3 });
-    const a: Ride = { chair, front, riders: [], at: { x: o.x, y: o.y, w, z } };
+    const a: Ride = { chair, front, riders: [], cargo: [], at: { x: o.x, y: o.y, w, z } };
     for (const r of o.riders ?? []) a.riders.push(place(k, a, r));
     if (o.wings) k.set([...k.part(chair, 'wingL'), ...k.part(chair, 'wingR')], { opacity: 1 });
     return a;
@@ -102,7 +111,19 @@ export const chairRide = {
 
   /** Moves the whole ride to an offset at once, without motion (legal in a scene's `set`: start it off stage). */
   jump<K extends string>(k: Kit<K>, a: Ride, o: { x?: number; y?: number }): void {
+    const [dx, dy] = moveBy(k, a, { x: o.x ?? 0, y: o.y ?? 0 });
     for (const el of all(a)) k.set(el, { x: o.x ?? 0, y: o.y ?? 0 });
+    for (const el of a.cargo) k.set(el, { x: `+=${dx}`, y: `+=${dy}` });
+  },
+
+  /** Things the script placed that now ride along with the chair (moved by fly, land and jump). */
+  load(a: Ride, ...els: HTMLElement[]): void {
+    for (const el of els) if (!a.cargo.includes(el)) a.cargo.push(el);
+  },
+
+  /** Takes things off the ride: they stay where they are. */
+  unload(a: Ride, ...els: HTMLElement[]): void {
+    a.cargo = a.cargo.filter((el) => !els.includes(el));
   },
 
   wings<K extends string>(k: Kit<K>, a: Ride): Promise<void> {
@@ -115,11 +136,13 @@ export const chairRide = {
     const vars: Record<string, number> = {};
     if (o.x !== undefined) vars.x = o.x;
     if (o.y !== undefined) vars.y = o.y;
+    const [dx, dy] = moveBy(k, a, o);
+    const cargo = a.cargo.map((el) => k.to(el, s, { x: `+=${dx}`, y: `+=${dy}`, ease: 'sine.inOut' }));
     if (o.tilt) {
       await k.all(...all(a).map((el) => k.to(el, s / 2, { ...vars, rotation: o.tilt, ease: 'sine.in' })));
-      await k.all(...all(a).map((el) => k.to(el, s / 2, { rotation: 0, ease: 'sine.out' })));
+      await k.all(...all(a).map((el) => k.to(el, s / 2, { rotation: 0, ease: 'sine.out' })), ...cargo);
     } else {
-      await k.all(...all(a).map((el) => k.to(el, s, { ...vars, ease: 'sine.inOut' })));
+      await k.all(...all(a).map((el) => k.to(el, s, { ...vars, ease: 'sine.inOut' })), ...cargo);
     }
   },
 
@@ -145,12 +168,18 @@ export const chairRide = {
   async land<K extends string>(k: Kit<K>, a: Ride, o: { x?: number; y?: number } = {}): Promise<void> {
     await chairRide.fly(k, a, { x: o.x ?? 0, y: (o.y ?? 0) - 20, s: 1.4 });
     k.fx.thud();
-    await k.all(...all(a).map((el) => k.to(el, 0.18, { y: o.y ?? 0, ease: 'power2.in' })));
+    await k.all(...all(a).map((el) => k.to(el, 0.18, { y: o.y ?? 0, ease: 'power2.in' })), ...a.cargo.map((el) => k.to(el, 0.18, { y: '+=20', ease: 'power2.in' })));
     k.fx.boing();
-    await k.all(...all(a).map((el) => k.to(el, 0.12, { y: (o.y ?? 0) - 10, yoyo: true, repeat: 1 })));
+    await k.all(...all(a).map((el) => k.to(el, 0.12, { y: (o.y ?? 0) - 10, yoyo: true, repeat: 1 })), ...a.cargo.map((el) => k.to(el, 0.12, { y: '-=10', yoyo: true, repeat: 1 })));
     await moves.foldWings(k as unknown as Kit, a.chair);
   },
 };
+
+/** How far the chair will move to reach the offset `o` (x and y from where it was placed; a missing one stays put). */
+function moveBy<K extends string>(k: Kit<K>, a: Ride, o: { x?: number; y?: number }): [number, number] {
+  const now = offset(k, a);
+  return [o.x === undefined ? 0 : o.x - now.x, o.y === undefined ? 0 : o.y - now.y];
+}
 
 /** How far the ride has flown from where it was placed. */
 function offset<K extends string>(k: Kit<K>, a: Ride): { x: number; y: number } {

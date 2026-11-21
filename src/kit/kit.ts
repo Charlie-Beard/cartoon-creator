@@ -28,9 +28,18 @@ import { findBackdrop, findCharacter, findProp, type World } from '../worlds';
 export type Side = 'left' | 'right' | 'top' | 'bottom';
 
 export interface PlaceOpts {
-  /** Top-left corner on the 1180 × 820 stage. */
-  x: number;
-  y: number;
+  /** Top-left corner on the 1180 × 820 stage (or `cx` / `feet` instead). */
+  x?: number;
+  y?: number;
+  /** Where its middle goes, across: instead of `x`. */
+  cx?: number;
+  /**
+   * Where its bottom edge goes: instead of `y`. Give a backdrop's ground
+   * line and a portrait stands on it at any width (`{ cx: 300, feet: 640,
+   * w: 230 }`), with no `y = 640 − w × 1.13` to work out or to forget to
+   * change when the width does.
+   */
+  feet?: number;
   /** Size on stage. Defaults to the art's natural size (portraits 300 × 340). */
   w?: number;
   h?: number;
@@ -133,7 +142,10 @@ export class Kit<K extends string = string> {
     const natural = /viewBox="[\d.-]+ [\d.-]+ ([\d.]+) ([\d.]+)"/.exec(html);
     const w = o.w ?? (natural ? +natural[1] : 300);
     const hh = o.h ?? (natural ? (+natural[2] / +natural[1]) * w : 300);
-    const el = place(h('div', { class: 'story-actor still' }), o.x, o.y, w, hh);
+    const x = o.x ?? (o.cx === undefined ? undefined : o.cx - w / 2);
+    const y = o.y ?? (o.feet === undefined ? undefined : o.feet - hh);
+    if (x === undefined || y === undefined) throw new Error('An actor needs x (or cx) and y (or feet)');
+    const el = place(h('div', { class: 'story-actor still' }), x, y, w, hh);
     el.style.zIndex = String(o.z ?? 10);
     const inner = h('div', { class: 'story-flip', html });
     if (o.flip) inner.style.transform = 'scaleX(-1)';
@@ -381,6 +393,21 @@ export class Kit<K extends string = string> {
     const y = Number(gsap.getProperty(item, 'y')) || 0;
     await this.to(item, seconds, { x: x + dx - sx, y: y + dy - sy, ease: 'power2.inOut' });
     this.flourish(item);
+  }
+
+  /**
+   * The `x` and `y` that put an actor's middle on a stage point, for
+   * `k.to` or `k.set` (scale aside, as `k.box`):
+   *
+   *   await k.to(cake, 0.6, { ...k.centreOn(cake, [600, 420]), ease: 'sine.inOut' });
+   *   k.set(towel, { ...k.centreOn(towel, [420, 330]), opacity: 0 });
+   */
+  centreOn(el: HTMLElement, [cx, cy]: Pt): { x: number; y: number } {
+    const l = parseFloat(el.style.left) || 0;
+    const t = parseFloat(el.style.top) || 0;
+    const w = parseFloat(el.style.width) || 0;
+    const hh = parseFloat(el.style.height) || 0;
+    return { x: cx - (l + w / 2), y: cy - (t + hh / 2) };
   }
 
   /** An actor's middle in world coordinates (the camera taken out). */
