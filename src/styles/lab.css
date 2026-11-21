@@ -121,3 +121,37 @@ body {
   border-color: rgba(216, 164, 63, 0.95);
   font-size: 16px;
 }
+
+/* &talk=1: the second card of each figure shows the talking mouth and the blink lids (src/lab.ts). */
+.lab-talk [data-part='mouthOpen'],
+.lab-talk [data-part='lids'] {
+  opacity: 1 !important;
+}
+.lab-talk [data-part='mouth'] {
+  opacity: 0 !important;
+}
+
+/* ?backdrop=<id>&with=a,b: characters standing on the ground line (src/lab.ts, standing). */
+.lab-stand {
+  position: absolute;
+}
+.lab-stand svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.lab-ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 2px dashed rgba(200, 30, 20, 0.8);
+}
+.lab-ground span {
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  font: 700 13px system-ui;
+  color: #c81e14;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0 4px;
+}

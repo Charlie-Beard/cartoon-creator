@@ -5,7 +5,14 @@ description: Draw a new torn-paper place (a full-stage 1180 × 820 backdrop) or 
 
 # New backdrop (or prop)
 
-Read `docs/WORLDS.md` and `docs/STYLE.md` (Look, Composition) first.
+Read `docs/WORLDS.md` ("Shape" and "Rules") and `docs/STYLE.md` ("Look",
+"Composition"; for the bears, "The bears" too) first. That's all the
+reading this needs: not the other docs, not the world's `index.ts`.
+
+If you were briefed by an episode's author, draw only your own file (they
+append the `index.ts` entry), and report back the id, the `about` note
+(the ground line, where the open floor is, what is painted in) and, for a
+prop, its size and parts.
 
 ## 1. Decide what it's for
 
@@ -66,10 +73,16 @@ npm run lab -- <world> --backdrop <id>     # at stage size, 1180 × 820
 npm run lab -- <world> props --p <id>
 ```
 
-Read the PNGs it prints (`screenshots/lab/`). Then place two or three
-characters on it (a scratch cartoon, or the one that needs it, with
-`npm run shots -- <id> --fast --scene <n>`) and check they stand on the floor, read clearly against
-it, and that the caption band is calm.
+Read the PNGs it prints (`screenshots/lab/`). Then stand two or three of
+the world's characters on it, one image, no scratch cartoon:
+
+```bash
+npm run lab -- <world> --backdrop <id> --with mollie,peter,jigs   # feet on the ground line its about gives
+```
+
+Check they stand on the floor, read clearly against it, that the ground
+line in `about` is right (the dashed line), and that the caption band is
+calm.
 
 ## 5. Check
 
